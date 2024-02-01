@@ -451,7 +451,7 @@ ModelState.Values
 
 
         [System.Web.Mvc.HttpPost]
-        [System.Web.Http.Route("api/DoctorApi/PatientList")]
+        [System.Web.Http.Route("api/DoctorApi/PatientList")]//dropdown
         public IHttpActionResult PatientList(PatientReportMasterVM model)
         {
             ModelState.Clear();
