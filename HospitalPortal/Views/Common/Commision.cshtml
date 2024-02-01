@@ -1,0 +1,94 @@
+﻿@model HospitalPortal.Models.ViewModels.CommissionDTO
+
+@{
+    ViewBag.Title = "Commision";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Add Commision</h2>
+
+<div style="margin:auto; width:90%">
+    @using (Html.BeginForm("AddCommision", "Common", FormMethod.Post))
+    {
+        <div class="row" style="margin-bottom:3%">
+            <div class="col-md-3">             
+                <select name="Name" class="form-control">
+                    <option value="">
+                        Select Any
+                    </option>
+                    <option value="Doctor">
+                        Doctor
+                    </option>
+                    <option value="Ambulance">
+                        Ambulance
+                    </option>
+                    <option value="Hospital">
+                        Hospital
+                    </option>
+                    <option value="Franchise">
+                        Franchise
+                    </option>
+                    <option value="Nurse">
+                        Nurse
+                    </option>
+                    <option value="Lab">
+                        Lab
+                    </option>
+                    <option value="HealthCheckUp">
+                        Health Check Up
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <input type="text" name="Commission" placeholder="Enter the Commission Amount" class="form-control" />
+            </div>
+            <div class="col-md-3">
+                <input type="submit" value="Submit" class="btn btn-primary" />
+            </div>
+        </div>
+        if (TempData["msg"] != null)
+        {
+            <h4>@TempData["msg"]</h4>
+        }
+
+    }
+
+    @if (Model.CommissionList.Count() <= 0)
+    {
+        <h2>No Records</h2>
+    }
+    else
+    {
+    <table class="table table-bordered" >
+        <tr>
+            <th>
+                Department
+            </th>
+            <th>
+                Amount (In %)
+            </th>
+            <th>
+                Action
+            </th>
+        </tr>
+        <tbody>
+            @foreach (var item in Model.CommissionList)
+            {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.Commission % </td>
+                <td>
+                    <a href="/Common/EditCommission?Id=@item.Id" class="btn btn-primary" onclick="return confirm('Are you sure wants to edit?')">Edit</a>
+                    @*<a href="/Common/DeleteCommission?Id=@item.Id" class="btn btn-primary" style="color:red"><i class="fa fa-trash-o"></i></a>*@
+                    @Html.ActionLink("Delete", "DeleteCommission", new { Id = item.Id },
+    new { onclick = "return confirm('Are sure wants to delete?');", @class = "btn btn-danger" })
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+    }
+</div>
+
+
+

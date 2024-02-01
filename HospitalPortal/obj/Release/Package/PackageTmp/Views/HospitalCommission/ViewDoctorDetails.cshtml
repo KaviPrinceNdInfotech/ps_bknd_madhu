@@ -1,0 +1,32 @@
+﻿@model HospitalPortal.Models.ViewModels.ReportDTO
+
+@{
+    ViewBag.Title = "ViewDoctorDetails";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>View Appointment Details</h2>
+
+@if (Model.DoctorReport == null) { }
+else
+{
+<table>
+    <thead>
+        <tr>
+            <th>Patient Name</th>
+            <th>Appointment Date</th>
+            <th>Amount</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.DoctorReport)
+        {
+            <tr>
+                <td>@item.PatientName</td>
+                <td>@item.AppointmentDate1</td>
+                <td>@item.Amount</td>
+            </tr>
+        }
+    </tbody>
+</table>
+}

@@ -1,0 +1,71 @@
+﻿@model HospitalPortal.Models.ViewModels.ReportDTO
+@{
+    ViewBag.Title = "ViewMedicinePurchase";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>View Medicine Purchase</h2>
+@if (Model.VieChemistDetails.Count() == 0)
+{
+    if (TempData["MSG"] != null)
+    {
+        <H2>@TempData["MSG"]</H2>
+    }
+}
+else
+{
+<table class="table-bordered table" >
+    <thead>
+        <tr>
+            <th>
+               Medicine Name
+            </th>
+            <th>MRP</th>
+            <th>
+               Buyer Name
+            </th>
+            <th>
+                Invoice Number
+            </th>
+            <th>
+                Order Date
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.VieChemistDetails)
+        {
+            <tr>
+                <td>
+                   @Model.MedicineName
+                </td>
+                <td>
+                    &#8377; @Model.MRP
+                </td>
+                <td>
+                    @item.Name
+                </td>
+                <td>
+                    @item.InvoiceNumber
+                </td>
+                <td>
+                    @if (item.OrderDate1 != null)
+                    {
+                    @item.OrderDate1.Value.ToString("dd-MMM-yyyy");
+                    }
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+<div class="row">
+    <div class="col-md-3"style="margin-left:6%">
+        <h2>Total Amount</h2>
+        @if (ViewBag.Total != null)
+        {
+            <h2 style="color:red">&#8377; @ViewBag.Total</h2>
+        }
+    </div>
+</div>
+}

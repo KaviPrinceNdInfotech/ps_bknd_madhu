@@ -1,0 +1,160 @@
+﻿@model IEnumerable<HospitalPortal.Models.ViewModels.NurseDTO>
+@using HospitalPortal.Models.DomainModels
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    string role = HospitalPortal.Utility.UserIdentity.UserRole;
+
+    DbEntities db = new DbEntities();
+}
+
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="~/js/jquery.doubleScroll.js"></script>
+<style>
+    #mainContainer {
+        width: 99%;
+        margin-top: 1%;
+        margin-left: 1%;
+    }
+
+    .double-scroll {
+        width: 99%;
+        
+    }
+</style>
+
+    <div id="mainContainer">
+        @*<div class="row">
+            <div class="col-md-6">
+                @Html.ActionLink("Add More", "Add", null, new { @class = "btn btn-info" })
+            </div>
+        </div>*@
+
+        <div class="row">
+            <div class="col-md-6">
+                <h3>Nurse List</h3>
+            </div>
+        </div>
+        @using (Html.BeginForm("All", "Nurse", FormMethod.Get))
+        {
+            <div class="row">
+                <div class="col-md-4">
+                    <input type="text" class="form-control" id="term" name="term" placeholder="Serach by Name and ID" />
+                </div>
+                <div class="col-md-3">
+                    <input type="submit" class="btn btn-primary" value="Search" />
+                </div>
+                <div class="col-md-3">
+                    <a href="/Nurse/All" class="btn btn-primary">Show All</a>
+                </div>
+            </div>
+        }
+            <div class="double-scroll">
+               <table class="table table-bordered">
+                 <thead>
+                     <tr>
+                         <th>Nurse Id</th>
+                         <th>Name</th>
+                         <th>Nurse Type</th>
+                         <th>Franchise</th>
+                         <th>Mobile No</th>
+                         <th>Email</th>
+                         <th>Address</th>
+                         <th>Certificate</th>
+                         @*<th>PAN</th>*@
+                         @*<th>Aadhar</th>*@
+                         <th>Approval</th>
+                         @*<th>Police verified</th>*@
+                         <th>Action</th>
+                     </tr>
+                 </thead>
+                   <tbody>
+                       @foreach(var item in Model)
+                       {
+                           var result = db.Nurses.Find(item.Id);
+                           <tr>
+                               <td>@item.NurseId</td>
+                               <td>@item.NurseName</td>
+                               <td>@item.NurseTypeName</td>
+                               <td>
+                                   @if (item.Vendor_Id < 0 || item.Vendor_Id == null)
+                {
+                    if (role == "admin")
+                    {
+                                           <a href="/Admin/ShareToVendor?Id=@item.Id&Role=Nurse">Share To Vendor</a>
+                                       }
+                                   }
+                                   else
+                                   {
+                                       @item.VendorName;
+                }
+                               </td>
+                               <td>@item.MobileNumber</td>
+                               <td>@item.EmailId</td>
+                               <td>@item.Location , @item.CityName, @item.StateName</td>
+                               <td>
+                                   <a href="/Images/@item.CertificateImage">
+                                       <img src="/Images/@item.CertificateImage" style="width:100px;height:80px" />
+                                   </a>
+                               </td>
+                               @*<td>@item.PAN
+                                   @if (string.IsNullOrEmpty(item.AadharImage) && string.IsNullOrEmpty(item.AadharImage2))
+                {
+                                       <a href="/Images/@item.PanImage">
+                                           <img src="/Images/@item.PanImage" class="thumb" />
+                                       </a>
+                                   }
+                               </td>*@
+                               @*<td>@item.AadharNumber
+                                   @if (string.IsNullOrEmpty(item.PanImage))
+                {
+                                       <a href="/Images/@item.AadharImage">
+                                           <img src="/Images/@item.AadharImage" class="thumb" />
+                                       </a>
+                                       <a href="/Images/@item.AadharImage2">
+                                           <img src="/Images/@item.AadharImage2" class="thumb" />
+                                       </a>
+                                   }
+                               </td>*@
+                           <td>
+                               @if (item.IsApproved)
+                               {
+                                   @Html.ActionLink("Approved", "UpdateStatus", new { id = item.Id }, new { @class = "btn btn-success" })
+                               }
+                               else
+                               {
+                                   @Html.ActionLink("Not Approved", "UpdateStatus", new { id = item.Id }, new { @class = "btn btn-danger" })
+                               }
+
+                               @if (result.FileName != null)
+                               {
+                                   <a href="/Nurse/DownloadFile?fileId=@result.Id" class="mt-3 text-primary text-justify">Click Download Everify Docs</a>
+                               }
+                           </td>
+                               @*<td>
+                                   @if (item.IsVerifiedByPolice)
+                                   {
+                                    <a href="/Images/@item.VerificationDoc"> <img class="thumb" src="/Images/@item.VerificationDoc" /> </a>
+                                   }
+                                   else
+                                   {
+                                       <span>No</span>
+                                   }
+                               </td>*@
+                           <td>
+                               @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { onclick = "return confirm('Are sure wants to Edit?');", @class = "btn btn-info" })
+                               <a href="/Common/BankDetails?Id=@item.AdminLogin_Id" class="btn btn-primary">Bank Details</a>
+                               @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { onclick = "return confirm('Are sure wants to delete?');", @class = "btn btn-danger" })
+                               <a href="/Nurse/EverifyDocs?id=@item.Id" class="btn btn-warning">Everify Docs</a>
+                           </td>
+
+                           </tr>
+                       }
+                   </tbody>
+               </table>
+            </div>
+        </div>
+<script>
+    $('.double-scroll').doubleScroll();
+</script>
+

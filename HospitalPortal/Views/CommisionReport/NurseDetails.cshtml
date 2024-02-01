@@ -1,0 +1,101 @@
+﻿@model HospitalPortal.Models.ViewModels.NurseCommissionReports
+@{
+    ViewBag.Title = "NurseDetails";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+<link href="/Styles/bootstrap.min.css" rel="stylesheet" />
+<h2>Details of <span style="color:red">@Model.NurseName</span></h2>
+
+
+@using (Html.BeginForm())
+{
+    <div class="row">
+        <div class="col-md-3">
+            <input type="hidden" name="NurseId" id="NurseId" value="@Model.NurseId" />
+            @Html.TextBoxFor(a => a.ServiceAcceptanceDate, new { @class = "datepicker form - control", required = "required" })
+        </div>
+        <div class="col-md-3">
+            <input type="submit" value="Click" />
+        </div>
+    </div>
+}
+
+
+@if (Model.NurseAppointmentList == null)
+{
+    if (TempData["msg"] != null)
+    {
+        <h3 style="color:red">@TempData["msg"]</h3>
+    }
+}
+else
+{
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Request Date</th>
+                @*<th>Name</th>
+                    <th>Correspondance Contact No.</th>
+                    <th>Registered Contact No</th>*@
+                <th>Service Schedule</th>
+                <th>Status</th>
+                <th>Total Days</th>
+                <th>Total Amt.</th>
+                <th>Paid At</th>
+                <th>
+                    Commission Amount(in %)
+                </th>
+                <th>
+                    Commission Amount
+                </th>
+                <th>
+                    Payable Amount
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.NurseAppointmentList)
+            {
+                <tr>
+                    <td>@item.RequestDate</td>
+                    @*<td>@item.PatientName</td>
+                        <td>@item.ContactNumber</td>
+                        <td>@item.RegisteredMobileNumber</td>*@
+                    <td>@item.ServiceTiming</td>
+                    <td>@item.ServiceStatus</td>
+                    <td>@item.TotalDays</td>
+                    <td>Rs. @item.TotalFee</td>
+                    <td>@item.PaymentDate</td>
+                    <td>@ViewBag.Commission</td>
+                    @{
+                        if (item.TotalFee == null)
+                        {
+                            item.TotalFee = 0;
+                        }
+                        else
+                        {
+                            item.TotalFee = item.TotalFee;
+                        }
+                        double? amt = (Math.Round(item.TotalFee * ViewBag.Commission) / 100);
+                        double? Value = item.TotalFee - amt;
+                    }
+                    <td>
+                        @amt
+                    </td>
+                    <td>
+                        @Value
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+<script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
+<link href="~/css/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
+<script>
+    $(".datepicker").datepicker({});
+</script>

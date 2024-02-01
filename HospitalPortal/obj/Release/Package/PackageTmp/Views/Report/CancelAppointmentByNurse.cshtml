@@ -1,0 +1,67 @@
+﻿@model HospitalPortal.Models.ViewModels.cancelReport
+@{
+    ViewBag.Title = "CancelAppointmentByNurse";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style>
+    #mainContainer {
+        width: 100%;
+        margin-left: 1%;
+        margin-top: 1%;
+    }
+</style>
+<div id="mainContainer">
+
+    <div class="row">
+        <div class="col-md-12">
+            <h3>Nurse Cancel Report</h3><hr />
+        </div>
+    </div>
+
+
+    @using (Html.BeginForm())
+    {
+        <div id="doublescroll">
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr style="background-color:gainsboro">
+
+                                <th>Patient Name</th>
+                                <th>Mobile Number</th>
+                                <th>Locatoion</th>
+                                <th>Fee</th>
+                                <th>Payment Date</th>
+                                <th>Service Acceptancedate</th>
+                                <th>Request Date</th>
+                                <th>User Wallet Amount</th>
+                                <th>NursePenality Amount</th>
+                                <th>Cancel Date</th>
+                                <th>Cancel By(Nurse Name)</th>
+
+</thead>
+                        @foreach (var item in Model.NurseCancel)
+                        {
+                            <tr style="background-color:oldlace">
+                                <td>@item.PatientName</td>
+                                <td>@item.MobileNumber</td>
+                                <td>@item.Location</td>
+                                <td>@item.Fee</td>
+                                <td>@item.PaymentDate</td>
+                                <td>@item.ServiceAcceptanceDate</td>
+                                <td>@item.RequestDate</td>
+                                <td>@item.UserWalletAmount</td>
+                                <td>@item.Amount</td>
+                                <td>@item.CancelDate</td>
+                                <td>@item.NurseName</td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+

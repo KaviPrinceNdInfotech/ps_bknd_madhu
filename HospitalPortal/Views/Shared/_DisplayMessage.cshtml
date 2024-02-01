@@ -1,0 +1,20 @@
+﻿
+@if (TempData["msg"] != null)
+{
+    <div class="row">
+        <div class="col-md-12">
+            @if (TempData["msg"].ToString() == "ok")
+            {
+                <div class="alert alert-success">
+                    Thanks for joining us.You have registered successfully but you can not login untill approved by ADMIN.
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-danger">
+                    @TempData["msg"]
+                </div>
+            }
+        </div>
+    </div>
+}

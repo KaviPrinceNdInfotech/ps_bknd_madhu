@@ -1,0 +1,49 @@
+﻿@model HospitalPortal.Models.ViewModels.UpdateBank
+@{
+    ViewBag.Title = "UpdateBank";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Update Bank</h2>
+
+<div id="main">
+    @using (Html.BeginForm())
+    {
+        <div class="row">
+            <div class="col-md-12">
+                @Html.HiddenFor(a => a.Id)
+                @Html.HiddenFor(a => a.Login_Id)
+                <div class="form-group">
+                    Account Number * @Html.TextBoxFor(a => a.AccountNo, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.AccountNo)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    Branch Name * @Html.TextBoxFor(a => a.BranchName, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.BranchName)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    Branch Address * @Html.TextBoxFor(a => a.BranchAddress, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.BranchAddress)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    IFSC Code * @Html.TextBoxFor(a => a.IFSCCode, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.IFSCCode)
+                    </span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-info" />
+                </div>
+            </div>
+        </div>
+    }
+</div>

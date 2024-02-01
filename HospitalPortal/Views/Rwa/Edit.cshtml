@@ -1,0 +1,139 @@
+﻿@model HospitalPortal.Models.ViewModels.RWADTO
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style>
+    #mainContainer {
+        width: 60%;
+        margin-top: 1%;
+        margin-left: 1%;
+    }
+</style>
+
+@using (Html.BeginForm("Edit","Rwa",FormMethod.Post,new {encType="multipart/form-data"}))
+{
+    <div id="mainContainer">
+
+     
+        <div class="row">
+            <div class="col-md-6">
+                <h3>Update RWA Profile</h3>
+            </div>
+        </div>
+
+        @Html.HiddenFor(a => a.Id)
+        @Html.HiddenFor(a=>a.IsDeleted)
+        @Html.HiddenFor(a=>a.AdminLogin_Id)
+        @Html.HiddenFor(a => a.IsApproved)
+        @Html.HiddenFor(a => a.Password)
+        @Html.HiddenFor(a => a.ConfirmPassword)
+        @Html.HiddenFor(a => a.EmailId)
+        @Html.HiddenFor(a => a.MobileNumber)
+        @Html.HiddenFor(a=>a.CertificateImage)
+        @Html.HiddenFor(a => a.IsCheckedTermsCondition)
+        @Html.Partial("~/Views/Shared/_DisplayMessageUpdate.cshtml")
+
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    RWA Name * @Html.TextBoxFor(a => a.AuthorityName, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.AuthorityName)
+                    </span>
+                </div>
+
+
+
+                @*<div class="form-group">
+                    Mobile Number * @Html.TextBoxFor(a => a.MobileNumber, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.MobileNumber)
+                    </span>
+                </div>*@
+
+                <div class="form-group">
+                    Landline Number * @Html.TextBoxFor(a => a.PhoneNumber, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.PhoneNumber)
+                    </span>
+                </div>
+
+                @*<div class="form-group">
+                    Email Id * @Html.TextBoxFor(a => a.EmailId, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.EmailId)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    Password * @Html.PasswordFor(a => a.Password, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.Password)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    Confirm Your Password * @Html.PasswordFor(a => a.ConfirmPassword, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.ConfirmPassword)
+                    </span>
+                </div>*@
+
+                <div class="form-group">
+                    State * @Html.DropDownListFor(a => a.StateMaster_Id, Model.States, "Select", new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.StateMaster_Id)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    City * @Html.DropDownListFor(a => a.CityMaster_Id,
+                        Model.Cities 
+                        , "Select", new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.CityMaster_Id)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    Address * @Html.TextAreaFor(a => a.Location, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.Location)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    Certificate Image *
+                    @if (!string.IsNullOrEmpty(Model.CertificateImage))
+                    {
+                        <a href="/Images/@Model.CertificateImage">
+                            <img src="/Images/@Model.CertificateImage" class="thumb" />
+                        </a>
+                    }
+                    @Html.TextBoxFor(a => a.CertificateFile, new { type = "file" })
+
+
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.CertificateFile)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-info" />
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<script src="/Scripts/Library/jquery-1.7.1.min.js"></script>
+<script src="/Scripts/Library/jquery-ui-1.8.20.min.js"></script>
+
+@Html.Partial("~/Views/Shared/_StateCityLocCascading.cshtml")
+
+@if (Model.IsApproved == false)
+{
+    <script src="~/Scripts/EditAlert.js"></script>
+}

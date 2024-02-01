@@ -1,0 +1,53 @@
+﻿@model IEnumerable<HospitalPortal.Models.DomainModels.DoctorSkill>
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style>
+    #mainContainer {
+        width: 60%;
+        margin-top: 1%;
+        margin-left: 1%;
+    }
+    .row{
+        margin-top:1%;
+    }
+</style>
+
+<div id="mainContainer">
+      <input type="hidden" id="docId" value="@ViewBag.docId" />
+    <h3> My Skills</h3> <hr/>
+
+    <div class="row">
+        <div class="col-md-6">
+            <button type="button" id="btnAdd" class="btn btn-lg btn-default"><i class="fa fa-plus"></i></button>
+        </div>
+    </div>
+     <div class="row">
+         <div class="col-md-12">
+             <table class="table table-bordered" id="skillTable">
+                 <thead>
+                     <tr>
+                         <th>Skill</th>
+                         <th>Action</th>
+                     </tr>
+                 </thead>
+                 <tbody>
+                     @foreach (var item in Model)
+                     {
+                         <tr>
+                             <td>@item.SkillName</td>
+                             <td>
+                                 <button url="/DoctorRegistration/RemoveSkill?id=@item.Id" type="button" class="btn btn-lg btn-danger btnRemove">
+                                     <i class="fa fa-trash-o"></i>
+                                 </button>
+                             </td>
+                         </tr>
+                     }
+                 </tbody>
+             </table>
+         </div>
+     </div>
+</div>
+<script src="/Scripts/Library/jquery-1.7.1.min.js"></script>
+<script src="/Scripts/doctorSkill.js"></script>

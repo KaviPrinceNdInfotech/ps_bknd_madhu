@@ -1,0 +1,147 @@
+﻿@model HospitalPortal.Models.ViewModels.ReportDTO
+@{
+    ViewBag.Title = "PaymentReport";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>PaymentReport</h2>
+
+<table class="table table-bordered">
+    <thead>
+        @if (Model.LabReport == null)
+        {
+            <tr>
+                <th>Lab Name</th>
+                <td>@Model.LabName</td>
+                <th>Mobile No.</th>
+                <td>@Model.MobileNumber</td>
+            </tr>
+            <tr>
+                <th>Address</th>
+                <td>
+                    @Model.Location
+                    @Model.CityName
+                    @Model.StateName
+                </td>
+                <th>Licence No.</th>
+                <td>@Model.LicenceNumber</td>
+            </tr>
+        }
+        else
+        {
+            <tr>
+                <th>Lab Name</th>
+                <td>@Model.LabReport.FirstOrDefault().LabName</td>
+                <th>Mobile No.</th>
+                <td>@Model.LabReport.FirstOrDefault().MobileNumber</td>
+            </tr>
+            <tr>
+                <th>Address</th>
+                <td>
+                    @Model.LabReport.FirstOrDefault().Location
+                    @Model.LabReport.FirstOrDefault().CityName,
+                    @Model.LabReport.FirstOrDefault().StateName
+                </td>
+                <th>Licence No.</th>
+                <td>@Model.LabReport.FirstOrDefault().LicenceNumber</td>
+            </tr>
+
+        }
+
+
+    </thead>
+</table>
+
+@using (Html.BeginForm())
+{
+    <div style="margin-bottom:3%;">
+        <div class="row">
+            <h4 style="text-align:center">Search By Date</h4>
+        </div>
+        <div class="row">
+            <div class='col-sm-5'>
+                <div class="form-group">
+                    <div class='input-group date'>
+                        <input type='text' name="sdate" id="datepicker1" class="form-control" placeholder="From Date" />
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class='col-sm-5'>
+                <div class="form-group">
+                    <div class='input-group date' id='datetimepicker1'>
+                        <input type='text' name="edate" id="datepicker2" class="form-control" placeholder="Date To" />
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2"><input type="submit" value="Filter" class="btn btn-primary" /></div>
+
+        </div>
+    </div>
+}
+@if (Model.ViewCmplteCheckUp == null)
+{
+    <h2 style="color:red; text-align:center">No Tests of Current Month</h2>
+}
+else
+{
+    <table id="doctor">
+        <thead>
+            <tr>
+                <th>Test Date</th>
+                <th>Total Amount</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.ViewCmplteCheckUp)
+            {
+                <tr>
+                    <td>
+                        @if (item.TestDate != null)
+                        {
+                            @item.TestDate.Value.ToString("dd-MMM-yyyy");
+                        }
+                    </td>
+                    <td>
+                        &#8377; @item.Amount
+                    </td>
+                    <td>
+                        <a href="/Report/ViewHealth?date=@item.TestDate1" class="btn btn-primary">View More</a>
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+    <div class="row">
+        <div class="col-md-2">
+            Total Month Amount
+        </div>
+        <div class="col-md-3">
+            <b style="color:red; font-size:medium">
+                @if (ViewBag.Total != null)
+                {
+
+                    <b style="color:red">&#8377; @ViewBag.Total</b>}
+                else
+                {
+                    <b style="color:red">&#8377; @ViewBag.Amount</b>
+                }
+
+        </div>
+    </div>
+}
+
+<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css">
+
+<script type="text/javascript">
+   var table=  $('#doctor').DataTable();
+</script>

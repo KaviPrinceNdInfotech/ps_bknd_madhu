@@ -1,0 +1,38 @@
+﻿@{
+    int loginId = Convert.ToInt32(User.Identity.Name);
+    int id = new HospitalPortal.Models.DomainModels.DbEntities().Nurses.FirstOrDefault(a => a.AdminLogin_Id == loginId).Id;
+    bool CurrentStatus = new HospitalPortal.Models.DomainModels.DbEntities().Nurses.FirstOrDefault(a => a.Id == id).IsApproved;
+
+}
+
+<div class="sidebar-nav">
+    <ul>
+        <li class="nav-header"><a href="/Admin/Dashboard/" style="cursor:pointer"> <i class="fa fa-bars"></i> Dashboard</a></li>
+        <li class="nav-header">
+            <a href="/Nurse/Edit?id=@id" style="cursor:pointer">
+                <i class="fa fa-pencil"></i> Manage Profile
+            </a>
+        </li>
+        <li class="nav-header">
+            <a href="/Bank/UpdateBank?id=@id" style="cursor:pointer">
+                <i class="fa fa-pencil"></i> Update Bank Details
+            </a>
+        </li>
+        @if (CurrentStatus == false) { }
+        else
+        {
+            <li class="nav-header">
+                <a href="/Nurse/Locations
+" style="cursor:pointer">
+                    <i class="fa fa-pencil"></i>Manage Location
+                </a>
+            </li>
+            <li class="nav-header">
+                <a href="/Nurse/AppointmentRequest/" style="cursor:pointer"> <i class="fa fa-bars"></i> Appointment Reqs</a>
+            </li>
+            <li class="nav-header">
+                <a href="/Nurse/MyAppointments/" style="cursor:pointer"> <i class="fa fa-bars"></i>My Appointments</a>
+            </li>
+        }
+    </ul>
+</div>

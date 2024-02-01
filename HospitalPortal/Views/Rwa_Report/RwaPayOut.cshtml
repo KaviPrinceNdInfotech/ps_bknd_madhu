@@ -1,0 +1,136 @@
+﻿@model HospitalPortal.Models.ViewModels.rwaReport
+
+@{
+    ViewBag.Title = "RwaPayOut";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>RWA PayOut</h2>
+
+@using (Html.BeginForm())
+{
+<div class="row" style="margin-bottom: 2%;">
+    <fieldset>
+        <div class="col-md-3">
+            @Html.TextBoxFor(a => a.Reg_Date, new { @class = "datepicker form-control" })
+        </div>
+        <div class="col-md-3">
+            <input type="submit" class="btn btn-primary" id="test" value="Search" />
+        </div>
+    </fieldset>
+
+    @*<fieldset>
+            <div class="col-md-3">
+                @Html.TextBoxFor(a => a.AuthorityName, new { @class = "form-control" })
+            </div>
+            <div class="col-md-3">
+                <input type="submit" class="btn btn-primary" id="test1" value="Search" />
+            </div>
+        </fieldset>*@
+</div>
+
+}
+
+@if (Model.rwaList == null)
+{
+    if (TempData["msg"] != null)
+    {
+        <h2 style="color:blueviolet">
+            @TempData["msg"]
+        </h2>
+    }
+}
+else
+{
+    <table id="tables" class="table table-responsive">
+        <thead>
+            <tr>
+                <th>
+                    Authority Name
+                </th>
+                <th>
+                    Total Amount
+                </th>
+                <th>Deducted Amount</th>
+                <th>
+                    Payable Amount
+                </th>
+                <th>
+                    Action
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.rwaList)
+            {
+                <tr>
+                    <td>
+                        @item.AuthorityName
+                    </td>
+
+                    <td>
+                       @ViewBag.payment
+                    </td>
+
+                    @{
+                        double amt = (Math.Round(ViewBag.payment * ViewBag.Amount) / 100);
+                        double Value = ViewBag.payment - amt;
+                    }
+
+                    <td>@amt</td>
+                    <td>@Value</td>
+                    <td>
+                        <a href="/Rwa_Report/Pay?Id=@item.Id&Amount=@Value" class="btn btn-primary">Pay</a>
+                   
+                        <a href="/Rwa_Report/ViewHistory?Id=@item.Id" class="btn btn-primary">View Payout History</a>
+                    </td>
+                </tr>
+                        }
+        </tbody>
+    </table>
+                        }
+
+<script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
+<link href="~/css/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
+<script>
+    
+    $(".datepicker").datepicker().datepicker('setDate', 'today');
+
+
+        $("#test").click(function () {
+            debugger
+            var date = $("#Reg_Date").val();
+            $.ajax({
+                url: "/Rwa_Report/RwaPayOut?week=" + date + "",
+                type: "get",
+                success: function (response) {
+                    console.log(response);
+                    $("#prevAtt").html(response);
+                },
+                error: function (error) {
+                    console.log(error.responseText);
+
+                }
+            });
+
+        });
+
+        $("#test1").click(function () {
+            debugger
+            var name = $("#DoctorName").val();
+            $.ajax({
+                url: "/Payout/Doctor?name=" + name + "",
+                type: "get",
+                success: function (response) {
+                    console.log(response);
+                    $("#prevAtt").html(response);
+                },
+                error: function (error) {
+                    console.log(error.responseText);
+
+                }
+            });
+
+        });
+</script>

@@ -1,0 +1,63 @@
+﻿@model HospitalPortal.Models.ViewModels.ViewPayOutHistory
+@{
+    ViewBag.Title = "ViewPayoutHistory";
+    Layout = "~/Views/Shared/_PayoutLayoutPage.cshtml";
+
+}
+
+<h2>Health Payout History</h2>
+
+<div style="margin:auto; width:95%">
+    @if (Model.HistoryOfHealth_Payout == null)
+    {
+        if (TempData["msg"] != null)
+        {
+            <h4 style="color:red">@TempData["msg"]</h4>
+        }
+    }
+    else
+    {
+        <table class="table table-bordered">
+            <tr>
+                <th>Serial No</th>
+                <th>Check Up Center</th>
+                <th>Payment Date</th>
+                <th>Amount</th>
+                @*<th>Status</th>*@
+            </tr>
+            <tbody>
+                @{int RowNo = 0;}
+                @foreach (var item in Model.HistoryOfHealth_Payout)
+                {
+                    <tr>
+                        <td>
+                            @{RowNo++;} @RowNo
+                        </td>
+                        <td>@item.LabName</td>
+                        <td>@item.PaymentDate</td>
+                        <td>@item.Amount</td>
+                        @*<td>
+                            @if (Convert.ToInt32(item.IsGenerated) == 1)
+                            {
+                                <a href="/Payout/UpdateHealthStatus?id=@item.Id" class="btn btn-primary">Generated</a>
+                            }
+                            else
+                            {
+                                <a href="/Payout/UpdateHealthStatus?id=@item.Id&Amount=@item.Amount" class="btn btn-danger">Not Generated</a>
+                            }
+
+                            @if (Convert.ToInt32(item.IsPaid) == 1)
+                            {
+                                <a href="/Payout/UpdateHealthPayment?id=@item.Id" class="btn btn-primary">Paid</a>
+                            }
+                            else
+                            {
+                                <a href="/Payout/UpdateHealthPayment?id=@item.Id" class="btn btn-danger">Not Paid</a>
+                            }
+                        </td>*@
+                    </tr>
+                                }
+            </tbody>
+        </table>
+                                }
+</div>

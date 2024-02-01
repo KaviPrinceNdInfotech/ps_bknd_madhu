@@ -1,0 +1,139 @@
+﻿@model HospitalPortal.Models.ViewModels.NurseAppointmentModel
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<style>
+    #main{
+        width:99%;
+        margin:auto;
+    }
+    .row{
+        margin-top:1%;
+    }
+</style>
+
+<div id="main">
+    <h2>My Appointments</h2>
+    @using (Html.BeginForm())
+    {
+    <div class="row">
+        <div class="col-md-4">
+            <input type="text" name="term" class="form form-control" placeholder="Search By Name/Mobile No"/>
+        </div>
+        
+         <div class="col-md-2">
+             <input type="text" class="form form-control dp" name="startDate" placeholder="Request Start Date"/>
+         </div>
+
+        <div class="col-md-2">
+            <input type="text" class="form form-control dp" name="endDate" placeholder="Request End Date"/>
+        </div>
+
+        <div class="col-md-1">
+            <input type="submit" class="btn btn-info" value="Search"/>
+        </div>
+
+    </div>
+    }
+
+    @if (Model != null && Model.Appointments.Count() < 1)
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <h4>No record found</h4>
+            </div>
+        </div>
+    }
+    else
+    {
+    <div class="row">
+       
+       <div class="col-md-12">
+           <table class="table table-striped">
+               <thead>
+                   <tr>
+                       <th>Request Date</th>
+                       <th>Name</th>
+                       <th>Correspondance Contact No.</th>
+                       <th>Registered Contact No</th>
+                       <th>Service Schedule</th>
+                       <th>Status</th>
+                       <th>Amt./Day</th>
+                       <th>Total Days</th>
+                       <th>Total Amt.</th>
+                       <th>Paid At</th>
+                       <th>Action</th>
+                   </tr>
+               </thead>
+             
+               <tbody>
+                   @foreach (var item in Model.Appointments)
+                   {
+                       <tr>
+                           <td>@item.RequestDate</td>
+                           <td>@item.PatientName</td>
+                           <td>@item.ContactNumber</td>
+                           <td>@item.RegisteredMobileNumber</td>
+                           <td>@if (item.ServiceType == "Other")
+                           {@item.ServiceTiming }
+                           else if (item.ServiceType == "24Hrs")
+                           {
+                            @item.ServiceDate
+                           }
+                           else
+                           {
+                            @item.ServiceDate <span>for @item.ServiceTime</span>
+                           }</td>
+                           <td>@item.ServiceStatus</td>
+                           <td>Rs. @item.TotalFee</td>
+                           <td>@if (item.ServiceType == "Other")
+                           {@item.TotalDays}
+                           else if (item.ServiceType == "24Hrs")
+                           {
+                            <span>1 Day</span>
+                           }
+                           else
+                           {
+                            <span>for @item.ServiceTime</span>
+                           }</td>
+                           <td>Rs. @item.TotalFee</td>
+                           <td>@item.PaymentDate</td>
+                           <td>
+                               <a href="/Nurse/ChangeApprovalStatus?serviceId=@item.Id" class="btn btn-info">Appove/Decline</a>
+                           </td>
+                       </tr>
+                   }
+               </tbody>
+           </table>
+       </div>
+    </div>
+    }
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="pagination">
+                @for (int i = 1; i <= Model.NumberOfPages; i++)
+                {
+                    if (i == Model.Page)
+                    {
+                        <li class="active">
+                            <a href="/Nurse/MyAppointments?startDate=@Model.StartDate&endDate=@Model.EndDate&term=@Model.Term&page=@i">
+                                @i
+                            </a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li>
+                            <a href="/Nurse/MyAppointments?startDate=@Model.StartDate&endDate=@Model.EndDate&term=@Model.Term&page=@i">
+                                @i
+                            </a>
+                        </li>
+                    }
+                }
+                
+            </ul>
+        </div>
+    </div>
+
+</div>
+

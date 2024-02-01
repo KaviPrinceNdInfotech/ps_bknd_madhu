@@ -1,0 +1,115 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>PS Wellness-A Complete Health Care Service</title>
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0" />
+    <link rel="icon" href="~/Home/favicon.ICO" sizes="16x16">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="Book Doctor, Buy Medicine, Book Ambulance, Book Nurse, Complete Heath Checkup Center, Lab Near Me, Hospital Near Me " />
+    <meta name="author" content="">
+
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" type="text/css" href="/lib/bootstrap/css/bootstrap.css">
+
+    <link rel="stylesheet" type="text/css" href="/stylesheets/theme.css">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/premium.css">
+
+    <style type="text/css">
+        #line-chart {
+            height: 300px;
+            width: 800px;
+            margin: 0px auto;
+            margin-top: 1em;
+        }
+
+        .navbar-default .navbar-brand, .navbar-default .navbar-brand:hover {
+            color: #fff;
+        }
+    </style>
+
+</head>
+<body class="theme-blue" ng-app="myApp">
+    <!-- Demo page code -->
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 7 ]> <body class="ie ie6"> <![endif]-->
+    <!--[if IE 7 ]> <body class="ie ie7 "> <![endif]-->
+    <!--[if IE 8 ]> <body class="ie ie8 "> <![endif]-->
+    <!--[if IE 9 ]> <body class="ie ie9 "> <![endif]-->
+    <!--[if (gt IE 9)|!(IE)]><!-->
+    <!--<![endif]-->
+
+    <div class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="" href="#l"><span class="navbar-brand" style="text-transform:capitalize">PS Wellness</span></a>
+        </div>
+
+        <div class="navbar-collapse collapse" style="height: 1px;">
+            <ul id="main-menu" class="nav navbar-nav navbar-right" style="color:white">
+              
+            </ul>
+         
+        </div>
+    </div>
+    
+
+    <div>
+            @Html.Partial("~/Views/Shared/_SignUpLayout.cshtml")
+    </div>
+    <div class="content" id="pageContainer">
+        @RenderBody()
+    </div>
+
+    @Html.Partial("~/Views/Shared/_script.cshtml")
+    <script type="text/javascript">
+
+           $(function () {
+               var match = document.cookie.match(new RegExp('color=([^;]+)'));
+               if (match) var color = match[1];
+               if (color) {
+                   $('body').removeClass(function (index, css) {
+                       return (css.match(/\btheme-\S+/g) || []).join(' ')
+                   })
+                   $('body').addClass('theme-' + color);
+               }
+
+               $('[data-popover="true"]').popover({ html: true });
+
+           });
+    </script>
+
+
+    <script type="text/javascript">
+        $(function () {
+            var uls = $('.sidebar-nav').clone();
+            uls.addClass('visible-xs');
+            uls.css('color:white')
+            $('#main-menu').append(uls.clone());
+        });
+    </script>
+    <script src="/lib/bootstrap/js/bootstrap.js"></script>
+    <script src="~/js/bootstrap-datepicker.js"></script>
+    <link href="~/css/datepicker.css" rel="stylesheet" />
+    <script type="text/javascript">
+        $("[rel=tooltip]").tooltip();
+        $(function () {
+            $('.demo-cancel-click').click(function () { return false; });
+        });
+    </script>
+    <script src="/Scripts/Library/jquery.validate.min.js"></script>
+    <script src="/Scripts/Library/jquery.validate.unobtrusive.min.js"></script>
+</body>
+</html>
+

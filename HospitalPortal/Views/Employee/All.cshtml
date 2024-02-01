@@ -1,0 +1,84 @@
+﻿@model IEnumerable<HospitalPortal.Models.DomainModels.Employee>
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="~/js/jquery.doubleScroll.js"></script>
+<style>
+    #mainContainer {
+        width: 99%;
+        margin-top: 1%;
+        margin-left: 1%;
+    }
+
+    .double-scroll {
+        width: 100%;
+    }
+</style>
+
+    <div id="mainContainer">
+        <div class="row">
+            <div class="col-md-6">
+                @Html.ActionLink("Add More", "Add", null, new { @class = "btn btn-info" })
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <h3>Employee List</h3>
+            </div>
+        </div>
+        @using (Html.BeginForm("All", "Employee", FormMethod.Get))
+        {
+            <div class="row">
+                <div class="col-md-4">
+                    <input type="text" class="form-control" id="term" name="term" placeholder="Serach by Name" />
+                </div>
+                <div class="col-md-3">
+                    <input type="submit" class="btn btn-primary" value="Search" />
+                </div>
+                <div class="col-md-3">
+                    <a href="/Employee/All" class="btn btn-primary">Show All</a>
+                </div>
+            </div>
+        }
+        <div class="row double-scroll">
+            <div class="col-md-12">
+               <table class="table table-bordered">
+                 <thead>
+                     <tr>
+                         <th>Name</th>
+                         <th>Mobile</th>
+                         <th>Email Id</th>
+                         <th>Address</th>
+                         <th>Employee Id</th>
+                         <th>Salary</th>
+                         <th>Action</th>
+                     </tr>
+                 </thead>
+                   <tbody>
+                       @foreach(var item in Model)
+                       {
+                           <tr>
+                               <td>@item.EmployeetName</td>
+                               <td>@item.MobileNumber</td>
+                               <td>@item.EmailId</td>
+                               <td>@item.EmployeeAddress</td>
+                               <td>@item.EmployeeId</td>
+                               <td>@item.Salary</td>
+                               <td>
+                                   @Html.ActionLink("Edit","Edit",new { id = item.Id }, new { @class="btn btn-info"})
+                                   @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-danger" })
+                               </td>
+                           </tr>
+                       }
+                   </tbody>
+               </table>
+            </div>
+        </div>
+    </div>
+
+<script>
+    $('.double-scroll').doubleScroll();
+</script>
+

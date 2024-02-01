@@ -1,0 +1,83 @@
+﻿@model HospitalPortal.Models.ViewModels.MailVM
+
+@{
+    ViewBag.Title = "MailUs";
+    Layout = "~/Views/Shared/_Home.cshtml";
+}
+
+<!-- banner1 -->
+<div class="banner1">
+    <div class="container">
+    </div>
+</div>
+
+<div class="services-breadcrumb">
+    <div class="container">
+        <ul>
+            <li><a href="/Home/Home">Home</a><i>|</i></li>
+            <li>Mail Us</li>
+        </ul>
+    </div>
+</div>
+<!-- //banner1 -->
+<!-- mail -->
+<div class="mail">
+    <div class="container">
+        <h3>Mail Us</h3>
+        <p class="quia">how to find us</p>
+
+        <div class="w3ls_map">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3504.2080386736748!2d77.21808441455796!3d28.563514993953245!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xc1f44d8290b22db5!2sPS+Wellness!5e0!3m2!1sen!2sin!4v1539331616127" width="600" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
+        </div>
+        <div class="col-md-4 wthree_contact_left">
+            <h4>Address</h4>
+            <b>Head Office</b>
+            <p>278-B, 1ST FLOOR, LEELA RAM MARKET MASJID MOTH, SOUTH EX. PAER-2, Masjid Moth Village, South Extension II, New Delhi, Delhi 110049</p>
+            <br>
+            <b>Branch Office</b>
+            <br>
+            <p>No. 224, 1st Floor, Humayunpur, Safdasrjang Enclave, Humayunpur, Safdarjung Enclave, New Delhi, Delhi 110029</p>
+            <br>
+            <p>Noida</p>
+            <br>
+            <p>Gurgaon</p>
+            <br>
+            <p>Panjab</p>
+            <ul>
+                <li><span class="glyphicon glyphicon-earphone" aria-hidden="true"></span> Phone :+91 11-41101286</li>
+                <li><span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span> Fax :+1 078 4589 2456</li>
+                <li><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span><a href="mailto:info@pswellness.in">info@pswellness.in</a></li>
+            </ul>
+        </div>
+        <div class="col-md-8 wthree_contact_left" >
+            <h4>Contact Form</h4>
+            @using (Html.BeginForm())
+            {
+                <div class="col-md-6 wthree_contact_left_grid">
+                    @Html.TextBoxFor(a => a.Name, new {@class="form-control", placeholder="Name" })
+                    @*<input type="text" name="Name" value="Name*" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Name*';}" required="">*@
+                    @Html.TextBoxFor(a => a.Email, new { @class = "form-control", placeholder = "Email" })
+                    @*<input type="email" name="Email" value="Email*" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Email*';}" required="">*@
+                </div>
+                <div class="col-md-6 wthree_contact_left_grid">
+                    @Html.TextBoxFor(a => a.TelePhone, new { @class = "form-control",placeholder = "TelePhone" })
+                    @*<input type="text" name="Telephone" value="Telephone*" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Telephone*';}" required="">*@
+                    @Html.TextBoxFor(a => a.Subjects, new { @class = "form-control",placeholder = "Subject" })
+                    @*<input type="text" name="Subject" value="Subject*" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Subject*';}" required="">*@
+                </div>
+                <div class="clearfix"> </div>
+                @Html.TextAreaFor(a => a.Msg,new { placeholder = "Your Message" });
+                @*<textarea name="Message" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Message...';}" required="">Message...</textarea>*@
+                <input type="submit" value="Submit">
+                <input type="reset" value="Clear">
+                if(TempData["msg"] != null)
+                {
+                    <h3 style="color:red; width: 106% !important;">@TempData["msg"]</h3>
+                }
+            }
+        </div>
+        <div class="clearfix"> </div>
+    </div>
+</div>
+<!-- //mail -->
+

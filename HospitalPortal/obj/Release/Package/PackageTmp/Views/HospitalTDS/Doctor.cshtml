@@ -1,0 +1,49 @@
+﻿@model HospitalPortal.Models.ViewModels.ReportDTO
+
+@{
+    Layout = null;
+}
+
+<link href="/Styles/bootstrap.min.css" rel="stylesheet" />
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>
+                Doctor Name
+            </th>
+            <th>Total Amount</th>
+            <th>TDS Amount</th>
+            <th>Payable Amount</th>
+            <th>
+                Action
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.DoctorReport)
+        {
+            <tr>
+                <td>@item.DoctorName</td>
+                <td>@item.Amount</td>
+                @{
+
+                    //Calculate The Amount for Doctor Commission
+                    double amt = (Math.Round(item.Amount * ViewBag.Commission) / 100);
+                    //Total Amount for Doctor
+                    double Value = (double)item.Amount - amt;
+                }
+                <td>₹ @amt</td>
+                <td>₹ @Value</td>
+                <td><a href="/HospitalPayment/ViewDoctorDetails?DoctorId=@item.Doctor_Id" class="btn btn-primary">View Details</a></td>
+            </tr>
+                    }
+    </tbody>
+</table>
+<script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
+@*<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>*@
+<script src="https://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css">
+
+<script type="text/javascript">
+        $('#table_id').DataTable();
+</script>

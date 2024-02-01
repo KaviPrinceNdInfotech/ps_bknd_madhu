@@ -1,0 +1,177 @@
+﻿@model HospitalPortal.Models.ViewModels.ChemistOrderHistory
+@{
+    ViewBag.Title = "OrderHistory";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style>
+    #main{
+        margin:auto;
+        width:95%;
+    }
+    .row{
+        margin-top:1%;
+    }
+</style>
+
+<div id="main">
+    <h2>Order History</h2>
+
+    @using (Html.BeginForm())
+    {
+       <div class="row">
+           <div class="col-md-3">
+               <input type="text" name="term" class="form-control" placeholder="Search by Name/OrderId" />
+           </div>
+           <div class="col-lg-2">
+               <input type="text" name="startDate" class="form-control dp" placeholder="Date From"/>
+           </div>
+
+           <div class="col-lg-2">
+               <input type="text" name="endDate" class="form-control dp" placeholder="Date To" />
+           </div>
+
+           <div class="col-md-1">
+               <input type="submit" class="btn btn-info" />
+           </div>
+       </div>
+    }
+
+  <div class="row">
+      <div class="col-md-12">
+          <table class="table table-bordered">
+              <thead>
+                  <tr>
+                      <th>Name</th>
+                      <th>Mobile</th>
+                      <td>State</td>
+                      <td>City</td>
+                      <td>PIN</td>
+                      <th>Address</th>
+                      <th>IsPaid</th>
+                      <th>Deliverd Record</th>
+                      <th>Total</th>
+                      <td>Action</td>
+                  </tr>
+              </thead>
+              <tbody>
+                  @foreach (var item in Model.Orders)
+                  {
+                  <tr>
+                      <td>@item.Name</td>   
+                      <td>@item.MobileNumber</td>
+                      <td>@item.StateName</td>
+                      <td>@item.CityName</td>
+                      <td>@item.PinCode</td>
+                      <td>@item.DeliveryAddress</td>
+                      <td>
+                          @if (item.IsPaid == true)
+                          {
+                            <span style="color:green">Yes</span>
+                          }
+                          else
+                          {
+                              <span style="color:red">No</span>
+                          }
+                      </td>
+                      <td>
+                      @if (item.IsDelivered == true)
+                      {
+
+                        <span style="color:green">
+                           @if (item.DeliveryDate != null) {
+                               @item.DeliveryDate.Value.ToString("dd-MMM-yyyy")
+                           }
+                           else {
+
+                           }/
+                        <br />
+                        @item.DeliveryStatus /
+                        <br />
+                        @item.Remarks
+                    </span>
+                      }
+                      else
+                      {
+                          <span style="color:red">No</span>
+                      }
+                      </td>
+                      <th>Rs.@item.TotalAmount</th>
+                      <td>
+                          @if (item.IsDelivered == true)
+                          {
+                            <a class="btn btn-info" data-toggle="modal" data-target="#myModal1" data-Remarks="@item.Remarks" data-date="@item.DeliveryDate" data-DeliveryStatus="@item.DeliveryStatus" data-code="@item.Id">Update Delievry Status</a>
+                          }
+                          else
+                          {
+                            <a class="btn btn-info" data-toggle="modal" data-target="#myModal" data-Remarks="@item.Remarks" data-date="@item.DeliveryDate" data-DeliveryStatus="@item.DeliveryStatus" data-code="@item.Id">Update Delievry Status</a>
+                          }
+                         
+                          @*<a href="/Chemist/UpdateDeliveryStatus?orderId=@item.Id" onclick="return confirm('Are you sure to update the record?')" class="btn btn-info">Set Delivery Status</a>*@
+                      </td>
+                  </tr>
+                  <tr>
+                      <td>&nbsp;</td>
+                      <td>
+                          <table class="table table table-striped">
+                              <tr>
+                                  <th>Medicine</th>
+                                  <th>Qty</th>
+                                  <th>Unit Price</th>
+                                  <th>Total Price</th>
+                              </tr>
+                              @foreach (var i in item.OrderDetail)
+                              {
+                                  <tr>
+                                      <td>@i.MedicineName (@i.BrandName)</td>
+                                      <td>@i.Quantity</td>
+                                      <td>@i.UnitPrice</td>
+                                      <td>Rs. @i.TotalPrice</td>
+                                  </tr>
+                              }
+                          </table>
+                      </td>
+                      <td>&nbsp;</td>
+                      <td>&nbsp;</td>
+                      <td>&nbsp;</td>
+                      <td>&nbsp;</td>
+                      <td>&nbsp;</td>
+                      <td>&nbsp;</td>
+                      <td>&nbsp;</td>
+                      <td>&nbsp;</td>
+                  </tr>
+                      }
+              </tbody>
+          </table>
+      </div>
+  </div>
+
+  <div class="row">
+      <div class="col-md-12">
+          <ul class="pagination">
+              @for(int i=1;i<=Model.NoOfPages;i++)
+              {
+                  if(i==Model.Page)
+                  {
+                      <li class="active"><a href="/Chemist/OrderHistory?term=@Model.term&startDate=@Model.sDate&endDate=@Model.eDate&page-@i">@i</a></li>
+                  }
+                  else
+                  {
+                    <li><a href="/Chemist/OrderHistory?term=@Model.term&startDate=@Model.sDate&endDate=@Model.eDate&page-@i">@i</a></li>
+                  }
+              }
+          </ul>
+      </div>
+  </div>
+
+</div>
+
+@Html.Partial("~/Views/Shared/_DeliveryStatus.cshtml")
+@Html.Partial("~/Views/Shared/_ModalPopUpScript.cshtml")
+@if (!User.Identity.IsAuthenticated)
+{
+    <link rel="stylesheet" type="text/css" href="/lib/bootstrap/css/bootstrap.css">
+    @Html.Partial("~/Views/Shared/_script.cshtml")
+}
+
+<script src="~/js/jquery-2.1.4.min.js"></script>

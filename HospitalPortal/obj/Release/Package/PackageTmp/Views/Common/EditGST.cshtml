@@ -1,0 +1,66 @@
+﻿@model HospitalPortal.Models.ViewModels.GSTMasterDTO
+@{
+    ViewBag.Title = "EditGST";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Edit GST</h2>
+
+<style>
+    #mainContainer {
+        width: 60%;
+        margin-left: 1%;
+        margin-top: 1%;
+    }
+</style>
+<a href="/Common/GST" class="btn btn-primary">Back</a>
+@using (Html.BeginForm("EditGST", "Common", FormMethod.Post))
+{
+    <div id="mainContainer">
+        @Html.HiddenFor(a => a.Id)
+        @Html.HiddenFor(a => a.IsDeleted)
+        @Html.HiddenFor(a => a.Name)
+        @*@Html.Partial("~/Views/Shared/_DisplayMessageUpdate.cshtml")*@
+        @if (TempData["msg"] != null)
+        {
+            string msg = TempData["msg"].ToString();
+            <div class="row">
+                <div class="col-md-12">
+                    @if (msg == "ok")
+                    {
+                        <div class="alert alert-success">
+                            Updated Successfully.
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-danger">
+                            @msg
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+        <br /><br />
+        <div class="row">
+            <div class="col-md-1">
+                <h4>Name</h4>
+            </div>
+            <div class="col-md-3">
+                <h4>@Model.Name</h4>
+            </div>
+            <div class="col-md-5">
+                @Html.TextBoxFor(a => a.Amount, new { @class = "form-control" })
+            </div>
+            <div class="col-md-3">
+                <input type="submit" value="Submit" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+}
+
+
+
+<script src="/Scripts/Library/jquery-1.7.1.min.js"></script>
+<script src="/Scripts/Library/jquery-ui-1.8.20.min.js"></script>
+

@@ -1,0 +1,58 @@
+﻿@model HospitalPortal.Models.ViewModels.VehicleAllotmentDTO
+@{
+    ViewBag.Title = "VehicleAllotment";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Vehicle Allotment to New Driver</h2>
+@*@using (Html.BeginForm())
+    {
+        <div class="row">
+            <div class="col-md-3">
+                <h3>Select Any Type</h3>
+            </div>
+            <div class="col-md-3">
+                @Html.DropDownListFor(a => a.Id, Model.VehicleList, "Select", new { @class = "form-control" })
+            </div>
+            <div class="col-md-3">
+                <input type="submit" value="Search" class="btn btn-primary">
+            </div>
+        </div>
+    }*@
+
+
+<div style="margin-top:2%; width: 60%;">
+    @if (Model.VehicleLists == null)
+    {
+
+    }
+    else
+    { <div class="row">
+        <div class="col-md-12">
+            <table id="myTable">
+                <thead>
+                    <tr>
+                        <th>Driver Name</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.VehicleLists)
+                {
+                        <tr>
+                            <td>@item.DriverName</td>
+                            <td><a href="/Vehicle/UpdateVehicles?Id=@item.Id" class="btn btn-primary">Update</a></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    }
+</div>
+<link rel="stylesheet" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
+<script src="/js/jquery-1.11.1.min.js"></script>
+<script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script>
+    $('#myTable').DataTable();
+</script>

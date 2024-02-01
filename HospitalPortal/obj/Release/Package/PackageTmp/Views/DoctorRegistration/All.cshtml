@@ -1,0 +1,178 @@
+﻿@model IEnumerable<HospitalPortal.Models.ViewModels.DoctorDTO>
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    string role = HospitalPortal.Utility.UserIdentity.UserRole;
+}
+
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="~/js/jquery.doubleScroll.js"></script>
+<style>
+    #mainContainer {
+        width: 99%;
+        margin-top: 1%;
+        margin-left: 1%;
+    }
+
+    .double-scroll {
+        width: 100%;
+    }
+</style>
+    <div id="mainContainer">
+        <div class="row">
+            <div class="col-md-6">
+                <h3 style="text-align:center"><b>Doctor List</b></h3>
+            </div>
+        </div>
+        @using (Html.BeginForm("All", "DoctorRegistration", FormMethod.Get))
+        {
+            <div class="row">
+                <div class="col-md-4">
+                    <input type="text" class="form-control" id="term" name="term" placeholder="Serach by DoctorID" />
+                </div>
+                <div class="col-md-3">
+                    <input type="submit" class="btn btn-primary" value="Search" />
+                </div>
+                <div class="col-md-3">
+                    <a href="/DoctorRegistration/All" class="btn btn-primary">Show All</a>
+                </div>
+            </div>
+        }
+
+        @if (Model == null)
+        {
+            <div class="alert">
+                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+         @TempData["msg"]</div>
+        }
+        else
+        {
+        <div class="row " style="overflow-y:scroll;" >
+                <div class="col-md-12 ">
+                    <div class="row" style="text-align:center">
+                        <ul class="pagination">
+                            @for (int i = 1; i <= Model.FirstOrDefault().NumberOfPages; i++)
+                            {
+                                if (Model.FirstOrDefault().Page == i)
+                                {
+                                    <li class="active"><a href="/DoctorRegistration/All?page=@i">@i</a></li>
+                                }
+                                else
+                                {
+                                    <li><a href="/DoctorRegistration/All?page=@i">@i</a></li>
+                                }
+                            }
+
+                        </ul>
+                    </div>
+                    <div class="double-scroll">
+                        <table class="table table-bordered ">
+                            <thead>
+                                <tr id="myHeader" class="header">
+                                    <th>Doctor Id</th>
+                                    <th>Name</th>
+                                    <th>Fee</th>
+                                    <th>Franchise</th>
+                                    <th>Department</th>
+                                    <th>Specialist In</th>
+                                    <th>Mobile & Phone No</th>
+                                    <th>Email </th>
+                                    <th>Address</th>
+                                    <th>Licence</th>
+                                    @*<th>PAN No.</th>
+                                    <th>Aadhar No.</th>*@
+                                    @if (role == "admin")
+                                {
+                                        <th>Approval</th>
+                                        <th>Action</th>
+                                }
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                            {
+                                    <tr>
+                                        <td>@item.DoctorId</td>
+                                        <td>Dr. @item.DoctorName</td>
+                                        <td>Rs. @item.Fee </td>
+                                        <td>
+                                            @if (item.Vendor_Id < 0 || item.Vendor_Id == null)
+                                        {
+                                            if (role == "admin")
+                                            {
+                                                    <a href="/Admin/ShareToVendor?Id=@item.Id&Role=Doctor">Share To Vendor</a>
+                                            }
+                                        }
+                                        else
+                                        {
+                                                @item.VendorName <span>/ @item.UniqueId</span>
+                                        }
+                                        </td>
+                                        <td>@item.DepartmentName</td>
+                                        <td>@item.SpecialistName</td>
+                                        <td>
+                                            @item.MobileNumber <br /> (Dr. @item.DoctorName ) <br />
+                                            @item.PhoneNumber
+                                        </td>
+                                        <td>@item.EmailId</td>
+                                        <td>@item.Location , @item.CityName, @item.StateName</td>
+                                        <td>
+                                            @item.LicenceNumber
+                                            <a href="/Images/@item.LicenceImage">
+                                                <img src="/Images/@item.LicenceImage" style="width:100px;height:80px" />
+                                            </a>
+                                        </td>
+                                        @*<td>
+                                            @item.PAN<br />
+                                        @if (string.IsNullOrEmpty(item.AadharImage) && string.IsNullOrEmpty(item.AadharImage2))
+                                        {
+                                            <a href="/Images/@item.PanImage">
+                                                <img src="/Images/@item.PanImage" class="thumb" />
+                                            </a>
+                                        }
+                                    </td>*@
+                                    @*<td>
+                                        @item.AadharNumber
+                                        @if (string.IsNullOrEmpty(item.PanImage))
+                                        {
+                                            <a href="/Images/@item.AadharImage">
+                                                <img src="/Images/@item.AadharImage" class="thumb" />
+                                            </a>
+                                            <a href="/Images/@item.AadharImage2">
+                                                <img src="/Images/@item.AadharImage2" class="thumb" />
+                                            </a>
+                                        }
+                                    </td>*@
+
+                                    @if (role == "admin")
+                                    {
+                                        <td>
+                                            @if (item.IsApproved)
+                                            {
+                                                @Html.ActionLink("Approved", "UpdateStatus", new { id = item.Id }, new { @class = "btn btn-success" })
+                                            }
+                                            else
+                                            {
+                                                @Html.ActionLink("Not Approved", "UpdateStatus", new { id = item.Id }, new { @class = "btn btn-danger" })
+                                            }
+                                        </td>
+                                        <td>
+                                            @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { onclick = "return confirm('Are sure wants to Edit?');", @class = "btn btn-info" })
+                                            <a href="/Common/BankDetails?Id=@item.AdminLogin_Id" class="btn btn-primary">Bank Details</a>
+                                            @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { onclick = "return confirm('Are sure wants to delete?');", @class = "btn btn-danger" })
+                                        </td>
+                                    }
+                                </tr>
+                            }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+</div>
+        }
+    </div>
+@*<script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>*@
+<script>
+    $('.double-scroll').doubleScroll();
+</script>

@@ -1,0 +1,56 @@
+﻿@{ 
+    int loginId = Convert.ToInt32(User.Identity.Name);
+    int id = new HospitalPortal.Models.DomainModels.DbEntities().RWAs.FirstOrDefault(a => a.AdminLogin_Id == loginId).Id;
+    bool CurrentStatus = new HospitalPortal.Models.DomainModels.DbEntities().RWAs.FirstOrDefault(a => a.Id == id).IsApproved;
+
+}
+
+<div class="sidebar-nav">
+    <ul>
+        <li class="nav-header"><a href="/Admin/Dashboard/" style="cursor:pointer"> <i class="fa fa-bars"></i> Dashboard</a></li>
+        <li class="nav-header">
+            <a href="/Patient/Add?rwaId=@id" style="cursor:pointer">
+                <i class="fa fa-plus"></i> Add Patient
+            </a>
+        </li>
+        <li class="nav-header">
+            <a href="/Bank/UpdateBank?id=@id" style="cursor:pointer">
+                <i class="fa fa-pencil"></i> Update Bank Details
+            </a>
+        </li>
+@if (CurrentStatus == false) { }
+else
+{
+        <li class="nav-header">
+            <a href="/Patient/PatientList?rwaId=@id" style="cursor:pointer">
+                <i class="fa fa-plus"></i>Patient List
+            </a>
+        </li>
+        <li class="nav-header"><a href="/Rwa/Edit?id=@id" style="cursor:pointer">
+                                   <i class="fa fa-pencil"></i> Manage Profile</a></li>
+
+
+        <li class="nav-header">
+            <a href="/Rwa/PaymentReport?id=@id" style="cursor:pointer">
+                <i class="fa fa-plus"></i>My Payment Report
+            </a>
+        </li>
+        <li class="nav-header">
+            <a href="/Rwa/PayOutReport?id=@id" style="cursor:pointer">
+                <i class="fa fa-plus"></i>My Payout Report
+            </a>
+        </li>
+        @*<li>
+            <ul class="regList-menu nav nav-list collapse">
+                <li>
+                    <a href="/Vehicle/All?vendorId=@vendorId" style="cursor:pointer"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Vehicle Entries</a>
+                </li>
+
+           
+
+                <li>
+            </ul>
+        </li>*@
+}
+    </ul>
+</div>

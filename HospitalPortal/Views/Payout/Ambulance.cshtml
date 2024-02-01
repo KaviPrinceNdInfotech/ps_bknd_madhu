@@ -1,0 +1,181 @@
+﻿@model HospitalPortal.Models.ViewModels.AmbulancesReport
+@{
+    ViewBag.Title = "Ambulance";
+    Layout = "~/Views/Shared/_PayoutLayoutPage.cshtml";
+}
+
+<h2>Ambulance</h2>
+
+@*<div class=" row">
+    <div class="col-md-3">
+        <div class=" form-group">
+            <a href="@Url.Action("AdminAmbulanceExcel", "Payout")">
+                <img src="https://www.pinclipart.com/picdir/big/178-1780962_download-105-free-excel-icons-here-excel-download.png" alt="List View" style="width: 55px;">
+            </a>
+        </div>
+    </div>
+</div>*@
+
+<style>
+    #main {
+        margin: 6%;
+        margin-left: 6%;
+    }
+</style>
+<div id="main">
+    @using (Html.BeginForm("Ambulance", "Payout", FormMethod.Get))
+    {
+        <div class="row">
+            <div class="col-md-4">
+                @Html.TextBoxFor(a => a.sdate, new { @class = "datepicker form-control", required = "required" })
+            </div>
+            <div class="col-md-4">
+                <input type="submit" id="test" value="Search" class="btn btn-primary" />
+            </div>
+        </div>
+    }
+
+    @if (Model.Ambulance == null)
+    {
+        if (TempData["msg"] != null)
+        {
+            <h3 style="color:red">@TempData["msg"]</h3>
+        }
+    }
+    else
+    {
+        <table id="tables" class="table table-responsive">
+            <thead>
+                <tr>
+                    <th>
+                        User Id
+                    </th>
+                    <th>
+                        Vehicle Number
+                    </th>
+                    <th>
+                        Vehicle Name
+                    </th>
+                    <th>
+                        Driver Name
+                    </th>
+                    <th>
+                        10% of Basic Amount
+                    </th>
+                    <th>
+                        Transaction Fee
+                    </th>
+                    <th>
+                        GST in %
+                    </th>
+                    <th>
+                        Total Amount
+                    </th>
+                    @*<th>Deducted Amout</th>*@
+                    <th>
+                        Commission in %
+                    </th>
+                    <th>
+                        TDS in %
+                    </th>
+                    <th>
+                        @*Payable Amount*@
+                        Net Amount
+                    </th>
+                    @*<th>Action</th>*@
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Ambulance)
+                {
+                    <tr>
+                        <td>
+                            @item.DriverId
+                        </td>
+                        <td>
+                            @item.VehicleNumber
+                        </td>
+                        <td>
+                            @item.VehicleName
+                        </td>
+                        <td>
+                            @item.DriverName
+                        </td>
+                        @*<td>
+            @item.Amount
+        </td>
+        @{
+            decimal? amount = 0;
+            if (item.Amount==null)
+            {
+                amount = 0;
+            }
+            else
+            {
+                amount = item.Amount;
+            }
+            decimal? amt =(Math.Round(amount * ViewBag.Amount) / 100);
+            decimal? Value = item.Amount - amt;
+
+        }
+        <td>@amt</td>
+        <td>@Value</td>*@
+                        <td>
+                            @item.Amount
+                        </td>
+                        @{
+                            double? razorpaycomm = @item.Amountwithrazorpaycomm;
+                            double? basicamt = (double)@item.Amount;
+                            double? razarfeeamt = razorpaycomm - basicamt;
+
+                        }
+                        <td>@razarfeeamt</td>
+                        <td>
+                            @ViewBag.gstAmount
+                        </td>
+                        @{
+
+                            double? GSTAmt = ((double)item.Amount * ViewBag.gstAmount) / 100;
+                            //double? WithGSTAmt = item.Amount + GSTAmt;
+                            double? WithGSTAmt = (double)item.Amount + razarfeeamt - (GSTAmt);
+
+                        }
+                        <td>@WithGSTAmt</td>
+
+
+                        <td>@ViewBag.Amount</td>
+                        <td>@ViewBag.tdsAmount</td>
+                        @{
+
+                            //decimal? commAmt = (item.Amount * ViewBag.Amount) / 100;
+                            //decimal? tdsamt = (item.Amount * ViewBag.tdsAmount) / 100;
+                            //decimal? Value = item.Amount - (commAmt + tdsamt);
+                            double? commAmt = (item.Amount * ViewBag.Amount) / 100;
+                            double? tdsamt = (item.Amount * ViewBag.tdsAmount) / 100;
+                            double? Value = (double)item.Amount - (commAmt + tdsamt);
+
+                        }
+
+                        <td>@Value</td>
+                        @*<td>
+            <a href="/Payout/WeeklyReport?Id=@item.VehicleId">View Record</a>
+        </td>*@
+                        @*<td>
+                            <a href="/Payout/PayAmbulance_Driver?Driver_Id=@item.Driver_Id&Amount=@Value" class="btn btn-primary">Pay</a>
+                        </td>
+                        <td>
+                            <a href="/Payout/ViewDriver_AmbulancePayoutHistory?Id=@item.Driver_Id" class="btn btn-primary">View Payout History</a>
+                        </td>*@
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+
+<script src="/Scripts/Library/jquery-1.7.1.min.js"></script>
+<link href="~/css/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
+<script>
+    $(".datepicker").datepicker().datepicker('setDate', 'today');
+</script>

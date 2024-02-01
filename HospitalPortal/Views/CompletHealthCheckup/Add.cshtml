@@ -1,0 +1,267 @@
+﻿@model HospitalPortal.Models.ViewModels.HealthCheckupCenterDTO
+@{
+    if (User.Identity.IsAuthenticated)
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_SignUp.cshtml";
+    }
+}
+
+<style>
+    #mainContainer {
+        width: 60%;
+        margin-top: 1%;
+        margin-left: 1%;
+    }
+</style>
+
+@using (Html.BeginForm("Add", "CompletHealthCheckup", FormMethod.Post, new { @encType = "multipart/form-data" }))
+{
+    <div id="mainContainer">
+
+        @*<div class="row">
+               <div class="col-md-6">
+                  @Html.ActionLink("Show All", "All", null, new { @class="btn btn-info"})
+               </div>
+            </div>*@
+
+        <div class="row">
+            <div class="col-md-6">
+                <h3>Health Checkup Center Registration</h3>
+            </div>
+        </div>
+
+        @*@Html.HiddenFor(a => a.Id)
+            @Html.HiddenFor(a=>a.IsDeleted)
+            @Html.HiddenFor(a=>a.AdminLogin_Id)
+        *@
+        @Html.Partial("~/Views/Shared/_DisplayMessage.cshtml")
+
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    Center Name * @Html.TextBoxFor(a => a.LabName, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.LabName)
+                    </span>
+                </div>
+
+                @*<div class="form-group">
+                        Shop Name * @Html.TextBoxFor(a => a.ShopName, new { @class = "form-control" })
+                        <span class="red">
+                            @Html.ValidationMessageFor(a => a.ShopName)
+                        </span>
+                    </div>*@
+
+                <div class="form-group">
+                    Mobile Number * @Html.TextBoxFor(a => a.MobileNumber, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.MobileNumber)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    Landline Number * @Html.TextBoxFor(a => a.PhoneNumber, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.PhoneNumber)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    Email Id *  @Html.TextBoxFor(a => a.EmailId, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.EmailId)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    Password * @Html.PasswordFor(a => a.Password, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.Password)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    Confirm Your Password * @Html.PasswordFor(a => a.ConfirmPassword, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.ConfirmPassword)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    State * @Html.DropDownListFor(a => a.StateMaster_Id, Model.States, "Select", new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.StateMaster_Id)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    @{ Html.EnableClientValidation(false);}
+                    City * @Html.DropDownListFor(a => a.CityMaster_Id,
+              Enumerable.Empty<SelectListItem>()
+              , "Select", new { @class = "form-control" })
+                    <span class="red">
+
+                        @Html.ValidationMessageFor(a => a.CityMaster_Id)
+                        @{ Html.EnableClientValidation(true);}
+
+
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    Other City (If you are not able to find it above )
+                    @Html.TextBoxFor(a => a.OtherCity, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.OtherCity)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    @{ Html.EnableClientValidation(false);}
+                    Location *  @Html.DropDownListFor(a => a.Location_Id,
+    Enumerable.Empty<SelectListItem>()
+    , "Select", new { @class = "form-control" })
+
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.Location_Id)
+                    </span>
+                    @{ Html.EnableClientValidation(true);}
+                </div>
+
+                <div class="form-group">
+                    Other Location (If you are not able to find it above )
+                    @Html.TextBoxFor(a => a.OtherLocation, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.OtherLocation)
+                    </span>
+                </div>
+                <div class="form-group">
+                    Address * @Html.TextAreaFor(a => a.Location, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.Location)
+                    </span>
+                </div>
+                <div class="form-group">
+                    PinCode * @Html.TextBoxFor(a => a.PinCode, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.PinCode)
+                    </span>
+                </div>
+                <div class="form-group">
+                    Licence Image File * @Html.TextBoxFor(a => a.LicenceImageFile, new { @class = "form-control", type = "file" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.LicenceImageFile)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    Licence Number @Html.TextBoxFor(a => a.LicenceNumber, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.LicenceNumber)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    GST Number   @Html.TextBoxFor(a => a.GSTNumber, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.GSTNumber)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    PAN Number *  @Html.TextBoxFor(a => a.PAN, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.PAN)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    Aadhar Number  @Html.TextBoxFor(a => a.AadharNumber, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.AadharNumber)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    Aadhar Image  @Html.TextBoxFor(a => a.AadharImageFile, new { @class = "form-control", type = "file" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.AadharImageFile)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    Registration Cert. No. *  @Html.TextBoxFor(a => a.RegNo, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.RegNo)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    Registration Cert. Image *  @Html.TextBoxFor(a => a.RegImageFile, new { @class = "form-control", type = "file" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.RegImageFile)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-5">
+                            Start Time *  @Html.TextBoxFor(a => a.StateTime, new { @class = "form-control", type = "time", required = "required" })
+                            <span class="red">
+                                @Html.ValidationMessageFor(a => a.StateTime)
+                            </span>
+                        </div>
+                        <div class="col-md-2" style="margin-top:5%;"><b>To </b></div>
+
+                        <div class="col-md-5">
+                            End Time  *  @Html.TextBoxFor(a => a.EndTime, new { @class = "form-control", type = "time", required = "required" })
+                            <span class="red">
+                                @Html.ValidationMessageFor(a => a.EndTime)
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+                @if (User.Identity.IsAuthenticated)
+                {
+
+                }
+                else
+                {
+                    @Html.Partial("~/Views/Shared/_Terms&ConditionView.cshtml")
+                }
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-info" />
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@if (!User.Identity.IsAuthenticated)
+{
+    <link rel="stylesheet" type="text/css" href="/lib/bootstrap/css/bootstrap.css">
+    @Html.Partial("~/Views/Shared/_script.cshtml")
+}
+<script src="/Scripts/Library/jquery-1.7.1.min.js"></script>
+@Html.Partial("~/Views/Shared/_StateCityLocCascading.cshtml")
+
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places"></script>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyAVJ6WcbMb96HxFwYJTgo3a00yxYj-ha80"></script>
+
+@*<script type="text/javascript">
+    google.maps.event.addDomListener(window, 'load', function () {
+        var options = {
+            types: ['(cities)'],
+            componentRestrictions: { country: "in" }
+        };
+        var input = document.getElementById('Location');
+        var places = new google.maps.places.Autocomplete(input, options);
+    });
+</script>*@
+
+

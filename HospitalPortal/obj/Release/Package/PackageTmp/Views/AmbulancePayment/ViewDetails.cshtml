@@ -1,0 +1,195 @@
+﻿@model HospitalPortal.Controllers.AmbulancePaymentController.AmbulanceList
+
+@{
+    ViewBag.Title = "ViewDoctorDetails";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2 style="text-align:center; margin-bottom:2%">Vehicle Travel Report</h2>
+
+<table class="table table-bordered">
+    <thead>
+
+        @if (Model.Ambulance.Count() != 0)
+        {
+            <tr>
+                <th>Vehicle Name</th>
+                <td>            @Model.Ambulance.FirstOrDefault().VehicleName</td>
+                <th>Vehicle No.</th>
+                <td>@Model.Ambulance.FirstOrDefault().VehicleNumber</td>
+            </tr>
+            <tr>
+                <th>Driver Name</th>
+                <td>@Model.Ambulance.FirstOrDefault().DriverName</td>
+            </tr>
+        }
+        else
+        {
+            <tr>
+                <th>Vehicle Name</th>
+                <td>@Model.VehicleName</td>
+                <th>Vehicle No.</th>
+                <td>@Model.VehicleNumber</td>
+            </tr>
+            <tr>
+                <th>Driver Name</th>
+                <td>@Model.DriverName</td>
+            </tr>
+        }
+
+
+    </thead>
+</table>
+
+@using (Html.BeginForm())
+{
+    <div style="margin-bottom:3%;">
+        <div class="row">
+            <h4 style="text-align:center">Search By Date</h4>
+        </div>
+        <div class="row">
+            <div class='col-sm-5'>
+                <div class="form-group">
+                    <div class='input-group date'>
+                        <input type='text' name="sdate" id="datepicker1" class="form-control" placeholder="From Date" />
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class='col-sm-5'>
+                <div class="form-group">
+                    <div class='input-group date' id='datetimepicker1'>
+                        <input type='text' name="edate" id="datepicker2" class="form-control" placeholder="Date To" />
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2"><input type="submit" value="Filter" class="btn btn-primary" /></div>
+
+        </div>
+    </div>
+}
+@if (Model.Ambulance.Count() == 0)
+{
+    <h2 style="color:red; text-align:center;">No Booking of Current Month</h2>
+}
+else
+{
+    <table id="doctor">
+        <thead>
+            <tr>
+                <th>Distance</th>
+                <th>Amount</th>
+                <th>Patient Name</th>
+                <th>Pick Up Place</th>
+                <th>Drop Place</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Ambulance)
+            {
+                <tr>
+                    <td>
+                       @Math.Round(@item.Distance) km
+                    </td>
+                    <td>
+                        &#8377; @item.Amount
+                    </td>
+                    <td>@item.PatientName</td>
+                    <td>@item.PickUp_Place</td>
+                    <td>@item.Drop_Place</td>
+                    @*<td>
+                        <a href="/Report/ViewDoctorAppointment?date=@item.AppointmentDate1" class="btn btn-primary">View More</a>
+                    </td>*@
+                </tr>
+            }
+
+        </tbody>
+    </table>
+                    <div class="row">
+                        <div class="col-md-3">
+                            Total Amount
+                        </div>
+                        <div class="col-md-3">
+                            <b style="color:red; font-size:medium">
+                                @if (ViewBag.Total != null)
+                                {
+
+                                    <b style="color:red">&#8377; @ViewBag.Total</b>}
+                                else
+                                {
+                                    <b style="color:red">&#8377; @ViewBag.Amount</b>
+                                }
+
+                        </div>
+                    </div>
+
+}
+<!--DatePicker-->
+
+
+
+
+
+
+
+
+<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css">
+
+<script type="text/javascript">
+
+                    var table = $('#doctor').DataTable();
+
+
+                    // Bootstrap datepicker
+                    //$(".input-daterange input").each(function () {
+                    //    $(this).datepicker("clearDates");
+                    //});
+
+
+
+                    // Set up your table
+                    //table = $("#my-table").DataTable({
+                    //    paging: false,
+                    //    info: false
+                    //});
+
+                    // Extend dataTables search
+                    //$.fn.dataTable.ext.search.push(
+                    //  function (settings, data, dataIndex) {
+                    //      debugger
+                    //      var min = $('#min-date').val();
+                    //      var max = $('#max-date').val();
+                    //      var createdAt = data[0] || 0; // Our date column in the table
+
+                    //      if (
+                    //        (min == "" || max == "") || (moment(createdAt).isSameOrAfter(min) && moment(createdAt).isSameOrBefore(max))
+                    //      ) {
+                    //          return true;
+                    //      }
+                    //      return false;
+                    //  }
+                    //);
+
+                    // Re-draw the table when the a date range filter changes
+                    //$('.date-range-filter').change(function () {
+                    //    table.draw();
+                    //});
+
+                    //$('#doctor_filter').hide();
+
+</script>
+<link href="/css/jquery-ui.css" rel="stylesheet" />
+<script src="/js/jquery-ui.js"></script>
+
+<script language="javascript">
+    $("#datepicker1").datepicker().datepicker('setDate', 'today');
+    $("#datepicker2").datepicker().datepicker('setDate', 'today');
+
+</script>

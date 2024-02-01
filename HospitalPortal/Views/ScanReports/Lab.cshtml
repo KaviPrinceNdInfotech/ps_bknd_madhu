@@ -1,0 +1,107 @@
+﻿@model HospitalPortal.Models.ViewModels.ScanReportVM
+@{
+    ViewBag.Title = "Lab";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Lab Scan Reports</h2>
+<div style="margin:auto; width:90%">
+    <div class="row">
+        <div class="col-md-3">
+            State: @Html.DropDownListFor(x => x.StateMaster_Id,Model.StateList, "Select State", new { @class = "form-control", style = "height: calc(3.25rem + 2px) !important;" })
+        </div>
+        <div class="col-md-3" style="margin-top: 2.2% !important;">
+            @Html.DropDownListFor(x => x.CityMaster_Id, Enumerable.Empty<SelectListItem>(), "Select City", new { @class = "form-control", style = "height: calc(3.25rem + 2px) !important;" })
+        </div>
+        <div class="col-md-3" style="margin-top: 2.2% !important;">
+            @Html.DropDownListFor(x => x.Location_Id, Enumerable.Empty<SelectListItem>(), "Select Location", new { @class = "form-control", style = "height: calc(3.25rem + 2px) !important;" })
+        </div>
+        <div class="col-md-3" style="margin-top: 2.2% !important;">
+            <input type="button" value="Check" id="btnCheck" class="btn btn-primary" />
+        </div>
+    </div>
+</div>
+<div id="prevAtt" style="margin-left: 5%; margin-top: 6%;">
+
+</div>
+<script src="~/js/jquery-1.11.1.min.js"></script>
+<script>
+    $("#StateMaster_Id").change(function () {
+        debugger
+        var StateMasterId = $("#StateMaster_Id").val();
+        var cityId = $("#CityMaster_Id");
+        cityId.empty();
+        cityId.append("<option value=''> Select City </option>");
+            $.ajax({
+                url: "/ScanReports/GetCityByStateId?StateMaster_Id=" + StateMasterId,
+                type: "get",
+                success: function (response) {
+                    //  console.log(response);
+                    //$.each(response, function (key, value) {
+                    //    deptId.append("<option value= '" + value.DeptId + "'>" + value.DeptName + "</option>");
+
+                    //});
+                    if (response.length > 0) {
+                        for(let i=0;i<response.length;i++)
+                        {
+                            cityId.append("<option value= '" + response[i].Id + "'>" + response[i].CityName + "</option>");
+
+                        }
+                    }
+                },
+                error: function(error){
+
+                    console.log(error.responseText);
+                }
+            });
+    });
+
+    $("#CityMaster_Id").change(function () {
+        debugger
+        var CityMasterId = $("#CityMaster_Id").val();
+        var locationId = $("#Location_Id");
+        locationId.empty();
+        locationId.append("<option value=''> Select Location </option>");
+        $.ajax({
+            url: "/ScanReports/GetLocationByCityId?CityMaster_Id=" + CityMasterId,
+            type: "get",
+            success: function (response) {
+                //  console.log(response);
+                //$.each(response, function (key, value) {
+                //    deptId.append("<option value= '" + value.DeptId + "'>" + value.DeptName + "</option>");
+
+                //});
+                if (response.length > 0) {
+                    for (let i = 0; i < response.length; i++) {
+                        locationId.append("<option value= '" + response[i].Id + "'>" + response[i].LocationName + "</option>");
+
+                    }
+                }
+            },
+            error: function (error) {
+
+                console.log(error.responseText);
+            }
+        });
+    });
+
+
+    $("#btnCheck").click(function () {
+        debugger
+        var State = $("#StateMaster_Id").val();
+        var City = $("#CityMaster_Id").val();
+        var Location = $("#Location_Id").val();
+            $.ajax({
+                url: "/ScanReports/LabList?State="+State+"&City="+City+"&Location="+Location+"",
+                type: "get",
+                success: function (response) {
+                    console.log(response);
+                    $("#prevAtt").html(response);
+                },
+                error: function (error) {
+                    console.log(error.responseText);
+                    msg.text("");
+                }
+            });
+        });
+</script>

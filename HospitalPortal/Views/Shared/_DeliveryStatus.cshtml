@@ -1,0 +1,78 @@
+﻿<div class="container">
+    <!-- Trigger the modal with a button -->
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    Delivery Status
+                    <div>
+                        <span id="mesg" style="color:red"></span>
+                    </div>
+                    <button type="button" class="close" id="btnclose" data-dismiss="modal"><i class="fa fa-close" style="color:red"></i></button>
+                </div>
+                <div class="modal-body">
+                    <form id="quatform" method="post" enctype="multipart/form-data" onsubmit="return AjaxPost(this)">
+                        <input type="hidden" id="code" name="code" readonly />
+                        Delvery Status:<br>
+                        <select class="form-control" name="deliveryStatus" id="deliveryStatus">
+                            <option value="">Select Status</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Shipped">Shipped</option>
+                            <option value="Delivered">Deliverd</option>
+                            <option value="Cancel">Cancel</option>
+                        </select>
+                        Delivery Date:<br>
+                        <input type="text" class="form-control dp" placeholder="Select Date" rows="5" required="required" id="date" name="date" />
+                        Remarks:<br>
+                        <textarea class="form-control" rows="5" id="description" name="description" placeholder="Please Make Some Remarks" required="required"></textarea>
+                        <button class="btn btn-danger" id="register" style="float: right;">
+                            Update Record
+                        </button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="myModal1" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    Delivery Status
+                    <div>
+                        <span id="mesg" style="color:red"></span>
+                    </div>
+                    <button type="button" class="close" id="btnclose" data-dismiss="modal"><i class="fa fa-close" style="color:red"></i></button>
+                </div>
+                <div class="modal-body">
+                    <form id="quatform" method="post" enctype="multipart/form-data" onsubmit="return AjaxPost(this)">
+                        <input type="hidden" id="code" name="code" readonly />
+                        Delvery Status:<br>
+                        <select class="form-control" name="deliveryStatus" id="deliveryStatus">
+                            <option value="">Select Status</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Shipped">Shipped</option>
+                            <option value="Delivered">Deliverd</option>
+                            <option value="Cancel">Cancel</option>
+                        </select>
+                        <button class="btn btn-danger" id="register" style="float: right;">
+                            Update Record
+                        </button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,96 @@
+﻿@model HospitalPortal.Models.ViewModels.ReportDetails
+@{
+    ViewBag.Title = "ViewReport";
+}
+<link href="/css/bootstrap.min.css" rel="stylesheet" />
+
+
+@using (Html.BeginForm())
+{
+    <div class="row">
+        <div class="col-md-4">
+            @Html.TextBoxFor(a => a.ServiceAcceptanceDate, new { @class = "dp form-control", required = "required" })
+        </div>
+        <div class="col-md-4">
+            <input type="button" id="test" value="Search" class="btn btn-primary" />
+        </div>
+    </div>
+
+
+}
+@if (Model.Nurses == null)
+{
+    if (TempData["msg"] != null)
+    {
+        <h2 style="color:blueviolet">
+            @TempData["msg"]
+        </h2>
+    }
+}
+else
+{
+    <table id="tables" class="table table-responsive">
+        <thead>
+            <tr>
+                <th>
+                    Date
+                </th>
+                <th>
+                    Amount
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Nurses)
+            {
+                <tr>
+                    <td>
+                        @item.ServiceAcceptanceDate.ToString("dd-MMM-yyyy")
+                    </td>
+                    <td>
+                        @item.TotalFee
+                    </td>
+                </tr>
+            }
+            <tr>
+                <td><h3>Total</h3></td>
+                <td>
+                    @if (ViewBag.Total != null)
+                {
+                    <h3 style="color:red"> ₹ @ViewBag.Total</h3>
+                }
+            </td>
+        </tr>
+    </tbody>
+</table>
+}
+<script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
+<link href="~/css/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
+<script>
+    $(".dp").datepicker({
+        changeMonth: true,
+        changeYear: true,
+        yearRange: 'c-0:c+20'
+    });
+
+
+    $("#test").click(function () {
+        debugger
+
+        var date = $("#ServiceAcceptanceDate").val();
+        $.ajax({
+            url: "/ViewReport/DailyNurse?date="+ date +"",
+            type: "get",
+            success: function (response) {
+                console.log(response);
+                $("#prevAtt").html(response);
+            },
+            error: function (error) {
+                console.log(error.responseText);
+
+            }
+        });
+
+    });
+</script>

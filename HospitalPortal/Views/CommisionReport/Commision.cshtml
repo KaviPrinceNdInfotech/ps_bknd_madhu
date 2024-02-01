@@ -1,0 +1,138 @@
+﻿@{
+    ViewBag.Title = "Commision";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Commision</h2>
+<div style="margin-bottom:auto; width:85%">
+    <div class="row">
+        <div class="col-md-3">
+        <select name="Name" id="Name" class="form-control">
+            <option value="">
+                Select Any
+            </option>
+            <option value="Doctor">
+                Doctor
+            </option>
+            <option value="Ambulance">
+                Ambulance
+            </option>
+            <option value="Nurse">
+                Nurse
+            </option>
+            <option value="Lab">
+                Lab
+            </option>
+            <option value="HealthCheckUp">
+                Health Check Up
+            </option>
+            <option value="Medicine">
+                Medicine
+            </option>
+        </select>
+    </div>
+        <div class="col-md-3">
+            <input type="button" id="btnCheck" value="Select" class="btn btn-primary" />
+        </div>
+    </div>
+
+    <div id="prevAtt" style="margin-top:5%;">
+
+    </div>
+</div>
+
+<script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
+<script>
+    $("#btnCheck").click(function () {
+        debugger
+        var term = $("#Name").val();
+        if (term == "Doctor") {
+            $.ajax({
+                url: "/CommisionReport/Doctor?term=" + term,
+                type: "get",
+                success: function (response) {
+                    console.log(response);
+                    $("#prevAtt").html(response);
+                },
+                error: function (error) {
+                    console.log(error.responseText);
+                    msg.text("");
+                }
+            });
+        }
+        if (term == "Nurse") {
+            $.ajax({
+                url: "/CommisionReport/Nurse?term=" + term,
+                type: "get",
+                success: function (response) {
+                    console.log(response);
+                    $("#prevAtt").html(response);
+                },
+                error: function (error) {
+                    console.log(error.responseText);
+                    msg.text("");
+                }
+            });
+        }
+        if (term == "Lab") {
+            $.ajax({
+                url: "/CommisionReport/Lab?term=" + term,
+                type: "get",
+                success: function (response) {
+                    console.log(response);
+                    $("#prevAtt").html(response);
+                },
+                error: function (error) {
+                    console.log(error.responseText);
+                    msg.text("");
+                }
+            });
+        }
+        if (term == "Health") {
+            $.ajax({
+                url: "/CommisionReport/Health?term=" + term,
+                type: "get",
+                success: function (response) {
+                    console.log(response);
+                    $("#prevAtt").html(response);
+                },
+                error: function (error) {
+                    console.log(error.responseText);
+                    msg.text("");
+                }
+            });
+        }
+        if (term == "Medicine") {
+            $.ajax({
+                url: "/CommisionReport/Medicine?term=" + term,
+                type: "get",
+                success: function (response) {
+                    console.log(response);
+                    $("#prevAtt").html(response);
+                },
+                error: function (error) {
+                    console.log(error.responseText);
+                    msg.text("");
+                }
+            });
+        }
+
+        if (term == "Ambulance") {
+            $.ajax({
+                url: "/CommisionReport/Driver?term=" + term,
+                type: "get",
+                success: function (response) {
+                    console.log(response);
+                    $("#prevAtt").html(response);
+                },
+                error: function (error) {
+                    console.log(error.responseText);
+                    msg.text("");
+                }
+            });
+        }
+
+    });
+</script>
+
+

@@ -1,0 +1,82 @@
+﻿ 
+
+@model HospitalPortal.Models.ViewModels.PatientDTO
+@{
+    ViewBag.Title = "ViewPrescriptionReport";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Prescription Report</h2>
+@using (Html.BeginForm())
+{
+    <div class="row" style="margin-bottom:3%;">
+        <div class="col-md-4">
+            Search By Name & User Id
+        </div>
+        <div class="col-md-3" style="margin-left: -13%;">
+            <input type="text" name="term" id="term" />
+        </div>
+        <div class="col-md-3">
+            <input type="submit" value="Filter" class="btn btn-primary" />
+        </div>
+    </div>
+}
+
+
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>User Id</th>
+            <th>Patient Name</th>
+            <th>EmailId</th>
+            <th>Mobile No</th>
+            <th>Location</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Patient != null)
+        {
+            foreach (var item in Model.Patient)
+            {
+                <tr>
+                    <td>@item.PatientRegNo</td>
+                    <td>@item.PatientName</td>
+                    <td>@item.EmailId</td>
+                    <td>@item.MobileNumber</td>
+                    <td>@item.Location</td>
+                    <td>
+                        @Html.ActionLink("Dowload Prescription", "DowloadPrescriptionReportPdf", new { id = item.Id }, new { @class = "btn btn-primary" })
+                        @*<input type="button" value="View Prescription" id="generate" class="btn btn-danger" />*@
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            @TempData["msg"]
+        }
+
+    </tbody>
+</table>
+@*<nav aria-label="Page navigation example">
+    <ul class="pagination"> 
+        @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+            if (i == Model.PageNumber)
+            {
+                <li class="page-item active"><a class="page-link" href="/Lab/LabPatientList?pageNumber=@i">@i</a></li>
+
+            }
+            else
+            {
+                <li class="page-item"><a class="page-link" href="/Lab/LabPatientList?pageNumber=@i">@i</a></li>
+
+            }
+        }
+      
+    </ul>
+</nav>*@
+
+

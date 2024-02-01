@@ -1,0 +1,52 @@
+﻿@model IEnumerable<HospitalPortal.Models.ViewModels.HospitalDepartmentDTO>
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+<style>
+    #mainContainer {
+        width: 40%;
+        margin-top: 1%;
+        margin-left: 1%;
+    }
+</style>
+
+<div id="mainContainer">
+    @*<div class="row">
+            <div class="col-md-6">
+                @Html.ActionLink("Add More", "Add", null, new { @class = "btn btn-info" })
+            </div>
+        </div>*@
+
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Our Departments</h3>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Dept.</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                          
+                            <td>@item.DeptName</td>
+                            <td>
+                               <a href="@Url.Action("RemoveDept", new {hospitalId = item.Hospital_Id})" class="btn btn-danger"><i class="fa fa-trash-o"></i></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

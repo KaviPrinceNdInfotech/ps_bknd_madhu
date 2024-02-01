@@ -1,0 +1,39 @@
+﻿@model HospitalPortal.Models.ViewModels.MedicineList
+@{
+    ViewBag.Title = "Medicine";
+    Layout = null;
+}
+
+<h2>Medicine</h2>
+
+<link href="/Styles/bootstrap.min.css" rel="stylesheet" />
+
+@if (Model.ChemistListDTO == null)
+{
+    <h3>No Records</h3>
+}
+else
+{
+    <table id="table_id" class="table table-bordered">
+        <thead>
+            <tr>
+                <th>
+                    Chemist Name
+                </th>
+                <th>
+                    Action
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.ChemistListDTO)
+            {
+                <tr>
+                    <td>@item.ChemistName</td>
+                    <td><a href="ChemistDetails?ChemistId=@item.Id" class="btn btn-primary">View Details</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+

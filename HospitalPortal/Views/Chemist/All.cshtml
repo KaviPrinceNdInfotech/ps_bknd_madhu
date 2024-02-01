@@ -1,0 +1,120 @@
+﻿@model IEnumerable<HospitalPortal.Models.ViewModels.ChemistDTO>
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    string Role = HospitalPortal.Utility.UserIdentity.UserRole;
+}
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="~/js/jquery.doubleScroll.js"></script>
+<style>
+    #mainContainer {
+        width: 99%;
+        margin-top: 1%;
+        margin-left: 1%;
+    }
+
+    .double-scroll {
+        width: 100%;
+    }
+</style>
+
+    <div id="mainContainer">
+        <div class="row">
+            <div class="col-md-6">
+                <h3>Chemist List</h3>
+            </div>
+        </div>
+
+        @using (Html.BeginForm("All", "Chemist", FormMethod.Get))
+        {
+            <div class="row">
+                <div class="col-md-4">
+                    <input type="text" class="form-control" id="term" name="term" placeholder="Serach by Name and ID" />
+                </div>
+                <div class="col-md-3">
+                    <input type="submit" class="btn btn-primary" value="Search" />
+                </div>
+                <div class="col-md-3">
+                    <a href="/Chemist/All" class="btn btn-primary">Show All</a>
+                </div>
+            </div>
+        }
+
+            <div class="double-scroll">
+               <table class="table table-bordered">
+                 <thead>
+                     <tr>
+                         <th>Chemist ID</th>
+                         <th>ChemistName</th>
+                         <th>Franchise</th>
+                         <th>Shop Name</th>
+                         <th>Mobile No</th>
+                         <th>Email</th>
+                         <th>Address</th>
+                         @*<th>PAN</th>*@
+                         <th>GST No.</th>
+                         <th>Licence</th>
+                         <th>Licence No</th>
+                         <th>Approval</th>
+                         <th>Action</th>
+                     </tr>
+                 </thead>
+                   <tbody>
+                       @foreach(var item in Model)
+                       {
+                           <tr>
+                               <td>@item.ChemistId</td>
+                               <td>@item.ChemistName</td>
+                               <td>
+                                   @if (item.Vendor_Id < 0 || item.Vendor_Id == null)
+                {
+                    if (Role == "admin")
+                    {
+                                           <a href="/Admin/ShareToVendor?Id=@item.Id&Role=Chemist">Share To Vendor</a>
+                                       }
+                                   }
+                                   else
+                                   {
+                                       @item.VendorName<span>/ @item.UniqueId</span>
+                                   }
+                               </td>
+                               <td>@item.ShopName</td>
+                               <td>@item.MobileNumber</td>
+                               <td>@item.EmailId</td>
+                               <td>@item.Location , @item.CityName, @item.StateName</td>
+                              
+                               @*<td>@item.PAN</td>*@
+                               <td>@item.GSTNumber</td>
+                               <td>
+                                   <a href="/Images/@item.LicenceImage">
+                                       <img src="/Images/@item.LicenceImage" style="width:100px;height:80px" />
+                                   </a>
+                               </td>
+                               <td>@item.LicenceNumber</td>
+                               
+                               <td>
+                                   @if (item.IsApproved)
+                                   {
+                                       @Html.ActionLink("Approved", "UpdateStatus", new { id = item.Id }, new { @class = "btn btn-success" })
+                                   }
+                                   else
+                                   {
+                                       @Html.ActionLink("Not Approved", "UpdateStatus", new { id = item.Id }, new { @class = "btn btn-danger" })
+                                   }
+                               </td>
+                               <td>
+                                   @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { onclick = "return confirm('Are sure wants to Edit?');", @class = "btn btn-info" })
+                                   <a href="/Common/BankDetails?Id=@item.AdminLogin_Id" class="btn btn-primary">Bank Details</a>
+                                   @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { onclick = "return confirm('Are sure wants to delete?');", @class = "btn btn-danger" })
+                               </td>
+                           </tr>
+                       }
+                   </tbody>
+               </table>
+            </div>
+        </div>
+
+<script>
+    $('.double-scroll').doubleScroll();
+</script>
+

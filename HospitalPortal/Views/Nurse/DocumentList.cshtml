@@ -1,0 +1,43 @@
+﻿@model HospitalPortal.Models.ViewModels.GallertDTO
+@{
+    ViewBag.Title = "DocumentList";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>DocumentList</h2>
+<style>
+    main {
+        margin: auto;
+        width: 80%;
+    }
+</style>
+
+<div id="main">
+
+    @if (Model.Documents == null)
+    {
+
+    }
+    else
+    {
+        <table class="table table-bordered" style="margin-top:3%">
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Documents)
+                {
+                    <tr>
+                        
+                        <td><img src="~/DocumentList/@item.FileName" width="200px" height="200px" /></td>
+                        <td><a href="/DocumentList/Delete?Id=@item.Id" onclick="return confirm('Are you sure to Delete?')">Delete</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+

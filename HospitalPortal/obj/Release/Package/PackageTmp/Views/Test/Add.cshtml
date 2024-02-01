@@ -1,0 +1,46 @@
+﻿@model HospitalPortal.Models.ViewModels.TestDTO
+
+@{
+    ViewBag.Title = "Test";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<style>
+    #mainContainer {
+        width: 60%;
+        margin-top: 1%;
+        margin-left: 1%;
+    }
+</style>
+
+<h2>Add Test</h2>
+
+    @using (Html.BeginForm())
+    {
+        <div id="mainContainer">
+            <div class="row">
+                <div class="col-md-6">
+                    @Html.ActionLink("Show All", "All", null, new { @class = "btn btn-info" })
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    Enter the Test Name
+                </div>
+                <div class="col-md-4">
+                    @Html.TextBoxFor(a => a.TestName)
+                </div>
+                <div class="col-md-3">
+                    <input type="submit" value="Submit" class="btn btn bg-primary" />
+                </div>
+            </div>
+        </div>
+        if (TempData["msg"] != null)
+        {
+            <div class="form-group">
+                @TempData["msg"]
+            </div>
+            }
+        
+    }
+

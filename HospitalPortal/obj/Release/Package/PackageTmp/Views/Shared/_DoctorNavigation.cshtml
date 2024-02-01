@@ -1,0 +1,122 @@
+﻿@{
+    int loginId = Convert.ToInt32(User.Identity.Name);
+    int id = new HospitalPortal.Models.DomainModels.DbEntities().Doctors.FirstOrDefault(a => a.AdminLogin_Id == loginId).Id;
+    int adminid = new HospitalPortal.Models.DomainModels.DbEntities().Doctors.FirstOrDefault(a => a.AdminLogin_Id == loginId).AdminLogin_Id;
+    bool CurrentStatus = new HospitalPortal.Models.DomainModels.DbEntities().Doctors.FirstOrDefault(a => a.Id == id).IsApproved;
+
+}
+
+<div class="sidebar-nav">
+    <ul>
+        <li class="nav-header"><a href="/Admin/Dashboard/" style="cursor:pointer"> <i class="fa fa-bars"></i> Dashboard</a></li>
+        <li class="nav-header">
+            <a href="/DoctorRegistration/Edit?id=@id" style="cursor:pointer">
+                <i class="fa fa-pencil"></i> Manage Profile
+            </a>
+        </li>
+        <li class="nav-header">
+            <a href="/Bank/UpdateBank?id=@adminid" style="cursor:pointer">
+                <i class="fa fa-pencil"></i> Update Bank Details
+            </a>
+        </li>
+        <li class="nav-header">
+            <a href="/DoctorRegistration/RegisterClinic?id=@id" style="cursor:pointer">
+                <i class="fa fa-pencil"></i> Register Clinic
+            </a>
+        </li>
+
+        @if (CurrentStatus == false) { }
+        else
+        {
+            <li class="nav-header">
+                <a href="/RoleUpdate/Department?id=@adminid" style="cursor:pointer">
+                    <i class="fa fa-pencil"></i> Add Department &amp; Specialist
+                </a>
+            </li>
+            <li class="nav-header">
+                <a href="/DoctorRegistration/UpdateDepartment?id=@id" style="cursor:pointer"><span class="fa fa-list"></span> <span class="fa fa-user"></span>Update Department &amp; Specialization</a>
+            </li>
+
+
+            @*<li class="nav-header">
+                <a href="/Specialist/All" style="cursor:pointer"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Add Specialist</a>
+            </li>
+            <li class="nav-header">
+                <a href="/Hospital/RemoveDept?hospitalId=@id" style="cursor:pointer">
+                    <i class="fa fa-plus"></i> View Departments
+                </a>
+            </li>*@
+            <li class="nav-header">
+                <a href="/DoctorRegistration/Prescription" style="cursor:pointer">
+                    <i class="fa fa-pencil"></i> Prescription
+                </a>
+            </li>
+            <li class="nav-header">
+                <a href="/DoctorRegistration/ViewPrescriptionReport?id=@id" style="cursor:pointer">
+                    <i class="fa fa-pencil"></i> Prescription Report
+                </a>
+            </li>
+            <li class="nav-header">
+                <a href="/DoctorRegistration/ViewAppoinments?id=@id" style="cursor:pointer">
+                    <i class="fa fa-pencil"></i> View Appointments
+                </a>
+            </li>
+            <li class="nav-header">
+                <a href="/DoctorRegistration/DoctorPatientList?id=@id" style="cursor:pointer">
+                    <i class="fa fa-list"></i> Patient List
+                </a>
+            </li>
+            <li class="nav-header">
+                <a href="/Common/LabReport" style="cursor:pointer">
+                    <i class="fa fa-history"></i> View Lab Reports
+                </a>
+            </li>
+            <li class="nav-header">
+                <a href="/Common/HealthReport" style="cursor:pointer">
+                    <i class="fa fa-history"></i> View Health Reports
+                </a>
+            </li>
+            <li class="nav-header">
+                <a href="/Common/DoctorReports" style="cursor:pointer">
+                    <i class="fa fa-history"></i> View Doctor Reports
+                </a>
+            </li>
+            <li class="nav-header">
+                <a href="/DoctorRegistration/PaymentHistory?id=@id" style="cursor:pointer">
+                    <i class="fa fa-list"></i> My Payment History
+                </a>
+            </li>
+            <li class="nav-header">
+                <a href="/DoctorRegistration/ViewPayoutHistory?id=@id" style="cursor:pointer">
+                    <i class="fa fa-list"></i> My Payout History
+                </a>
+            </li>
+            <li class="nav-header">
+                <a href="/DoctorRegistration/MyTDS?id=@id" style="cursor:pointer">
+                    <i class="fa fa-list"></i> My TDS History
+                </a>
+            </li>
+            <li class="nav-header">
+                <a href="/DoctorRegistration/MyCommission?id=@id" style="cursor:pointer">
+                    <i class="fa fa-list"></i> My Commission History
+                </a>
+            </li>
+            @*<li>
+                <a href="#" data-target=".regList-menu" class="nav-header" data-toggle="collapse">
+                    <i class="fa fa-user"></i> Registrations Details <i class="fa fa-collapse"></i>
+                </a>
+            </li>
+            <li>
+                <ul class="regList-menu nav nav-list collapse">
+                    <li>
+                        <a href="/Vehicle/All?vendorId=@vendorId" style="cursor:pointer"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Vehicle Entries</a>
+                    </li>
+
+
+
+                    <li>
+                </ul>
+            </li>*@
+        }
+    </ul>
+</div>

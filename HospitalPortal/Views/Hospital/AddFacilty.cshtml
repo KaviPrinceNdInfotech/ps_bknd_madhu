@@ -1,0 +1,58 @@
+﻿@model HospitalPortal.Models.ViewModels.HospitalFacilityDTO
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style>
+    #mainContainer {
+        width: 60%;
+        margin-left: 1%;
+        margin-top: 1%;
+    }
+
+    .row {
+        margin-top: 1%;
+    }
+</style>
+
+@using (Html.BeginForm())
+{
+    <div id="mainContainer">
+        <h3>Add new facility</h3>
+        <hr />
+        @if (TempData["msg"] != null)
+        {
+            string msg = TempData["msg"].ToString();
+            <div class="row">
+                <div class="col-md-12">
+                    @if (msg == "ok")
+                    {
+                        <div class="alert alert-success">
+                            Saved Successfully.
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-danger">
+                            @msg
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+        <div class="row">
+            @Html.HiddenFor(a => a.Hospital_Id)
+            <div class="col-md-12">
+                <div class="form-group">
+                    @Html.TextBoxFor(a => a.FacilityName, new { @class = "form-control" })
+                    <span class="text-danger">@Html.ValidationMessageFor(a => a.FacilityName)</span>
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" class="btn btn-info" value="Save" />
+                </div>
+
+            </div>
+        </div>
+    </div>
+}

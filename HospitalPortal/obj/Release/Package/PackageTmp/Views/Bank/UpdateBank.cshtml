@@ -1,0 +1,216 @@
+﻿@model HospitalPortal.Models.ViewModels.UpdateBank
+@{
+    ViewBag.Title = "UpdateBank";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Update Bank Details</h2>
+<style>
+    #main {
+        width: 60%;
+        margin-top: 1%;
+        margin-left: 1%;
+    }
+</style>
+<div id="main">
+    
+    @using (Html.BeginForm("UpdateBank", "Bank", FormMethod.Post, new { @enctype= "multipart/form-data" }))
+    {
+        @Html.Partial("~/Views/Shared/_DisplayMessage.cshtml")
+       
+        
+        <div class="row">
+            @*@if (Model.isverfied == true) //Model.isverfied == true
+            {*@
+                <div>
+                    <div class="col-md-12">
+                        @Html.HiddenFor(a => a.Id)
+                        @Html.HiddenFor(a => a.Login_Id)
+                        @*@Html.HiddenFor(a => a.CancelCheque)*@
+                        <div class="form-group">
+                            Account Number * @Html.TextBoxFor(a => a.AccountNo, new { @class = "form-control", type = "password" })
+                            <span class="red">
+                                @Html.ValidationMessageFor(a => a.AccountNo)
+                            </span>
+                        </div>
+                        <div class="form-group">
+                            Verify Account Number * @Html.TextBoxFor(a => a.VerifyAccountNo, new { @class = "form-control" })
+                            <span class="red">
+                                @Html.ValidationMessageFor(a => a.VerifyAccountNo)
+                            </span>
+                        </div>
+                        <div class="form-group">
+                            Bank Name * @Html.TextBoxFor(a => a.BranchName, new { @class = "form-control" })
+                            <span class="red">
+                                @Html.ValidationMessageFor(a => a.BranchName)
+                            </span>
+                        </div>
+
+                        <div class="form-group">
+                            Branch Address * @Html.TextBoxFor(a => a.BranchAddress, new { @class = "form-control" })
+                            <span class="red">
+                                @Html.ValidationMessageFor(a => a.BranchAddress)
+                            </span>
+                        </div>
+                        <div class="form-group">
+                            Account Holder's Name * @Html.TextBoxFor(a => a.HolderName, new { @class = "form-control" })
+                            <span class="red">
+                                @Html.ValidationMessageFor(a => a.IFSCCode)
+                            </span>
+                        </div>
+                        <div class="form-group">
+                            IFSC Code * @Html.TextBoxFor(a => a.IFSCCode, new { @class = "form-control" })
+                            <span class="red">
+                                @Html.ValidationMessageFor(a => a.IFSCCode)
+                            </span>
+                        </div>
+                        @*<div class="form-group">
+        Cancel Cheque * @Html.TextBoxFor(a => a.CancelChequeFile, new { @class = "form-control", type = "file" })
+        <span class="red">
+            @Html.ValidationMessageFor(a => a.CancelCheque)
+        </span>
+    </div>
+    @if (Model.CancelCheque != null)
+    {
+        <a href="~/Images/@Model.CancelCheque">
+            <img src="~/Images/@Model.CancelCheque" width="200px" height="200px" />
+        </a>
+    }
+    else
+    {
+    }*@
+                        <div class="form-group">
+                            <input type="submit" value="Save" class="btn btn-info" />
+                        </div>
+                    </div>
+                </div>
+
+            @*}*@
+            <!--else
+            {
+                <div class="col-md-12">
+
+                    <div class="col-md-3">
+                        @Html.TextBoxFor(a => a.MobileNumber, new { @class = "form-control" })
+                    </div>
+                    <div class="col-md-3" id="btn">
+                        <input type="button" id="sendOtp" value="Send OTP" />
+                    </div>
+                    <div class="row" style="display:none" id="otpNo">
+                        <div class="col-md-3">
+                            <input type="text" id="otp" />
+                        </div>
+                        <div class="col-md-3" id="btn1">
+                            <input type="button" id="Verifyotp" value="Verify" />
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display:none" id="BankDetails">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            Account Number * @Html.TextBoxFor(a => a.AccountNo, new { @class = "form-control", type = "password" })
+                            <span class="red">
+                                @Html.ValidationMessageFor(a => a.AccountNo)
+                            </span>
+                        </div>
+                        <div class="form-group">
+                            Verify Account Number * @Html.TextBoxFor(a => a.VerifyAccountNo, new { @class = "form-control" })
+                            <span class="red">
+                                @Html.ValidationMessageFor(a => a.VerifyAccountNo)
+                            </span>
+                        </div>
+                        <div class="form-group">
+                            Bank Name * @Html.TextBoxFor(a => a.BranchName, new { @class = "form-control" })
+                            <span class="red">
+                                @Html.ValidationMessageFor(a => a.BranchName)
+                            </span>
+                        </div>
+
+                        <div class="form-group">
+                            Branch Address * @Html.TextBoxFor(a => a.BranchAddress, new { @class = "form-control" })
+                            <span class="red">
+                                @Html.ValidationMessageFor(a => a.BranchAddress)
+                            </span>
+                        </div>
+                        <div class="form-group">
+                            Account Holder's Name * @Html.TextBoxFor(a => a.HolderName, new { @class = "form-control" })
+                            <span class="red">
+                                @Html.ValidationMessageFor(a => a.IFSCCode)
+                            </span>
+                        </div>
+                        <div class="form-group">
+                            IFSC Code * @Html.TextBoxFor(a => a.IFSCCode, new { @class = "form-control" })
+                            <span class="red">
+                                @Html.ValidationMessageFor(a => a.IFSCCode)
+                            </span>
+                        </div>-->
+                        @*<div class="form-group">
+                            Cancel Cheque * @Html.TextBoxFor(a => a.CancelChequeFile, new { @class = "form-control", type = "file" })
+                            <span class="red">
+                                @Html.ValidationMessageFor(a => a.CancelCheque)
+                            </span>
+                        </div>*@
+                        <!--<div class="form-group">
+                            <input type="submit" value="Save" class="btn btn-info" />
+                        </div>
+                    </div>
+                </div>
+            }-->
+          
+        </div>
+    }
+</div>
+
+@*<script src="~/js/jquery-1.11.1.min.js"></script>
+<script>
+    $("#sendOtp").click(function (e) {
+        e.preventDefault();
+        debugger
+        var MobileNo = $("#MobileNumber").val();
+        if (MobileNo == null || MobileNo == "") {
+            alert("Mobile Number field can't be blank");
+            return false;
+        }
+        $.ajax({
+            contentType: 'application/Json; Charset=utf-8',
+            method: 'POST',
+            url: '/Bank/SendOTP',
+            data: "{'mob':'" + MobileNo + "'}",
+            dataType: 'json',
+            success: (function (response) {
+                if (response == "ok") {
+                    $("#otpNo").show();
+                    $("btn").hide();
+                }
+            })
+        })
+    });
+
+
+
+    $("#Verifyotp").click(function (e) {
+        e.preventDefault();
+        debugger
+        var otpNo = $("#otp").val();
+        if (otpNo == null || otpNo == "") {
+            alert("Otp field can't be blank");
+            return false;
+        }
+        $.ajax({
+            contentType: 'application/Json; Charset=utf-8',
+            method: 'POST',
+            url: '/Bank/VerifyOtp?otpNo='+otpNo,
+            dataType: 'json',
+            success: (function (response) {
+                if (response == "true") {
+                    $("btn1").hide();
+                    $("#BankDetails").show();
+                }
+                else {
+                    alert("Wrong OTP");
+                }
+            })
+        })
+    });
+</script>*@

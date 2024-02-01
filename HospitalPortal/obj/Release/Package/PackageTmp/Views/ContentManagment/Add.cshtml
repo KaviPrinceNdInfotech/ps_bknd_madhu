@@ -1,0 +1,52 @@
+﻿@model HospitalPortal.Models.ViewModels.PageMasterDTO
+@{
+    ViewBag.Title = "Add";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Add</h2>
+
+<div style="margin:auto; width:90%">
+    @using (Html.BeginForm())
+    {
+    <div class="row">
+        <div class="col-md-3">Page Name</div>
+        <div class="col-md-3">
+           @Html.TextBoxFor(a=> a.PageName)
+        </div>
+        <div class="col-md-3">@TempData["msg"]</div>
+        <div class="col-md-3"><input type="submit" class="btn btn-primary" /></div>
+    </div>
+    }
+
+
+    @if (Model.PageMasterList.Count() <= 0)
+    {
+        <h2>No Records</h2>
+    }
+    else
+    {
+        <table class="table table-bordered" style=" margin-top :4px;">
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Action
+                </th>
+            </tr>
+            <tbody>
+                @foreach (var item in Model.PageMasterList)
+                {
+                    <tr>
+                        <td>@item.PageName</td>
+                        <td><a href="Delete?Id=@item.Id" class="btn btn-primary" onclick="return confirm('Are You Sure to Delete?')">Delete</a>
+                        
+                            <a href="Edit?Id=@item.Id" class="btn btn-primary" onclick="return confirm('Are You Sure to Edit?')">Edit</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+

@@ -1,0 +1,165 @@
+﻿@model HospitalPortal.Models.ViewModels.VendorDTO
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style>
+    #mainContainer {
+        width: 60%;
+        margin-top: 1%;
+        margin-left: 1%;
+    }
+</style>
+
+@using (Html.BeginForm("Edit", "Vendor", FormMethod.Post, new { encType = "multipart/form-data" }))
+{
+    <div id="mainContainer">
+
+        @*<div class="row">
+               <div class="col-md-6">
+                  @Html.ActionLink("Show All", "All", null, new { @class="btn btn-info"})
+               </div>
+            </div>*@
+
+        <div class="row">
+            <div class="col-md-6">
+                <h3>Edit Your Profile</h3>
+            </div>
+        </div>
+
+        @Html.HiddenFor(a => a.Id)
+        @Html.HiddenFor(a=>a.IsDeleted)
+        @Html.HiddenFor(a => a.AdminLogin_Id)
+        @Html.HiddenFor(a => a.EmailId)
+        @Html.HiddenFor(a => a.MobileNumber)
+        @Html.HiddenFor(a => a.AadharOrPANImage)
+        @Html.HiddenFor(a => a.Password)
+        @Html.HiddenFor(a=>a.UniqueId)
+        @Html.HiddenFor(a=>a.IsCheckedTermsCondition)
+        
+        @Html.Partial("~/Views/Shared/_DisplayMessageUpdate.cshtml")
+
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    Vendor Name * @Html.TextBoxFor(a => a.VendorName, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.VendorName)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    Company Name * @Html.TextBoxFor(a => a.CompanyName, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.CompanyName)
+                    </span>
+                </div>
+
+                @*<div class="form-group">
+        Mobile Number * @Html.TextBoxFor(a => a.MobileNumber, new { @class = "form-control" })
+        <span class="red">
+            @Html.ValidationMessageFor(a => a.MobileNumber)
+        </span>
+    </div>
+
+
+    <div class="form-group">
+        Email Id * @Html.TextBoxFor(a => a.EmailId, new { @class = "form-control" })
+        <span class="red">
+            @Html.ValidationMessageFor(a => a.EmailId)
+        </span>
+    </div>
+
+    <div class="form-group">
+        Password * @Html.PasswordFor(a => a.Password, new { @class = "form-control" })
+        <span class="red">
+            @Html.ValidationMessageFor(a => a.Password)
+        </span>
+    </div>
+
+    <div class="form-group">
+        Confirm Your Password * @Html.PasswordFor(a => a.ConfirmPassword, new { @class = "form-control" })
+        <span class="red">
+            @Html.ValidationMessageFor(a => a.ConfirmPassword)
+        </span>
+    </div>*@
+
+                <div class="form-group">
+                    State * @Html.DropDownListFor(a => a.StateMaster_Id, Model.States, "Select", new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.StateMaster_Id)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    @{ Html.EnableClientValidation(false);}
+                    City * @Html.DropDownListFor(a => a.City_Id,
+                       Model.Cities
+                        , "Select", new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.City_Id)
+                    </span>
+                    @{ Html.EnableClientValidation(true);}
+                </div>
+                <div class="form-group">
+                    Other City (If you are not able to find it above )
+                    @Html.TextBoxFor(a => a.OtherCity, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.OtherCity)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    Address * @Html.TextAreaFor(a => a.Location, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.Location)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    GST No * @Html.TextBoxFor(a => a.GSTNumber, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.GSTNumber)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    PAN/Aadhar Number @Html.TextBoxFor(a => a.AadharOrPANNumber, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.AadharOrPANNumber)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    @{ Html.EnableClientValidation(false); }
+                    @if(!string.IsNullOrEmpty(Model.AadharOrPANImage))
+                    {
+                        <img  class="thumb" src="/Images/@Model.AadharOrPANImage"/>
+                    }
+                    PAN/Aadhar doc. @Html.TextBoxFor(a => a.AadharOrImageFile, new { @class = "form-control", type = "file" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.AadharOrImageFile)
+                    </span>
+                    @{ Html.EnableClientValidation(true); }
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-info" />
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+<script src="/Scripts/Library/jquery-1.7.1.min.js"></script>
+<script src="/Scripts/Library/jquery-ui-1.8.20.min.js"></script>
+
+@Html.Partial("~/Views/Shared/_StateCityLocCascading.cshtml")
+
+@if (Model.IsApproved == false)
+{
+    <script src="~/Scripts/EditAlert.js"></script>
+}
+

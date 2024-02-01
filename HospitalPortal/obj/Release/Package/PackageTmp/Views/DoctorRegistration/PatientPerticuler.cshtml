@@ -1,0 +1,675 @@
+﻿@model HospitalPortal.Models.ViewModels.MedicinePrescriptionDTO
+@{
+    ViewBag.Title = "PatientPerticuler";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+<h2>PatientParticular</h2>
+@if (TempData["msg"] != null)
+{
+    string msg = TempData["msg"].ToString();
+    <div class="row">
+        <div class="col-md-12">
+            @if (msg == "ok")
+            {
+                <div class="alert alert-success">
+                    Saved Successfully.
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-danger">
+                    @msg
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@using (Html.BeginForm("PatientPerticuler", "DoctorRegistration", FormMethod.Post, new { @encType = "multipart/form-data" }))
+
+{
+
+    <div class="container-fluid" style="background-color: cyan; border: solid; ">
+        <div class=" row">
+            <div style=" text-align: center; border-bottom: 1px solid black;">PS Wellness</div>
+            <div style=" text-align: center; border-bottom: 1px solid black;">Patient Particulars</div>
+        </div>
+        <div class=" row">
+            <div class=" col-md-6">
+                <div class="form-group">
+                    Prescriptions For (Patient Name)* @Html.DropDownListFor(a => a.Patient_Id, Model.Patient, "Select", new { @class = "form-control", @required = "required" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.Patient_Id)
+                    </span>
+                </div>
+            </div>
+
+        </div>
+        <div class=" row" style="border: 1px solid black;">
+            <div class=" col-md-12">
+                <div class=" row" style="border-bottom:1px solid black">
+                    <div class=" form-group">
+
+                        @*<div class="col-md-3" style="border-right:1px solid black; margin-top:5px;">
+                                <lebel>Case No.</lebel>
+                            </div>
+                            <div class="col-md-3" style="border-right:1px solid black">
+                                @Html.TextBoxFor(a => a.AppointmentId, new { @class = "form-control", @disabled = "disabled" })
+                                <span class="red">
+                                    @Html.ValidationMessageFor(a => a.AppointmentId)
+                                </span>
+
+                            </div>*@
+                        <div class="col-md-3" style="border-right: 1px solid black; margin-top: 5px;">
+                            <lebel>UID</lebel>
+                        </div>
+                        <div class="col-md-3" style="border-right:1px solid black">
+                            @Html.TextBoxFor(a => a.PatientRegNo, new { @class = "form-control", @disabled = "disabled" })
+                            <span class="red">
+                                @Html.ValidationMessageFor(a => a.PatientRegNo)
+                            </span>
+                        </div>
+                        <div class="col-md-3" style="border-right:1px solid black">
+                            <lebel>Date</lebel>
+                        </div>
+                        <div class="col-md-3">
+                            @Html.TextBoxFor(model => model.AppointmentDate, new { @class = "form-control", @disabled = "disabled" })
+                        </div>
+
+                    </div>
+                </div>
+                @*<div class=" row" style="border-bottom: 1px solid black; margin-top: 5px;">
+                        <div class=" form-group">
+
+                            <div class="col-md-3" style="border-right:1px solid black">
+                                <lebel>Date</lebel>
+                            </div>
+                            <div class="col-md-3" style="border-right:1px solid black">
+                                @Html.TextBoxFor(model => model.AppointmentDate, new { @class = "form-control", @disabled = "disabled" })
+                            </div>
+                            <div class="col-md-3" style="border-right: 1px solid black; margin-top: 5px;">
+                                <lebel>Time</lebel>
+                            </div>
+                            <div class="col-md-3">
+                                @Html.TextBoxFor(a => a.Weight, new { @class = "form-control", @disabled = "disabled" })
+                                <span class="red">
+                                    @Html.ValidationMessageFor(a => a.Weight)
+                                </span>
+                            </div>
+                        </div>
+                    </div>*@
+                <div class=" row" style="border-bottom:1px solid black">
+                    <div class=" form-group">
+
+                        <div class="col-md-3" style="border-right: 1px solid black; margin-top: 5px;">
+                            <lebel>Patient Name</lebel>
+                        </div>
+                        <div class="col-md-3" style="border-right:1px solid black">
+                            @Html.TextBoxFor(model => model.PatientName, new { @class = "form-control", @disabled = "disabled" })
+
+                        </div>
+                        <div class="col-md-3" style="border-right: 1px solid black; margin-top: 5px;">
+                            <lebel>Gender</lebel>
+                        </div>
+                        <div class="col-md-3">
+                            @Html.TextBoxFor(a => a.Gender, new { @class = "form-control", @disabled = "disabled" })
+                            <span class="red">
+                                @Html.ValidationMessageFor(a => a.Gender)
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class=" row" style="border-bottom:1px solid black">
+                    <div class=" form-group">
+
+                        <div class="col-md-3" style="border-right: 1px solid black; margin-top: 5px;">
+                            <lebel>Date Of Birth</lebel>
+                        </div>
+                        <div class="col-md-3" style="border-right:1px solid black">
+                            @Html.TextBoxFor(a => a.DOB, new { @class = "form-control", @disabled = "disabled" })
+                            <span class="red">
+                                @Html.ValidationMessageFor(a => a.DOB)
+                            </span>
+                        </div>
+                        <div class="col-md-3" style="border-right: 1px solid black; margin-top: 5px;">
+                            <lebel>Age</lebel>
+                        </div>
+                        <div class="col-md-3">
+                            @Html.TextBoxFor(a => a.AgeValue, new { @class = "form-control", @disabled = "disabled" })
+                            <span class="red">
+                                @Html.ValidationMessageFor(a => a.AgeValue)
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class=" row" style="border-bottom:1px solid black">
+                    <div class=" form-group">
+
+                        <div class="col-md-3" style="border-right: 1px solid black; margin-top: 5px;">
+                            <lebel>Location Of Patient</lebel>
+                        </div>
+                        <div class="col-md-3" style="border-right:1px solid black">
+                            @Html.TextBoxFor(model => model.Location, new { @class = "form-control", @disabled = "disabled" })
+                        </div>
+                        <div class="col-md-3" style="border-right: 1px solid black; margin-top: 5px;">
+                            <lebel>Weight (In KG)</lebel>
+                        </div>
+                        <div class="col-md-3">
+                            @Html.TextBoxFor(a => a.Weight, new { @class = "form-control" })
+                            <span class="red">
+                                @Html.ValidationMessageFor(a => a.Weight)
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class=" row" style="border-bottom:1px solid black">
+                    <div class=" form-group">
+
+                        <div class="col-md-3" style="border-right: 1px solid black; margin-top: 5px;">
+                            <lebel>Caller's EmailId</lebel>
+                        </div>
+                        <div class="col-md-3" style="border-right:1px solid black">
+                            @Html.TextBoxFor(a => a.EmailId, new { @class = "form-control", @disabled = "disabled" })
+                            <span class="red">
+                                @Html.ValidationMessageFor(a => a.EmailId)
+                            </span>
+                        </div>
+                        <div class="col-md-3" style="border-right: 1px solid black; margin-top: 5px;">
+                            <lebel>Caller's Mobile</lebel>
+                        </div>
+                        <div class="col-md-3">
+                            @Html.TextBoxFor(a => a.MobileNumber, new { @class = "form-control", @disabled = "disabled" })
+                            <span class="red">
+                                @Html.ValidationMessageFor(a => a.MobileNumber)
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <!--<div class=" row" style="border-bottom:1px solid black">
+                    <div class=" form-group">
+
+                        <div class="col-md-3" style="border-right: 1px solid black; margin-top: 5px;">
+                            <lebel>Height</lebel>
+                        </div>
+                        <div class="col-md-3" style="border-right:1px solid black">
+                            <div>
+                                <div class="d-flex justify-content-around">
+                                    <div>
+                                        <input type="radio" name="flexRadioDefault"><label>Feet</label>
+                                        <input type="radio" name="flexRadioDefault"><label>Inch</label>
+                                        <input type="radio" name="flexRadioDefault"><label>Centimeter</label>
+                                    </div>
+                                </div>
+                                <input type="email" class="form-control col m-4">
+
+                            </div>
+                        </div>
+                        <div class="col-md-3" style="border-right: 1px solid black; margin-top: 5px;">
+                            <lebel>BMI</lebel>
+                        </div>-->
+                @*<div class="col-md-3">
+                        <input type="email" class="form-control col m-4">
+                    </div>*@
+                <!--</div>
+                </div>-->
+            </div>
+
+
+        </div>
+        <div class=" row" style="border: 1px solid black; ">
+            <div class="col-md-3" style="border-right:1px solid black; margin-top:5px;">
+                <lebel>Clinical History Given By Patient</lebel>
+            </div>
+        </div>
+        <div class=" row" style="border: 1px solid black;">
+            <div class=" col-md-12">
+                <div class=" row" style="border-bottom:1px solid black">
+                    <div class=" form-group">
+
+                        <div class="col-md-3" style="border-right:1px solid black; margin-top:5px;">
+                            <lebel>Present Complaints</lebel>
+                        </div>
+                        <div class="col-md-9" style="border-right:1px solid black">
+                            @Html.TextAreaFor(a => a.PresentComplaint, new { @class = "form-control" })
+                            <span class="red">
+                                @Html.ValidationMessageFor(a => a.PresentComplaint)
+                            </span>
+
+                            @*<textarea class="form-control col m-4"></textarea>*@
+                        </div>
+
+                    </div>
+                </div>
+                <div class=" row" style="border-bottom:1px solid black">
+                    <div class=" form-group">
+
+                        <div class="col-md-3" style="border-right:1px solid black; margin-top:5px;">
+                            <lebel>Past Medical/ Surgical History</lebel>
+                        </div>
+                        <div class="col-md-9" style="border-right:1px solid black">
+                            @Html.TextAreaFor(a => a.PastMedical_SurgicalHistory, new { @class = "form-control" })
+                            <span class="red">
+                                @Html.ValidationMessageFor(a => a.PastMedical_SurgicalHistory)
+                            </span>
+                        </div>
+
+                    </div>
+                </div>
+                <div class=" row" style="border-bottom:1px solid black">
+                    <div class=" form-group">
+
+                        <div class="col-md-3" style="border-right:1px solid black; margin-top:5px;">
+                            <lebel>Allergies,if any</lebel>
+                        </div>
+                        <div class="col-md-9" style="border-right:1px solid black">
+                            @Html.TextAreaFor(a => a.Allergies, new { @class = "form-control" })
+                            <span class="red">
+                                @Html.ValidationMessageFor(a => a.Allergies)
+                            </span>
+                        </div>
+
+                    </div>
+                </div>
+                <div class=" row" style="border-bottom:1px solid black">
+                    <div class=" form-group">
+
+                        <div class="col-md-3" style="border-right:1px solid black; margin-top:5px;">
+                            <lebel>Primary Diagonosis Based On Symtoms</lebel>
+                        </div>
+                        <div class="col-md-9" style="border-right:1px solid black">
+                            @Html.TextAreaFor(a => a.Primarydiagnosis, new { @class = "form-control" })
+                            <span class="red">
+                                @Html.ValidationMessageFor(a => a.Primarydiagnosis)
+                            </span>
+                        </div>
+
+                    </div>
+                </div>
+                <div class=" row" style="border-bottom:1px solid black">
+                    <div class=" form-group">
+
+                        <div class="col-md-3 style="border-right:1px solid black; margin-top:5px;">
+                            <lebel>Prescribed Medicine</lebel>
+                        </div>
+                        <div class="col-md-9" style="border-right: 1px solid black">
+                            <div class="col-md-4">
+                                <label>Medicine 1</label>
+                                @Html.TextBoxFor(a => a.MedicineName1, new { @class = "form-control", @required = "required" })
+                                <span class="red">
+                                    @Html.ValidationMessageFor(a => a.MedicineName1)
+                                </span>
+                            </div>
+                            <div class="col-md-4">
+                                <label>Dosage1</label>
+                                @Html.TextBoxFor(a => a.Dosage1, new { @class = "form-control", @required = "required" })
+                                <span class="red">
+                                    @Html.ValidationMessageFor(a => a.Dosage1)
+                                </span>
+                            </div>
+                            <div class="col-md-4">
+                                <label>Instruction 1</label>
+                                @Html.TextBoxFor(a => a.Instruction1, new { @class = "form-control", @required = "required" })
+                                <span class="red">
+                                    @Html.ValidationMessageFor(a => a.Instruction1)
+                                </span>
+                            </div>
+                            <div class="col-md-4">
+                                <label>Medicine 2</label>
+                                @Html.TextBoxFor(a => a.MedicineName2, new { @class = "form-control" })
+                                <span class="red">
+                                    @Html.ValidationMessageFor(a => a.MedicineName2)
+                                </span>
+                            </div>
+                            <div class="col-md-4">
+                                <label>Dosage 2</label>
+                                @Html.TextBoxFor(a => a.Dosage2, new { @class = "form-control" })
+                                <span class="red">
+                                    @Html.ValidationMessageFor(a => a.Dosage2)
+                                </span>
+                            </div>
+                            <div class="col-md-4">
+                                <label>Instruction 2</label>
+                                @Html.TextBoxFor(a => a.Instruction2, new { @class = "form-control" })
+                                <span class="red">
+                                    @Html.ValidationMessageFor(a => a.Instruction2)
+                                </span>
+                            </div>
+                            <div class="col-md-4">
+                                <label>Medicine 3</label>
+                                @Html.TextBoxFor(a => a.MedicineName3, new { @class = "form-control" })
+                                <span class="red">
+                                    @Html.ValidationMessageFor(a => a.MedicineName3)
+                                </span>
+                            </div>
+                            <div class="col-md-4">
+                                <label>Dosage 3</label>
+                                @Html.TextBoxFor(a => a.Dosage3, new { @class = "form-control" })
+                                <span class="red">
+                                    @Html.ValidationMessageFor(a => a.Dosage3)
+                                </span>
+                            </div>
+                            <div class="col-md-4">
+                                <label>Instruction 3</label>
+                                @Html.TextBoxFor(a => a.Instruction3, new { @class = "form-control" })
+                                <span class="red">
+                                    @Html.ValidationMessageFor(a => a.Instruction3)
+                                </span>
+                            </div>
+                            <div class="col-md-4">
+                                <label>Medicine 4</label>
+                                @Html.TextBoxFor(a => a.MedicineName4, new { @class = "form-control" })
+                                <span class="red">
+                                    @Html.ValidationMessageFor(a => a.MedicineName3)
+                                </span>
+                            </div>
+                            <div class="col-md-4">
+                                <label>Dosage 4</label>
+                                @Html.TextBoxFor(a => a.Dosage4, new { @class = "form-control" })
+                                <span class="red">
+                                    @Html.ValidationMessageFor(a => a.Dosage4)
+                                </span>
+                            </div>
+                            <div class="col-md-4">
+                                <label>Instruction 4</label>
+                                @Html.TextBoxFor(a => a.Instruction4, new { @class = "form-control" })
+                                <span class="red">
+                                    @Html.ValidationMessageFor(a => a.Instruction4)
+                                </span>
+                            </div>
+                            <div class="col-md-4">
+                                <label>Medicine 5</label>
+                                @Html.TextBoxFor(a => a.MedicineName5, new { @class = "form-control" })
+                                <span class="red">
+                                    @Html.ValidationMessageFor(a => a.MedicineName5)
+                                </span>
+                            </div>
+                            <div class="col-md-4">
+                                <label>Dosage 5</label>
+                                @Html.TextBoxFor(a => a.Dosage5, new { @class = "form-control" })
+                                <span class="red">
+                                    @Html.ValidationMessageFor(a => a.Dosage5)
+                                </span>
+                            </div>
+                            <div class="col-md-4">
+                                <label>Instruction 5</label>
+                                @Html.TextBoxFor(a => a.Instruction5, new { @class = "form-control" })
+                                <span class="red">
+                                    @Html.ValidationMessageFor(a => a.Instruction5)
+                                </span>
+                            </div>
+                            <div class="col-md-4">
+                                <label>Medicine 6</label>
+                                @Html.TextBoxFor(a => a.MedicineName6, new { @class = "form-control" })
+                                <span class="red">
+                                    @Html.ValidationMessageFor(a => a.MedicineName6)
+                                </span>
+                            </div>
+                            <div class="col-md-4">
+                                <label>Dosage 6</label>
+                                @Html.TextBoxFor(a => a.Dosage6, new { @class = "form-control" })
+                                <span class="red">
+                                    @Html.ValidationMessageFor(a => a.Dosage6)
+                                </span>
+                            </div>
+                            <div class="col-md-4">
+                                <label>Instruction 6</label>
+                                @Html.TextBoxFor(a => a.Instruction6, new { @class = "form-control" })
+                                <span class="red">
+                                    @Html.ValidationMessageFor(a => a.Instruction6)
+                                </span>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label>Medicine 7</label>
+                                @Html.TextBoxFor(a => a.MedicineName7, new { @class = "form-control" })
+                                <span class="red">
+                                    @Html.ValidationMessageFor(a => a.MedicineName7)
+                                </span>
+                            </div>
+                            <div class="col-md-4">
+                                <label>Dosage 7</label>
+                                @Html.TextBoxFor(a => a.Dosage7, new { @class = "form-control" })
+                                <span class="red">
+                                    @Html.ValidationMessageFor(a => a.Dosage7)
+                                </span>
+                            </div>
+                            <div class="col-md-4">
+                                <label>Instruction 7</label>
+                                @Html.TextBoxFor(a => a.Instruction7, new { @class = "form-control" })
+                                <span class="red">
+                                    @Html.ValidationMessageFor(a => a.Instruction7)
+                                </span>
+                            </div>
+                            <div class="col-md-4">
+                                <label>Medicine 8</label>
+                                @Html.TextBoxFor(a => a.MedicineName8, new { @class = "form-control" })
+                                <span class="red">
+                                    @Html.ValidationMessageFor(a => a.MedicineName8)
+                                </span>
+                            </div>
+                            <div class="col-md-4">
+                                <label>Dosage 8</label>
+                                @Html.TextBoxFor(a => a.Dosage8, new { @class = "form-control" })
+                                <span class="red">
+                                    @Html.ValidationMessageFor(a => a.Dosage8)
+                                </span>
+                            </div>
+                            <div class="col-md-4">
+                                <label>Instruction 8</label>
+                                @Html.TextBoxFor(a => a.Instruction8, new { @class = "form-control" })
+                                <span class="red">
+                                    @Html.ValidationMessageFor(a => a.Instruction8)
+                                </span>
+                            </div>
+                            <div class="col-md-4">
+                                <label>Medicine 9</label>
+                                @Html.TextBoxFor(a => a.MedicineName9, new { @class = "form-control" })
+                                <span class="red">
+                                    @Html.ValidationMessageFor(a => a.MedicineName9)
+                                </span>
+                            </div>
+                            <div class="col-md-4">
+                                <label>Dosage 9</label>
+                                @Html.TextBoxFor(a => a.Dosage9, new { @class = "form-control" })
+                                <span class="red">
+                                    @Html.ValidationMessageFor(a => a.Dosage9)
+                                </span>
+                            </div>
+                            <div class="col-md-4">
+                                <label>Instruction 9</label>
+                                @Html.TextBoxFor(a => a.Instruction9, new { @class = "form-control" })
+                                <span class="red">
+                                    @Html.ValidationMessageFor(a => a.Instruction9)
+                                </span>
+                            </div>
+                            <div class="col-md-4">
+                                <label>Medicine 10</label>
+                                @Html.TextBoxFor(a => a.MedicineName10, new { @class = "form-control" })
+                                <span class="red">
+                                    @Html.ValidationMessageFor(a => a.MedicineName10)
+                                </span>
+                            </div>
+                            <div class="col-md-4">
+                                <label>Dosage 10</label>
+                                @Html.TextBoxFor(a => a.Dosage10, new { @class = "form-control" })
+                                <span class="red">
+                                    @Html.ValidationMessageFor(a => a.Dosage10)
+                                </span>
+                            </div>
+                            <div class="col-md-4">
+                                <label>Instruction 10</label>
+                                @Html.TextBoxFor(a => a.Instruction10, new { @class = "form-control" })
+                                <span class="red">
+                                    @Html.ValidationMessageFor(a => a.Instruction10)
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--<div class=" row" style="border-bottom:1px solid black">
+                    <div class=" form-group">
+
+                        <div class="col-md-3" style="border-right:1px solid black; margin-top:5px;">
+                            <lebel>Speciality /Illness</lebel>
+                        </div>
+                        <div class="col-md-9" style="border-right:1px solid black">
+                            <select class="form-control col m-4">
+                                <option value="option1">Option 1</option>
+                                <option value="option2">Option 2</option>
+                                <option value="option3">Option 3</option>-->
+                <!-- Add more options as needed -->
+                <!--</select>
+                        </div>
+
+
+                    </div>
+                </div>
+                <div class=" row" style="border-bottom:1px solid black">
+                    <div class=" form-group">
+
+                        <div class="col-md-3" style="border-right:1px solid black; margin-top:5px;">
+                            <lebel>ICD Code</lebel>
+                        </div>
+                        <div class="col-md-9" style="border-right:1px solid black">
+                            <textarea class="form-control col m-4"></textarea>
+                        </div>
+
+                    </div>
+                </div>-->
+                <div class=" row" style="border-bottom:1px solid black">
+                    <div class=" form-group">
+
+                        <div class="col-md-3" style="border-right:1px solid black; margin-top:5px;">
+                            <lebel>Test Prescribed</lebel><br />
+                            <lebel style="color:forestgreen">Maximum Character 500</lebel>
+                        </div>
+                        <div class="col-md-9" style="border-right:1px solid black; margin-top:5px;">
+                            @Html.TextAreaFor(a => a.TestPrescribed, new { @class = "form-control" })
+                            <span class="red">
+                                @Html.ValidationMessageFor(a => a.TestPrescribed)
+                            </span>
+                        </div>
+
+                    </div>
+                </div>
+                <div class=" row" style="border-bottom:1px solid black">
+                    <div class=" form-group">
+
+                        <div class="col-md-3" style="border-right:1px solid black; margin-top:5px;">
+                            <lebel>Further Refferal Recommendations</lebel>
+                            <lebel style="color:forestgreen">Maximum Character 250</lebel>
+                        </div>
+                        <div class="col-md-9" style="border-right:1px solid black">
+                            @Html.TextAreaFor(a => a.Furtherrefferal_Recommendations, new { @class = "form-control" })
+                            <span class="red">
+                                @Html.ValidationMessageFor(a => a.Furtherrefferal_Recommendations)
+                            </span>
+                        </div>
+
+                    </div>
+                </div>
+                @*<div class=" row" style="border-bottom:1px solid black">
+                        <div class=" form-group">
+
+                            <div class="col-md-3" style="border-right:1px solid black; margin-top:5px;">
+                                <lebel>Recommended Clinical Triage</lebel>
+                            </div>
+                            <div class="col-md-9" style="border-right:1px solid black">
+                                <textarea class="form-control col m-4"></textarea>
+                            </div>
+
+                        </div>
+                    </div>*@
+            </div>
+
+
+        </div>
+    </div>
+    <div class=" row" style=" text-align: center; margin-top:10px;">
+        <input type="submit" value="Submit" class="btn btn-info" />
+
+    </div>
+    <div class=" col-md-4" style="background-color: cyan; border: solid; " id="smsEmailSection">
+        <form class="row">
+            <div class="col-md-12">
+                <div class="form-group row" style="margin-top :5px;">
+                    <table style="width:100%;">
+                        <tr>
+                            <th style="text-align:center ;">SMS/Email</th>
+                            @*<th>Last Sent Date</th>*@
+                        </tr>
+                        <tr>
+                            @*<td><input type="button" value="Send E-Mail" class="btn btn-warning" style="width :260px;" /></td>*@
+                            <td>
+                                <a id="sendemail" class="btn btn-warning" style="width :260px;">Send E-Mail</a>
+                            </td>
+                            @*<td></td>*@
+                        </tr>
+                        <tr>
+                            <td><input type="button" value="Send SMS:Prescription Link" class="btn btn-warning  " style="width :260px;" /></td>
+                            @*<td></td>*@
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </form>
+    </div>
+}
+
+<script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
+<link href="~/css/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
+
+<script>
+    $('#Patient_Id').val('@Model.Patient_Id');
+</script>
+<script>
+    $("#Patient_Id").change(function () {
+
+        window.location.href = '/DoctorRegistration/PatientPerticuler?id=' + $('#Patient_Id').val();
+
+
+    });
+
+</script>
+<script>
+    $("#sendemail").click(function () {
+        $.ajax({ 
+            url: "/Doctorregistration/Sendemailpdf",
+            type: "get",
+            success: function (response) {
+                console.log(response);
+                alert(response); 
+            },
+            error: function (error) {
+                console.log(error.responseText);
+
+            }
+        });
+
+    });
+</script>
+<script>
+    // Get a reference to the "Submit" button
+    var submitButton = document.querySelector('.btn.btn-info');
+
+    // Get a reference to the SMS/Email section
+    var smsEmailSection = document.getElementById('smsEmailSection');
+
+    // Hide the SMS/Email section initially
+    smsEmailSection.style.display = 'none';
+
+    // Add a click event listener to the "Submit" button
+    submitButton.addEventListener('click', function () {
+        // Show the SMS/Email section when the button is clicked
+        smsEmailSection.style.display = 'block';
+    });
+</script>
+
+
+
+
+
+

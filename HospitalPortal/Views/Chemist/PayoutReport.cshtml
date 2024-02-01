@@ -1,0 +1,79 @@
+﻿
+@{
+    ViewBag.Title = "PayoutReport";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>PayoutReport</h2>
+
+@model HospitalPortal.Models.ViewModels.ViewPayOutHistory
+@{
+    ViewBag.Title = "ViewPayoutHistory";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+}
+
+<h2>Payout History</h2>
+
+<div style="margin:auto; width:95%">
+    <div style="margin-top:3%; margin-bottom:3%;">
+        Lab Name : <h2 style="color:brown">
+            @if (Model.HistoryOfChemist_Payout != null)
+            {
+                @Model.HistoryOfChemist_Payout.FirstOrDefault().ChemistName
+            }
+            else
+            {@Model.ChemistName @*@Model.HistoryOfHealth_Payout.FirstOrDefault().LabName*@ }
+        </h2>
+    </div>
+    @if (Model.HistoryOfChemist_Payout == null)
+    {
+        if (TempData["msg"] != null)
+        {
+            <h4 style="color:red">@TempData["msg"]</h4>
+        }
+    }
+    else
+    {
+        <table class="table table-bordered">
+            <tr>
+                <th>Serial No</th>
+                <th>Payment Date</th>
+                <th>Amount</th>
+                <th>Status</th>
+            </tr>
+            <tbody>
+                @{int RowNo = 0;}
+                @foreach (var item in Model.HistoryOfChemist_Payout)
+                {
+                    <tr>
+                        <td>
+                            @{RowNo++;} @RowNo
+                        </td>
+                        <td>@item.PaymentDate</td>
+                        <td>@item.Amount</td>
+                        <td>
+                            @if (Convert.ToInt32(item.IsGenerated) == 1)
+                            {
+                                <span>Generated</span>
+                            }
+                            else
+                            {
+                                <span> Generated</span>
+                            }
+
+                            @if (Convert.ToInt32(item.IsPaid) == 1)
+                            {
+                                <span>Paid</span>
+                            }
+                            else
+                            {
+                                <span>Not Paid</span>
+                            }
+                        </td>
+                    </tr>
+                                }
+            </tbody>
+        </table>
+                                }
+</div>

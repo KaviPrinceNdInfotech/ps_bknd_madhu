@@ -1,0 +1,27 @@
+﻿@model HospitalPortal.Models.ViewModels.HealthCheckUpPackageDTO
+@{
+    ViewBag.Title = "EditTest";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2 style="text-align:center">Edit Health's Test</h2>
+
+@using (Html.BeginForm())
+{
+    <div id="mainContainer">
+        <div class="row">
+            <div class="col-md-3">Select Test</div>
+            <div class="col-md-3">
+                @Html.HiddenFor(a => a.Id)
+                @Html.HiddenFor(a => a.HealthPackageID)
+                @Html.HiddenFor(a => a.TestAmt)
+                @Html.HiddenFor(a => a.statusKey)
+                @Html.DropDownListFor(a => a.TestId, Model.Tests, "Select", new { @class = "form-control" })
+            </div>
+            <div class="col-md-3">
+                <input type="submit" value="Submit" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+}
+

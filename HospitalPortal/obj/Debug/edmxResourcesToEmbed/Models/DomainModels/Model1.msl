@@ -1,0 +1,2251 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="ModelStoreContainer" CdmEntityContainer="DbEntities">
+    <EntitySetMapping Name="RWAPayments">
+      <EntityTypeMapping TypeName="Model.RWAPayment">
+        <MappingFragment StoreEntitySet="RWAPayment">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Departement" ColumnName="Departement" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserWallets">
+      <EntityTypeMapping TypeName="Model.UserWallet">
+        <MappingFragment StoreEntitySet="UserWallet">
+          <ScalarProperty Name="walletAmount" ColumnName="walletAmount" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="AdminId" ColumnName="AdminId" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="TransactionType" ColumnName="TransactionType" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="VehicleTemps">
+      <EntityTypeMapping TypeName="Model.VehicleTemp">
+        <MappingFragment StoreEntitySet="VehicleTemp">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Login_Id" ColumnName="Login_Id" />
+          <ScalarProperty Name="VehicleTypeName" ColumnName="VehicleTypeName" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="under5KM" ColumnName="under5KM" />
+          <ScalarProperty Name="under6_10KM" ColumnName="under6_10KM" />
+          <ScalarProperty Name="under11_20KM" ColumnName="under11_20KM" />
+          <ScalarProperty Name="under21_40KM" ColumnName="under21_40KM" />
+          <ScalarProperty Name="under41_60KM" ColumnName="under41_60KM" />
+          <ScalarProperty Name="under61_80KM" ColumnName="under61_80KM" />
+          <ScalarProperty Name="under81_100KM" ColumnName="under81_100KM" />
+          <ScalarProperty Name="under100_150KM" ColumnName="under100_150KM" />
+          <ScalarProperty Name="under151_200KM" ColumnName="under151_200KM" />
+          <ScalarProperty Name="under201_250KM" ColumnName="under201_250KM" />
+          <ScalarProperty Name="under251_300KM" ColumnName="under251_300KM" />
+          <ScalarProperty Name="under301_350KM" ColumnName="under301_350KM" />
+          <ScalarProperty Name="under351_400KM" ColumnName="under351_400KM" />
+          <ScalarProperty Name="under401_450KM" ColumnName="under401_450KM" />
+          <ScalarProperty Name="under451_500KM" ColumnName="under451_500KM" />
+          <ScalarProperty Name="Above500KM" ColumnName="Above500KM" />
+          <ScalarProperty Name="IsApproved" ColumnName="IsApproved" />
+          <ScalarProperty Name="Category_Id" ColumnName="Category_Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AdminLogins">
+      <EntityTypeMapping TypeName="Model.AdminLogin">
+        <MappingFragment StoreEntitySet="AdminLogin">
+          <ScalarProperty Name="DeviceId" ColumnName="DeviceId" />
+          <ScalarProperty Name="Confirmpassword" ColumnName="Confirmpassword" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Username" ColumnName="Username" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="Role" ColumnName="Role" />
+          <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+          <ScalarProperty Name="Token" ColumnName="Token" />
+          <ScalarProperty Name="IsLoginApproved" ColumnName="IsLoginApproved" />
+          <ScalarProperty Name="TransactionPwd" ColumnName="TransactionPwd" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="BankDetails">
+      <EntityTypeMapping TypeName="Model.BankDetail">
+        <MappingFragment StoreEntitySet="BankDetails">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Login_Id" ColumnName="Login_Id" />
+          <ScalarProperty Name="AccountNo" ColumnName="AccountNo" />
+          <ScalarProperty Name="IFSCCode" ColumnName="IFSCCode" />
+          <ScalarProperty Name="BranchName" ColumnName="BranchName" />
+          <ScalarProperty Name="BranchAddress" ColumnName="BranchAddress" />
+          <ScalarProperty Name="HolderName" ColumnName="HolderName" />
+          <ScalarProperty Name="CancelCheque" ColumnName="CancelCheque" />
+          <ScalarProperty Name="MobileNumber" ColumnName="MobileNumber" />
+          <ScalarProperty Name="isverified" ColumnName="isverified" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="BookTestLabs">
+      <EntityTypeMapping TypeName="Model.BookTestLab">
+        <MappingFragment StoreEntitySet="BookTestLab">
+          <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+          <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+          <ScalarProperty Name="InvoiceNumber" ColumnName="InvoiceNumber" />
+          <ScalarProperty Name="IsCancel" ColumnName="IsCancel" />
+          <ScalarProperty Name="Slotid" ColumnName="Slotid" />
+          <ScalarProperty Name="StateMaster_Id" ColumnName="StateMaster_Id" />
+          <ScalarProperty Name="CityMaster_Id" ColumnName="CityMaster_Id" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Lab_Id" ColumnName="Lab_Id" />
+          <ScalarProperty Name="Test_Id" ColumnName="Test_Id" />
+          <ScalarProperty Name="Patient_Id" ColumnName="Patient_Id" />
+          <ScalarProperty Name="PatientName" ColumnName="PatientName" />
+          <ScalarProperty Name="PatientAddress" ColumnName="PatientAddress" />
+          <ScalarProperty Name="ContactNumber" ColumnName="ContactNumber" />
+          <ScalarProperty Name="TestDate" ColumnName="TestDate" />
+          <ScalarProperty Name="AvailabelTime1" ColumnName="AvailabelTime1" />
+          <ScalarProperty Name="AvailableTime2" ColumnName="AvailableTime2" />
+          <ScalarProperty Name="IsTaken" ColumnName="IsTaken" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
+          <ScalarProperty Name="IsPaid" ColumnName="IsPaid" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CancelledAppointments">
+      <EntityTypeMapping TypeName="Model.CancelledAppointment">
+        <MappingFragment StoreEntitySet="CancelledAppointment">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Patient_Id" ColumnName="Patient_Id" />
+          <ScalarProperty Name="AppointmentDate" ColumnName="AppointmentDate" />
+          <ScalarProperty Name="StartSlotTime" ColumnName="StartSlotTime" />
+          <ScalarProperty Name="EndSlotTime" ColumnName="EndSlotTime" />
+          <ScalarProperty Name="Doctor_Id" ColumnName="Doctor_Id" />
+          <ScalarProperty Name="Specialist_Id" ColumnName="Specialist_Id" />
+          <ScalarProperty Name="IsBooked" ColumnName="IsBooked" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="IsPaid" ColumnName="IsPaid" />
+          <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
+          <ScalarProperty Name="Hospital_Id" ColumnName="Hospital_Id" />
+          <ScalarProperty Name="HospitalDoc_Id" ColumnName="HospitalDoc_Id" />
+          <ScalarProperty Name="IsCancelled" ColumnName="IsCancelled" />
+          <ScalarProperty Name="CancelledId" ColumnName="CancelledId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Charges">
+      <EntityTypeMapping TypeName="Model.Charge">
+        <MappingFragment StoreEntitySet="Charges">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="Role" ColumnName="Role" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CheckUpReports">
+      <EntityTypeMapping TypeName="Model.CheckUpReport">
+        <MappingFragment StoreEntitySet="CheckUpReport">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Patient_Id" ColumnName="Patient_Id" />
+          <ScalarProperty Name="File" ColumnName="File" />
+          <ScalarProperty Name="Checkup_Center_Id" ColumnName="Checkup_Center_Id" />
+          <ScalarProperty Name="TestName" ColumnName="TestName" />
+          <ScalarProperty Name="TestId" ColumnName="TestId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ChekcupCenterDepartments">
+      <EntityTypeMapping TypeName="Model.ChekcupCenterDepartment">
+        <MappingFragment StoreEntitySet="ChekcupCenterDepartment">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Hospital_Id" ColumnName="Hospital_Id" />
+          <ScalarProperty Name="Department_Id" ColumnName="Department_Id" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ChemistPayOuts">
+      <EntityTypeMapping TypeName="Model.ChemistPayOut">
+        <MappingFragment StoreEntitySet="ChemistPayOut">
+          <ScalarProperty Name="BankdetailsId" ColumnName="BankdetailsId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Chemist_Id" ColumnName="Chemist_Id" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
+          <ScalarProperty Name="IsPaid" ColumnName="IsPaid" />
+          <ScalarProperty Name="IsGenerated" ColumnName="IsGenerated" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CityMasters">
+      <EntityTypeMapping TypeName="Model.CityMaster">
+        <MappingFragment StoreEntitySet="CityMaster">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="CityName" ColumnName="CityName" />
+          <ScalarProperty Name="StateMaster_Id" ColumnName="StateMaster_Id" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CityTemps">
+      <EntityTypeMapping TypeName="Model.CityTemp">
+        <MappingFragment StoreEntitySet="CityTemp">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="CityName" ColumnName="CityName" />
+          <ScalarProperty Name="Login_Id" ColumnName="Login_Id" />
+          <ScalarProperty Name="IsApproved" ColumnName="IsApproved" />
+          <ScalarProperty Name="State_Id" ColumnName="State_Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CmpltCheckUps">
+      <EntityTypeMapping TypeName="Model.CmpltCheckUp">
+        <MappingFragment StoreEntitySet="CmpltCheckUp">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="BookingId" ColumnName="BookingId" />
+          <ScalarProperty Name="PatientId" ColumnName="PatientId" />
+          <ScalarProperty Name="TestDate" ColumnName="TestDate" />
+          <ScalarProperty Name="PatientName" ColumnName="PatientName" />
+          <ScalarProperty Name="PatientAddress" ColumnName="PatientAddress" />
+          <ScalarProperty Name="ContactNo" ColumnName="ContactNo" />
+          <ScalarProperty Name="RequestDate" ColumnName="RequestDate" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
+          <ScalarProperty Name="IsPaid" ColumnName="IsPaid" />
+          <ScalarProperty Name="Center_Id" ColumnName="Center_Id" />
+          <ScalarProperty Name="IsTaken" ColumnName="IsTaken" />
+          <ScalarProperty Name="Test_Id" ColumnName="Test_Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CommissionMasters">
+      <EntityTypeMapping TypeName="Model.CommissionMaster">
+        <MappingFragment StoreEntitySet="CommissionMaster">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Commission" ColumnName="Commission" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Contents">
+      <EntityTypeMapping TypeName="Model.Content">
+        <MappingFragment StoreEntitySet="Content">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="PageName" ColumnName="PageName" />
+          <ScalarProperty Name="About" ColumnName="About" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Departments">
+      <EntityTypeMapping TypeName="Model.Department">
+        <MappingFragment StoreEntitySet="Department">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="DepartmentName" ColumnName="DepartmentName" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DepartmentTemps">
+      <EntityTypeMapping TypeName="Model.DepartmentTemp">
+        <MappingFragment StoreEntitySet="DepartmentTemp">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Department_Id" ColumnName="Department_Id" />
+          <ScalarProperty Name="Specialist_Id" ColumnName="Specialist_Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DoctorComplaints">
+      <EntityTypeMapping TypeName="Model.DoctorComplaint">
+        <MappingFragment StoreEntitySet="DoctorComplaints">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Login_Id" ColumnName="Login_Id" />
+          <ScalarProperty Name="Subjects" ColumnName="Subjects" />
+          <ScalarProperty Name="Complaints" ColumnName="Complaints" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="IsResolved" ColumnName="IsResolved" />
+          <ScalarProperty Name="Others" ColumnName="Others" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DoctorDepartments">
+      <EntityTypeMapping TypeName="Model.DoctorDepartment">
+        <MappingFragment StoreEntitySet="DoctorDepartment">
+          <ScalarProperty Name="State_id" ColumnName="State_id" />
+          <ScalarProperty Name="city_id" ColumnName="city_id" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Doctor_Id" ColumnName="Doctor_Id" />
+          <ScalarProperty Name="Department_Id" ColumnName="Department_Id" />
+          <ScalarProperty Name="Specialist_Id" ColumnName="Specialist_Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DoctorPayOuts">
+      <EntityTypeMapping TypeName="Model.DoctorPayOut">
+        <MappingFragment StoreEntitySet="DoctorPayOut">
+          <ScalarProperty Name="Slot_id" ColumnName="Slot_id" />
+          <ScalarProperty Name="PaymentId" ColumnName="PaymentId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Doctor_Id" ColumnName="Doctor_Id" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="IsPaid" ColumnName="IsPaid" />
+          <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
+          <ScalarProperty Name="IsGenerated" ColumnName="IsGenerated" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DoctorReports">
+      <EntityTypeMapping TypeName="Model.DoctorReport">
+        <MappingFragment StoreEntitySet="DoctorReports">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Doctor_Id" ColumnName="Doctor_Id" />
+          <ScalarProperty Name="Patient_Id" ColumnName="Patient_Id" />
+          <ScalarProperty Name="Image1" ColumnName="Image1" />
+          <ScalarProperty Name="UploadDate" ColumnName="UploadDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DoctorSkills">
+      <EntityTypeMapping TypeName="Model.DoctorSkill">
+        <MappingFragment StoreEntitySet="DoctorSkill">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Doctor_Id" ColumnName="Doctor_Id" />
+          <ScalarProperty Name="SkillName" ColumnName="SkillName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Employees">
+      <EntityTypeMapping TypeName="Model.Employee">
+        <MappingFragment StoreEntitySet="Employee">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="EmployeetName" ColumnName="EmployeetName" />
+          <ScalarProperty Name="MobileNumber" ColumnName="MobileNumber" />
+          <ScalarProperty Name="EmailId" ColumnName="EmailId" />
+          <ScalarProperty Name="EmployeeAddress" ColumnName="EmployeeAddress" />
+          <ScalarProperty Name="Salary" ColumnName="Salary" />
+          <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ExpenseReports">
+      <EntityTypeMapping TypeName="Model.ExpenseReport">
+        <MappingFragment StoreEntitySet="ExpenseReport">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Expense" ColumnName="Expense" />
+          <ScalarProperty Name="Type_Of_Expense" ColumnName="Type_Of_Expense" />
+          <ScalarProperty Name="Transaction_Type" ColumnName="Transaction_Type" />
+          <ScalarProperty Name="Expense_Description" ColumnName="Expense_Description" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="TransactionDate" ColumnName="TransactionDate" />
+          <ScalarProperty Name="IsPaid" ColumnName="IsPaid" />
+          <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Galleries">
+      <EntityTypeMapping TypeName="Model.Gallery">
+        <MappingFragment StoreEntitySet="Gallery">
+          <ScalarProperty Name="Franchise_Id" ColumnName="Franchise_Id" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="ImageName" ColumnName="ImageName" />
+          <ScalarProperty Name="Images" ColumnName="Images" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="HealthBookings">
+      <EntityTypeMapping TypeName="Model.HealthBooking">
+        <MappingFragment StoreEntitySet="HealthBooking">
+          <ScalarProperty Name="Slotid" ColumnName="Slotid" />
+          <ScalarProperty Name="TestDate" ColumnName="TestDate" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+          <ScalarProperty Name="PatientId" ColumnName="PatientId" />
+          <ScalarProperty Name="Test_Id" ColumnName="Test_Id" />
+          <ScalarProperty Name="Total" ColumnName="Total" />
+          <ScalarProperty Name="IsPaid" ColumnName="IsPaid" />
+          <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="HealthPayOuts">
+      <EntityTypeMapping TypeName="Model.HealthPayOut">
+        <MappingFragment StoreEntitySet="HealthPayOut">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Health_Id" ColumnName="Health_Id" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="IsPaid" ColumnName="IsPaid" />
+          <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
+          <ScalarProperty Name="IsGenerated" ColumnName="IsGenerated" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="HopitalFaciltiys">
+      <EntityTypeMapping TypeName="Model.HopitalFaciltiy">
+        <MappingFragment StoreEntitySet="HopitalFaciltiy">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Hospital_Id" ColumnName="Hospital_Id" />
+          <ScalarProperty Name="FacilityName" ColumnName="FacilityName" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="HospitalDepartments">
+      <EntityTypeMapping TypeName="Model.HospitalDepartment">
+        <MappingFragment StoreEntitySet="HospitalDepartment">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Hospital_Id" ColumnName="Hospital_Id" />
+          <ScalarProperty Name="Department_Id" ColumnName="Department_Id" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="HospitalDoctors">
+      <EntityTypeMapping TypeName="Model.HospitalDoctor">
+        <MappingFragment StoreEntitySet="HospitalDoctor">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="DoctorName" ColumnName="DoctorName" />
+          <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+          <ScalarProperty Name="MobileNumber" ColumnName="MobileNumber" />
+          <ScalarProperty Name="EmailId" ColumnName="EmailId" />
+          <ScalarProperty Name="StateMaster_Id" ColumnName="StateMaster_Id" />
+          <ScalarProperty Name="CityMaster_Id" ColumnName="CityMaster_Id" />
+          <ScalarProperty Name="Location" ColumnName="Location" />
+          <ScalarProperty Name="LicenceImage" ColumnName="LicenceImage" />
+          <ScalarProperty Name="LicenceNumber" ColumnName="LicenceNumber" />
+          <ScalarProperty Name="ClinicName" ColumnName="ClinicName" />
+          <ScalarProperty Name="Department_Id" ColumnName="Department_Id" />
+          <ScalarProperty Name="Specialist_Id" ColumnName="Specialist_Id" />
+          <ScalarProperty Name="IsApproved" ColumnName="IsApproved" />
+          <ScalarProperty Name="PAN" ColumnName="PAN" />
+          <ScalarProperty Name="AadharNumber" ColumnName="AadharNumber" />
+          <ScalarProperty Name="AadharImage" ColumnName="AadharImage" />
+          <ScalarProperty Name="Hospital_Id" ColumnName="Hospital_Id" />
+          <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+          <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+          <ScalarProperty Name="SlotTime" ColumnName="SlotTime" />
+          <ScalarProperty Name="Fee" ColumnName="Fee" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="HospitalDoctorDepartments">
+      <EntityTypeMapping TypeName="Model.HospitalDoctorDepartment">
+        <MappingFragment StoreEntitySet="HospitalDoctorDepartment">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="HospitalDoctor_Id" ColumnName="HospitalDoctor_Id" />
+          <ScalarProperty Name="Department_Id" ColumnName="Department_Id" />
+          <ScalarProperty Name="Specialist_Id" ColumnName="Specialist_Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="HospitalNurses">
+      <EntityTypeMapping TypeName="Model.HospitalNurse">
+        <MappingFragment StoreEntitySet="HospitalNurse">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="NurseName" ColumnName="NurseName" />
+          <ScalarProperty Name="NurseType_Id" ColumnName="NurseType_Id" />
+          <ScalarProperty Name="Hospital_Id" ColumnName="Hospital_Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="HospitalReports">
+      <EntityTypeMapping TypeName="Model.HospitalReport">
+        <MappingFragment StoreEntitySet="HospitalReport">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Department" ColumnName="Department" />
+          <ScalarProperty Name="Hospital_Id" ColumnName="Hospital_Id" />
+          <ScalarProperty Name="Patient_Id" ColumnName="Patient_Id" />
+          <ScalarProperty Name="Test" ColumnName="Test" />
+          <ScalarProperty Name="File" ColumnName="File" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="LabPayOuts">
+      <EntityTypeMapping TypeName="Model.LabPayOut">
+        <MappingFragment StoreEntitySet="LabPayOut">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Lab_Id" ColumnName="Lab_Id" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="IsPaid" ColumnName="IsPaid" />
+          <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
+          <ScalarProperty Name="IsGenerated" ColumnName="IsGenerated" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="LabReports">
+      <EntityTypeMapping TypeName="Model.LabReport">
+        <MappingFragment StoreEntitySet="LabReport">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Lab_Id" ColumnName="Lab_Id" />
+          <ScalarProperty Name="Patient_Id" ColumnName="Patient_Id" />
+          <ScalarProperty Name="Test" ColumnName="Test" />
+          <ScalarProperty Name="File" ColumnName="File" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Locations">
+      <EntityTypeMapping TypeName="Model.Location">
+        <MappingFragment StoreEntitySet="Location">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="LocationName" ColumnName="LocationName" />
+          <ScalarProperty Name="City_Id" ColumnName="City_Id" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="Lat" ColumnName="Lat" />
+          <ScalarProperty Name="Lng" ColumnName="Lng" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Mails">
+      <EntityTypeMapping TypeName="Model.Mail">
+        <MappingFragment StoreEntitySet="Mail">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="TelePhone" ColumnName="TelePhone" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Subjects" ColumnName="Subjects" />
+          <ScalarProperty Name="Msg" ColumnName="Msg" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MainCategories">
+      <EntityTypeMapping TypeName="Model.MainCategory">
+        <MappingFragment StoreEntitySet="MainCategory">
+          <ScalarProperty Name="AmbulanceType_id" ColumnName="AmbulanceType_id" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Medicines">
+      <EntityTypeMapping TypeName="Model.Medicine">
+        <MappingFragment StoreEntitySet="Medicine">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="MedicineName" ColumnName="MedicineName" />
+          <ScalarProperty Name="MedicineDescription" ColumnName="MedicineDescription" />
+          <ScalarProperty Name="MedicineType_Id" ColumnName="MedicineType_Id" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="MRP" ColumnName="MRP" />
+          <ScalarProperty Name="BrandName" ColumnName="BrandName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MedicineCarts">
+      <EntityTypeMapping TypeName="Model.MedicineCart">
+        <MappingFragment StoreEntitySet="MedicineCart">
+          <ScalarProperty Name="TotalPrice" ColumnName="TotalPrice" />
+          <ScalarProperty Name="price" ColumnName="price" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Patient_Id" ColumnName="Patient_Id" />
+          <ScalarProperty Name="Medicine_Id" ColumnName="Medicine_Id" />
+          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MedicineOrders">
+      <EntityTypeMapping TypeName="Model.MedicineOrder">
+        <MappingFragment StoreEntitySet="MedicineOrder">
+          <ScalarProperty Name="finalPrice" ColumnName="finalPrice" />
+          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+          <ScalarProperty Name="IsPaid" ColumnName="IsPaid" />
+          <ScalarProperty Name="IsDelivered" ColumnName="IsDelivered" />
+          <ScalarProperty Name="Patient_Id" ColumnName="Patient_Id" />
+          <ScalarProperty Name="Chemist_Id" ColumnName="Chemist_Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="MobileNumber" ColumnName="MobileNumber" />
+          <ScalarProperty Name="DeliveryAddress" ColumnName="DeliveryAddress" />
+          <ScalarProperty Name="StateMaster_Id" ColumnName="StateMaster_Id" />
+          <ScalarProperty Name="PinCode" ColumnName="PinCode" />
+          <ScalarProperty Name="CityMaster_Id" ColumnName="CityMaster_Id" />
+          <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+          <ScalarProperty Name="InvoiceNumber" ColumnName="InvoiceNumber" />
+          <ScalarProperty Name="Location_Id" ColumnName="Location_Id" />
+          <ScalarProperty Name="DeliveryStatus" ColumnName="DeliveryStatus" />
+          <ScalarProperty Name="DeliveryDate" ColumnName="DeliveryDate" />
+          <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MedicineOrderDetails">
+      <EntityTypeMapping TypeName="Model.MedicineOrderDetail">
+        <MappingFragment StoreEntitySet="MedicineOrderDetail">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Order_Id" ColumnName="Order_Id" />
+          <ScalarProperty Name="Medicine_Id" ColumnName="Medicine_Id" />
+          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MedicineTypes">
+      <EntityTypeMapping TypeName="Model.MedicineType">
+        <MappingFragment StoreEntitySet="MedicineType">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="MedicineTypeName" ColumnName="MedicineTypeName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Nurse_Location">
+      <EntityTypeMapping TypeName="Model.Nurse_Location">
+        <MappingFragment StoreEntitySet="Nurse_Location">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Nurse_Id" ColumnName="Nurse_Id" />
+          <ScalarProperty Name="Location_Id" ColumnName="Location_Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="NursePayouts">
+      <EntityTypeMapping TypeName="Model.NursePayout">
+        <MappingFragment StoreEntitySet="NursePayout">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Nurse_Id" ColumnName="Nurse_Id" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="IsPaid" ColumnName="IsPaid" />
+          <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
+          <ScalarProperty Name="IsGenerated" ColumnName="IsGenerated" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="NurseServiceRequests">
+      <EntityTypeMapping TypeName="Model.NurseServiceRequest">
+        <MappingFragment StoreEntitySet="NurseServiceRequest">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="NurseService_Id" ColumnName="NurseService_Id" />
+          <ScalarProperty Name="Nurse_Id" ColumnName="Nurse_Id" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="NurseTypes">
+      <EntityTypeMapping TypeName="Model.NurseType">
+        <MappingFragment StoreEntitySet="NurseType">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="NurseTypeName" ColumnName="NurseTypeName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PageMasters">
+      <EntityTypeMapping TypeName="Model.PageMaster">
+        <MappingFragment StoreEntitySet="PageMaster">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="PageName" ColumnName="PageName" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PatientAppointments">
+      <EntityTypeMapping TypeName="Model.PatientAppointment">
+        <MappingFragment StoreEntitySet="PatientAppointment">
+          <ScalarProperty Name="AppointmentIsDone" ColumnName="AppointmentIsDone" />
+          <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+          <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+          <ScalarProperty Name="InvoiceNumber" ColumnName="InvoiceNumber" />
+          <ScalarProperty Name="BookingMode_Id" ColumnName="BookingMode_Id" />
+          <ScalarProperty Name="TotalFee" ColumnName="TotalFee" />
+          <ScalarProperty Name="Slot_id" ColumnName="Slot_id" />
+          <ScalarProperty Name="WorkingShift" ColumnName="WorkingShift" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Patient_Id" ColumnName="Patient_Id" />
+          <ScalarProperty Name="AppointmentDate" ColumnName="AppointmentDate" />
+          <ScalarProperty Name="StartSlotTime" ColumnName="StartSlotTime" />
+          <ScalarProperty Name="EndSlotTime" ColumnName="EndSlotTime" />
+          <ScalarProperty Name="Doctor_Id" ColumnName="Doctor_Id" />
+          <ScalarProperty Name="Specialist_Id" ColumnName="Specialist_Id" />
+          <ScalarProperty Name="IsBooked" ColumnName="IsBooked" />
+          <ScalarProperty Name="IsPaid" ColumnName="IsPaid" />
+          <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
+          <ScalarProperty Name="Hospital_Id" ColumnName="Hospital_Id" />
+          <ScalarProperty Name="HospitalDoc_Id" ColumnName="HospitalDoc_Id" />
+          <ScalarProperty Name="IsCancelled" ColumnName="IsCancelled" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PatientComplaints">
+      <EntityTypeMapping TypeName="Model.PatientComplaint">
+        <MappingFragment StoreEntitySet="PatientComplaints">
+          <ScalarProperty Name="patsubid" ColumnName="patsubid" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Subjects" ColumnName="Subjects" />
+          <ScalarProperty Name="Complaints" ColumnName="Complaints" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="IsResolved" ColumnName="IsResolved" />
+          <ScalarProperty Name="Others" ColumnName="Others" />
+          <ScalarProperty Name="Login_Id" ColumnName="Login_Id" />
+          <ScalarProperty Name="Roles" ColumnName="Roles" />
+          <ScalarProperty Name="ComplaintDate" ColumnName="ComplaintDate" />
+          <ScalarProperty Name="Rating" ColumnName="Rating" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PatientRequests">
+      <EntityTypeMapping TypeName="Model.PatientRequest">
+        <MappingFragment StoreEntitySet="PatientRequest">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Patient_Id" ColumnName="Patient_Id" />
+          <ScalarProperty Name="VehicelType_Id" ColumnName="VehicelType_Id" />
+          <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+          <ScalarProperty Name="Longtitude" ColumnName="Longtitude" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Request" ColumnName="Request" />
+          <ScalarProperty Name="DropLatitude" ColumnName="DropLatitude" />
+          <ScalarProperty Name="DropLongtitude" ColumnName="DropLongtitude" />
+          <ScalarProperty Name="StatusKey" ColumnName="StatusKey" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PaymentMasters">
+      <EntityTypeMapping TypeName="Model.PaymentMaster">
+        <MappingFragment StoreEntitySet="PaymentMaster">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Department" ColumnName="Department" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PayoutMasters">
+      <EntityTypeMapping TypeName="Model.PayoutMaster">
+        <MappingFragment StoreEntitySet="PayoutMaster">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RwaPayouts">
+      <EntityTypeMapping TypeName="Model.RwaPayout">
+        <MappingFragment StoreEntitySet="RwaPayout">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Rwa_Id" ColumnName="Rwa_Id" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="IsGenerated" ColumnName="IsGenerated" />
+          <ScalarProperty Name="IsPaid" ColumnName="IsPaid" />
+          <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SalaryMasters">
+      <EntityTypeMapping TypeName="Model.SalaryMaster">
+        <MappingFragment StoreEntitySet="SalaryMaster">
+          <ScalarProperty Name="Leave" ColumnName="Leave" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Emp_Id" ColumnName="Emp_Id" />
+          <ScalarProperty Name="Salary" ColumnName="Salary" />
+          <ScalarProperty Name="PaidDate" ColumnName="PaidDate" />
+          <ScalarProperty Name="IsPaid" ColumnName="IsPaid" />
+          <ScalarProperty Name="GenerateDate" ColumnName="GenerateDate" />
+          <ScalarProperty Name="IsGenerated" ColumnName="IsGenerated" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Specialists">
+      <EntityTypeMapping TypeName="Model.Specialist">
+        <MappingFragment StoreEntitySet="Specialist">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="SpecialistName" ColumnName="SpecialistName" />
+          <ScalarProperty Name="Department_Id" ColumnName="Department_Id" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="StateMasters">
+      <EntityTypeMapping TypeName="Model.StateMaster">
+        <MappingFragment StoreEntitySet="StateMaster">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="StateName" ColumnName="StateName" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TDSMasters">
+      <EntityTypeMapping TypeName="Model.TDSMaster">
+        <MappingFragment StoreEntitySet="TDSMaster">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TempDepartments">
+      <EntityTypeMapping TypeName="Model.TempDepartment">
+        <MappingFragment StoreEntitySet="TempDepartment">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Department" ColumnName="Department" />
+          <ScalarProperty Name="Specialist" ColumnName="Specialist" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="Requested" ColumnName="Requested" />
+          <ScalarProperty Name="IsApproved" ColumnName="IsApproved" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TestLabs">
+      <EntityTypeMapping TypeName="Model.TestLab">
+        <MappingFragment StoreEntitySet="TestLab">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Test_Id" ColumnName="Test_Id" />
+          <ScalarProperty Name="Lab_Id" ColumnName="Lab_Id" />
+          <ScalarProperty Name="TestAmount" ColumnName="TestAmount" />
+          <ScalarProperty Name="TestDescription" ColumnName="TestDescription" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TravelMasters">
+      <EntityTypeMapping TypeName="Model.TravelMaster">
+        <MappingFragment StoreEntitySet="TravelMaster">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="VehicleType_Id" ColumnName="VehicleType_Id" />
+          <ScalarProperty Name="Patient_Id" ColumnName="Patient_Id" />
+          <ScalarProperty Name="Driver_Id" ColumnName="Driver_Id" />
+          <ScalarProperty Name="Lat_Driver" ColumnName="Lat_Driver" />
+          <ScalarProperty Name="Lang_Driver" ColumnName="Lang_Driver" />
+          <ScalarProperty Name="Vehicle_Id" ColumnName="Vehicle_Id" />
+          <ScalarProperty Name="IsDriveCompleted" ColumnName="IsDriveCompleted" />
+          <ScalarProperty Name="RequestDate" ColumnName="RequestDate" />
+          <ScalarProperty Name="DriverKey" ColumnName="DriverKey" />
+          <ScalarProperty Name="StatusKey" ColumnName="StatusKey" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Vehicles">
+      <EntityTypeMapping TypeName="Model.Vehicle">
+        <MappingFragment StoreEntitySet="Vehicle">
+          <ScalarProperty Name="PAN" ColumnName="PAN" />
+          <ScalarProperty Name="VehicleOwnerName" ColumnName="VehicleOwnerName" />
+          <ScalarProperty Name="VehicleCat_Id" ColumnName="VehicleCat_Id" />
+          <ScalarProperty Name="RefId" ColumnName="RefId" />
+          <ScalarProperty Name="AccountHolderName" ColumnName="AccountHolderName" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="VehicleNumber" ColumnName="VehicleNumber" />
+          <ScalarProperty Name="Validity" ColumnName="Validity" />
+          <ScalarProperty Name="InsurranceDate" ColumnName="InsurranceDate" />
+          <ScalarProperty Name="PollutionDate" ColumnName="PollutionDate" />
+          <ScalarProperty Name="IsApproved" ColumnName="IsApproved" />
+          <ScalarProperty Name="VehicleType_Id" ColumnName="VehicleType_Id" />
+          <ScalarProperty Name="Driver_Id" ColumnName="Driver_Id" />
+          <ScalarProperty Name="Vendor_Id" ColumnName="Vendor_Id" />
+          <ScalarProperty Name="FitnessCertificateValidity" ColumnName="FitnessCertificateValidity" />
+          <ScalarProperty Name="InsuranceImage" ColumnName="InsuranceImage" />
+          <ScalarProperty Name="PollutionImage" ColumnName="PollutionImage" />
+          <ScalarProperty Name="FitnessCerficateImage" ColumnName="FitnessCerficateImage" />
+          <ScalarProperty Name="RegistrationDate" ColumnName="RegistrationDate" />
+          <ScalarProperty Name="RC_Image" ColumnName="RC_Image" />
+          <ScalarProperty Name="RC_No" ColumnName="RC_No" />
+          <ScalarProperty Name="VehicleName" ColumnName="VehicleName" />
+          <ScalarProperty Name="VehicleImg" ColumnName="VehicleImg" />
+          <ScalarProperty Name="AccountNo" ColumnName="AccountNo" />
+          <ScalarProperty Name="IFSCCode" ColumnName="IFSCCode" />
+          <ScalarProperty Name="BranchName" ColumnName="BranchName" />
+          <ScalarProperty Name="BranchAddress" ColumnName="BranchAddress" />
+          <ScalarProperty Name="HolderName" ColumnName="HolderName" />
+          <ScalarProperty Name="CancelCheque" ColumnName="CancelCheque" />
+          <ScalarProperty Name="DriverCharges" ColumnName="DriverCharges" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="VehicleTypes">
+      <EntityTypeMapping TypeName="Model.VehicleType">
+        <MappingFragment StoreEntitySet="VehicleType">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="VehicleTypeName" ColumnName="VehicleTypeName" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="under5KM" ColumnName="under5KM" />
+          <ScalarProperty Name="under6_10KM" ColumnName="under6_10KM" />
+          <ScalarProperty Name="under11_20KM" ColumnName="under11_20KM" />
+          <ScalarProperty Name="under21_40KM" ColumnName="under21_40KM" />
+          <ScalarProperty Name="under41_60KM" ColumnName="under41_60KM" />
+          <ScalarProperty Name="under61_80KM" ColumnName="under61_80KM" />
+          <ScalarProperty Name="under81_100KM" ColumnName="under81_100KM" />
+          <ScalarProperty Name="under100_150KM" ColumnName="under100_150KM" />
+          <ScalarProperty Name="under151_200KM" ColumnName="under151_200KM" />
+          <ScalarProperty Name="under201_250KM" ColumnName="under201_250KM" />
+          <ScalarProperty Name="under251_300KM" ColumnName="under251_300KM" />
+          <ScalarProperty Name="under301_350KM" ColumnName="under301_350KM" />
+          <ScalarProperty Name="under351_400KM" ColumnName="under351_400KM" />
+          <ScalarProperty Name="under401_450KM" ColumnName="under401_450KM" />
+          <ScalarProperty Name="under451_500KM" ColumnName="under451_500KM" />
+          <ScalarProperty Name="Above500KM" ColumnName="Above500KM" />
+          <ScalarProperty Name="Category_Id" ColumnName="Category_Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="VendorPayOuts">
+      <EntityTypeMapping TypeName="Model.VendorPayOut">
+        <MappingFragment StoreEntitySet="VendorPayOut">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Vendor_Id" ColumnName="Vendor_Id" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="IsPaid" ColumnName="IsPaid" />
+          <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
+          <ScalarProperty Name="IsGenerated" ColumnName="IsGenerated" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AppLogs">
+      <EntityTypeMapping TypeName="Model.AppLog">
+        <MappingFragment StoreEntitySet="AppLog">
+          <ScalarProperty Name="Date" ColumnName="Date" />
+          <ScalarProperty Name="Thread" ColumnName="Thread" />
+          <ScalarProperty Name="Level" ColumnName="Level" />
+          <ScalarProperty Name="Logger" ColumnName="Logger" />
+          <ScalarProperty Name="Message" ColumnName="Message" />
+          <ScalarProperty Name="Exception" ColumnName="Exception" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionName="Model.Store.udf_AppointmentSlots" FunctionImportName="udf_AppointmentSlots">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Model.udf_AppointmentSlots_Result">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="n" ColumnName="n" />
+          <ScalarProperty Name="TimeSlot" ColumnName="TimeSlot" />
+          <ScalarProperty Name="TSStart" ColumnName="TSStart" />
+          <ScalarProperty Name="TSEnd" ColumnName="TSEnd" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionName="Model.Store.udf_getAppointmentSlots" FunctionImportName="udf_getAppointmentSlots">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Model.udf_getAppointmentSlots_Result">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="TSStart" ColumnName="TSStart" />
+          <ScalarProperty Name="TSEnd" ColumnName="TSEnd" />
+          <ScalarProperty Name="Timeslot" ColumnName="Timeslot" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_AppointmentHistory" FunctionName="Model.Store.sp_AppointmentHistory">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Model.sp_AppointmentHistory_Result">
+          <ScalarProperty Name="AppointmentId" ColumnName="AppointmentId" />
+          <ScalarProperty Name="AppointmentDate" ColumnName="AppointmentDate" />
+          <ScalarProperty Name="MobileNo" ColumnName="MobileNo" />
+          <ScalarProperty Name="Doctor_Id" ColumnName="Doctor_Id" />
+          <ScalarProperty Name="Specialist_Id" ColumnName="Specialist_Id" />
+          <ScalarProperty Name="Specility" ColumnName="Specility" />
+          <ScalarProperty Name="IsCancelled" ColumnName="IsCancelled" />
+          <ScalarProperty Name="ClinicName" ColumnName="ClinicName" />
+          <ScalarProperty Name="ClinicAddress" ColumnName="ClinicAddress" />
+          <ScalarProperty Name="PhoneNo" ColumnName="PhoneNo" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+          <ScalarProperty Name="DoctornName" ColumnName="DoctornName" />
+          <ScalarProperty Name="AppointedTime" ColumnName="AppointedTime" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="AddMedicineToCart" FunctionName="Model.Store.AddMedicineToCart" />
+    <FunctionImportMapping FunctionImportName="AppointmentTestNurse" FunctionName="Model.Store.AppointmentTestNurse" />
+    <FunctionImportMapping FunctionImportName="AppointmentWithNurse" FunctionName="Model.Store.AppointmentWithNurse" />
+    <FunctionImportMapping FunctionImportName="DeleteMedicineFromCart" FunctionName="Model.Store.DeleteMedicineFromCart" />
+    <FunctionImportMapping FunctionImportName="GetMedicineCart" FunctionName="Model.Store.GetMedicineCart">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Model.GetMedicineCart_Result">
+          <ScalarProperty Name="CartId" ColumnName="CartId" />
+          <ScalarProperty Name="Medicine_Id" ColumnName="Medicine_Id" />
+          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+          <ScalarProperty Name="MedicineName" ColumnName="MedicineName" />
+          <ScalarProperty Name="BrandName" ColumnName="BrandName" />
+          <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+          <ScalarProperty Name="TotalPrice" ColumnName="TotalPrice" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="GetNurseAppointmentList" FunctionName="Model.Store.GetNurseAppointmentList">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Model.GetNurseAppointmentList_Result">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Nurse_Id" ColumnName="Nurse_Id" />
+          <ScalarProperty Name="Patient_Id" ColumnName="Patient_Id" />
+          <ScalarProperty Name="MobileNumber" ColumnName="MobileNumber" />
+          <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+          <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+          <ScalarProperty Name="IsPaid" ColumnName="IsPaid" />
+          <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
+          <ScalarProperty Name="ServiceAcceptanceDate" ColumnName="ServiceAcceptanceDate" />
+          <ScalarProperty Name="RequestDate" ColumnName="RequestDate" />
+          <ScalarProperty Name="ServiceStatus" ColumnName="ServiceStatus" />
+          <ScalarProperty Name="PerDayAmount" ColumnName="PerDayAmount" />
+          <ScalarProperty Name="NurseTypeId" ColumnName="NurseTypeId" />
+          <ScalarProperty Name="LocationId" ColumnName="LocationId" />
+          <ScalarProperty Name="ServiceDate" ColumnName="ServiceDate" />
+          <ScalarProperty Name="ServiceType" ColumnName="ServiceType" />
+          <ScalarProperty Name="ServiceTime" ColumnName="ServiceTime" />
+          <ScalarProperty Name="TotalFee" ColumnName="TotalFee" />
+          <ScalarProperty Name="PatientName" ColumnName="PatientName" />
+          <ScalarProperty Name="LocationName" ColumnName="LocationName" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_getChemistOrder" FunctionName="Model.Store.sp_getChemistOrder">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Model.sp_getChemistOrder_Result">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+          <ScalarProperty Name="InvoiceNumber" ColumnName="InvoiceNumber" />
+          <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+          <ScalarProperty Name="IsDelivered" ColumnName="IsDelivered" />
+          <ScalarProperty Name="IsPaid" ColumnName="IsPaid" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="MobileNumber" ColumnName="MobileNumber" />
+          <ScalarProperty Name="DeliveryAddress" ColumnName="DeliveryAddress" />
+          <ScalarProperty Name="PinCode" ColumnName="PinCode" />
+          <ScalarProperty Name="StateName" ColumnName="StateName" />
+          <ScalarProperty Name="CityName" ColumnName="CityName" />
+          <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+          <ScalarProperty Name="DeliveryStatus" ColumnName="DeliveryStatus" />
+          <ScalarProperty Name="DeliveryDate" ColumnName="DeliveryDate" />
+          <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_GetNearestMedicalShop" FunctionName="Model.Store.sp_GetNearestMedicalShop">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Model.sp_GetNearestMedicalShop_Result">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="ChemistName" ColumnName="ChemistName" />
+          <ScalarProperty Name="ShopName" ColumnName="ShopName" />
+          <ScalarProperty Name="MobileNumber" ColumnName="MobileNumber" />
+          <ScalarProperty Name="EmailId" ColumnName="EmailId" />
+          <ScalarProperty Name="LicenceImage" ColumnName="LicenceImage" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="Distance" ColumnName="Distance" />
+          <ScalarProperty Name="StateName" ColumnName="StateName" />
+          <ScalarProperty Name="CityName" ColumnName="CityName" />
+          <ScalarProperty Name="LocationName" ColumnName="LocationName" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_getOrder" FunctionName="Model.Store.sp_getOrder">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Model.sp_getOrder_Result">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+          <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+          <ScalarProperty Name="IsDelivered" ColumnName="IsDelivered" />
+          <ScalarProperty Name="IsPaid" ColumnName="IsPaid" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="MobileNumber" ColumnName="MobileNumber" />
+          <ScalarProperty Name="DeliveryAddress" ColumnName="DeliveryAddress" />
+          <ScalarProperty Name="PinCode" ColumnName="PinCode" />
+          <ScalarProperty Name="StateName" ColumnName="StateName" />
+          <ScalarProperty Name="CityName" ColumnName="CityName" />
+          <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_getOrderDetail" FunctionName="Model.Store.sp_getOrderDetail">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Model.sp_getOrderDetail_Result">
+          <ScalarProperty Name="MedicineId" ColumnName="MedicineId" />
+          <ScalarProperty Name="MedicineName" ColumnName="MedicineName" />
+          <ScalarProperty Name="BrandName" ColumnName="BrandName" />
+          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+          <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+          <ScalarProperty Name="TotalPrice" ColumnName="TotalPrice" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_PatientAppointments" FunctionName="Model.Store.sp_PatientAppointments">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Model.sp_PatientAppointments_Result">
+          <ScalarProperty Name="AppointmentDate" ColumnName="AppointmentDate" />
+          <ScalarProperty Name="MobileNo" ColumnName="MobileNo" />
+          <ScalarProperty Name="Doctor_Id" ColumnName="Doctor_Id" />
+          <ScalarProperty Name="AppointmentId" ColumnName="AppointmentId" />
+          <ScalarProperty Name="Specialist_Id" ColumnName="Specialist_Id" />
+          <ScalarProperty Name="Specility" ColumnName="Specility" />
+          <ScalarProperty Name="ClinicName" ColumnName="ClinicName" />
+          <ScalarProperty Name="ClinicAddress" ColumnName="ClinicAddress" />
+          <ScalarProperty Name="PhoneNo" ColumnName="PhoneNo" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+          <ScalarProperty Name="DoctorName" ColumnName="DoctorName" />
+          <ScalarProperty Name="Patient_Id" ColumnName="Patient_Id" />
+          <ScalarProperty Name="IsCancelled" ColumnName="IsCancelled" />
+          <ScalarProperty Name="AppointedTime" ColumnName="AppointedTime" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_saveOrder" FunctionName="Model.Store.sp_saveOrder" />
+    <FunctionImportMapping FunctionImportName="sp_SearchNurse" FunctionName="Model.Store.sp_SearchNurse">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Model.sp_SearchNurse_Result">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="NurseName" ColumnName="NurseName" />
+          <ScalarProperty Name="EmailId" ColumnName="EmailId" />
+          <ScalarProperty Name="MobileNumber" ColumnName="MobileNumber" />
+          <ScalarProperty Name="StateName" ColumnName="StateName" />
+          <ScalarProperty Name="CityName" ColumnName="CityName" />
+          <ScalarProperty Name="Fee" ColumnName="Fee" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="NurseTypeName" ColumnName="NurseTypeName" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="spVehicleCategory" FunctionName="Model.Store.spVehicleCategory">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Model.spVehicleCategory_Result">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="spVehicleList" FunctionName="Model.Store.spVehicleList">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Model.spVehicleList_Result">
+          <ScalarProperty Name="C_0_5" ColumnName="_0_5" />
+          <ScalarProperty Name="C_6_10" ColumnName="_6_10" />
+          <ScalarProperty Name="C_11_20" ColumnName="_11_20" />
+          <ScalarProperty Name="C_21_40" ColumnName="_21_40" />
+          <ScalarProperty Name="C_41_60" ColumnName="_41_60" />
+          <ScalarProperty Name="C_61_80" ColumnName="_61_80" />
+          <ScalarProperty Name="C_81_100" ColumnName="_81_100" />
+          <ScalarProperty Name="C_101_150" ColumnName="_101_150" />
+          <ScalarProperty Name="C_151_200" ColumnName="_151_200" />
+          <ScalarProperty Name="C_201_250" ColumnName="_201_250" />
+          <ScalarProperty Name="C_251_300" ColumnName="_251_300" />
+          <ScalarProperty Name="C_301_350" ColumnName="_301_350" />
+          <ScalarProperty Name="C_351_400" ColumnName="_351_400" />
+          <ScalarProperty Name="C_401_450" ColumnName="_401_450" />
+          <ScalarProperty Name="C_451_500" ColumnName="_451_500" />
+          <ScalarProperty Name="C_500" ColumnName="_500" />
+          <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+          <ScalarProperty Name="Category_Id" ColumnName="Category_Id" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="VehicleTypeName" ColumnName="VehicleTypeName" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="UpdateCartQuantity" FunctionName="Model.Store.UpdateCartQuantity" />
+    <FunctionImportMapping FunctionImportName="usp_AppintmentSlots" FunctionName="Model.Store.usp_AppintmentSlots">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Model.usp_AppintmentSlots_Result">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="n" ColumnName="n" />
+          <ScalarProperty Name="TimeSlot" ColumnName="TimeSlot" />
+          <ScalarProperty Name="TSStart" ColumnName="TSStart" />
+          <ScalarProperty Name="TSEnd" ColumnName="TSEnd" />
+          <ScalarProperty Name="IsBooked" ColumnName="IsBooked" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="usp_getAppintmentSlots" FunctionName="Model.Store.usp_getAppintmentSlots">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Model.usp_getAppintmentSlots_Result">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="TSStart" ColumnName="TSStart" />
+          <ScalarProperty Name="TSEnd" ColumnName="TSEnd" />
+          <ScalarProperty Name="Timeslot" ColumnName="Timeslot" />
+          <ScalarProperty Name="IsBooked" ColumnName="IsBooked" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="usp_GetBookingList" FunctionName="Model.Store.usp_GetBookingList">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Model.usp_GetBookingList_Result">
+          <ScalarProperty Name="TestDate" ColumnName="TestDate" />
+          <ScalarProperty Name="LabName" ColumnName="LabName" />
+          <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+          <ScalarProperty Name="MobileNumber" ColumnName="MobileNumber" />
+          <ScalarProperty Name="Location" ColumnName="Location" />
+          <ScalarProperty Name="TestName" ColumnName="TestName" />
+          <ScalarProperty Name="TestAmount" ColumnName="TestAmount" />
+          <ScalarProperty Name="AvailableTime" ColumnName="AvailableTime" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <EntitySetMapping Name="LabBookings">
+      <EntityTypeMapping TypeName="Model.LabBooking">
+        <MappingFragment StoreEntitySet="LabBooking">
+          <ScalarProperty Name="AvailabelTime2" ColumnName="AvailabelTime2" />
+          <ScalarProperty Name="AvailabelTime1" ColumnName="AvailabelTime1" />
+          <ScalarProperty Name="TestDate" ColumnName="TestDate" />
+          <ScalarProperty Name="Test" ColumnName="Test" />
+          <ScalarProperty Name="TestId" ColumnName="TestId" />
+          <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
+          <ScalarProperty Name="IsPaid" ColumnName="IsPaid" />
+          <ScalarProperty Name="Total" ColumnName="Total" />
+          <ScalarProperty Name="Test_Id" ColumnName="Test_Id" />
+          <ScalarProperty Name="PatientId" ColumnName="PatientId" />
+          <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Drivers">
+      <EntityTypeMapping TypeName="Model.Driver">
+        <MappingFragment StoreEntitySet="Driver">
+          <ScalarProperty Name="Charge" ColumnName="Charge" />
+          <ScalarProperty Name="Lang" ColumnName="Lang" />
+          <ScalarProperty Name="Lat" ColumnName="Lat" />
+          <ScalarProperty Name="BranchName" ColumnName="BranchName" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Paidamount" ColumnName="Paidamount" />
+          <ScalarProperty Name="City" ColumnName="City" />
+          <ScalarProperty Name="State" ColumnName="State" />
+          <ScalarProperty Name="VehicleName" ColumnName="VehicleName" />
+          <ScalarProperty Name="RefId" ColumnName="RefId" />
+          <ScalarProperty Name="IsCheckedTermsCondition" ColumnName="IsCheckedTermsCondition" />
+          <ScalarProperty Name="DriverId" ColumnName="DriverId" />
+          <ScalarProperty Name="PanImage" ColumnName="PanImage" />
+          <ScalarProperty Name="DlImage3" ColumnName="DlImage3" />
+          <ScalarProperty Name="DlImage2" ColumnName="DlImage2" />
+          <ScalarProperty Name="DlImage1" ColumnName="DlImage1" />
+          <ScalarProperty Name="AadharImage2" ColumnName="AadharImage2" />
+          <ScalarProperty Name="PinCode" ColumnName="PinCode" />
+          <ScalarProperty Name="VehicleType_Id" ColumnName="VehicleType_Id" />
+          <ScalarProperty Name="JoiningDate" ColumnName="JoiningDate" />
+          <ScalarProperty Name="VerificationDoc" ColumnName="VerificationDoc" />
+          <ScalarProperty Name="IsVerifiedByPolice" ColumnName="IsVerifiedByPolice" />
+          <ScalarProperty Name="Vendor_Id" ColumnName="Vendor_Id" />
+          <ScalarProperty Name="AadharImage" ColumnName="AadharImage" />
+          <ScalarProperty Name="AadharNumber" ColumnName="AadharNumber" />
+          <ScalarProperty Name="PAN" ColumnName="PAN" />
+          <ScalarProperty Name="IsApproved" ColumnName="IsApproved" />
+          <ScalarProperty Name="AdminLogin_Id" ColumnName="AdminLogin_Id" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="DlValidity" ColumnName="DlValidity" />
+          <ScalarProperty Name="DlNumber" ColumnName="DlNumber" />
+          <ScalarProperty Name="DlImage" ColumnName="DlImage" />
+          <ScalarProperty Name="DriverImage" ColumnName="DriverImage" />
+          <ScalarProperty Name="Location" ColumnName="Location" />
+          <ScalarProperty Name="CityMaster_Id" ColumnName="CityMaster_Id" />
+          <ScalarProperty Name="StateMaster_Id" ColumnName="StateMaster_Id" />
+          <ScalarProperty Name="EmailId" ColumnName="EmailId" />
+          <ScalarProperty Name="MobileNumber" ColumnName="MobileNumber" />
+          <ScalarProperty Name="DriverName" ColumnName="DriverName" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Hospitals">
+      <EntityTypeMapping TypeName="Model.Hospital">
+        <MappingFragment StoreEntitySet="Hospital">
+          <ScalarProperty Name="RefId" ColumnName="RefId" />
+          <ScalarProperty Name="IsCheckedTermsCondition" ColumnName="IsCheckedTermsCondition" />
+          <ScalarProperty Name="HospitalId" ColumnName="HospitalId" />
+          <ScalarProperty Name="PinCode" ColumnName="PinCode" />
+          <ScalarProperty Name="Vendor_Id" ColumnName="Vendor_Id" />
+          <ScalarProperty Name="Location_Id" ColumnName="Location_Id" />
+          <ScalarProperty Name="AdminLogin_Id" ColumnName="AdminLogin_Id" />
+          <ScalarProperty Name="MobileNumber" ColumnName="MobileNumber" />
+          <ScalarProperty Name="EmailId" ColumnName="EmailId" />
+          <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+          <ScalarProperty Name="IsApproved" ColumnName="IsApproved" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="AuthorizationLetterImage" ColumnName="AuthorizationLetterImage" />
+          <ScalarProperty Name="Location" ColumnName="Location" />
+          <ScalarProperty Name="CityMaster_Id" ColumnName="CityMaster_Id" />
+          <ScalarProperty Name="StateMaster_Id" ColumnName="StateMaster_Id" />
+          <ScalarProperty Name="HospitalName" ColumnName="HospitalName" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RWAs">
+      <EntityTypeMapping TypeName="Model.RWA">
+        <MappingFragment StoreEntitySet="RWA">
+          <ScalarProperty Name="PAN" ColumnName="PAN" />
+          <ScalarProperty Name="About" ColumnName="About" />
+          <ScalarProperty Name="CertificateNo" ColumnName="CertificateNo" />
+          <ScalarProperty Name="LandlineNumber" ColumnName="LandlineNumber" />
+          <ScalarProperty Name="Pincode" ColumnName="Pincode" />
+          <ScalarProperty Name="IsCheckedTermsCondition" ColumnName="IsCheckedTermsCondition" />
+          <ScalarProperty Name="RWAId" ColumnName="RWAId" />
+          <ScalarProperty Name="JoiningDate" ColumnName="JoiningDate" />
+          <ScalarProperty Name="Vendor_Id" ColumnName="Vendor_Id" />
+          <ScalarProperty Name="CertificateImage" ColumnName="CertificateImage" />
+          <ScalarProperty Name="AdminLogin_Id" ColumnName="AdminLogin_Id" />
+          <ScalarProperty Name="Location" ColumnName="Location" />
+          <ScalarProperty Name="CityMaster_Id" ColumnName="CityMaster_Id" />
+          <ScalarProperty Name="StateMaster_Id" ColumnName="StateMaster_Id" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="EmailId" ColumnName="EmailId" />
+          <ScalarProperty Name="MobileNumber" ColumnName="MobileNumber" />
+          <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+          <ScalarProperty Name="AuthorityName" ColumnName="AuthorityName" />
+          <ScalarProperty Name="IsApproved" ColumnName="IsApproved" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Vendors">
+      <EntityTypeMapping TypeName="Model.Vendor">
+        <MappingFragment StoreEntitySet="Vendor">
+          <ScalarProperty Name="About" ColumnName="About" />
+          <ScalarProperty Name="PinCode" ColumnName="PinCode" />
+          <ScalarProperty Name="IsCheckedTermsCondition" ColumnName="IsCheckedTermsCondition" />
+          <ScalarProperty Name="UniqueId" ColumnName="UniqueId" />
+          <ScalarProperty Name="AadharOrPANImage2" ColumnName="AadharOrPANImage2" />
+          <ScalarProperty Name="PanNumber" ColumnName="PanNumber" />
+          <ScalarProperty Name="PanImage" ColumnName="PanImage" />
+          <ScalarProperty Name="AadharOrPANImage" ColumnName="AadharOrPANImage" />
+          <ScalarProperty Name="AadharOrPANNumber" ColumnName="AadharOrPANNumber" />
+          <ScalarProperty Name="VendorName" ColumnName="VendorName" />
+          <ScalarProperty Name="AdminLogin_Id" ColumnName="AdminLogin_Id" />
+          <ScalarProperty Name="IsApproved" ColumnName="IsApproved" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="GSTNumber" ColumnName="GSTNumber" />
+          <ScalarProperty Name="Location" ColumnName="Location" />
+          <ScalarProperty Name="City_Id" ColumnName="City_Id" />
+          <ScalarProperty Name="StateMaster_Id" ColumnName="StateMaster_Id" />
+          <ScalarProperty Name="EmailId" ColumnName="EmailId" />
+          <ScalarProperty Name="MobileNumber" ColumnName="MobileNumber" />
+          <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Patients">
+      <EntityTypeMapping TypeName="Model.Patient">
+        <MappingFragment StoreEntitySet="Patient">
+          <ScalarProperty Name="DOB" ColumnName="DOB" />
+          <ScalarProperty Name="Gender" ColumnName="Gender" />
+          <ScalarProperty Name="About" ColumnName="About" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="walletAmount" ColumnName="walletAmount" />
+          <ScalarProperty Name="RefId" ColumnName="RefId" />
+          <ScalarProperty Name="vendorId" ColumnName="vendorId" />
+          <ScalarProperty Name="IsCheckedTermsCondition" ColumnName="IsCheckedTermsCondition" />
+          <ScalarProperty Name="PatientRegNo" ColumnName="PatientRegNo" />
+          <ScalarProperty Name="PinCode" ColumnName="PinCode" />
+          <ScalarProperty Name="Reg_Date" ColumnName="Reg_Date" />
+          <ScalarProperty Name="Rwa_Id" ColumnName="Rwa_Id" />
+          <ScalarProperty Name="AdminLogin_Id" ColumnName="AdminLogin_Id" />
+          <ScalarProperty Name="IsApproved" ColumnName="IsApproved" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="Location" ColumnName="Location" />
+          <ScalarProperty Name="CityMaster_Id" ColumnName="CityMaster_Id" />
+          <ScalarProperty Name="StateMaster_Id" ColumnName="StateMaster_Id" />
+          <ScalarProperty Name="MobileNumber" ColumnName="MobileNumber" />
+          <ScalarProperty Name="EmailId" ColumnName="EmailId" />
+          <ScalarProperty Name="PatientName" ColumnName="PatientName" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="LabTests">
+      <EntityTypeMapping TypeName="Model.LabTest">
+        <MappingFragment StoreEntitySet="LabTest">
+          <ScalarProperty Name="Test_Id" ColumnName="Test_Id" />
+          <ScalarProperty Name="TestDesc" ColumnName="TestDesc" />
+          <ScalarProperty Name="TestAmount" ColumnName="TestAmount" />
+          <ScalarProperty Name="Lab_Id" ColumnName="Lab_Id" />
+          <ScalarProperty Name="TestName" ColumnName="TestName" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="VehicleCharges">
+      <EntityTypeMapping TypeName="Model.VehicleCharge">
+        <MappingFragment StoreEntitySet="VehicleCharges">
+          <ScalarProperty Name="AppliedFor" ColumnName="AppliedFor" />
+          <ScalarProperty Name="TypeId" ColumnName="TypeId" />
+          <ScalarProperty Name="Category_Id" ColumnName="Category_Id" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DoctorClinics">
+      <EntityTypeMapping TypeName="Model.DoctorClinic">
+        <MappingFragment StoreEntitySet="DoctorClinics">
+          <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+          <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+          <ScalarProperty Name="FullAddress" ColumnName="FullAddress" />
+          <ScalarProperty Name="LocationId" ColumnName="LocationId" />
+          <ScalarProperty Name="CityId" ColumnName="CityId" />
+          <ScalarProperty Name="StateId" ColumnName="StateId" />
+          <ScalarProperty Name="ClinicName" ColumnName="ClinicName" />
+          <ScalarProperty Name="DoctorId" ColumnName="DoctorId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="HealthPackageMasters">
+      <EntityTypeMapping TypeName="Model.HealthPackageMaster">
+        <MappingFragment StoreEntitySet="HealthPackageMaster">
+          <ScalarProperty Name="PackageName" ColumnName="PackageName" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="HealthCheckUpPackages">
+      <EntityTypeMapping TypeName="Model.HealthCheckUpPackage">
+        <MappingFragment StoreEntitySet="HealthCheckUpPackage">
+          <ScalarProperty Name="Gst" ColumnName="Gst" />
+          <ScalarProperty Name="DiscountAmt" ColumnName="DiscountAmt" />
+          <ScalarProperty Name="CenterId" ColumnName="CenterId" />
+          <ScalarProperty Name="TestAmt" ColumnName="TestAmt" />
+          <ScalarProperty Name="packageId" ColumnName="packageId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="HealthLabTests">
+      <EntityTypeMapping TypeName="Model.HealthLabTest">
+        <MappingFragment StoreEntitySet="HealthLabTest">
+          <ScalarProperty Name="TestName" ColumnName="TestName" />
+          <ScalarProperty Name="TestAmt" ColumnName="TestAmt" />
+          <ScalarProperty Name="HealthPackageID" ColumnName="HealthPackageID" />
+          <ScalarProperty Name="TestId" ColumnName="TestId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TravelRecordMasters">
+      <EntityTypeMapping TypeName="Model.TravelRecordMaster">
+        <MappingFragment StoreEntitySet="TravelRecordMaster">
+          <ScalarProperty Name="CancelBy" ColumnName="CancelBy" />
+          <ScalarProperty Name="ExtraCharges" ColumnName="ExtraCharges" />
+          <ScalarProperty Name="Is8HourRide" ColumnName="Is8HourRide" />
+          <ScalarProperty Name="RideEndTime" ColumnName="RideEndTime" />
+          <ScalarProperty Name="RideStartTime" ColumnName="RideStartTime" />
+          <ScalarProperty Name="IsPaid" ColumnName="IsPaid" />
+          <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
+          <ScalarProperty Name="RecordId" ColumnName="RecordId" />
+          <ScalarProperty Name="FullAmount" ColumnName="FullAmount" />
+          <ScalarProperty Name="RequestDate" ColumnName="RequestDate" />
+          <ScalarProperty Name="Distance" ColumnName="Distance" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="IsDriveCompleted" ColumnName="IsDriveCompleted" />
+          <ScalarProperty Name="Vehicle_Id" ColumnName="Vehicle_Id" />
+          <ScalarProperty Name="Drop_Place" ColumnName="Drop_Place" />
+          <ScalarProperty Name="PickUp_Place" ColumnName="PickUp_Place" />
+          <ScalarProperty Name="Lat_Drop" ColumnName="Lat_Drop" />
+          <ScalarProperty Name="Lang_Drop" ColumnName="Lang_Drop" />
+          <ScalarProperty Name="Lang_PickUp_Pateint" ColumnName="Lang_PickUp_Pateint" />
+          <ScalarProperty Name="Lat_PickUp_Patient" ColumnName="Lat_PickUp_Patient" />
+          <ScalarProperty Name="Driver_Id" ColumnName="Driver_Id" />
+          <ScalarProperty Name="Patient_Id" ColumnName="Patient_Id" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="HealthCheckUps">
+      <EntityTypeMapping TypeName="Model.HealthCheckUp">
+        <MappingFragment StoreEntitySet="HealthCheckUp">
+          <ScalarProperty Name="PackageId" ColumnName="PackageId" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="Center_Id" ColumnName="Center_Id" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Nurses">
+      <EntityTypeMapping TypeName="Model.Nurse">
+        <MappingFragment StoreEntitySet="Nurse">
+          <ScalarProperty Name="Location_id" ColumnName="Location_id" />
+          <ScalarProperty Name="ClinicName" ColumnName="ClinicName" />
+          <ScalarProperty Name="about" ColumnName="about" />
+          <ScalarProperty Name="experience" ColumnName="experience" />
+          <ScalarProperty Name="RefId" ColumnName="RefId" />
+          <ScalarProperty Name="FileName" ColumnName="FileName" />
+          <ScalarProperty Name="ContentType" ColumnName="ContentType" />
+          <ScalarProperty Name="Data" ColumnName="Data" />
+          <ScalarProperty Name="Hospital_Id" ColumnName="Hospital_Id" />
+          <ScalarProperty Name="IsCheckedTermsCondition" ColumnName="IsCheckedTermsCondition" />
+          <ScalarProperty Name="NurseId" ColumnName="NurseId" />
+          <ScalarProperty Name="CityName" ColumnName="CityName" />
+          <ScalarProperty Name="MonthFee" ColumnName="MonthFee" />
+          <ScalarProperty Name="HrsFeex24" ColumnName="HrsFeex24" />
+          <ScalarProperty Name="PanImage" ColumnName="PanImage" />
+          <ScalarProperty Name="NurseImage" ColumnName="NurseImage" />
+          <ScalarProperty Name="JoiningDate" ColumnName="JoiningDate" />
+          <ScalarProperty Name="Vendor_Id" ColumnName="Vendor_Id" />
+          <ScalarProperty Name="PinCode" ColumnName="PinCode" />
+          <ScalarProperty Name="Fee" ColumnName="Fee" />
+          <ScalarProperty Name="NurseType_Id" ColumnName="NurseType_Id" />
+          <ScalarProperty Name="VerificationDoc" ColumnName="VerificationDoc" />
+          <ScalarProperty Name="IsVerifiedByPolice" ColumnName="IsVerifiedByPolice" />
+          <ScalarProperty Name="AadharImage" ColumnName="AadharImage" />
+          <ScalarProperty Name="AadharNumber" ColumnName="AadharNumber" />
+          <ScalarProperty Name="PAN" ColumnName="PAN" />
+          <ScalarProperty Name="AdminLogin_Id" ColumnName="AdminLogin_Id" />
+          <ScalarProperty Name="Location" ColumnName="Location" />
+          <ScalarProperty Name="CityMaster_Id" ColumnName="CityMaster_Id" />
+          <ScalarProperty Name="StateMaster_Id" ColumnName="StateMaster_Id" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="CertificateNumber" ColumnName="CertificateNumber" />
+          <ScalarProperty Name="CertificateImage" ColumnName="CertificateImage" />
+          <ScalarProperty Name="EmailId" ColumnName="EmailId" />
+          <ScalarProperty Name="MobileNumber" ColumnName="MobileNumber" />
+          <ScalarProperty Name="NurseName" ColumnName="NurseName" />
+          <ScalarProperty Name="IsApproved" ColumnName="IsApproved" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="HealthCheckupCenters">
+      <EntityTypeMapping TypeName="Model.HealthCheckupCenter">
+        <MappingFragment StoreEntitySet="HealthCheckupCenter">
+          <ScalarProperty Name="HealthType" ColumnName="HealthType" />
+          <ScalarProperty Name="About" ColumnName="About" />
+          <ScalarProperty Name="year" ColumnName="year" />
+          <ScalarProperty Name="RefId" ColumnName="RefId" />
+          <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+          <ScalarProperty Name="StateTime" ColumnName="StateTime" />
+          <ScalarProperty Name="IsCheckedTermsCondition" ColumnName="IsCheckedTermsCondition" />
+          <ScalarProperty Name="HealthCheckUpId" ColumnName="HealthCheckUpId" />
+          <ScalarProperty Name="Pincode" ColumnName="Pincode" />
+          <ScalarProperty Name="RegImage" ColumnName="RegImage" />
+          <ScalarProperty Name="RegNo" ColumnName="RegNo" />
+          <ScalarProperty Name="JoiningDate" ColumnName="JoiningDate" />
+          <ScalarProperty Name="Vendor_Id" ColumnName="Vendor_Id" />
+          <ScalarProperty Name="Location_Id" ColumnName="Location_Id" />
+          <ScalarProperty Name="AadharNumber" ColumnName="AadharNumber" />
+          <ScalarProperty Name="AadharImage" ColumnName="AadharImage" />
+          <ScalarProperty Name="GSTNumber" ColumnName="GSTNumber" />
+          <ScalarProperty Name="PAN" ColumnName="PAN" />
+          <ScalarProperty Name="AdminLogin_Id" ColumnName="AdminLogin_Id" />
+          <ScalarProperty Name="Location" ColumnName="Location" />
+          <ScalarProperty Name="CityMaster_Id" ColumnName="CityMaster_Id" />
+          <ScalarProperty Name="StateMaster_Id" ColumnName="StateMaster_Id" />
+          <ScalarProperty Name="LicenceNumber" ColumnName="LicenceNumber" />
+          <ScalarProperty Name="LicenceImage" ColumnName="LicenceImage" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="EmailId" ColumnName="EmailId" />
+          <ScalarProperty Name="MobileNumber" ColumnName="MobileNumber" />
+          <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+          <ScalarProperty Name="LabName" ColumnName="LabName" />
+          <ScalarProperty Name="IsApproved" ColumnName="IsApproved" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Media">
+      <EntityTypeMapping TypeName="Model.Medium">
+        <MappingFragment StoreEntitySet="Media">
+          <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MediaHospitals">
+      <EntityTypeMapping TypeName="Model.MediaHospital">
+        <MappingFragment StoreEntitySet="MediaHospital">
+          <ScalarProperty Name="ImageName" ColumnName="ImageName" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Discounts">
+      <EntityTypeMapping TypeName="Model.Discount">
+        <MappingFragment StoreEntitySet="Discount">
+          <ScalarProperty Name="Professional_Id" ColumnName="Professional_Id" />
+          <ScalarProperty Name="DiscountCoupon" ColumnName="DiscountCoupon" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="NurseComplaints">
+      <EntityTypeMapping TypeName="Model.NurseComplaint">
+        <MappingFragment StoreEntitySet="NurseComplaint">
+          <ScalarProperty Name="Login_Id" ColumnName="Login_Id" />
+          <ScalarProperty Name="Others" ColumnName="Others" />
+          <ScalarProperty Name="IsResolved" ColumnName="IsResolved" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="Complaints" ColumnName="Complaints" />
+          <ScalarProperty Name="Subjects" ColumnName="Subjects" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Bannerprofessionals">
+      <EntityTypeMapping TypeName="Model.Bannerprofessional">
+        <MappingFragment StoreEntitySet="Bannerprofessional">
+          <ScalarProperty Name="professionals" ColumnName="professionals" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Banners">
+      <EntityTypeMapping TypeName="Model.Banner">
+        <MappingFragment StoreEntitySet="Banner">
+          <ScalarProperty Name="pro_id" ColumnName="pro_id" />
+          <ScalarProperty Name="BannerPath" ColumnName="BannerPath" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DriverComplaints">
+      <EntityTypeMapping TypeName="Model.DriverComplaint">
+        <MappingFragment StoreEntitySet="DriverComplaint">
+          <ScalarProperty Name="Others" ColumnName="Others" />
+          <ScalarProperty Name="IsResolved" ColumnName="IsResolved" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="Complaints" ColumnName="Complaints" />
+          <ScalarProperty Name="Subjects" ColumnName="Subjects" />
+          <ScalarProperty Name="Login_Id" ColumnName="Login_Id" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AmbulanceTypes">
+      <EntityTypeMapping TypeName="Model.AmbulanceType">
+        <MappingFragment StoreEntitySet="AmbulanceType">
+          <ScalarProperty Name="AmbulanceType1" ColumnName="AmbulanceType" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PatientSubjects">
+      <EntityTypeMapping TypeName="Model.PatientSubject">
+        <MappingFragment StoreEntitySet="PatientSubjects">
+          <ScalarProperty Name="SubjectName" ColumnName="SubjectName" />
+          <ScalarProperty Name="Subid" ColumnName="Subid" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TimeSlots">
+      <EntityTypeMapping TypeName="Model.TimeSlot">
+        <MappingFragment StoreEntitySet="TimeSlot">
+          <ScalarProperty Name="SlotTime" ColumnName="SlotTime" />
+          <ScalarProperty Name="Slotid" ColumnName="Slotid" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DoctorChooseDepartments">
+      <EntityTypeMapping TypeName="Model.DoctorChooseDepartment">
+        <MappingFragment StoreEntitySet="DoctorChooseDepartment">
+          <ScalarProperty Name="Patient_id" ColumnName="Patient_id" />
+          <ScalarProperty Name="City_id" ColumnName="City_id" />
+          <ScalarProperty Name="State_id" ColumnName="State_id" />
+          <ScalarProperty Name="Specialist_id" ColumnName="Specialist_id" />
+          <ScalarProperty Name="Department_id" ColumnName="Department_id" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RWA_PaymentReport">
+      <EntityTypeMapping TypeName="Model.RWA_PaymentReport">
+        <MappingFragment StoreEntitySet="RWA_PaymentReport">
+          <ScalarProperty Name="PaymentStatus" ColumnName="PaymentStatus" />
+          <ScalarProperty Name="PaymentTime" ColumnName="PaymentTime" />
+          <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
+          <ScalarProperty Name="PaidAmount" ColumnName="PaidAmount" />
+          <ScalarProperty Name="Payment_Id" ColumnName="Payment_Id" />
+          <ScalarProperty Name="Bank_Id" ColumnName="Bank_Id" />
+          <ScalarProperty Name="User_Id" ColumnName="User_Id" />
+          <ScalarProperty Name="RWA_Id" ColumnName="RWA_Id" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RWA_Complaints">
+      <EntityTypeMapping TypeName="Model.RWA_Complaints">
+        <MappingFragment StoreEntitySet="RWA_Complaints">
+          <ScalarProperty Name="Others" ColumnName="Others" />
+          <ScalarProperty Name="IsResolved" ColumnName="IsResolved" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="Complaints" ColumnName="Complaints" />
+          <ScalarProperty Name="Subjects" ColumnName="Subjects" />
+          <ScalarProperty Name="RWA_Id" ColumnName="RWA_Id" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Doctors">
+      <EntityTypeMapping TypeName="Model.Doctor">
+        <MappingFragment StoreEntitySet="Doctor">
+          <ScalarProperty Name="SignaturePic" ColumnName="SignaturePic" />
+          <ScalarProperty Name="RegistrationNumber" ColumnName="RegistrationNumber" />
+          <ScalarProperty Name="Qualification" ColumnName="Qualification" />
+          <ScalarProperty Name="Disease" ColumnName="Disease" />
+          <ScalarProperty Name="About" ColumnName="About" />
+          <ScalarProperty Name="Experience" ColumnName="Experience" />
+          <ScalarProperty Name="RefId" ColumnName="RefId" />
+          <ScalarProperty Name="SlotTime2" ColumnName="SlotTime2" />
+          <ScalarProperty Name="EndTime2" ColumnName="EndTime2" />
+          <ScalarProperty Name="StartTime2" ColumnName="StartTime2" />
+          <ScalarProperty Name="IsCheckedTermsCondition" ColumnName="IsCheckedTermsCondition" />
+          <ScalarProperty Name="DoctorId" ColumnName="DoctorId" />
+          <ScalarProperty Name="HospitalId" ColumnName="HospitalId" />
+          <ScalarProperty Name="PanImage" ColumnName="PanImage" />
+          <ScalarProperty Name="AadharImage2" ColumnName="AadharImage2" />
+          <ScalarProperty Name="PinCode" ColumnName="PinCode" />
+          <ScalarProperty Name="LicenseValidity" ColumnName="LicenseValidity" />
+          <ScalarProperty Name="JoiningDate" ColumnName="JoiningDate" />
+          <ScalarProperty Name="SlotTime" ColumnName="SlotTime" />
+          <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+          <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+          <ScalarProperty Name="Vendor_Id" ColumnName="Vendor_Id" />
+          <ScalarProperty Name="AadharImage" ColumnName="AadharImage" />
+          <ScalarProperty Name="AadharNumber" ColumnName="AadharNumber" />
+          <ScalarProperty Name="PAN" ColumnName="PAN" />
+          <ScalarProperty Name="AdminLogin_Id" ColumnName="AdminLogin_Id" />
+          <ScalarProperty Name="IsApproved" ColumnName="IsApproved" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="Fee" ColumnName="Fee" />
+          <ScalarProperty Name="Specialist_Id" ColumnName="Specialist_Id" />
+          <ScalarProperty Name="Department_Id" ColumnName="Department_Id" />
+          <ScalarProperty Name="ClinicName" ColumnName="ClinicName" />
+          <ScalarProperty Name="LicenceNumber" ColumnName="LicenceNumber" />
+          <ScalarProperty Name="LicenceImage" ColumnName="LicenceImage" />
+          <ScalarProperty Name="Location" ColumnName="Location" />
+          <ScalarProperty Name="CityMaster_Id" ColumnName="CityMaster_Id" />
+          <ScalarProperty Name="StateMaster_Id" ColumnName="StateMaster_Id" />
+          <ScalarProperty Name="EmailId" ColumnName="EmailId" />
+          <ScalarProperty Name="MobileNumber" ColumnName="MobileNumber" />
+          <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+          <ScalarProperty Name="DoctorName" ColumnName="DoctorName" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Labs">
+      <EntityTypeMapping TypeName="Model.Lab">
+        <MappingFragment StoreEntitySet="Lab">
+          <ScalarProperty Name="LabTest_Id" ColumnName="LabTest_Id" />
+          <ScalarProperty Name="image" ColumnName="image" />
+          <ScalarProperty Name="PinCode" ColumnName="PinCode" />
+          <ScalarProperty Name="WorkingDay" ColumnName="WorkingDay" />
+          <ScalarProperty Name="fee" ColumnName="fee" />
+          <ScalarProperty Name="ChooseDate" ColumnName="ChooseDate" />
+          <ScalarProperty Name="year" ColumnName="year" />
+          <ScalarProperty Name="LabTypeName" ColumnName="LabTypeName" />
+          <ScalarProperty Name="About" ColumnName="About" />
+          <ScalarProperty Name="RefId" ColumnName="RefId" />
+          <ScalarProperty Name="IsCheckedTermsCondition" ColumnName="IsCheckedTermsCondition" />
+          <ScalarProperty Name="lABId" ColumnName="lABId" />
+          <ScalarProperty Name="HospitalId" ColumnName="HospitalId" />
+          <ScalarProperty Name="JoiningDate" ColumnName="JoiningDate" />
+          <ScalarProperty Name="Vendor_Id" ColumnName="Vendor_Id" />
+          <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+          <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+          <ScalarProperty Name="Location_Id" ColumnName="Location_Id" />
+          <ScalarProperty Name="AadharNumber" ColumnName="AadharNumber" />
+          <ScalarProperty Name="PanImage" ColumnName="PanImage" />
+          <ScalarProperty Name="GSTNumber" ColumnName="GSTNumber" />
+          <ScalarProperty Name="PAN" ColumnName="PAN" />
+          <ScalarProperty Name="AdminLogin_Id" ColumnName="AdminLogin_Id" />
+          <ScalarProperty Name="Location" ColumnName="Location" />
+          <ScalarProperty Name="CityMaster_Id" ColumnName="CityMaster_Id" />
+          <ScalarProperty Name="StateMaster_Id" ColumnName="StateMaster_Id" />
+          <ScalarProperty Name="LicenceNumber" ColumnName="LicenceNumber" />
+          <ScalarProperty Name="LicenceImage" ColumnName="LicenceImage" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="EmailId" ColumnName="EmailId" />
+          <ScalarProperty Name="MobileNumber" ColumnName="MobileNumber" />
+          <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+          <ScalarProperty Name="LabName" ColumnName="LabName" />
+          <ScalarProperty Name="IsApproved" ColumnName="IsApproved" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="LabComplaints">
+      <EntityTypeMapping TypeName="Model.LabComplaint">
+        <MappingFragment StoreEntitySet="LabComplaint">
+          <ScalarProperty Name="Others" ColumnName="Others" />
+          <ScalarProperty Name="IsResolved" ColumnName="IsResolved" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="Complaints" ColumnName="Complaints" />
+          <ScalarProperty Name="Subjects" ColumnName="Subjects" />
+          <ScalarProperty Name="Login_Id" ColumnName="Login_Id" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="chemistcomplaints">
+      <EntityTypeMapping TypeName="Model.chemistcomplaint">
+        <MappingFragment StoreEntitySet="chemistcomplaint">
+          <ScalarProperty Name="Login_Id" ColumnName="Login_Id" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="Complaints" ColumnName="Complaints" />
+          <ScalarProperty Name="others" ColumnName="others" />
+          <ScalarProperty Name="patsubid" ColumnName="patsubid" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Chemists">
+      <EntityTypeMapping TypeName="Model.Chemist">
+        <MappingFragment StoreEntitySet="Chemist">
+          <ScalarProperty Name="About" ColumnName="About" />
+          <ScalarProperty Name="LicenceImage" ColumnName="LicenceImage" />
+          <ScalarProperty Name="ConfirmPassword" ColumnName="ConfirmPassword" />
+          <ScalarProperty Name="PinCode" ColumnName="PinCode" />
+          <ScalarProperty Name="RefId" ColumnName="RefId" />
+          <ScalarProperty Name="ChemistId" ColumnName="ChemistId" />
+          <ScalarProperty Name="IsCheckedTermsCondition" ColumnName="IsCheckedTermsCondition" />
+          <ScalarProperty Name="LocationName" ColumnName="LocationName" />
+          <ScalarProperty Name="CityNames" ColumnName="CityNames" />
+          <ScalarProperty Name="Certificateimg" ColumnName="Certificateimg" />
+          <ScalarProperty Name="JoiningDate" ColumnName="JoiningDate" />
+          <ScalarProperty Name="Vendor_Id" ColumnName="Vendor_Id" />
+          <ScalarProperty Name="LicenseValidity" ColumnName="LicenseValidity" />
+          <ScalarProperty Name="Location_Id" ColumnName="Location_Id" />
+          <ScalarProperty Name="Lng" ColumnName="Lng" />
+          <ScalarProperty Name="Lat" ColumnName="Lat" />
+          <ScalarProperty Name="PAN" ColumnName="PAN" />
+          <ScalarProperty Name="AdminLogin_Id" ColumnName="AdminLogin_Id" />
+          <ScalarProperty Name="GSTNumber" ColumnName="GSTNumber" />
+          <ScalarProperty Name="Location" ColumnName="Location" />
+          <ScalarProperty Name="CityMaster_Id" ColumnName="CityMaster_Id" />
+          <ScalarProperty Name="StateMaster_Id" ColumnName="StateMaster_Id" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="LicenceNumber" ColumnName="LicenceNumber" />
+          <ScalarProperty Name="EmailId" ColumnName="EmailId" />
+          <ScalarProperty Name="MobileNumber" ColumnName="MobileNumber" />
+          <ScalarProperty Name="ShopName" ColumnName="ShopName" />
+          <ScalarProperty Name="ChemistName" ColumnName="ChemistName" />
+          <ScalarProperty Name="IsApproved" ColumnName="IsApproved" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="FranchiseComplaints">
+      <EntityTypeMapping TypeName="Model.FranchiseComplaint">
+        <MappingFragment StoreEntitySet="FranchiseComplaint">
+          <ScalarProperty Name="patsubid" ColumnName="patsubid" />
+          <ScalarProperty Name="Login_Id" ColumnName="Login_Id" />
+          <ScalarProperty Name="Others" ColumnName="Others" />
+          <ScalarProperty Name="IsResolved" ColumnName="IsResolved" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="Complaints" ColumnName="Complaints" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Reviews">
+      <EntityTypeMapping TypeName="Model.Review">
+        <MappingFragment StoreEntitySet="Review">
+          <ScalarProperty Name="Patient_Id" ColumnName="Patient_Id" />
+          <ScalarProperty Name="Professional" ColumnName="Professional" />
+          <ScalarProperty Name="pro_Id" ColumnName="pro_Id" />
+          <ScalarProperty Name="Image" ColumnName="Image" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Rating5" ColumnName="Rating5" />
+          <ScalarProperty Name="Rating4" ColumnName="Rating4" />
+          <ScalarProperty Name="Rating3" ColumnName="Rating3" />
+          <ScalarProperty Name="Rating2" ColumnName="Rating2" />
+          <ScalarProperty Name="Rating1" ColumnName="Rating1" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AddFranchiseDepartments">
+      <EntityTypeMapping TypeName="Model.AddFranchiseDepartment">
+        <MappingFragment StoreEntitySet="AddFranchiseDepartment">
+          <ScalarProperty Name="Admin_LoginId" ColumnName="Admin_LoginId" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Spec_Id" ColumnName="Spec_Id" />
+          <ScalarProperty Name="Dep_Id" ColumnName="Dep_Id" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Franchise_Department">
+      <EntityTypeMapping TypeName="Model.Franchise_Department">
+        <MappingFragment StoreEntitySet="Franchise_Department">
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="DepartmentName" ColumnName="DepartmentName" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Franchise_Specialist">
+      <EntityTypeMapping TypeName="Model.Franchise_Specialist">
+        <MappingFragment StoreEntitySet="Franchise_Specialist">
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="Department_Id" ColumnName="Department_Id" />
+          <ScalarProperty Name="SpecialistName" ColumnName="SpecialistName" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="FraAddVehicleTypes">
+      <EntityTypeMapping TypeName="Model.FraAddVehicleType">
+        <MappingFragment StoreEntitySet="FraAddVehicleType">
+          <ScalarProperty Name="Admin_LoginId" ColumnName="Admin_LoginId" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="VehicleType_Id" ColumnName="VehicleType_Id" />
+          <ScalarProperty Name="Category_Id" ColumnName="Category_Id" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="franchiseRoles">
+      <EntityTypeMapping TypeName="Model.franchiseRole">
+        <MappingFragment StoreEntitySet="franchiseRole">
+          <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Medicine_Pays">
+      <EntityTypeMapping TypeName="Model.Medicine_Pay">
+        <MappingFragment StoreEntitySet="Medicine Pay">
+          <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
+          <ScalarProperty Name="IsPaid" ColumnName="IsPaid" />
+          <ScalarProperty Name="PatientId" ColumnName="PatientId" />
+          <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Medicinedelivers">
+      <EntityTypeMapping TypeName="Model.Medicinedeliver">
+        <MappingFragment StoreEntitySet="Medicinedeliver">
+          <ScalarProperty Name="Patient_Id" ColumnName="Patient_Id" />
+          <ScalarProperty Name="PinCode" ColumnName="PinCode" />
+          <ScalarProperty Name="StateMaster_Id" ColumnName="StateMaster_Id" />
+          <ScalarProperty Name="CityMaster_Id" ColumnName="CityMaster_Id" />
+          <ScalarProperty Name="DeliveryAddress" ColumnName="DeliveryAddress" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="MobileNumber" ColumnName="MobileNumber" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Nurse_Rep">
+      <EntityTypeMapping TypeName="Model.Nurse_Rep">
+        <MappingFragment StoreEntitySet="Nurse_Rep">
+          <ScalarProperty Name="File" ColumnName="File" />
+          <ScalarProperty Name="Patient_Id" ColumnName="Patient_Id" />
+          <ScalarProperty Name="Nurse_Id" ColumnName="Nurse_Id" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="NearDrivers">
+      <EntityTypeMapping TypeName="Model.NearDriver">
+        <MappingFragment StoreEntitySet="NearDriver">
+          <ScalarProperty Name="ToatlDistance" ColumnName="ToatlDistance" />
+          <ScalarProperty Name="DeviceId" ColumnName="DeviceId" />
+          <ScalarProperty Name="TotalPrice" ColumnName="TotalPrice" />
+          <ScalarProperty Name="Charge" ColumnName="Charge" />
+          <ScalarProperty Name="DL" ColumnName="DL" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="KM" ColumnName="KM" />
+          <ScalarProperty Name="DriverId" ColumnName="DriverId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="droptable" FunctionName="Model.Store.droptable" />
+    <FunctionImportMapping FunctionImportName="GEtAllMedicines" FunctionName="Model.Store.GEtAllMedicines">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Model.GEtAllMedicines_Result">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="MedicineName" ColumnName="MedicineName" />
+          <ScalarProperty Name="MedicineDescription" ColumnName="MedicineDescription" />
+          <ScalarProperty Name="MedicineType_Id" ColumnName="MedicineType_Id" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="MRP" ColumnName="MRP" />
+          <ScalarProperty Name="BrandName" ColumnName="BrandName" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="GetNearDriver" FunctionName="Model.Store.GetNearDriver">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Model.GetNearDriver_Result">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="DriverId" ColumnName="DriverId" />
+          <ScalarProperty Name="KM" ColumnName="KM" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="DL" ColumnName="DL" />
+          <ScalarProperty Name="Charge" ColumnName="Charge" />
+          <ScalarProperty Name="TotalPrice" ColumnName="TotalPrice" />
+          <ScalarProperty Name="DeviceId" ColumnName="DeviceId" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="AppointmentNurseFor24Hrs" FunctionName="Model.Store.AppointmentNurseFor24Hrs" />
+    <FunctionImportMapping FunctionImportName="DeleteNearDriver" FunctionName="Model.Store.DeleteNearDriver" />
+    <FunctionImportMapping FunctionImportName="sp_AddCheckUp1" FunctionName="Model.Store.sp_AddCheckUp" />
+    <EntitySetMapping Name="DriverLocations">
+      <EntityTypeMapping TypeName="Model.DriverLocation">
+        <MappingFragment StoreEntitySet="DriverLocation">
+          <ScalarProperty Name="RejectedStatus" ColumnName="RejectedStatus" />
+          <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
+          <ScalarProperty Name="ToatlDistance" ColumnName="ToatlDistance" />
+          <ScalarProperty Name="TotalPrice" ColumnName="TotalPrice" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="IsPay" ColumnName="IsPay" />
+          <ScalarProperty Name="EntryDate" ColumnName="EntryDate" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="start_Long" ColumnName="start_Long" />
+          <ScalarProperty Name="start_Lat" ColumnName="start_Lat" />
+          <ScalarProperty Name="end_Long" ColumnName="end_Long" />
+          <ScalarProperty Name="end_Lat" ColumnName="end_Lat" />
+          <ScalarProperty Name="VehicleType_id" ColumnName="VehicleType_id" />
+          <ScalarProperty Name="AmbulanceType_id" ColumnName="AmbulanceType_id" />
+          <ScalarProperty Name="key" ColumnName="key" />
+          <ScalarProperty Name="PatientId" ColumnName="PatientId" />
+          <ScalarProperty Name="Lang_Driver" ColumnName="Lang_Driver" />
+          <ScalarProperty Name="Lat_Driver" ColumnName="Lat_Driver" />
+          <ScalarProperty Name="Driver_Id" ColumnName="Driver_Id" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TestInLabs">
+      <EntityTypeMapping TypeName="Model.TestInLab">
+        <MappingFragment StoreEntitySet="TestInLab">
+          <ScalarProperty Name="Test_Id" ColumnName="Test_Id" />
+          <ScalarProperty Name="Lab_Id" ColumnName="Lab_Id" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DoctorBookingModes">
+      <EntityTypeMapping TypeName="Model.DoctorBookingMode">
+        <MappingFragment StoreEntitySet="DoctorBookingMode">
+          <ScalarProperty Name="Mode" ColumnName="Mode" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PFMasters">
+      <EntityTypeMapping TypeName="Model.PFMaster">
+        <MappingFragment StoreEntitySet="PFMaster">
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="EMP_Id" ColumnName="EMP_Id" />
+          <ScalarProperty Name="PFAmount" ColumnName="PFAmount" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="GSTMasters">
+      <EntityTypeMapping TypeName="Model.GSTMaster">
+        <MappingFragment StoreEntitySet="GSTMaster">
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="NurseServices">
+      <EntityTypeMapping TypeName="Model.NurseService">
+        <MappingFragment StoreEntitySet="NurseService">
+          <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+          <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+          <ScalarProperty Name="InvoiceNumber" ColumnName="InvoiceNumber" />
+          <ScalarProperty Name="CityMaster_Id" ColumnName="CityMaster_Id" />
+          <ScalarProperty Name="StateMaster_Id" ColumnName="StateMaster_Id" />
+          <ScalarProperty Name="Location" ColumnName="Location" />
+          <ScalarProperty Name="Slotid" ColumnName="Slotid" />
+          <ScalarProperty Name="TotalFee" ColumnName="TotalFee" />
+          <ScalarProperty Name="ServiceTime" ColumnName="ServiceTime" />
+          <ScalarProperty Name="ServiceType" ColumnName="ServiceType" />
+          <ScalarProperty Name="ServiceDate" ColumnName="ServiceDate" />
+          <ScalarProperty Name="LocationId" ColumnName="LocationId" />
+          <ScalarProperty Name="NurseTypeId" ColumnName="NurseTypeId" />
+          <ScalarProperty Name="PerDayAmount" ColumnName="PerDayAmount" />
+          <ScalarProperty Name="ServiceStatus" ColumnName="ServiceStatus" />
+          <ScalarProperty Name="RequestDate" ColumnName="RequestDate" />
+          <ScalarProperty Name="ServiceAcceptanceDate" ColumnName="ServiceAcceptanceDate" />
+          <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
+          <ScalarProperty Name="IsPaid" ColumnName="IsPaid" />
+          <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+          <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+          <ScalarProperty Name="MobileNumber" ColumnName="MobileNumber" />
+          <ScalarProperty Name="Patient_Id" ColumnName="Patient_Id" />
+          <ScalarProperty Name="Nurse_Id" ColumnName="Nurse_Id" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PenaltyAmounts">
+      <EntityTypeMapping TypeName="Model.PenaltyAmount">
+        <MappingFragment StoreEntitySet="PenaltyAmount">
+          <ScalarProperty Name="CancelDate" ColumnName="CancelDate" />
+          <ScalarProperty Name="UserWalletAmount" ColumnName="UserWalletAmount" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="Patient_Id" ColumnName="Patient_Id" />
+          <ScalarProperty Name="Pro_Id" ColumnName="Pro_Id" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RWATDSMasters">
+      <EntityTypeMapping TypeName="Model.RWATDSMaster">
+        <MappingFragment StoreEntitySet="RWATDSMaster">
+          <ScalarProperty Name="Department" ColumnName="Department" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="FranchiseTDSMasters">
+      <EntityTypeMapping TypeName="Model.FranchiseTDSMaster">
+        <MappingFragment StoreEntitySet="FranchiseTDSMaster">
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="Department" ColumnName="Department" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RWAGstMasters">
+      <EntityTypeMapping TypeName="Model.RWAGstMaster">
+        <MappingFragment StoreEntitySet="RWAGstMaster">
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Department" ColumnName="Department" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="FranchiseGstMasters">
+      <EntityTypeMapping TypeName="Model.FranchiseGstMaster">
+        <MappingFragment StoreEntitySet="FranchiseGstMaster">
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Department" ColumnName="Department" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MedicineDeliveryCharges">
+      <EntityTypeMapping TypeName="Model.MedicineDeliveryCharge">
+        <MappingFragment StoreEntitySet="MedicineDeliveryCharge">
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MedicinePrescriptionDetails">
+      <EntityTypeMapping TypeName="Model.MedicinePrescriptionDetail">
+        <MappingFragment StoreEntitySet="MedicinePrescriptionDetail">
+          <ScalarProperty Name="EntryDate" ColumnName="EntryDate" />
+          <ScalarProperty Name="Furtherrefferal_Recommendations" ColumnName="Furtherrefferal_Recommendations" />
+          <ScalarProperty Name="PastMedical_SurgicalHistory" ColumnName="PastMedical_SurgicalHistory" />
+          <ScalarProperty Name="Instruction10" ColumnName="Instruction10" />
+          <ScalarProperty Name="Dosage10" ColumnName="Dosage10" />
+          <ScalarProperty Name="MedicineName10" ColumnName="MedicineName10" />
+          <ScalarProperty Name="Instruction9" ColumnName="Instruction9" />
+          <ScalarProperty Name="Dosage9" ColumnName="Dosage9" />
+          <ScalarProperty Name="MedicineName9" ColumnName="MedicineName9" />
+          <ScalarProperty Name="Instruction8" ColumnName="Instruction8" />
+          <ScalarProperty Name="Dosage8" ColumnName="Dosage8" />
+          <ScalarProperty Name="MedicineName8" ColumnName="MedicineName8" />
+          <ScalarProperty Name="Instruction7" ColumnName="Instruction7" />
+          <ScalarProperty Name="Dosage7" ColumnName="Dosage7" />
+          <ScalarProperty Name="MedicineName7" ColumnName="MedicineName7" />
+          <ScalarProperty Name="TestPrescribed" ColumnName="TestPrescribed" />
+          <ScalarProperty Name="Instruction6" ColumnName="Instruction6" />
+          <ScalarProperty Name="Dosage6" ColumnName="Dosage6" />
+          <ScalarProperty Name="MedicineName6" ColumnName="MedicineName6" />
+          <ScalarProperty Name="Instruction5" ColumnName="Instruction5" />
+          <ScalarProperty Name="Dosage5" ColumnName="Dosage5" />
+          <ScalarProperty Name="MedicineName5" ColumnName="MedicineName5" />
+          <ScalarProperty Name="Instruction4" ColumnName="Instruction4" />
+          <ScalarProperty Name="Dosage4" ColumnName="Dosage4" />
+          <ScalarProperty Name="MedicineName4" ColumnName="MedicineName4" />
+          <ScalarProperty Name="Instruction3" ColumnName="Instruction3" />
+          <ScalarProperty Name="Dosage3" ColumnName="Dosage3" />
+          <ScalarProperty Name="MedicineName3" ColumnName="MedicineName3" />
+          <ScalarProperty Name="Instruction2" ColumnName="Instruction2" />
+          <ScalarProperty Name="Dosage2" ColumnName="Dosage2" />
+          <ScalarProperty Name="MedicineName2" ColumnName="MedicineName2" />
+          <ScalarProperty Name="Instruction1" ColumnName="Instruction1" />
+          <ScalarProperty Name="Dosage1" ColumnName="Dosage1" />
+          <ScalarProperty Name="MedicineName1" ColumnName="MedicineName1" />
+          <ScalarProperty Name="Primarydiagnosis" ColumnName="Primarydiagnosis" />
+          <ScalarProperty Name="Allergies" ColumnName="Allergies" />
+          <ScalarProperty Name="PresentComplaint" ColumnName="PresentComplaint" />
+          <ScalarProperty Name="Weight" ColumnName="Weight" />
+          <ScalarProperty Name="Patient_Id" ColumnName="Patient_Id" />
+          <ScalarProperty Name="Doctor_Id" ColumnName="Doctor_Id" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PrescriptionAppointments">
+      <EntityTypeMapping TypeName="Model.PrescriptionAppointment">
+        <MappingFragment StoreEntitySet="PrescriptionAppointments">
+          <ScalarProperty Name="Doctor_Id" ColumnName="Doctor_Id" />
+          <ScalarProperty Name="AppointmentMin3" ColumnName="AppointmentMin3" />
+          <ScalarProperty Name="AppointmentHour3" ColumnName="AppointmentHour3" />
+          <ScalarProperty Name="AppointmentMin2" ColumnName="AppointmentMin2" />
+          <ScalarProperty Name="AppointmentHour2" ColumnName="AppointmentHour2" />
+          <ScalarProperty Name="AppointmentMin1" ColumnName="AppointmentMin1" />
+          <ScalarProperty Name="AppointmentHour1" ColumnName="AppointmentHour1" />
+          <ScalarProperty Name="EntryDate" ColumnName="EntryDate" />
+          <ScalarProperty Name="RegistrationNumber" ColumnName="RegistrationNumber" />
+          <ScalarProperty Name="DoctorCode" ColumnName="DoctorCode" />
+          <ScalarProperty Name="DoctorSpeciality" ColumnName="DoctorSpeciality" />
+          <ScalarProperty Name="DoctorName" ColumnName="DoctorName" />
+          <ScalarProperty Name="HospitalName" ColumnName="HospitalName" />
+          <ScalarProperty Name="PreferredAppointmentDateTime3" ColumnName="PreferredAppointmentDateTime3" />
+          <ScalarProperty Name="PreferredAppointmentDateTime2" ColumnName="PreferredAppointmentDateTime2" />
+          <ScalarProperty Name="PreferredAppointmentDateTime1" ColumnName="PreferredAppointmentDateTime1" />
+          <ScalarProperty Name="IsAppointment" ColumnName="IsAppointment" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DriverPayOuts">
+      <EntityTypeMapping TypeName="Model.DriverPayOut">
+        <MappingFragment StoreEntitySet="DriverPayOut">
+          <ScalarProperty Name="IsGenerated" ColumnName="IsGenerated" />
+          <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
+          <ScalarProperty Name="IsPaid" ColumnName="IsPaid" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="Driver_Id" ColumnName="Driver_Id" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DoctorTimeSlots">
+      <EntityTypeMapping TypeName="Model.DoctorTimeSlot">
+        <MappingFragment StoreEntitySet="DoctorTimeSlot">
+          <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+          <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ChemistMedicines">
+      <EntityTypeMapping TypeName="Model.ChemistMedicine">
+        <MappingFragment StoreEntitySet="ChemistMedicine">
+          <ScalarProperty Name="EntryDate" ColumnName="EntryDate" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="Medicine_Id" ColumnName="Medicine_Id" />
+          <ScalarProperty Name="Chemist_Id" ColumnName="Chemist_Id" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

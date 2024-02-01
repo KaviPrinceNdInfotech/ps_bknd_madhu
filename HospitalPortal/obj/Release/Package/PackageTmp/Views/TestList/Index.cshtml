@@ -1,0 +1,40 @@
+﻿@model HospitalPortal.Models.APIModels.PaymentHistroyForDosctor
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Index</h2>
+@using (Html.BeginForm())
+{
+    @Html.TextBoxFor(a=> a.AppointmentDate, new {@class="form control", type="date" })
+    <input type="submit" value="click" class="btn btn-primary" />
+}
+@if (Model.PaymentHistory == null)
+{
+    <h2>
+        @TempData["msg"]
+    </h2>
+}
+else
+{
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Total Amount</th>
+            <th>Appointment Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.PaymentHistory)
+        {
+        <tr>
+            <td>@item.Amount</td>
+            <td>@item.AppointmentDate.Date.ToShortDateString()</td>
+        </tr>
+        }
+    </tbody>
+</table>
+}
+

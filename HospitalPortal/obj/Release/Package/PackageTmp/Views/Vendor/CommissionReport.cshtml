@@ -1,0 +1,166 @@
+﻿
+@{
+    ViewBag.Title = "CommissionReport";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <select id="tp" class="form-control" required="required">
+            <option value="Daily">
+                Select Any
+            </option>
+            <option value="Doctor">
+                Doctor
+            </option>
+            <option value="Driver">
+                Driver
+            </option>
+            <option value="Vehicle">
+                Vehicle
+            </option>
+            <option value="HealthCheck">
+                Health Check Up
+            </option>
+            <option value="Lab">
+                Lab
+            </option>
+            <option value="Nurse">
+                Nurse
+            </option>
+        </select>
+    </div>
+    <div class="col-md-4">
+        <input type="button" value="Check" id="btnCheck" class="btn btn-primary" />
+    </div>
+</div>
+<div id="prevAtt" style="margin-top:5%;">
+
+</div>
+
+<script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
+
+<script>
+    $("#btnCheck").click(function () {
+        var term = $("#tp").val();
+        if (term == "Doctor") {
+            $.ajax({
+                url: "/VendorCommission/Doctor?term=" + term,
+                type: "get",
+                success: function (response) {
+                    console.log(response);
+                    $("#prevAtt").html(response);
+                },
+                error: function (error) {
+                    console.log(error.responseText);
+                    //msg.text("");
+                }
+            });
+        }
+        if (term == "Driver") {
+            $.ajax({
+                url: "/VendorCommission/Driver?term=" + term,
+                type: "get",
+                success: function (response) {
+                    console.log(response);
+                    $("#prevAtt").html(response);
+                },
+                error: function (error) {
+                    console.log(error.responseText);
+                    msg.text("");
+                }
+            });
+        }
+
+        if (term == "Vehicle") {
+            $.ajax({
+                url: "/VendorCommission/Vehicle?term=" + term,
+                type: "get",
+                success: function (response) {
+                    console.log(response);
+                    $("#prevAtt").html(response);
+                },
+                error: function (error) {
+                    console.log(error.responseText);
+                    msg.text("");
+                }
+            });
+        }
+
+        if (term == "RWA") {
+            $.ajax({
+                url: "/VendorCommission/RWA?term=" + term,
+                type: "get",
+                success: function (response) {
+                    console.log(response);
+                    $("#prevAtt").html(response);
+                },
+                error: function (error) {
+                    console.log(error.responseText);
+                    msg.text("");
+                }
+            });
+        }
+        if (term == "HealthCheck") {
+            $.ajax({
+                url: "/VendorCommission/HealthCheckuUp?term=" + term,
+                type: "get",
+                success: function (response) {
+                    console.log(response);
+                    $("#prevAtt").html(response);
+                },
+                error: function (error) {
+                    console.log(error.responseText);
+                    msg.text("");
+                }
+            });
+        }
+
+
+        if (term == "Patient") {
+            $.ajax({
+                url: "/VendorCommission/Patient?term=" + term,
+                type: "get",
+                success: function (response) {
+                    console.log(response);
+                    $("#prevAtt").html(response);
+                },
+                error: function (error) {
+                    console.log(error.responseText);
+                    msg.text("");
+                }
+            });
+        }
+
+        if (term == "Lab") {
+            $.ajax({
+                url: "/Vendor/Lab?term=" + term,
+                type: "get",
+                success: function (response) {
+                    console.log(response);
+                    $("#prevAtt").html(response);
+                },
+                error: function (error) {
+                    console.log(error.responseText);
+                    msg.text("");
+                }
+            });
+        }
+
+        if (term == "Nurse") {
+            $.ajax({
+                url: "/Vendor/Nurse?term=" + term,
+                type: "get",
+                success: function (response) {
+                    console.log(response);
+                    $("#prevAtt").html(response);
+                },
+                error: function (error) {
+                    console.log(error.responseText);
+                    msg.text("");
+                }
+            });
+        }
+    });
+</script>
+

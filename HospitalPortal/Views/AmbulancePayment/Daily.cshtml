@@ -1,0 +1,50 @@
+﻿@model HospitalPortal.Controllers.AmbulancePaymentController.AmbulanceList
+@{
+    Layout = null;
+}
+
+<link href="/css/bootstrap.min.css" rel="stylesheet" />
+<h2 style="text-align:center">Daily Report</h2>
+@if (Model.Ambulance == null)
+{
+    @TempData["msg "]
+}
+else
+{
+<table id="table_id" class="display">
+    <thead>
+        <tr>
+            <th>
+                Vehicle Number
+            </th>
+            <th>
+                Driver Name
+            </th>
+            <th>
+                Action
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Ambulance)
+        {
+            <tr>
+                <td>@item.VehicleNumber</td>
+                <td>
+                    @item.DriverName
+                </td>
+                <td><a href="/AmbulancePayment/ViewDetails?id=@item.VehicleId" class="btn btn-primary">View Details</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
+}
+<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+
+
+<script src="https://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css">
+
+<script type="text/javascript">
+        $('#table_id').DataTable();
+</script>

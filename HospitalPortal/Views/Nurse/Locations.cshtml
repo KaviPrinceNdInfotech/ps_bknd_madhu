@@ -1,0 +1,64 @@
+﻿@model IEnumerable<HospitalPortal.Models.ViewModels.NurseLocationModel>
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+}
+
+<style>
+    #main{
+        width:40%;
+        margin-left:1%;
+    }
+    .row{
+       margin-top:1%;
+    }
+</style>
+
+<div id="main">
+    <div class="row">
+        <div class="col-md-6">
+            <a href="/Nurse/RegisterLocation" class="btn btn-info">Add More</a>
+        </div>
+    </div>
+    <h2>Locations</h2>
+    <div class="row">
+        <div class="col-md-12">
+
+            <table class="table table-striped">
+                <tr>
+                    <th>Location</th>
+                    <th>Action</th>
+                </tr>
+
+                @foreach(var loc in Model)
+                {
+                    <tr>
+                        <td>@loc.LocationName
+                        </td>
+                        <td>
+                            <span onclick="deleteLocation(this)" url="/Nurse/DeleteLocation?id=@loc.Id" class="btn btn-danger">Delete</span>
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+</div>
+<script src="/Scripts/Library/jquery-1.7.1.min.js"></script>
+<script>
+    function deleteLocation(obj)
+    {
+        var el = $(obj);
+        if(window.confirm('are you sure to delete?????'))
+        {
+            $.get(el.attr('url')).then(function (respone) {
+
+                if(respone=="ok")
+                {
+                    el.parent().parent().remove();
+                }
+            })
+        }
+       
+    }
+</script>

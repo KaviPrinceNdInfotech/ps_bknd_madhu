@@ -1,0 +1,77 @@
+﻿@model HospitalPortal.Models.ViewModels.ViewPayOutHistory
+@{
+    ViewBag.Title = "ViewPayoutHistory";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>ViewPayoutHistory</h2>
+<div style="margin:auto; width:95%">
+    <div class="row">
+        <div class="col-md-3" style="margin-top:3%; margin-bottom:3%;">Authority Name : <h2 style="color:brown">@Model.AuthorityName</h2></div>
+        @*@using (Html.BeginForm())
+                {
+            <div class="col-md-3">
+                @ViewBag.Id
+                @Html.TextBoxFor(a => a.PaymentDate, new { @class = "form-control" })
+            </div>
+            <div class="col-md-3">
+                <input type="submit" class="btn btn-primary" value="Search" />
+            </div>
+                }*@
+    </div>
+
+
+    @if (Model.HistoryOfRWA_Payout == null)
+    {
+        if (TempData["msg"] != null)
+        {
+            <h3>@TempData["msg"]</h3>
+        }
+    }
+    else
+    {
+        <table class="table table-bordered">
+            <tr>
+                <th>Serial No</th>
+                <th>Payment Date</th>
+                <th>Amount</th>
+                <th>Status</th>
+            </tr>
+            <tbody>
+                @{int RowNo = 0;}
+                @foreach (var item in Model.HistoryOfRWA_Payout)
+                {
+                    <tr>
+                        <td>
+                            @{RowNo++;} @RowNo
+                        </td>
+
+                        <td>@item.PaymentDate</td>
+                        <td>@item.Amount</td>
+                        <td>
+                            @if (Convert.ToInt32(item.IsGenerated) == 1)
+                            {
+                                <a href="/Rwa_Report/UpdateStatus?id=@item.Id" class="btn btn-primary">Generated</a>
+                            }
+                            
+                            @if (Convert.ToInt32(item.IsPaid) == 1)
+                            {
+                                <a href="/Rwa_Report/UpdatePayment?id=@item.Id" class="btn btn-primary">Paid</a>
+                            }
+                            else
+                            {
+                                <a href="/Rwa_Report/UpdatePayment?id=@item.Id" class="btn btn-danger">Not Paid</a>
+                            }
+                        </td>
+                    </tr>
+                                }
+            </tbody>
+        </table>
+                                }
+</div>
+<script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
+<link href="~/css/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
+<script>
+    $(".datepicker").datepicker().datepicker('setDate', 'today');
+</script>

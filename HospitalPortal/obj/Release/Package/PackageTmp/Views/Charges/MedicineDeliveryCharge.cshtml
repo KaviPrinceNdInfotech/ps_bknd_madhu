@@ -1,0 +1,73 @@
+﻿@model HospitalPortal.Models.ViewModels.ChargeDTO
+@{
+    ViewBag.Title = "Add";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Add Medicine Delivery Charge</h2>
+
+<style>
+    #main {
+        width: 60%;
+    }
+</style>
+
+<div id="main">
+    @using (Html.BeginForm())
+    {
+        <div class="row">
+            <div class="col-md-4">
+                @Html.TextBoxFor(a => a.Amount, new { @class = "form-control", placeholder = "Enter the Amount", required = "required" })
+            </div>
+            <div class="col-md-4">
+                <input type="submit" class="btn btn-primary" value="Submit" />
+            </div>
+        </div>
+    }
+    @if (TempData["msg"] != null)
+    {
+        string msg = TempData["msg"].ToString();
+        <div class="row">
+            <div class="col-md-12">
+                @if (msg == "ok")
+                {
+                    <div class="alert alert-success">
+                        Saved Successfully.
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-danger">
+                        @msg
+                    </div>
+                }
+            </div>
+        </div>
+    }
+
+   
+        <table class="table table-bordered" style="margin-top:3%;">
+            <thead>
+                <tr>
+                    <th>Amount</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.MedcineDelChargelist)
+                {
+                    <tr>
+                        <td>@item.Amount</td>
+
+                        <td>
+                            @*<a href="/Category/Delete?Id=@item.Id" class="btn btn-primary">Delete</a>*@
+                            <a href="/Charges/DeleteMedDelCharge?Id=@item.Id" class="btn btn-danger" onclick="return confirm('Are You Sure to Delete?')"><i class="fa fa-trash-o"></i></a>
+
+                            @*<a href="/Category/Edit?Id=@item.Id" class="btn btn-primary" onclick="return confirm('Are You Sure to Edit?')"><i class="fa fa-edit"></i></a>*@
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+</div>

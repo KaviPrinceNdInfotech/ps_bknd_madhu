@@ -1,0 +1,106 @@
+﻿@model HospitalPortal.Models.ViewModels.Appointment
+@{
+    ViewBag.Title = "ViewAppoinments";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>View Appoinments</h2>
+@using (Html.BeginForm())
+{
+    <div class="row" style="margin-bottom:1%;">
+        <div class="col-md-4">
+            <h3>Search By Patient Name & Mobile No.</h3>
+        </div>
+        <div class="col-md-3" style="margin-left: 0%">
+            <input type="text" name="term" class="form-control" id="term" autocomplete="off"/>
+        </div>
+        <div class="col-md-2">
+            <input type="submit" value="Filter" class="btn btn-primary" />
+        </div>
+    </div>
+    <div class="row" style="margin-bottom:1%;">
+        <div class="col-md-4">
+            <h3>Search By Date</h3>
+        </div>
+        <div class="col-md-3" style="margin-left: -6%;">
+            <input type="text" class="datepicker form-control" name="AppointmentDate" id="AppointmentDate"  autocomplete="off"/> 
+        </div>
+        <div class="col-md-2">
+            <input type="submit" value="Click Me" class="btn btn-primary" />
+        </div>
+    </div>
+}
+
+@if (Model.ViewAppointByDoctor == null)
+{
+   <h2>No Records</h2>
+}
+else
+{
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Patient Name</th>
+            <th>Mobile No.</th>
+            <th>Appointment Date</th>
+            <th>Appointment Time</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    @foreach (var item in Model.ViewAppointByDoctor)
+    {
+        <tbody>
+            <tr>
+                <td>@item.PatientName</td>
+                <td>@item.MobileNumber</td>
+                <td>
+                @if(item.AppointmentDate != null)
+                {
+                    <span>@item.AppointmentDate.Value.ToString("dd-MMM-yyyy")</span>
+
+                }
+                </td>
+                <td>@item.AppointedTime</td>
+                <td>
+                @if(item.IsCancelled == true)
+                {
+                    <span style="color:red">Cancelled</span>
+                }
+                else
+                {
+                    <span style="color:greenyellow">Not Cancelled</span>
+                }
+               </td>
+            </tr>
+        </tbody>
+    }
+</table>
+}
+
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+        @*<li class="page-item"><a class="page-link" href="#">Previous</a></li>*@
+        @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+            if (i == Model.PageNumber)
+            {
+                <li class="page-item active"><a class="page-link" href="/DocotorRegistration/PatientList?pageNumber=@i">@i</a></li>
+
+            }
+            else
+            {
+                <li class="page-item"><a class="page-link" href="/DocotorRegistration/PatientList?pageNumber=@i">@i</a></li>
+
+            }
+        }
+        @*<li class="page-item"><a class="page-link" href="#">Next</a></li>*@
+    </ul>
+</nav>
+<script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
+<link href="~/css/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
+<script>
+    $(".datepicker").datepicker().datepicker('setdate', 'today');
+</script>
+
+

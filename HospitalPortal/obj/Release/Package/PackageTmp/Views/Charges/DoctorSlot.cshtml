@@ -1,0 +1,58 @@
+﻿@model HospitalPortal.Models.ViewModels.DoctorslotDTO
+@{
+    ViewBag.Title = "DoctorSlot";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    var successMessage = TempData["SuccessMessage"] as string;
+}
+@if (!string.IsNullOrEmpty(successMessage))
+{
+    <div class="alert alert-success">
+        @successMessage
+    </div>
+}
+@using (Html.BeginForm("DoctorSlot", "Charges", FormMethod.Post, new { @class = "form" }))
+{
+    <div id="mainContainer">
+        <div class="row">
+            <div class="col-md-6">
+                <h3>Addn Doctor Slot</h3>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6">
+
+                @*Appointment Slot*@
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-5">
+                            Start Time *  @Html.TextBoxFor(a => a.StartTime, new { @class = "form-control", type = "time", required = "required" })
+                            <span class="red">
+                                @Html.ValidationMessageFor(a => a.StartTime)
+                            </span>
+                        </div>
+                        <div class="col-md-2" style="margin-top:5%;"><b>To </b></div>
+
+                        <div class="col-md-5">
+                            End Time  *  @Html.TextBoxFor(a => a.EndTime, new { @class = "form-control", type = "time", required = "required" })
+                            <span class="red">
+                                @Html.ValidationMessageFor(a => a.EndTime)
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="form-group" style=" margin-top :20px;">
+                <input type="submit" value="Save" class="btn btn-info" />
+                <a href="/Charges/ViewDoctorSlot" class="btn btn-info" >Show All</a>
+            </div>
+        </div>
+    </div>
+
+
+}
+
+

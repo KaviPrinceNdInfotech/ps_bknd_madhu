@@ -1,0 +1,45 @@
+﻿@model HospitalPortal.Controllers.AmbulancePaymentController.AmbulanceList
+@{
+    ViewBag.Title = "Ambulance";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    string role = HospitalPortal.Utility.UserIdentity.UserRole;
+}
+
+<h2>Vehicle List</h2>
+
+<table id="table_id" class="display">
+    <thead>
+        <tr>
+            <th>
+                Vehicle Number
+            </th>
+            <th>
+                Vehicle Name
+            </th>
+            <th>
+                Action
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Ambulance)
+        {
+            <tr>
+                <td>
+                    @item.DriverName
+                </td>
+                <td>@item.VehicleName</td>
+                <td><a href="/AmbulancePayment/ViewDetails?id=@item.VehicleId" class="btn btn-primary">View Details</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+
+
+<script src="https://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css">
+
+<script type="text/javascript">
+        $('#table_id').DataTable();
+</script>

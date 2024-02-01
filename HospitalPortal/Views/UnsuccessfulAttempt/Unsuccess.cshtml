@@ -1,0 +1,11 @@
+﻿
+@{
+    ViewBag.Title = "Unsuccess";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@if(TempData["msg"] != null)
+{
+    <h3>@TempData["msg"]</h3>
+}
+

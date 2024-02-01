@@ -1,0 +1,234 @@
+﻿
+@{
+    if (User.Identity.IsAuthenticated)
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = null;
+    }
+}
+
+<link href="~/css/component.css" rel="stylesheet" />
+<link href="~/css/style_grid.css" rel="stylesheet" />
+
+<h2>Dashboard</h2>
+@if (User.IsInRole("admin"))
+{
+    <div class="agile_top_w3_grids">
+        <ul class="ca-menu">
+            <li>
+                <a href="/Complaint/Complaint">
+
+                    <i class="fa fa-comment-o" aria-hidden="true"></i>
+                    <div class="ca-content">
+                        <h4 class="ca-main">User's Complaints</h4>
+                        <h3 class="ca-sub">View Complaints</h3>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="/Vehicle/UpdateVehicle">
+                    <i class="fa fa-ambulance" aria-hidden="true"></i>
+                    <div class="ca-content">
+                        <h4 class="ca-main one">Allot Vehicle</h4>
+                        <h3 class="ca-sub one">New Driver</h3>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="/Vehicle/VehicleAllotment">
+                    <i class="fa fa-ambulance" aria-hidden="true"></i>
+                    <div class="ca-content">
+                        <h4 class="ca-main two">Swap Vehicle</h4>
+                        <h3 class="ca-sub two">Old Driver</h3>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="/Expense/Expense">
+                    <i class="fa fa-rupee" aria-hidden="true"></i>
+                    <div class="ca-content">
+                        <h4 class="ca-main three">Daily Expenses</h4>
+                        <h3 class="ca-sub three">Manage Expenses</h3>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="/SalaryMaster/Employee">
+                    <i class="fa fa-money" aria-hidden="true"></i>
+                    <div class="ca-content">
+                        <h4 class="ca-main four">Employee Salary</h4>
+                        <h3 class="ca-sub four">Manage Salary</h3>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="/VehicleType/All">
+                    <i class="fa fa-ambulance" aria-hidden="true"></i>
+                    <div class="ca-content">
+                        <h4 class="ca-main five">New Vehicle Type </h4>
+                        <h3 class="ca-sub five">Add New Vehicle Type</h3>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="/Gallery/Gallery">
+                    <i class="fa fa-image" aria-hidden="true"></i>
+                    <div class="ca-content">
+                        <h4 class="ca-main six1">Gallery</h4>
+                        <h3 class="ca-sub six1" style="background: blueviolet !important;">Add Gallery Images</h3>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="/AddTest/All">
+                    <i class="fa fa-list" aria-hidden="true"></i>
+                    <div class="ca-content">
+                        <h4 class="ca-main six1">Test</h4>
+                        <h3 class="ca-sub six1">Add Test</h3>
+                    </div>
+                </a>
+            </li>
+
+        </ul>
+    </div>
+}
+@if (User.IsInRole("Franchise"))
+{
+    <div class="agile_top_w3_grids">
+        <ul class="ca-menu">
+            <li>
+                <a href="/Gallery/Gallery">
+                    <i class="fa fa-image" aria-hidden="true"></i>
+                    <div class="ca-content">
+                        <h4 class="ca-main six1">Gallery</h4>
+                        <h3 class="ca-sub six1" style="background: blueviolet !important;">Add Gallery Images</h3>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fa fa-ambulance" aria-hidden="true"></i>
+                    <div class="ca-content">
+                        <h4 class="ca-main one">Allot Vehicle</h4>
+                        <h3 class="ca-sub one">New Driver</h3>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fa fa-ambulance" aria-hidden="true"></i>
+                    <div class="ca-content">
+                        <h4 class="ca-main two">Vehicle Type</h4>
+                        <h3 class="ca-sub two">Add Vehicle Type</h3>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fa fa-medkit" aria-hidden="true"></i>
+                    <div class="ca-content">
+                        <h4 class="ca-main three">Spec & Dept</h4>
+                        <h3 class="ca-sub three">Add spec & Dept</h3>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="/AddTest/All">
+                    <i class="fa fa-list" aria-hidden="true"></i>
+                    <div class="ca-content">
+                        <h4 class="ca-main six1">Test</h4>
+                        <h3 class="ca-sub six1">Add Test</h3>
+                    </div>
+                </a>
+            </li>
+
+        </ul>
+    </div>
+}
+
+@if (User.IsInRole("Doctor"))
+{
+    <div class="agile_top_w3_grids">
+        <ul class="ca-menu">
+            <li>
+                <a href="#">
+                    <i class="fa fa-medkit" aria-hidden="true"></i>
+                    <div class="ca-content">
+                        <h4 class="ca-main six1">Register Clinic</h4>
+                        <h3 class="ca-sub six1" style="background: blueviolet !important;">Register Clinic</h3>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fa fa-ambulance" aria-hidden="true"></i>
+                    <div class="ca-content">
+                        <h4 class="ca-main one">Prescription</h4>
+                        <h3 class="ca-sub one">Prescription</h3>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fa fa-ambulance" aria-hidden="true"></i>
+                    <div class="ca-content">
+                        <h4 class="ca-main two">Doctor Patient List</h4>
+                        <h3 class="ca-sub two">Patient List</h3>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fa fa-medkit" aria-hidden="true"></i>
+                    <div class="ca-content">
+                        <h4 class="ca-main three">Spec & Dept</h4>
+                        <h3 class="ca-sub three">Add spec & Dept</h3>
+                    </div>
+                </a>
+            </li>
+
+
+        </ul>
+    </div>
+}
+
+@if (User.IsInRole("Lab"))
+{
+    <div class="agile_top_w3_grids">
+        <ul class="ca-menu">
+            <li>
+                <a href="#">
+                    <i class="fa fa-medkit" aria-hidden="true"></i>
+                    <div class="ca-content">
+                        <h4 class="ca-main six1">Add Test</h4>
+                        <h3 class="ca-sub six1" style="background: blueviolet !important;">Add Test</h3>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fa fa-ambulance" aria-hidden="true"></i>
+                    <div class="ca-content">
+                        <h4 class="ca-main one">Upload Report</h4>
+                        <h3 class="ca-sub one">Upload Report</h3>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fa fa-ambulance" aria-hidden="true"></i>
+                    <div class="ca-content">
+                        <h4 class="ca-main two">Patient List</h4>
+                        <h3 class="ca-sub two">Patient List</h3>
+                    </div>
+                </a>
+            </li>
+            
+
+
+        </ul>
+    </div>
+}

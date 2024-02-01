@@ -1,0 +1,106 @@
+﻿@model HospitalPortal.Models.ViewModels.VehicleChargesDTO
+@{
+    ViewBag.Title = "VehicleList";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Vehicle Cancellation Charges</h2>
+
+<div style="margin:auto; width:50%">
+    @using (Html.BeginForm())
+    {
+        <div class="form-group">
+            Vehicle Category
+            @Html.DropDownListFor(a => a.Category_Id, Model.CategoryList, "Select", new { @class = "form-control", required = "required" })
+        </div>
+        <div class="form-group">
+            Vehicle Type * @Html.DropDownListFor(a => a.TypeId,
+                        Enumerable.Empty<SelectListItem>()
+                        , "Select", new { @class = "form-control", required = "required" })
+        </div>
+        <div class="form-group">
+            Charges Apllied for*:
+            <select class="form-control" id="AppliedFor" name="AppliedFor" required="required">
+                <option value="">
+                    Select Any
+                </option>
+                <option value="Driver">
+                    Driver
+                </option>
+                <option value="Patient">
+                    Patient
+                </option>
+            </select>
+        </div>
+        <div class="form-group">
+            @Html.TextBoxFor(a => a.Amount, new { @class = "form-control", required= "required" })
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Submit" class="btn btn-primary" />
+        </div>
+    }
+
+</div>
+    <div class="row">
+        <div class="col-md-12">
+            @if (Model.ListVehicleType == null)
+            {
+
+            }
+            else
+            {
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Vehicle Type</th>
+                            <th>Category Name</th>
+                            <th>Charges Applied For</th>
+                            <th>Charges (in %)</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.ListVehicleType)
+                        {
+                            <tr>
+                                <td>@item.VehicleTypeName</td>
+                                <td>@item.CategoryName</td>
+                                <td>@item.AppliedFor</td>
+                                <td>@item.Amount %</td>
+                                <td>
+                                    <a href="/Charges/EditCharges?id=@item.Id" class="btn btn-primary" onclick="return confirm('Are You Sure to Edit?')">Edit</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    </div>
+
+
+<script src="/Scripts/Library/jquery-1.7.1.min.js"></script>
+<link href="~/css/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
+
+<script>
+    $("#Category_Id").change(function () {
+        debugger
+        var stateId = $(this).val();
+        var city = $("#TypeId");
+        city.empty();
+        city.append("<option value=''>Select</option>");
+        $.ajax({
+            url: '/Common/GetTypeUsingCategory?CatId='+stateId,
+            type: 'get',
+            success: function (response) {
+                $.each(response, function (key,val) {
+                    city.append("<option value='"+val.Id+"'>"+val.VehicleTypeName+"</option>");
+                });
+            },
+            error: function (error) {
+                console.log(error.responseText);
+            }
+        });
+    });
+</script>

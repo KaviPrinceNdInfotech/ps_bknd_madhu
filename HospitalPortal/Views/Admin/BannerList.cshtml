@@ -1,0 +1,52 @@
+﻿@model HospitalPortal.Models.ViewModels.Banner_List 
+@{
+    ViewBag.Title = "BannerList";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    int i=1;
+}
+
+<h2>BannerList</h2>
+<div id="mainContainer">
+    <div class="row">
+        <div class="col-md-6">
+            @Html.ActionLink("Add Banner", "AddBanner", null, new { @class = "btn btn-info" })
+        </div>
+    </div>
+    <br />
+    <table class="table table-hover">
+        <tr>
+            <th>
+                SN.
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.professionals)
+            </th>
+            <th>
+                Image
+            </th>
+            <th>Action</th>
+        </tr>
+
+        @foreach (var item in Model.listBanner)
+        {
+            <tr>
+                <td>
+                    @i
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.professionals)
+                </td>
+                <td>
+                    <img src="~/Images/@item.BannerPath" width="80" height="70" />
+                </td>
+                <td>
+                    @*<a href="/AdminOperation/DeleteHealthPackage?Id=@item.Id"  class="btn btn-danger" onclick="return confirm('Are you sure？')"><i class="fa fa-trash-o"></i></a>*@
+                    @Html.ActionLink("Delete", "DeleteBanner", new { id = item.ID }, new { onclick = "return confirm('Are sure wants to delete?');", @class = "btn btn-danger" })
+                </td>
+            </tr>
+            i++;
+        }
+
+    </table>
+    </div> 
+

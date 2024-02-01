@@ -1,0 +1,161 @@
+﻿@model HospitalPortal.Models.ViewModels.EmployeeNameVM
+@{
+    ViewBag.Title = "ViewHistory";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>View History</h2>
+<div style="margin:auto; width:90%">
+    <div class="row" style="margin-bottom:6%;margin-top:3%;">
+        @using (Html.BeginForm())
+        {
+
+            <div class="col-md-3">
+                <input type="text" name="term" id="term" class="form-control" placeholder="Search By Name" />
+            </div>
+            <div class="col-md-3">
+                <input type="submit" id="click" class="btn btn-primary" value="Find" />
+            </div>
+
+
+        }
+        @using (Html.BeginForm("ViewHistory", "SalaryMaster"))
+        {
+            <div class="col-md-2">
+                <select name="Year" id="year" class="form-control" style="height: calc(3.25rem + 2px) !important;">
+                    <option selected value=''>Select Year</option>
+                    @for (int year = DateTime.Now.Year; year >= DateTime.Now.Year - 10; year--)
+                    {
+                        <option value="@year">@year</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select name="Month" id="month" class="form-control" style="height: calc(3.25rem + 2px) !important;">
+                    <option selected value=''>Select Month</option>
+                    <option value="01">January</option>
+                    <option value='02'>February</option>
+                    <option value='03'>March</option>
+                    <option value='04'>April</option>
+                    <option value='05'>May</option>
+                    <option value='06'>June</option>
+                    <option value='07'>July</option>
+                    <option value='08'>August</option>
+                    <option value='09'>September</option>
+                    <option value='10'>October</option>
+                    <option value='11'>November</option>
+                    <option value='12'>December</option>
+                </select>
+            </div>
+
+
+            <div class="col-md-2">
+                <input type="submit" class="btn btn-primary" value="Search" />
+            </div>
+
+        }
+    </div>
+    @*@Html.ActionLink("Download Excel", "DownloadEmpExcel", new { @class = "btn btn-primary" })*@
+    <div class=" row">
+        <div class="col-md-3">
+            <div class=" form-group">
+                <a href="@Url.Action("DownloadEmpExcel", "SalaryMaster")">
+                    <img src="https://www.pinclipart.com/picdir/big/178-1780962_download-105-free-excel-icons-here-excel-download.png" alt="List View" style="width: 55px;">
+                </a>
+            </div>
+        </div>
+    </div>
+    @if (Model.Emp_Detail == null)
+    {
+        @TempData["msg"]
+    }
+    else
+    {
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Employee Name & Id</th>
+                    <th>Current Salary</th>
+                    <th>Month Salary</th>
+                    <th>Generated Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Emp_Detail)
+                {
+                    <tr>
+                        <td>@item.EmployeetName (<span style="color:red">@item.EmployeeId</span>)</td>
+                        <td>@item.CurrentSalary</td>
+                        <td>@item.MonthSalary</td>
+                        <td>@item.GenerateDate.Date.ToShortDateString()</td>
+                        <td>
+                            @if (Convert.ToInt32(item.IsPaid) == 1)
+                            {
+                                <a href="" class="btn btn-primary">Paid</a>
+                            }
+                            else
+                            {
+                                <a href="/SalaryMaster/UpdatePayment?id=@item.Id" class="btn btn-danger">Not Paid</a>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    }
+</div>
+<link href="~/css/jquery-ui.css" rel="stylesheet" />
+<script src="~/js/jquery-1.11.1.min.js"></script>
+<script src="~/js/jquery-ui.js"></script>
+<link href="~/css/jquery-ui.min.css" rel="stylesheet" />
+@{ 
+    if (@ViewBag.year != null)
+    {
+               <script>
+                   $("#year").val(@ViewBag.year);
+
+               </script>
+    } if (@ViewBag.month != null)
+    {
+               <script>
+                   $("#month").val(@ViewBag.month);
+
+               </script>
+            }
+}
+<script>
+    $(".datepicker").datepicker();
+
+    $("#click").click(function () {
+        var term = $("#term").val();
+        $.ajax({
+            url: "/SalaryMaster/ViewHistory?term=" + term,
+            contentType: "application/json",
+            type: 'get',
+            success: function (response) {
+                console.log(response);
+            },
+            error: function () {
+                console.log(error.responseText);
+            }
+        });
+    });
+
+
+    $("#clickme").click(function () {
+        var term = $("#date").val();
+        $.ajax({
+            url: "/SalaryMaster/ViewHistory?term=" + date,
+            contentType: "application/json",
+            type: 'get',
+            success: function (response) {
+                console.log(response);
+            },
+            error: function () {
+                console.log(error.responseText);
+            }
+        });
+    });
+</script>

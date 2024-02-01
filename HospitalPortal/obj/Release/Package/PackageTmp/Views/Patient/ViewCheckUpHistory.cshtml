@@ -1,0 +1,49 @@
+﻿@model HospitalPortal.Models.ViewModels.HealthCheckupPatientList
+@{
+    ViewBag.Title = "ViewCheckUpHistory";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>My Health CheckUp Report</h2>
+@if (Model.HealthCheckUpReprt.Count() == 0)
+{
+
+<h2 style="color:red;">You Haven't taken this Service Yet.</h2>
+}
+else
+{
+using (Html.BeginForm())
+{
+    <div class="row" style="margin-bottom:3%;">
+        <div class="col-md-3">
+            Search By Lab Name
+        </div>
+        <div class="col-md-3" style="margin-left: -6%;">
+            <input type="date" name="term" id="term" />
+        </div>
+        <div class="col-md-3">
+            <input type="submit" value="Filter" class="btn btn-primary" />
+        </div>
+    </div>
+}
+
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Lab Name</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.HealthCheckUpReprt)
+        {
+            <tr>
+                <td>@item.LabName</td>
+                <td><a href="/Patient/ViewTestReport?id=@item.Patient_Id" class="btn btn-primary">View Test List</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
+}
+

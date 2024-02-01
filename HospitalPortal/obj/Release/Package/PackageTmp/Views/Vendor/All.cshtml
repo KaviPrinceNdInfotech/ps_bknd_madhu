@@ -1,0 +1,136 @@
+﻿@model IEnumerable<HospitalPortal.Models.ViewModels.VendorDTO>
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="~/js/jquery.doubleScroll.js"></script>
+<style>
+    #mainContainer {
+        width: 99%;
+        margin-top: 1%;
+        margin-left: 1%;
+    }
+
+    .double-scroll {
+        width: 100%;
+    }
+</style>
+
+    <div id="mainContainer">
+        @*<div class="row">
+            <div class="col-md-6">
+                @Html.ActionLink("Add More", "Add", null, new { @class = "btn btn-info" })
+            </div>
+        </div>*@
+
+        <div class="row">
+            <div class="col-md-6">
+                <h3>Franchise</h3>
+            </div>
+        </div>
+        @using (Html.BeginForm("All", "Vendor", FormMethod.Get))
+        {
+            <div class="row">
+                <div class="col-md-4">
+                    <input type="text" class="form-control" id="term" name="term" placeholder="Serach by Name and UniqueId" />
+                </div>
+                <div class="col-md-3">
+                    <input type="submit" class="btn btn-primary" value="Search" />
+                </div>
+                <div class="col-md-3">
+                    <a href="/Vendor/All" class="btn btn-primary">Show All</a>
+                </div>
+            </div>
+        }
+        @if (Model.Count() > 0)
+        {
+        <div class="double-scroll">
+               <table class="table table-bordered">
+                 <thead>
+                     <tr>
+                         <th>Unique Id</th>
+                         <th>Name</th>
+                         <th>Company</th>
+                         <th>MobileNo</th>
+                         <th>Email</th>
+                         <th>Address</th>
+                         <th>GST</th>
+                         <th>PAN</th>
+                         <th>Aadhar Details</th>
+                         <th>Approval</th>
+                         <th>Action</th>
+                     </tr>
+                 </thead>
+                   <tbody>
+                       @foreach (var item in Model)
+                       {
+                           <tr>
+                               <td>@item.UniqueId</td>
+                               <td>@item.VendorName</td>
+                               <td>@item.CompanyName</td>
+                               <td>@item.MobileNumber</td>
+                               <td>@item.EmailId</td>
+                               <td>@item.Location , @item.CityName, @item.StateName</td>
+                               <td>@item.GSTNumber</td>
+                               <td>
+                                   @item.PanNumber<br />
+                               @if (string.IsNullOrEmpty(item.AadharOrPANImage) && string.IsNullOrEmpty(item.AadharOrPANImage2))
+                               {
+                                   <a href="/Images/@item.PanImage">
+                                       <img src="/Images/@item.PanImage" style="width:100px; height:80px;" />
+                                   </a>
+                               }
+                               else
+                               {
+                                   <text>No Images</text>
+                               }
+                           </td>
+                           <td>
+                              @item.AadharOrPANNumber
+                               @if (string.IsNullOrEmpty(item.PanImage))
+                               {
+                                   <a href="/Images/@item.AadharOrPANImage">
+                                       <img src="/Images/@item.AadharOrPANImage" style="width:100px; height:80px;" />
+                                   </a>
+                                           <a href="/Images/@item.AadharOrPANImage2">
+                                               <img src="/Images/@item.AadharOrPANImage2" style="width:100px; height:80px;" />
+                                           </a>
+                               }
+                               else
+                               {
+                                <text>No Images</text>
+                               }
+                           </td>
+                           <td>
+                               @if (item.IsApproved)
+                               {
+                                   <a href="/Vendor/UpdateStatus?id=@item.Id" class="btn btn-success">Approved</a>
+                                   @*@Html.ActionLink("Approved", "UpdateStatus", new { id = item.Id }, new { @class = "btn btn-success" })*@
+                               }
+                               else
+                               {
+                                   <a href="/Vendor/UpdateStatus?id=@item.Id" class="btn btn-danger">Not Approve</a>
+                               }
+                           </td>
+                               <td>
+                                   @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { onclick = "return confirm('Are sure wants to Edit?');", @class = "btn btn-info" })
+                                   <a href="/Common/BankDetails?Id=@item.AdminLogin_Id" class="btn btn-primary">Bank Details</a>
+                                   @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { onclick = "return confirm('Are sure wants to delete?');", @class = "btn btn-danger" })
+                               </td>
+                           </tr>
+                       }
+                   </tbody>
+               </table>
+            </div>
+        }
+        else
+        {
+            <span>No Records</span>
+        }
+        </div>
+
+<script>
+    $('.double-scroll').doubleScroll();
+</script>

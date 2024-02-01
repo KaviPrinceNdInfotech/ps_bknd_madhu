@@ -1,0 +1,64 @@
+﻿@model HospitalPortal.Models.ViewModels.PatientHistory
+@{
+    ViewBag.Title = "AppointmentHistroy";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>My Appointment Histroy</h2>
+@if(Model.AppointmentHistory.Count() == 0)
+{
+<h2 style="color:red">You Haven't taken this Service,yet.</h2>
+}
+else
+{
+    using (Html.BeginForm())
+    {
+    <div class="row" style="margin-bottom:3%">
+        <div class="col-md-3">
+            Search By Appointment Date
+        </div>
+        <div class="col-md-3">
+            <input type="date" name="date" id="date" />
+        </div>
+        <div class="col-md-3">
+            <input type="submit" value="Filter" class="btn btn-primary" />
+        </div>
+    </div>
+    }
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Doctor Name</th>
+            <th>Mobile No</th>
+            <th>Phone No</th>
+            <th>Speciality</th>
+            <th>Clinic Name</th>
+            <th>Clinic Address</th>
+            <th>Appointed Time</th>
+            <th>Appointed Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var item in Model.AppointmentHistory)
+        {
+            <tr>
+                <td>@item.DoctorName</td>
+                <td>@item.MobileNo</td>
+                <td>@item.PhoneNo</td>
+                <td>@item.Specility</td>
+                <td>@item.ClinicName</td>
+                <td>@item.ClinicAddress, @item.CityName, @item.StateName</td>
+                <td>@item.AppointedTime</td>
+                <td>@if (item.AppointmentDate != null)
+                    {
+                    <span>
+                        @item.AppointmentDate.Value.ToString("dd-MMM-yyyy")
+                    </span>
+                }</td>
+            </tr>
+        }
+    </tbody>
+</table>
+}
+

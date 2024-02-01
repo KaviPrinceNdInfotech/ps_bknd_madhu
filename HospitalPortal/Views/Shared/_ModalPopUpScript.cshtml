@@ -1,0 +1,45 @@
+﻿
+<script src="~/js/jquery-2.1.4.min.js"></script>
+
+<script>
+    function AjaxPost(formData) {
+        debugger
+        var url_string = window.location.href;
+        var ajaxConfig = {
+            type: "POST",
+            url: "/Chemist/UpdateDelivery",
+            data: new FormData(formData),
+            success: function (result) {
+               window.location.href;
+            }
+        }
+        if ($(formData).attr('enctype') == "multipart/form-data") {
+            ajaxConfig["contentType"] = false;
+            ajaxConfig["processData"] = false;
+        }
+        $.ajax(ajaxConfig);
+        return false;
+    }
+</script>
+
+<script>
+    $(function () {
+        $('#myModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget); // Button that triggered the modal
+            var code = button.data('code'); // Extract info from data-* attributes
+            // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+            // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+            var modal = $(this);
+            modal.find('#code').val(code);
+        });
+
+        $('#myModal1').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget); // Button that triggered the modal
+            var code = button.data('code'); // Extract info from data-* attributes
+            // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+            // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+            var modal = $(this);
+            modal.find('#code').val(code);
+        });
+    });
+</script>

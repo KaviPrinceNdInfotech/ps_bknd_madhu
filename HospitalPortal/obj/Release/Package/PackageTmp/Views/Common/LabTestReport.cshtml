@@ -1,0 +1,42 @@
+﻿@model HospitalPortal.Models.ViewModels.HealthCheckupPatientList
+@{
+    ViewBag.Title = "TestList";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2 style="margin-bottom:5%;">Test List of Patient @Model.LabTestReport.FirstOrDefault().PatientName</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Patient Name</th>
+            <td>@Model.LabTestReport.FirstOrDefault().PatientName</td>
+            <th>Patient Address</th>
+            <td>
+                @Model.LabTestReport.FirstOrDefault().Location,
+                @Model.LabTestReport.FirstOrDefault().CityName,
+                @Model.LabTestReport.FirstOrDefault().StateName
+            </td>
+            <th>Email ID</th>
+            <td>
+                @Model.LabTestReport.FirstOrDefault().EmailId
+            </td>
+        </tr>
+        <tr>
+            <th>Mobile No.</th>
+            <td>@Model.LabTestReport.FirstOrDefault().MobileNumber</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr><th>Test List</th></tr>
+        @foreach (var item in Model.LabTestReport)
+        {
+            <tr>
+                <td>@item.TestName</td>
+                <td><a href="~/Images/@item.File" target="_blank" class="btn btn-default">View Test Report</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+

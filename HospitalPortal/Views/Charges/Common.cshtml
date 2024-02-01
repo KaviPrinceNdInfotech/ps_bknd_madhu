@@ -1,0 +1,94 @@
+﻿@model HospitalPortal.Models.ViewModels.ChargeDTO
+@{
+    ViewBag.Title = "Common";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style>
+    #main {
+        margin: auto;
+        width: 50%;
+    }
+</style>
+<h2>Cancellation Charges</h2>
+@if (TempData["msg"] != null)
+{
+    string msg = TempData["msg"].ToString();
+    <div class="row">
+        <div class="col-md-12">
+            @if (msg == "ok")
+            {
+                <div class="alert alert-success">
+                    Saved Successfully.
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-danger">
+                    @msg
+                </div>
+            }
+        </div>
+    </div>
+}
+<br />
+<div id="main">
+    @using (Html.BeginForm())
+    {
+       
+        <div class="form-group">
+            <select class="form-control" id="Role" name="Role" required="required">
+                <option value="">
+                    Select Any
+                </option>
+                <option value="Nurse">
+                    Nurse
+                </option>
+                <option value="Doctor">
+                    Doctor
+                </option>
+            </select>
+
+        </div>
+        <div class="form-group">
+            @Html.TextBoxFor(a => a.Amount, new { @class = "form-control", required = "required" })
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Submit" class="btn btn-primary" />
+        </div>
+    }
+</div>
+
+@*@if(Model.Charges == null)
+    {
+
+    }
+     else
+    {*@
+<div id="main">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Role</th>
+                <th>Amount (Charges)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Charges)
+            {
+                <tr>
+                    <td>
+                        @item.Role
+                    </td>
+                    <td>
+                        @item.Amount
+                    </td>
+                    <td>
+                        <a href="/Charges/Edit?id=@item.Id" class="btn btn-primary" onclick="return confirm('Are You Sure to Edit?')"> Edit</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    </div> 
+    @*}*@

@@ -1,0 +1,99 @@
+﻿@model HospitalPortal.Models.ViewModels.HealthCheckUpPackageDTO
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    string role = HospitalPortal.Utility.UserIdentity.UserRole;
+}
+
+<style>
+    #main {
+        width: 70%;
+        margin: auto;
+    }
+</style>
+
+<div id="main">
+    <div style="margin-bottom:3%">
+        <a href="/AdminOperation/ViewPackage" class="btn btn-primary">Show All</a>
+    </div>
+
+    @using (Html.BeginForm())
+    {
+        if (TempData["msg"] != null)
+        {
+            <span class="alert alert-success">
+                @TempData["msg"]
+            </span>
+        }
+        @Html.HiddenFor(a => a.Id);
+        <div class="row form-group">
+            <div class="col-md-4">Select Package Name:-</div>
+            <div class="col-md-4">
+                @Html.DropDownListFor(a => a.packageId, Model.PackageList, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-12">
+                Select List of Tests:-
+                @*@Html.DropDownListFor(a => a.chosenIds, Model.LabTest, new { id = "EmpList", @class = "form-group", multiple = "multiple" })*@
+                <div style="margin-top:3%">
+                    <table class="table table-bordered" style="width:80%">
+                        <thead>
+                            <tr style="background-color:#5d6c8a;color:#ffffff">
+                                <th>Test Name</th>
+                                <th>Amount</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.HealthTest)
+                            {
+                                <tr>
+                                    <td>@item.TestDesc</td>
+                                    <td>@item.TestAmount</td>
+                                    <td>
+                                        <a href="/AdminOperation/EditHealthTest?Id=@item.Id&statusKey=1" class="btn btn-primary"><i class="fa fa-pencil"></i></a>
+                                        <a href="/AdminOperation/DeleteHealthTest?Id=@item.Id&statusKey=1" class="btn btn-danger"><i class="fa fa-trash-o"></i></a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-5">
+                Total Amount (As Per Selected List Items)
+                @Html.TextBoxFor(a => a.gTotal, new { @class = "form-control", id = "grandTotal", @readonly = "readonly" })
+            </div>
+            <div class="col-md-5">
+                Discount (In Rs)
+                @Html.TextBoxFor(a => a.DiscountAmt, new { @class = "form-control", id = "Discount" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-5">
+                GST (In %) : Current Gst <span style="color:red">(@Model.Gst %)</span>
+                <select id="Gst" name="Gst" class="form-control">
+                    <option value="">Select GST</option>
+                    <option value="5">5 %</option>
+                    <option value="12">12 %</option>
+                    <option value="18">18 %</option>
+                    <option value="28">28 %</option>
+                </select>
+            </div>
+            <div class="col-md-5">
+                Net Payable Amount
+                @Html.TextBoxFor(a => a.GrandTotal, new {@class="form-control", id = "GrandTotal", @readonly = "readonly" })
+            </div>
+        </div>
+        <div class="form-group" style="margin-top:2%;">
+            <input type="submit" value="Submit" class="btn btn-primary" />
+        </div>
+    }
+</div>
+
+
+
+
+

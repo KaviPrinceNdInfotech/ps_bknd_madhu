@@ -1,0 +1,137 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    //Layout = null;
+}
+<script src="/Scripts/Library/angular.min.js"></script>
+<script src="/Scripts/Controllers/MedicController.js"></script>
+<style>
+    #main{
+        width:98%;
+        margin:auto;
+    }
+
+    #displayList{
+        width:90%;margin:auto;
+    }
+</style>
+
+<div id="main" ng-controller="medicCtrl">
+    
+    <div ng-if="showAddUpdate" onclick="displayAddUpdate(false)">
+        <h2> {{action}} Medicine </h2>
+        <span class="btn btn-info" ng-click="displayAddUpdate(false)">Show Medicines</span>
+     
+        <div class="row">
+            <div class="col-md-12">
+                <div class="{{alertType}}">{{msg}}</div>
+            </div>
+        </div>
+
+        <form ng-submit="addMedicine(medic)">
+            <div class="row">
+                <input type="hidden" ng-model="medic.Id"/>
+                <div class="col-md-2">
+                    <input type="text" class="form-control" ng-model="medic.MedicineName" placeholder="Medicine Name *" />
+                </div>
+
+                <div class="col-md-2">
+                    <input type="text" class="form-control" ng-model="medic.BrandName" placeholder="Brand Name *" />
+                </div>
+
+                <div class="col-md-2">
+                    <select type="text" class="form-control" ng-model="medic.MedicineType_Id" placeholder="type" ng-options="item.Id as item.MedicineTypeName for item in medicineTypes">
+                        <option value="">Select</option>
+                        
+                    </select>
+                        @*<select type="text" class="form-control" ng-model="medic.MedicineType_Id" placeholder="type">
+                <option value="">Select</option>
+                <option ng-repeat="t in medicineTypes" value="{{t.Id}}">{{t.MedicineTypeName}}</option>
+            </select>*@
+</div>
+
+                <div class="col-md-2">
+                    <input type="number" class="form-control" ng-model="medic.MRP" placeholder="MRP *" />
+                </div>
+
+                <div class="col-md-2">
+                    <textarea ng-model="medic.MedicineDescription" class="form-control" placeholder="Description"></textarea>
+                </div>
+
+                <div class="col-md-2">
+                    <input type="submit" class="btn btn-info" value="Save" />
+                </div>
+
+            </div>
+        </form>
+        
+
+    </div>
+
+    <div ng-if="!showAddUpdate" id="displayList">
+        <h2> List of Medicines </h2>
+        <span class="btn btn-info" ng-click="displayAddUpdate(true)">Add More</span>
+        <br /><br />
+        <div class="row">
+            <div class="col-sm-12" style="padding-bottom:20px">
+                <div class="col-sm-2">
+                    <span>Select File  :</span>
+                </div>
+                <div class="col-sm-3">
+                    
+                    <input class="form-control" type="file" name="importFile" id="importFile" required="required" />
+                </div>
+                <div class="col-sm-3">
+                    <button class="btn btn-info" id="btnUpload" ng-click="uploadFile()">Upload File</button>
+                </div>
+            </div>
+        </div>
+        <div >           
+           
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <input type="text" class="form-control" ng-model="term" ng-change="searchMedicine(term)" placeholder="Search By Name" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="colo-md-12">
+                <div>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Medicine</th>
+                                <th>Brand</th>
+                                <th>Type</th>
+                                <th>Price</th>
+                                <th>Description</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="m in medicines">
+                                <td>{{m.MedicineName}}</td>
+                                <td>{{m.BrandName}}</td>
+                                <td>{{m.MedicineTypeName}}</td>
+                                <td>{{m.MRP | currency:"&#8377"}}</td>
+                                <td>{{m.MedicineDescription}}</td>
+                                <td>
+                                    <span class="btn btn-info" ng-click="editMedicine(m)"><i class="fa fa-pencil-square-o"></i></span>
+                                    <span class="btn btn-danger" ng-click="deleteMedicine(m.Id)"><i class="fa fa-trash-o"></i></span>
+
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <ul class="pagination">
+                        <li ng-repeat="p in totalPages" ng-class="{'active': page==p}">
+                            <a href="#" ng-click="loadMedicineList('',p)"> {{p}} </a>
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>

@@ -1,0 +1,65 @@
+﻿
+@model HospitalPortal.Models.ViewModels.VendorPayOutListVM
+@{
+    ViewBag.Title = "ViewPayOutList";
+    Layout = "~/Views/Shared/_PayoutLayoutPage.cshtml";
+
+}
+
+<h2>Vendor Payout History</h2>
+
+<div class=" row">
+    <div class="col-md-3">
+        <div class=" form-group">
+            <a href="@Url.Action("DownloadVendorExcel", "VendorPayout")">
+                <img src="https://www.pinclipart.com/picdir/big/178-1780962_download-105-free-excel-icons-here-excel-download.png" alt="List View" style="width: 55px;">
+            </a>
+        </div>
+    </div>
+</div>
+
+<div style="margin:auto; width:95%">
+    @if (Model.VendorList == null)
+    {
+        <span>No Records</span>
+    }
+    else
+    {
+        <table class="table table-bordered">
+            <tr>
+                <th>Serial No</th>
+                <th>Vendor Name &amp; Id</th>
+                <th>Company Name</th>
+                <th>Payment Date</th>
+                <th>Amount</th>
+                @*<th>Status</th>*@
+            </tr>
+            <tbody>
+                @{int RowNo = 0;}
+                @foreach(var item in Model.VendorList)
+                {
+                    <tr>
+                        <td>@{RowNo++;} @RowNo</td>
+                        <td> @item.VendorName (@item.UniqueId)</td>
+                        <td>@item.CompanyName</td>
+                        <td>@item.PaymentDate</td>
+                        <td>@item.Amount</td>
+                        @*<td>
+                            @if (Convert.ToInt32(item.IsPaid) == 1)
+                            {
+                                <a href="/VendorPayout/UpdateVendorPayment?id=@item.Id" class="btn btn-primary">Paid</a>
+                            }
+                            else
+                            {
+                                <a href="/VendorPayout/UpdateVendorPayment?id=@item.Id" class="btn btn-danger">Not Paid</a>
+                            }
+                        </td>*@
+                    </tr>
+                                }
+            </tbody>
+        </table>
+
+                                }
+</div>
+
+

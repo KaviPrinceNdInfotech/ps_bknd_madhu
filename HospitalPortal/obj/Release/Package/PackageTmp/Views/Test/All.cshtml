@@ -1,0 +1,74 @@
+﻿@model IEnumerable<HospitalPortal.Models.ViewModels.TestDTO>
+
+@{
+    ViewBag.Title = "All";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+
+<style>
+    #mainContainer {
+        width: 60%;
+        margin-top: 1%;
+        margin-left: 1%;
+    }
+</style>
+
+<div id="mainContainer">
+    <div class="row">
+        <div class="col-md-6">
+            @Html.ActionLink("Add More", "Add", null, new { @class = "btn btn-info" })
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Test List</h3>
+        </div>
+    </div>
+
+    @using (Html.BeginForm())
+    {
+        <div class="row">
+            <div class="col-md-4">
+                Search By Test Name 
+            </div>
+            <div class="col-md-3">
+                <input type="text" name="term" id="term" />
+            </div>
+            <div class="col-md-3" style="margin-left: 11%;">
+                <input type="submit" value="Filter" class="btn btn-primary" />
+            </div>
+        </div>
+    }
+
+
+
+
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Test Name</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.TestName</td>
+                            <td>
+                                @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-info" })
+                                @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-danger" })
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+

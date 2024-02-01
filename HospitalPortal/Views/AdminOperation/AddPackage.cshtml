@@ -1,0 +1,75 @@
+﻿@model HospitalPortal.Models.ViewModels.HealthCheckUpPackageDTO
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    string role = HospitalPortal.Utility.UserIdentity.UserRole;
+}
+
+<style>
+    #main {
+        width: 70%;
+        margin: auto;
+    }
+</style>
+
+@if (TempData["msg"] != null)
+{
+    <span class="alert alert-success">
+        @TempData["msg"]
+    </span>
+}
+<div id="main">
+    <div style="margin-bottom:3%">
+        <a href="/AdminOperation/ViewPackage" class="btn btn-primary">Show All</a>
+    </div>
+    @using (Html.BeginForm())
+    {
+
+        <div class="row form-group">
+            <div class="col-md-4">Enter Package Name:-</div>
+            <div class="col-md-4">
+                @Html.DropDownListFor(a => a.packageId, Model.PackageList, "-Select Any-", new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-4">Select List of Tests:-</div>
+            <div class="col-md-4">
+                @Html.DropDownListFor(a => a.chosenIds, Model.LabTest, new { id = "EmpList", @class = "form-group", multiple = "multiple" })
+            </div>
+        </div>
+        <input type="button" id="btnSelected" class="btn btn-success" value="Get Selected" />
+        <div class="row">
+            <div class="col-md-5">
+                Total Amount (As Per Selected List Items)
+                <span id="total"></span>
+                <input type="text" class="form-control" id="grandTotal" value="0" readonly />
+            </div>
+            <div class="col-md-5">
+                Discount (In Rs)
+                <input type="text" class="form-control" id="DiscountAnt" name="DiscountAnt" placeholder="Discount" />
+            </div>
+        </div>
+            <div class="row">
+                <div class="col-md-5">
+                    GST (In %)
+                    <select id="Gst" name="Gst" class="form-control">
+                        <option value="">Select GST</option>
+                        <option value="5">5 %</option>
+                        <option value="12">12 %</option>
+                        <option value="18">18 %</option>
+                        <option value="28">28 %</option>
+                    </select>
+                </div>
+                <div class="col-md-5">
+                    Net Payable Amount
+                    <input type="text" class="form-control" id="GrandTotal" name="GrandTotal" readonly />
+                </div>
+            </div>
+            <div class="form-group" style="margin-top:2%;">
+                <input type="submit" value="Submit" class="btn btn-primary" />
+            </div>
+    }
+</div>
+
+
+
+

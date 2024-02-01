@@ -1,0 +1,449 @@
+﻿@model HospitalPortal.Models.ViewModels.DoctorDTO
+
+@{
+    if (User.Identity.IsAuthenticated)
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_SignUp.cshtml";
+    }
+
+}
+
+<style>
+    #mainContainer {
+        width: 60%;
+        margin-top: 1%;
+        margin-left: 1%;
+    }
+</style>
+
+@using (Html.BeginForm("Add", "DoctorRegistration", FormMethod.Post, new { @encType = "multipart/form-data" }))
+
+{
+    <div id="mainContainer">
+        @Html.HiddenFor(a => a.Vendor_Id)
+        @Html.HiddenFor(a => a.HospitalId)
+        @*<div class="row">
+               <div class="col-md-6">
+                  @Html.ActionLink("Show All", "All", null, new { @class="btn btn-info"})
+               </div>
+            </div>*@
+
+        <div class="row">
+            <div class="col-md-6">
+                <h3>Doctor Registration</h3>
+            </div>
+        </div>
+        @*@Html.HiddenFor(a => a.Id)
+            @Html.HiddenFor(a=>a.IsDeleted)
+            @Html.HiddenFor(a=>a.AdminLogin_Id)
+        *@
+        @Html.Partial("~/Views/Shared/_DisplayMessage.cshtml")
+
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    Name * @Html.TextBoxFor(a => a.DoctorName, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.DoctorName)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    Clinic Name * @Html.TextBoxFor(a => a.ClinicName, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.ClinicName)
+                    </span>
+                </div>
+                <div class="form-group">
+                    Department * @Html.DropDownListFor(a => a.Department_Id, Model.DepartmentList, "Select", new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.Department_Id)
+                    </span>
+                </div>
+                <div class="form-group">
+                    Specialist * @Html.DropDownListFor(a => a.Specialist_Id,
+Enumerable.Empty<SelectListItem>()
+, "Select", new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.Specialist_Id)
+                    </span>
+                </div>
+                <div class="form-group">
+                    Mobile Number * @Html.TextBoxFor(a => a.MobileNumber, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.MobileNumber)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    Phone Number  @Html.TextBoxFor(a => a.PhoneNumber, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.PhoneNumber)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    Email Id *  @Html.TextBoxFor(a => a.EmailId, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.EmailId)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    Password * @Html.PasswordFor(a => a.Password, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.Password)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    Confirm Your Password * @Html.PasswordFor(a => a.ConfirmPassword, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.ConfirmPassword)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    State * @Html.DropDownListFor(a => a.StateMaster_Id, Model.States, "Select", new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.StateMaster_Id)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    @{ Html.EnableClientValidation(false);}
+                    City * @Html.DropDownListFor(a => a.CityMaster_Id, Enumerable.Empty<SelectListItem>(), "Select", new { @class = "form-control" })
+                    <span class="red">
+
+                        @Html.ValidationMessageFor(a => a.CityMaster_Id)
+                        @{ Html.EnableClientValidation(true);}
+
+
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    Other City (If you are not able to find it above )
+                    @Html.TextBoxFor(a => a.OtherCity, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.OtherCity)
+                    </span>
+                </div>
+
+                <div class="form-group" style="enable!important">
+                    Location * @Html.TextAreaFor(a => a.Location, new { @class = "form-control enable" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.Location)
+                    </span>
+                </div>
+                @*<div class="form-group">
+
+           Location* @Html.TextArea("Description", "This is dummy description.", new { @class = "form-control" })
+        </div>*@
+                <div class="form-group">
+                    PinCode * @Html.TextBoxFor(a => a.PinCode, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.PinCode)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    Franchise ID * @Html.TextBoxFor(a => a.RefId, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.RefId)
+                    </span>
+                </div>
+                <div class="form-group">
+                    Licence Doc. * @Html.TextBoxFor(a => a.LicenceImageFile, new { @class = "form-control", type = "file" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.LicenceImageFile)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    Licence Number * @Html.TextBoxFor(a => a.LicenceNumber, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.LicenceNumber)
+                    </span>
+                </div>
+                <div class="form-group">
+                    Pan Number * @Html.TextBoxFor(a => a.PAN, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.PAN)
+                    </span>
+                </div>
+
+
+                <div class="form-group">
+                    Experience * @Html.TextBoxFor(a => a.Experience, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.Experience)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    Licence Validity * @Html.TextBoxFor(a => a.LicenseValidity, new { @class = "form-control dp" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.LicenceNumber)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    Qualification  @Html.TextBoxFor(a => a.Qualification, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.Qualification)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    Reg Number  @Html.TextBoxFor(a => a.RegistrationNumber, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.RegistrationNumber)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    Signature  * @Html.TextBoxFor(a => a.SignatureImageFile, new { @class = "form-control", type = "file" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.SignatureImageFile)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    About * @Html.TextAreaFor(a => a.About, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.About)
+                    </span>
+                </div>
+
+
+
+
+
+
+                @*Appointment Slot*@
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-5">
+                            Morning Start Time *  @Html.TextBoxFor(a => a.StartTime, new { @class = "form-control", type = "time", required = "required" })
+                            <span class="red">
+                                @Html.ValidationMessageFor(a => a.StartTime)
+                            </span>
+                        </div>
+                        <div class="col-md-2" style="margin-top:5%;"><b>To </b></div>
+
+                        <div class="col-md-5">
+                            Morning End Time  *  @Html.TextBoxFor(a => a.EndTime, new { @class = "form-control", type = "time", required = "required" })
+                            <span class="red">
+                                @Html.ValidationMessageFor(a => a.EndTime)
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    Morning Slot Timing *  @Html.DropDownListFor(a => a.SlotTiming, new List<SelectListItem>() { new SelectListItem() { Text = "10", Value = "10" }, new SelectListItem() { Text="15", Value="1" },
+new SelectListItem() { Text="20", Value="20" },new SelectListItem() { Text="25", Value="25" },new SelectListItem() { Text="30", Value="30" }
+}, "Select Slot Timing", new { @class = "form-control", required = "required" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.SlotTiming)
+                    </span>
+                </div>
+
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-5">
+                            Evening Start Time*  @Html.TextBoxFor(a => a.StartTime2, new { @class = "form-control", type = "time" })
+                            <span class="red">
+                                @Html.ValidationMessageFor(a => a.StartTime2)
+                            </span>
+                        </div>
+                        <div class="col-md-2" style="margin-top:5%;"><b>To </b></div>
+
+                        <div class="col-md-5">
+                            Evening End Time  *  @Html.TextBoxFor(a => a.EndTime2, new { @class = "form-control", type = "time" })
+                            <span class="red">
+                                @Html.ValidationMessageFor(a => a.EndTime2)
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    Evening Slot Timing * @Html.DropDownListFor(a => a.SlotTiming2, new List<SelectListItem>() { new SelectListItem() { Text = "10", Value = "10" }, new SelectListItem() { Text="15", Value="1" },
+new SelectListItem() { Text="20", Value="20" },new SelectListItem() { Text="25", Value="25" },new SelectListItem() { Text="30", Value="30" }
+}, "Select Slot Timing", new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.SlotTiming2)
+                    </span>
+                </div>
+            </div>
+                @if (User.Identity.IsAuthenticated)
+                {
+
+                }
+                else
+                {
+                    @Html.Partial("~/Views/Shared/_Terms&ConditionView.cshtml")
+                }
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-info" />
+                </div>
+            </div>
+        </div>
+   
+
+ }
+
+
+
+@if (!User.Identity.IsAuthenticated)
+{
+    <link rel="stylesheet" type="text/css" href="/lib/bootstrap/css/bootstrap.css">
+    @Html.Partial("~/Views/Shared/_script.cshtml")
+}
+<script src="/Scripts/Library/jquery-1.7.1.min.js"></script>
+<link href="~/css/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
+<script>
+    $(".datepicker").datepicker().datepicker('setdate', 'today');
+    $(function () {
+        $("#btnAddAttr").click(function () {
+            debugger
+            var employee = new Object();
+            employee.Department_Id = $('#Department_Id').val();
+            employee.Specialist_Id = $('#Specialist_Id').val();
+            if (employee != null) {
+                $.ajax({
+                    type: "POST",
+                    url: "/DoctorRegistration/AddDepartmentSpecialization",
+                    data: JSON.stringify(employee),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function () {
+                        getAllEmployees();
+                        console.log(data);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            }
+        });
+
+        function getAllEmployees() {
+            debugger
+            $.ajax({
+                url: '/DoctorRegistration/GetRecords',
+                dataType: "json",
+                method: 'GET',
+                success: function (data) {
+                    var employeeTable = $('#employee tbody');
+                    employeeTable.empty();
+                    $(data).each(function (index, emp) {
+                        employeeTable.append('<tr><td>' + "<input type='hidden' value=" + emp.Id + "/>" + emp.DepartmentName + '</td><td>'
+                            + emp.SpecialistName + '</td><td>' + "<span class='btn btn-danger' id='btnDeleteAttr'><i class='fa fa-trash-o'></i></span>" + '</td></tr>');
+                    });
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            });
+        }
+
+
+        $("#employee").on("click", "#btnDeleteAttr", function () {
+            debugger
+            var btn = $(this);
+            var currentRow = btn.parent().parent();
+            alert(currentRow.val());
+            // finding all rows after this row ad increase their index by 1
+            //currentRow.nextAll().find(":input").each(function () {
+            //    var row = $(this);
+            //    var name = row.attr('name');
+            //    var index = parseInt(name.replace(/[^\d.]/g, ''));
+            //    var nextIndex = index - 1;
+            //    var newName = name.replace(index, nextIndex);
+            //    row.attr('name', newName);
+            //    console.log(row.attr("name"));
+            //});
+            //currentRow.remove();
+        });
+    });
+</script>
+<script>
+    $("#StateMaster_Id").change(function () {
+        var stateId = $(this).val();
+        var city = $("#CityMaster_Id");
+        city.empty();
+        city.append("<option value=''>Select</option>");
+        $.ajax({
+            url: '/Common/GetCitiesByState?stateId=' + stateId,
+            type: 'get',
+            success: function (response) {
+                $.each(response, function (key, val) {
+                    city.append("<option value='" + val.Id + "'>" + val.CityName + "</option>");
+                });
+            },
+            error: function (error) {
+                console.log(error.responseText);
+            }
+        });
+    });
+
+    $("#Department_Id").change(function () {
+        let depId = $(this).val();
+        var childDd = $("#Specialist_Id");
+        childDd.empty();
+        childDd.append('<option value="">Select</option>')
+        $.get('/Common/GetSpecialistByDept?depId=' + depId).then(function (response) {
+            $.each(response, function (key, val) {
+                childDd.append(`<option value="${val.Id}">${val.SpecialistName}</option>`);
+            });
+        }).error(function (response) {
+            console.log(response.responseText);
+        });
+    });
+
+
+    $('input:radio[id="Image1"]').change(function () {
+        if ($(this).val() == 'Aadhar') {
+            $("#PanimageDiv").css("display", "none");
+            $("#AadharimageDiv").toggle();
+        }
+    });
+
+    $('input:radio[id="Image2"]').change(function () {
+        if ($(this).val() == 'Pan') {
+            $("#AadharimageDiv").css("display", "none");
+            $("#PanimageDiv").toggle();
+        }
+
+    });
+</script>
+
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places"></script>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyAVJ6WcbMb96HxFwYJTgo3a00yxYj-ha80"></script>
+
+
+
+
+@*<script type="text/javascript">
+    google.maps.event.addDomListener(window, 'load', function () {
+        var options = {
+            types: ['(cities)'],
+            componentRestrictions: { country: "in" }
+        };
+        var input = document.getElementById('Location');
+        var places = new google.maps.places.Autocomplete(input, options);
+    });
+</script>*@

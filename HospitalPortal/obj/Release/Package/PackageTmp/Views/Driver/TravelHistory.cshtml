@@ -1,0 +1,58 @@
+﻿@model HospitalPortal.Models.ViewModels.TravelHistoryVM
+@{
+    ViewBag.Title = "TravelHistory";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Travel History</h2>
+
+@if(Model.travelHistory != null)
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Driver Name</th>
+                <th>Patient Name</th>
+                <th>PickUp Place</th>
+                <th>Drop Place</th>
+                <th>Amount</th>
+                <th>Distance</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.travelHistory)
+            {
+            <tr>
+               
+                    <td>@item.DriverName</td>
+                
+                <td>@item.PatientName</td>
+                <td>@item.PickUp_Place</td>
+                <td>@item.Drop_Place</td>
+                <td>@item.Amount</td>
+                <td>@item.Distance</td>
+                <td>
+                    @if(item.IsDriveCompleted == false)
+                    {
+                        <span>Cancel</span>
+                    }
+                    else
+                    {
+                        <span>Driver Completed</span>
+                    }
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <span>
+        @TempData["msg"]
+    </span>
+}
+
+
+

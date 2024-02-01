@@ -1,0 +1,380 @@
+﻿@model HospitalPortal.Models.ViewModels.PrescriptionDTO
+@{
+    ViewBag.Title = "Prescription";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Prescription</h2>
+<style>
+    table, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+</style>
+@if (TempData["msg"] != null)
+{
+    string msg = TempData["msg"].ToString();
+    <div class="row">
+        <div class="col-md-12">
+            @if (msg == "ok")
+            {
+                <div class="alert alert-success">
+                    Saved Successfully.
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-danger">
+                    @msg
+                </div>
+            }
+        </div>
+    </div>
+}
+<div class="container-fluid" style="background-color:cyan ">
+
+    <div class=" row" style="border:solid;">
+
+        <div class="col-md-6" style="border-bottom: 1px solid black; margin-top :7px;">
+            Is Appointment Required?
+        </div>
+        <div class="col-md-6 d-flex justify-content-around" style="border-bottom: 1px solid black;">
+            <input type="radio" name="flexRadioDefault" id="Yes" value="Yes"><label for="Yes">Yes</label>
+            <input type="radio" name="flexRadioDefault" id="No" value="No" checked><label for="No">No</label>
+
+        </div>
+
+
+        <div class=" col-md-12" style="margin-top :5px;">
+            <form class="row" method="post">
+                <div class="col-md-12">
+                    <div class="form-group row">
+                        <div class="col-md-4">
+                            <label for="inputKey" class="control-label" style=" margin-top:27px;">Preferred Appointment Date & Time 1:</label>
+
+                        </div>
+                        <div class="col-md-3" style="margin-top:5px;">
+                            <label for="inputKey" class="control-label">Date</label>
+                            @Html.TextBoxFor(a => a.PreferredAppointmentDateTime1, new { @class = "datepicker form-control", placeholder = "mm/dd/yyyy" })
+
+                            @*<input type="text" class="form-control" id="inputKey" placeholder="mm/dd/yyyy" readonly="true">*@
+                        </div>
+                        <div class="col-md-2" style="margin-top:5px;">
+                            <label for="inputValue" class="control-label">Hour</label>
+
+                            <select class="form-control" id="AppointmentHour1" name="AppointmentHour1">
+                                <option value="0">12:00 am</option>
+                                <option value="1">1:00 am</option>
+                                <option value="2">2:00 am</option>
+                                <option value="3">3:00 am</option>
+                                <option value="4">4:00 am</option>
+                                <option value="5">5:00 am</option>
+                                <option value="6">6:00 am</option>
+                                <option value="7">7:00 am</option>
+                                <option value="8">8:00 am</option>
+                                <option value="9">9:00 am</option>
+                                <option value="10">10:00 am</option>
+                                <option value="11">11:00 am</option>
+                                <option value="12">12:00 pm</option>
+                                <option value="13">1:00 pm</option>
+                                <option value="14">2:00 pm</option>
+                                <option value="15">3:00 pm</option>
+                                <option value="16">4:00 pm</option>
+                                <option value="17">5:00 pm</option>
+                                <option value="18">6:00 pm</option>
+                                <option value="19">7:00 pm</option>
+                                <option value="20">8:00 pm</option>
+                                <option value="21">9:00 pm</option>
+                                <option value="22">10:00 pm</option>
+                                <option value="23">11:00 pm</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2" style="margin-top:5px;">
+                            <label for="AppointmentMin1" class="control-label">Minute</label>
+                            <select class="form-control" id="AppointmentMin1" name="AppointmentMin1">
+                                @for (int minute = 0; minute <= 59; minute++)
+                                {
+                                    <option value="@minute.ToString("D2")">@minute.ToString("D2")</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-4">
+                            <label for="inputKey" class="control-label" style=" margin-top:27px;">Preferred Appointment Date & Time 2:</label>
+
+                        </div>
+                        <div class="col-md-3" style="margin-top:5px;">
+                            <label for="inputKey" class="control-label">Date</label>
+                            @Html.TextBoxFor(a => a.PreferredAppointmentDateTime2, new { @class = "datepicker form-control", placeholder = "mm/dd/yyyy" })
+                            @*<input type="text" class="form-control" id="inputKey" placeholder="mm/dd/yyyy" readonly="true">*@
+                        </div>
+                        <div class="col-md-2" style="margin-top:5px;">
+                            <label for="inputValue" class="control-label">Hour</label>
+                            <select class="form-control" id="AppointmentHour2" name="AppointmentHour2">
+                                <option value="0">12:00 am</option>
+                                <option value="1">1:00 am</option>
+                                <option value="2">2:00 am</option>
+                                <option value="3">3:00 am</option>
+                                <option value="4">4:00 am</option>
+                                <option value="5">5:00 am</option>
+                                <option value="6">6:00 am</option>
+                                <option value="7">7:00 am</option>
+                                <option value="8">8:00 am</option>
+                                <option value="9">9:00 am</option>
+                                <option value="10">10:00 am</option>
+                                <option value="11">11:00 am</option>
+                                <option value="12">12:00 pm</option>
+                                <option value="13">1:00 pm</option>
+                                <option value="14">2:00 pm</option>
+                                <option value="15">3:00 pm</option>
+                                <option value="16">4:00 pm</option>
+                                <option value="17">5:00 pm</option>
+                                <option value="18">6:00 pm</option>
+                                <option value="19">7:00 pm</option>
+                                <option value="20">8:00 pm</option>
+                                <option value="21">9:00 pm</option>
+                                <option value="22">10:00 pm</option>
+                                <option value="23">11:00 pm</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2" style="margin-top:5px;">
+                            <label for="AppointmentMin1" class="control-label">Minute</label>
+                            <select class="form-control" id="AppointmentMin2" name="AppointmentMin2">
+                                @for (int minute = 0; minute <= 59; minute++)
+                                {
+                                    <option value="@minute.ToString("D2")">@minute.ToString("D2")</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-4">
+                            <label for="inputKey" class="control-label" style=" margin-top:27px;">Preferred Appointment Date & Time 3:</label>
+
+                        </div>
+                        <div class="col-md-3" style="margin-top:5px;">
+                            <label for="inputKey" class="control-label">Date</label>
+                            @Html.TextBoxFor(a => a.PreferredAppointmentDateTime3, new { @class = "datepicker form-control", placeholder = "mm/dd/yyyy" })
+                            @*<input type="text" class="form-control" id="inputKey" placeholder="mm/dd/yyyy" readonly="true">*@
+                        </div>
+                        <div class="col-md-2" style="margin-top:5px;">
+                            <label for="inputValue" class="control-label">Hour</label>
+                            <select class="form-control" id="AppointmentHour3" name="AppointmentHour3">
+                                <option value="0">12:00 am</option>
+                                <option value="1">1:00 am</option>
+                                <option value="2">2:00 am</option>
+                                <option value="3">3:00 am</option>
+                                <option value="4">4:00 am</option>
+                                <option value="5">5:00 am</option>
+                                <option value="6">6:00 am</option>
+                                <option value="7">7:00 am</option>
+                                <option value="8">8:00 am</option>
+                                <option value="9">9:00 am</option>
+                                <option value="10">10:00 am</option>
+                                <option value="11">11:00 am</option>
+                                <option value="12">12:00 pm</option>
+                                <option value="13">1:00 pm</option>
+                                <option value="14">2:00 pm</option>
+                                <option value="15">3:00 pm</option>
+                                <option value="16">4:00 pm</option>
+                                <option value="17">5:00 pm</option>
+                                <option value="18">6:00 pm</option>
+                                <option value="19">7:00 pm</option>
+                                <option value="20">8:00 pm</option>
+                                <option value="21">9:00 pm</option>
+                                <option value="22">10:00 pm</option>
+                                <option value="23">11:00 pm</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2" style="margin-top:5px;">
+                            <label for="AppointmentMin1" class="control-label">Minute</label>
+                            <select class="form-control" id="AppointmentMin3" name="AppointmentMin3">
+                                @for (int minute = 0; minute <= 59; minute++)
+                                {
+                                    <option value="@minute.ToString("D2")">@minute.ToString("D2")</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-4">
+                            <label for="inputKey" class="control-label" style=" margin-top:27px;">Hospital Name:</label>
+
+                        </div>
+                        <div class="col-md-3" style="margin-top:15px;">
+                            @Html.TextBoxFor(a => a.HospitalName, new { @class = "form-control" })
+                            <span class="red">
+                                @Html.ValidationMessageFor(a => a.HospitalName)
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-4">
+                            <label for="inputKey" class="control-label" style=" margin-top:27px;">Doctor Name:</label>
+
+                        </div>
+                        <div class="col-md-3" style="margin-top:15px;">
+                            @Html.TextBoxFor(a => a.DoctorName, new { @class = "form-control" })
+                            <span class="red">
+                                @Html.ValidationMessageFor(a => a.DoctorName)
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-4">
+                            <label for="inputKey" class="control-label" style=" margin-top:27px;">Doctor Speciality:</label>
+
+                        </div>
+                        <div class="col-md-3" style="margin-top:15px;">
+                            @Html.TextBoxFor(a => a.DoctorSpeciality, new { @class = "form-control" })
+                            <span class="red">
+                                @Html.ValidationMessageFor(a => a.DoctorSpeciality)
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-4">
+                            <label for="inputKey" class="control-label" style=" margin-top:27px;">Doctor Code:</label>
+
+                        </div>
+                        <div class="col-md-3" style="margin-top:15px;">
+                            @Html.TextBoxFor(a => a.DoctorCode, new { @class = "form-control" })
+                            <span class="red">
+                                @Html.ValidationMessageFor(a => a.DoctorCode)
+                            </span>
+                        </div>
+                        <div class="col-md-3" style="margin-top:15px;">
+                            <input type="button" value="Preview Prescription" class="btn btn-info" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-4">
+                            <label for="inputKey" class="control-label" style=" margin-top:27px;">Registration No:</label>
+
+                        </div>
+                        <div class="col-md-3" style="margin-top:15px;">
+                            @Html.TextBoxFor(a => a.RegistrationNumber, new { @class = "form-control" })
+                            <span class="red">
+                                @Html.ValidationMessageFor(a => a.RegistrationNumber)
+                            </span>
+                        </div>
+                        <div class="col-md-5" style="margin-top:15px;">
+                            <input type="submit" value="Save" class="btn btn-info" />
+                            <a href="/Doctorregistration/PatientPerticuler" id="saveLink" class="btn btn-info">Next Page</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!--<div class=" col-md-4">
+            <form class="row">
+                <div class="col-md-12">
+                    <div class="form-group row" style="margin-top :5px;">
+                        <table style="width:100%;">
+                            <tr>
+                                <th style="text-align:center ;">SMS/Email</th>
+                                <th>Last Sent Date</th>
+                            </tr>-->
+
+                            @*<tr>
+                                    <td><input type="button" value="Send SMS:Appointment Not Required" class="btn btn-success" /></td>
+                                    <td></td>
+                                </tr>*@
+                            <!--<tr>-->
+                                @*<td><input type="button" value="Send E-Mail" class="btn btn-warning" style="width :260px;" /></td>*@
+                                <!--<td>
+                                    <a id="sendemail" class="btn btn-warning" style="width :260px;">Send E-Mail</a>
+                                </td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td><input type="button" value="Send SMS:Prescription Link" class="btn btn-warning  " style="width :260px;" /></td>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </form>
+        </div>-->
+
+    </div>
+</div>
+<script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
+<link href="~/css/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
+<script>
+    $(".datepicker").datepicker().datepicker('setdate', 'today');
+
+
+
+    $("#test").click(function () {
+        debugger
+
+        var date = $("#AppointmentDate").val();
+        $.ajax({
+            url: "/ViewReport/DailyDoctor?date=" + date + "",
+            type: "get",
+            success: function (response) {
+                console.log(response);
+                $("#prevAtt").html(response);
+            },
+            error: function (error) {
+                console.log(error.responseText);
+
+            }
+        });
+
+    });
+</script>
+
+<script>
+    // Function to enable/disable form elements
+    function toggleFormElements(enabled) {
+        $("#date-time-1").prop("disabled", !enabled);
+        $("#AppointmentHour1").prop("disabled", !enabled);
+        $("#AppointmentHour2").prop("disabled", !enabled);
+        $("#AppointmentHour3").prop("disabled", !enabled);
+        $("#AppointmentMin1").prop("disabled", !enabled);
+        $("#AppointmentMin2").prop("disabled", !enabled);
+        $("#AppointmentMin3").prop("disabled", !enabled);
+        $("#DoctorSpeciality").prop("disabled", !enabled);
+        $("#PreferredAppointmentDateTime1").prop("disabled", !enabled);
+        $("#PreferredAppointmentDateTime2").prop("disabled", !enabled);
+        $("#PreferredAppointmentDateTime3").prop("disabled", !enabled);
+        $("#HospitalName").prop("disabled", !enabled);
+        $("#DoctorName").prop("disabled", !enabled);
+        $("#DoctorCode").prop("disabled", !enabled);
+        $("#RegistrationNumber").prop("disabled", !enabled);
+        // Add more form elements here
+    }
+
+    // Initial state based on the selected radio button
+    $(document).ready(function () {
+        toggleFormElements($("#Yes").is(":checked"));
+
+        // Handle radio button change event
+        $("input[name='flexRadioDefault']").change(function () {
+            toggleFormElements($("#Yes").is(":checked"));
+        });
+    });
+</script>
+@*<script>
+    $("#sendemail").click(function () {
+        $.ajax({
+           // url: "/Doctorregistration/Sendemailpdf?id=" + date + "",
+            url: "/Doctorregistration/Sendemailpdf",
+            type: "get",
+            success: function (response) {
+                console.log(response);
+                alert(response);
+                ///$("#prevAtt").html(response);
+            },
+            error: function (error) {
+                console.log(error.responseText);
+
+            }
+        });
+
+    });
+</script>*@

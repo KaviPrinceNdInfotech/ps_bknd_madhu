@@ -1,0 +1,167 @@
+﻿@model HospitalPortal.Models.ViewModels.ReportDTO
+@{
+    ViewBag.Title = "ViewNurseList";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2 style="text-align:center;">Nurse's Payment History</h2>
+
+<table class="table table-bordered">
+    <thead>
+
+        @if (Model.NurseList.Count() != 0)
+        {
+            <tr>
+                <th>Nurse Name</th>
+                <td>@Model.NurseList.FirstOrDefault().NurseName</td>
+                <th>Mobile No.</th>
+                <td>@Model.NurseList.FirstOrDefault().MobileNumber</td>
+            </tr>
+            <tr>
+                <th>Address</th>
+                <td>@Model.NurseList.FirstOrDefault().Location
+                @Model.NurseList.FirstOrDefault().CityName
+                @Model.NurseList.FirstOrDefault().StateName
+                </td>
+                <th>Certificate No.</th>
+                <td>@Model.NurseList.FirstOrDefault().CertificateNumber</td>
+            </tr>
+        }
+        else
+        {
+            <tr>
+                <th>Nurse Name</th>
+                <td>@Model.NurseName</td>
+                <th>Mobile No.</th>
+                <td>@Model.MobileNumber</td>
+            </tr>
+            <tr>
+                <th>Address</th>
+                <td>@Model.Location
+                @Model.CityName
+                @Model.StateName</td>
+                <th>Certificate No.</th>
+                <td>@Model.CertificateNumber</td>
+            </tr>
+        }
+
+
+    </thead>
+</table>
+
+@using (Html.BeginForm())
+{
+    <div style="margin-bottom:3%;">
+        <div class="row">
+            <h4 style="text-align:center">Search By Date</h4>
+        </div>
+        <div class="row">
+            <div class='col-sm-5'>
+                <div class="form-group">
+                    <div class='input-group date'>
+                        <input type='text' name="sdate" id="datepicker1" class="form-control" placeholder="From Date" />
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class='col-sm-5'>
+                <div class="form-group">
+                    <div class='input-group date' id='datetimepicker1'>
+                        <input type='text' name="edate" id="datepicker2" class="form-control" placeholder="Date To" />
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2"><input type="submit" value="Filter" class="btn btn-primary" /></div>
+
+        </div>
+    </div>
+}
+@if (Model.NurseList.Count() == 0)
+{
+    <h2 style="color:red; text-align:center;">No Appoinment of Current Month</h2>
+}
+else
+{
+    <table id="doctor">
+        <thead>
+            <tr>
+                <th>Patient Name</th>
+                <th>Request Date</th>
+                <th>Service Acceptance Date</th>
+                <th>Total Fee </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.NurseList)
+            {
+                <tr>
+                    <td>@item.PatientName</td>
+                    <td>
+                        @if (item.RequestDate != null)
+                        {
+                            @item.RequestDate.ToString();
+                        }
+                    </td>
+                    <td>
+                        @if (item.ServiceAcceptanceDate != null)
+                        {
+                            @item.ServiceAcceptanceDate.ToString();
+                        }
+                    </td>
+                    <td>
+                        @item.TotalFee
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+                    <div class="row">
+                        <div class="col-md-3">
+                            Total Month Amount
+                        </div>
+                        <div class="col-md-3">
+                            <b style="color:red; font-size:medium">
+                                @if (ViewBag.Total != null)
+                                {
+
+                                    <b style="color:red">&#8377; @ViewBag.Total</b>}
+                                else
+                                {
+                                    <b style="color:red">&#8377; @ViewBag.Amount</b>
+                                }
+
+                        </div>
+                    </div>
+
+}
+<!--DatePicker-->
+
+
+
+
+
+
+
+
+<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css">
+
+<script type="text/javascript">
+                    var table = $('#doctor').DataTable();
+</script>
+<link href="/css/jquery-ui.css" rel="stylesheet" />
+<script src="/js/jquery-ui.js"></script>
+
+<script language="javascript">
+    $("#datepicker1").datepicker().datepicker('setDate', 'today');
+    $("#datepicker2").datepicker().datepicker('setDate', 'today');
+
+</script>
+

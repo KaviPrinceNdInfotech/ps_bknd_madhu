@@ -1,0 +1,130 @@
+﻿@model HospitalPortal.Models.ViewModels.RegisterNurseLocation
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style>
+    #main {
+        width: 98%;
+        margin: auto;
+    }
+
+    .row {
+        margin-top: 1%;
+    }
+</style>
+@using (Html.BeginForm())
+{
+<div id="main">
+    <div class="row">
+        <div class="col-md-6">
+            <a href="/Nurse/Locations" class="btn btn-info">View all</a>
+        </div>
+    </div>
+    <h2>Register Locations</h2>
+    <div class="row">
+        <div class="col-md-1">
+            State *
+        </div>
+        <div class="col-md-3">
+            @Html.DropDownList("state", Model.States, "Select State", new { @class = "form-control" })
+        </div>
+        <div class="col-md-1">
+            City *
+        </div>
+        <div class="col-md-3">
+            <select id="city" class="form-control">
+                <option value="">Select</option>
+            </select>
+        </div>
+
+
+    </div>
+
+    <div class="row">
+        <div class="col-md-1">
+            Location *
+        </div>
+        <div class="col-md-3" id="locationHolder">
+
+        </div>
+    </div>
+
+    @if (TempData["msg"] != null)
+    {
+        <div class="row">
+
+            <div class="col-md-12">@TempData["msg"]</div>
+
+        </div>
+    }
+
+    <div class="row">
+        <div class="col-md-4">
+            <input type="submit" class="btn btn-lg btn-info" value="Submit" />
+        </div>
+    </div>
+
+
+
+</div>
+}
+<script src="/Scripts/Library/jquery-1.7.1.min.js"></script>
+<script>
+    $("#all").click(function () {
+        console.log($(this).prop("checked"));
+        if ($(this).prop("checked") == true) {
+            $(".locations").prop('checked', true);
+        }
+        else {
+            $(".locations").prop('checked', false);
+        }
+    });
+    $("#state").change(function () {
+        var stateId = $(this).val();
+        var city = $("#city");
+        city.empty();
+        city.append("<option value=''>Select</option>");
+        $.ajax({
+            url: '/Common/GetCitiesByState?stateId=' + stateId,
+            type: 'get',
+            success: function (response) {
+                $.each(response, function (key, val) {
+                    city.append("<option value='" + val.Id + "'>" + val.CityName + "</option>");
+                });
+            },
+            error: function (error) {
+                console.log(error.responseText);
+            }
+        });
+    });
+    $("#city").change(function () {
+        let cityId = $(this).val();
+        let locationContainer = $("#locationHolder");
+        var defaultEl = `<input type="checkbox" id="all" value="" class="form-control"/>All`;
+        locationContainer.append(defaultEl);
+        locationContainer.html('');
+        if (cityId.length < 1)
+            return;
+        let location = $("#locationId");
+        location.empty();
+        location.append("<option value=''>Select</option>");
+        $.ajax({
+            url: '/Nurse/GetLocation?cityId=' + cityId,
+            type: 'get',
+            success: function (response) {
+                if (response.length == 0) {
+                   alert("No Location Available For You")
+                }
+                $.each(response, function (key, val) {
+                    // location.append("<option value='" + val.Id + "'>" + val.LocationName + "</option>");
+                    var el = `${val.LocationName} &nbsp;<input type="checkbox" name="LocationIds" value="${val.Id}" class="locations"/>  </br>`;
+                    locationContainer.append(el);
+                });
+            },
+            error: function (error) {
+                alert("No Location Found for You.");
+            }
+        });
+    });
+</script>

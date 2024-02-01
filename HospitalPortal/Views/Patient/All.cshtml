@@ -1,0 +1,65 @@
+﻿@model int?
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style>
+    #mainContainer {
+        width: 60%;
+        margin-left: 1%;
+        margin-top: 1%;
+    }
+</style>
+
+
+    <div id="mainContainer">
+        <div class="row">
+            <div class="col-md-12">
+                <h3>Patient List</h3><hr />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+               <table id="tbl">
+                   <thead>
+                       <tr>
+                           <th>Name</th>
+                           <th>Email Id</th>
+                           <th>Mobile Number</th>
+                           <th>Location</th>
+                           <th>City</th>
+                           <th>State</th>
+                           <th>Action</th>
+                       </tr>
+                   </thead>
+                 
+               </table>
+            </div>
+        </div>
+
+    </div>
+
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.18/css/jquery.dataTables.min.css" />
+<script src="/Scripts/Library/jquery-1.7.1.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js"></script>
+<script>
+    var oTable = $( '#tbl').dataTable({
+        "bServerSide": true ,
+        "sAjaxSource": "/Patient/GetPatientList?rwaId="+@Model,
+        "sServerMethod": "POST" ,
+        "aoColumns": [
+        { "mData": "PatientName" },
+        { "mData": "EmailId" },
+        { "mData": "MobileNumber" },
+        { "mData": "Location" },
+        { "mData": "CityName" },
+        { "mData": "StateName" },
+        {
+            "mData": function (o) {
+                return "<a href='/Patient/Edit?Id="+o.Id+"' class='btn btn-info'><i class='fa fa-pencil'></i></a>";
+            }
+        }
+        ],
+    });
+</script>

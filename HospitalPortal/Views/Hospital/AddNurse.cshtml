@@ -1,0 +1,33 @@
+﻿@model HospitalPortal.Models.ViewModels.HospitalNurseDTO
+@{
+    ViewBag.Title = "AddNurse";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Add Nurse</h2>
+
+<div style="margin:auto; width:80%">
+    <a href="ShowNurse?hospitalId=@Model.Hospital_Id" class="btn btn-primary">Show All</a>
+    @using (Html.BeginForm())
+    {
+        <div class="row">
+            <div class="col-md-3">Name Of Nurse</div>
+            <div class="col-md-3">@Html.TextBoxFor(a => a.NurseName, new { @class="form-control", PlaceHolder="Nurse Name"})</div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">Type Of Nurse</div>
+            <div class="col-md-3">@Html.DropDownListFor(a => a.NurseType_Id, Model.NurseTypeList, "Select", new { @class = "form-control" })</div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                @if (TempData["msg"] != null)
+                {
+                    <h3>@TempData["msg"]</h3>
+                }
+            </div>
+            <div class="col-md-3">
+                <input type="submit" />
+            </div>
+        </div>
+    }
+</div>

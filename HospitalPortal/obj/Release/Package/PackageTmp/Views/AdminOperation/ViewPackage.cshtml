@@ -1,0 +1,56 @@
+﻿@model HospitalPortal.Models.ViewModels.CompleteCheckup
+
+@{
+    ViewBag.Title = "ViewPackage";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>View Packages</h2>
+
+<div class="row">
+    <div class="col-md-6">
+        @Html.ActionLink("Add More", "AddPackage", null, new { @class = "btn btn-info" })
+    </div>
+</div>
+
+@if (Model.showDesc != null)
+{
+    <div style="margin-top:3%">
+        <table class="table table-bordered">
+            <thead>
+                <tr style="background-color:#5d6c8a;color:#ffffff" >
+                    <th>Package Name</th>
+                    
+                    <th>Amount</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var item in Model.showDesc)
+                {
+                    <tr>
+                        <td>@item.PackageName</td>
+                        @{ 
+                            double? totalAmt = item.TestAmt - item.DiscountAmt;
+                            double? gstAmt = ((totalAmt * item.gst / 100));
+                            double? totalAmt1 = totalAmt + gstAmt;
+                        }
+                        <td>@Math.Round(Convert.ToDouble(@totalAmt1))</td>
+                        <td> 
+                            <a href="/AdminOperation/DeleteHealthPackage?Id=@item.Id"  class="btn btn-danger" onclick="return confirm('Are you sure？')"><i class="fa fa-trash-o"></i></a>
+                            <a href="/AdminOperation/ViewHealthTest?Id=@item.Id" class="btn btn-primary" ><i class="fa fa-eye"></i></a>
+                            <a href="/AdminOperation/EditPacakge?Id=@item.Id" class="btn btn-primary" onclick="return confirm('Are you sure wants to edit？')"><i class="fa fa-pencil"></i></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+    </div>
+}
+else
+{
+    <span>No Records</span>
+}
+

@@ -1,0 +1,77 @@
+﻿@model HospitalPortal.Models.ViewModels.VehicleList
+@{
+    ViewBag.Title = "ViewVehicle";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Requested Vehicle Type List</h2>
+
+<style>
+    #main{
+        width:100%;
+    }
+</style>
+
+<div id="main">
+    @if (Model.vahan_suchi == null)
+    {
+        @TempData["msg"]
+    }
+    else
+    {
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Vehicle Name</th>
+                <th>0-5 km</th>
+                <th>6-10 km</th>
+                <th>11-20 km</th>
+                <th>21-40 km</th>
+                <th>41-60 km</th>
+                <th>61-80 km</th>
+                <th>81-100 km</th>
+                <th>101-150 km</th>
+                <th>151-200 km</th>
+                <th>201-250 km</th>
+                <th>251-300 km</th>
+                <th>301-350 km</th>
+                <th>351-400 km</th>
+                <th>401-450 km</th>
+                <th>451-500 km</th>
+                <th>Above 500 km</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.vahan_suchi)
+            {
+                <tr>
+                    <td>@item.VehicleTypeName</td>
+                    <td>@item.under5KM</td>
+                    <td>@item.under6_10KM</td>
+                    <td>@item.under11_20KM</td>
+                    <td>@item.under21_40KM</td>
+                    <td>@item.under41_60KM</td>
+                    <td>@item.under61_80KM</td>
+                    <td>@item.under81_100KM</td>
+                    <td>@item.under100_150KM</td>
+                    <td>@item.under151_200KM</td>
+                    <td>@item.under201_250KM</td>
+                    <td>@item.under251_300KM</td>
+                    <td>@item.under301_350KM</td>
+                    <td>@item.under351_400KM</td>
+                    <td>@item.under401_450KM</td>
+                    <td>@item.under451_500KM</td>
+                    <td>@item.Above500KM</td>
+                    <td>
+                    @if (item.IsApproved == false)
+                    {
+                        <a href="/Common/UpdateList?id=@item.Id" class="btn btn-primary">Not Approved</a>
+                    }
+                    
+                </tr>
+            }
+        </tbody>
+    </table>
+    }
+</div>

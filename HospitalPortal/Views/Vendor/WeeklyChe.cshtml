@@ -1,0 +1,96 @@
+﻿@model HospitalPortal.Models.ViewModels.ReportDetails
+@{
+    ViewBag.Title = "ViewReport";
+}
+<link href="/css/bootstrap.min.css" rel="stylesheet" />
+
+
+@using (Html.BeginForm())
+{
+    <div class="row">
+        <div class="col-md-4">
+            @Html.TextBoxFor(a => a.RegistrationDate, new { @class = "datepicker form-control", required = "required" })
+        </div>
+        <div class="col-md-4">
+            <input type="button" id="test" value="Search" class="btn btn-primary" />
+        </div>
+    </div>
+
+
+}
+@if (Model.Vendors == null)
+{
+    if (TempData["msg"] != null)
+    {
+        <h2 style="color:blueviolet">
+            @TempData["msg"]
+        </h2>
+    }
+}
+else
+{
+
+    <table id="tables" class="table table-responsive">
+        <thead>
+            <tr>
+                <th>
+                    Vendor Name
+                </th>
+                <th>
+                    Company Name
+                </th>
+                <th>
+                    Total Amount
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Vendors)
+            {
+                <tr>
+                    <td>
+                        @item.Name
+                    </td>
+                    <td>
+                        @item.Name1
+                    </td>
+                    @{
+
+                    }
+                    <td>
+                        @item.Counts
+                    </td>
+                </tr>
+                        }
+        </tbody>
+    </table>
+                        }
+
+<link href="~/css/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
+
+<script>
+
+
+    $(".datepicker").datepicker().datepicker('setdate', 'today');
+
+
+
+        $("#test").click(function () {
+            debugger
+            var date = $("#RegistrationDate").val();
+            $.ajax({
+                url: "/Vendor/WeeklyChe?week=" + date + "",
+                type: "get",
+                success: function (response) {
+                    console.log(response);
+                    $("#prevAtt").html(response);
+                },
+                error: function (error) {
+                    console.log(error.responseText);
+
+                }
+            });
+
+        });
+</script>

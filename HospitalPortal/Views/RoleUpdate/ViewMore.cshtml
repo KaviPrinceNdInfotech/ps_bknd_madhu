@@ -1,0 +1,56 @@
+﻿@model HospitalPortal.Models.ViewModels.UpdateDepartment
+@{
+    ViewBag.Title = "ViewMore";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Added Department and Specialist List</h2>
+<div id="main">
+    @if (Model.DepartmentList == null)
+    {
+        <h3>No Records</h3>
+    }
+    else
+    {
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Department</th>
+                    <th>Specialist</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.DepartmentList)
+                {
+            <tr>
+                <td>@item.Department</td>
+                <td>@item.Specialist</td>
+                <td>
+                    @if(item.IsApproved == false)
+                    {
+                        <span style="color:red">Not Approved</span>
+                    }
+                        else
+                        {
+                        <span style="color:green">Approved</span>
+                        }
+
+
+                    @if (item.IsDeleted == false)
+                    {
+                        <span style="color:red">Not Deleted</span> 
+                    }
+                    else
+                    {
+                        <span style="color:green">Delete</span>
+                    }
+                </td>
+            </tr>
+            }
+            </tbody>
+        </table>
+    }
+
+</div>
+

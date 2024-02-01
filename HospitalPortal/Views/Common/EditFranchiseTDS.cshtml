@@ -1,0 +1,29 @@
+﻿@model HospitalPortal.Models.ViewModels.FranchiseTDSDTO
+
+@{
+    ViewBag.Title = "EditFranchiseTDS";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<h2 style="text-align:center">Edit Franchise TDS</h2>
+<div style="margin:auto; width:90%">
+    @using (Html.BeginForm("EditFranchiseTDS", "Common", FormMethod.Post))
+    {
+        @Html.HiddenFor(a => a.Id)
+        @Html.HiddenFor(a => a.IsDeleted)
+        @Html.HiddenFor(a => a.Name)
+        @Html.HiddenFor(a => a.Department)
+        <div class="row" style="margin-bottom:3%">
+            <div class="col-md-3">
+                @Html.TextBoxFor(a => a.Amount, new { @class = "form-control" })
+            </div>
+            <div class="col-md-3">
+                <input type="submit" value="Submit" class="btn btn-default" />
+            </div>
+        </div>
+        if (TempData["msg"] != null)
+        {
+            <h4>@TempData["msg"]</h4>
+        }
+    }
+</div>
+

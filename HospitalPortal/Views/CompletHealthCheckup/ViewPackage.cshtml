@@ -1,0 +1,44 @@
+﻿@model HospitalPortal.Models.ViewModels.CompleteCheckup
+
+@{
+    ViewBag.Title = "ViewPackage";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>View Package</h2>
+
+@if (Model.showDesc != null)
+{
+    <div style="margin-top:3%">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Package Name</th>
+                    <th>Test Name</th>
+                    <th>Test Description</th>
+                    <th>Amount</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var item in Model.showDesc)
+                {
+                    <tr>
+                        <td>@item.PackageName</td>
+                        <td>@item.Name </td>
+                        <td>@item.TestDesc</td>
+                        <td>@item.TestAmount</td>
+                        <td><a href="/CompletHealthCheckup/DeleteDesc?HealthId=@item.Id" class="btn btn-danger" onclick="return confirm('Are you sure？')">Delete</a></td>
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+    </div>
+}
+else
+{
+    <span>No Records</span>
+}
+

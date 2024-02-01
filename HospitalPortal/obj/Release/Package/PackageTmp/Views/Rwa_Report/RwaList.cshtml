@@ -1,0 +1,58 @@
+﻿@model HospitalPortal.Models.ViewModels.rwaReport
+@{
+    ViewBag.Title = "RwaList";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>RwaList</h2>
+@if (Model.rwaList == null)
+{
+    <h2>Currently, No Records Present </h2>
+}
+else
+{
+<table id="table_id" class="display">
+    <thead>
+        <tr>
+            <th>
+                Authority Name
+            </th>
+            <th>
+                No. Of Patient Reg.
+            </th>
+            <th>
+                Payable Amount
+            </th>
+            <th>
+                Action
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.rwaList)
+        {
+            <tr>
+                <td>@item.AuthorityName</td>
+                <td>@item.Counts</td>
+                @{
+                    double amt = item.Counts * ViewBag.Payment;
+                }
+                <td>
+                    @amt
+                </td>
+                <td><a href="/Rwa_Report/PatientList?Id=@item.Id" class="btn btn-primary">View Details</a></td>
+            </tr>
+                    }
+    </tbody>
+</table>
+                    }
+
+<script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
+@*<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>*@
+<script src="https://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css">
+
+<script type="text/javascript">
+        $('#table_id').DataTable();
+</script>
+

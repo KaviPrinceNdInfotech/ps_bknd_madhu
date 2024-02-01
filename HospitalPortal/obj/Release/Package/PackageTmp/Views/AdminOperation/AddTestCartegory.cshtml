@@ -1,0 +1,79 @@
+﻿@model HospitalPortal.Models.ViewModels.AddTestByLabDTO
+@{
+    ViewBag.Title = "AddTestCartegory";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Add Test Cartegory</h2>
+
+<br />
+<style>
+    #mainContainer {
+        margin: auto;
+    }
+</style>
+@if (TempData["msg"] != null)
+{
+    <span class="alert alert-success">
+        @TempData["msg"]
+    </span>
+    
+}
+
+
+<br /><br />
+
+<div id="mainContainer">
+    @using (Html.BeginForm())
+    {
+        <div class="row">
+            <div class="col-md-2"><b>Enter Test Category*</b></div>
+            <div class="col-md-3">
+                @Html.TextBoxFor(a => a.TestName, new { @class = "form-control" })
+            </div>
+            
+            @*<div class="col-md-2">Select Any Lab</div>
+                <div class="col-md-3">
+                    @Html.DropDownListFor(a => a.Lab_Id, Model.LabNameList, "Select Lab", new { @class = "form-control", required = "required" })
+                </div>*@
+           
+            <div class="col-md-2">
+                <input type="submit" class="btn btn-primary" value="Submit" />
+            </div>
+        </div>
+    }
+
+    <div style="margin-top:5%;">
+        @if (Model.TestCategoryList != null)
+        {
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Test Category Name</th>
+                        @*<th>Lab Name</th>*@
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.TestCategoryList)
+                    {
+                        <tr>
+                            <td>@item.TestName</td>
+                            @*<td>@item.LabName</td>*@
+                        <td>
+                            @*<a href="/AdminOperation/EditCategory?Id=@item.Id"><i class="fa fa-edit"></i></a>
+        <a href="/AdminOperation/DeleteCategory?Id=@item.Id" style="color:red"><i class="fa fa-trash-o"></i></a>*@
+                            @*@Html.ActionLink("Edit", "EditCategory", new { id = item.Id }, new { onclick = "return confirm('Are sure wants to Edit?');", @class = "btn btn-info" })*@
+                            @Html.ActionLink("Edit", "EditCategory", new { id = item.Id }, new { onclick = "return confirm('Are sure wants to Edit?');", @class = "btn btn-info" })
+
+                            @Html.ActionLink("Delete", "DeleteCategory", new { id = item.Id },
+new { onclick = "return confirm('Are sure wants to delete?');", @class = "btn btn-danger" })
+
+                        </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>

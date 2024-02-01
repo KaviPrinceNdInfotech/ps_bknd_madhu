@@ -1,0 +1,99 @@
+﻿@model HospitalPortal.Models.ViewModels.TDSMasterDTO
+
+@{
+    ViewBag.Title = "TDS";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Add TDS</h2>
+
+<div style="margin:auto; width:90%">
+    @using (Html.BeginForm("AddTDS", "Common", FormMethod.Post))
+    {
+        <div class="row" style="margin-bottom:3%">
+            <div class="col-md-3">
+                <select name="Name" id="Name" class="form-control">
+                    <option value="">
+                        Select Any
+                    </option>
+                    <option value="Doctor">
+                        Doctor
+                    </option>
+                    <option value="Ambulance">
+                        Ambulance
+                    </option>
+                    <option value="Driver">
+                        Driver
+                    </option>
+                    <option value="Vehicle">
+                        Vehicle
+                    </option>
+                    <option value="Health">
+                        Health CheckUp
+                    </option>
+                    <option value="Lab">
+                        Lab
+                    </option>
+                    <option value="Chemist">
+                        Chemist
+                    </option>
+                    <option value="Nurse">
+                        Nurse
+                    </option>
+                    <option value="Hospital">
+                        Hospital
+                    </option>
+                    <option value="Employee">
+                        Employee
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <input type="text" name="Amount" id="Amount" placeholder="Enter the TDS Amount" class="form-control" />
+            </div>
+            <div class="col-md-3">
+                <input type="submit" value="Submit" class="btn btn-primary" />
+            </div>
+        </div>
+        if (TempData["msg"] != null)
+        {
+            <h4>@TempData["msg"]</h4>
+        }
+
+    }
+
+    @if (Model.TDSLIST.Count() <= 0)
+    {
+        <h2>No Records</h2>
+    }
+    else
+    {
+        <table class="table table-bordered">
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    TDS %
+                </th>
+                <th>
+                    Action
+                </th>
+            </tr>
+            <tbody>
+                @foreach (var item in Model.TDSLIST)
+                {
+                    <tr>
+                        <td>@item.Name</td>
+                        <td>@item.Amount % </td>
+                        <td><a href="/Common/Edit?Id=@item.Id" class="btn btn-primary" onclick="return confirm('Are You Sure to Edit?')">Edit</a>
+                            @*<a href="/Common/DeleteTDS?Id=@item.Id" class="btn btn-danger">Delete</a>*@
+                        @Html.ActionLink("Delete", "DeleteTDS", new { Id = @item.Id }, new {onclick= "return confirm('Are sure wants to delete?');", @class = "btn btn-danger" })  
+                        </td>
+                        
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

@@ -1,0 +1,150 @@
+﻿@model HospitalPortal.Models.ViewModels.EmployeeNameVM
+@{
+    ViewBag.Title = "Employee";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Employee List</h2>
+<div style="margin:auto; width:90%">
+    <div class="row" style="margin-bottom:6%;margin-top:3%;">
+        <div class="col-md-3">
+            <a href="/SalaryMaster/ViewHistory" class="btn btn-primary">Salary Status</a>
+        </div>
+@using (Html.BeginForm())
+{
+        <div class="col-md-3">
+            <input type="text" name="term" id="term" class="form-control" placeholder="Search By Name" />
+        </div>
+        <div class="col-md-3">
+            <input type="button" id="click" class="btn btn-primary" value="Find" />
+        </div>
+}
+        </div>
+    @*excel*@
+    @*<div class=" row">
+        <div class="col-md-3">
+            <div class=" form-group">
+                <a href="@Url.Action("DownloadExcel", "SalaryMaster")" >
+                    <img src="https://www.pinclipart.com/picdir/big/178-1780962_download-105-free-excel-icons-here-excel-download.png" alt="List View" style="width: 55px;">
+                </a>
+            </div>
+        </div>
+    </div>*@
+    @if (Model.Emp_Detail == null)
+    {
+        @TempData["msg"]
+    }
+    else
+    {
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>
+                        Employee Name
+                        (Employee Id)
+                    </th>
+                    <th>
+                        Salary
+                    </th>
+                    <th>
+                        Leaves!!
+                    </th>
+                    <th>
+                        Action1
+                    </th>
+                    <th>
+                        Month Salary
+                    </th>
+                    <th>
+                        Action2
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Emp_Detail)
+                {
+                    <tr>
+                        <td>
+                            <input type="hidden" id="val" value="@item.Id" />
+                            @item.EmployeetName (<span style="color:red">@item.EmployeeId</span>)
+                        </td>
+                        <td><span id="salary">@item.Salary</span></td>
+                        <td><input type="text" class="form-control" id="leave" required="required" /></td>
+                        <td><input type="button" value="Calculate" onclick="cal(this)" class="btn btn-danger" /></td>
+                        <td><span id="total"></span></td>
+                        <td>
+                            <input type="button" value="Generate" onclick="generate(this)" id="generate" class="btn btn-danger" />
+                            @*<input type="button" value="Generate" onclick="generate(this)" id="generate" class="btn btn-danger" />*@
+                            <p id="p"></p>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+<script src="~/js/jquery-1.11.1.min.js"></script>
+<script>
+
+    function cal(obj) {
+        debugger
+        var salary = $(obj).closest('tr').find('#salary').text();
+        var leave = $(obj).closest('tr').find('#leave').val();
+        var total = Math.round(salary - salary / 30 * leave);
+        $(obj).closest('tr').find('#total').text(total);
+    };
+
+    function generate(obj) {
+        debugger
+        var current = $(this);
+        var salary = $(obj).closest('tr').find('#total').text();
+        var Id = $(obj).closest('tr').find('#val').val();
+        $.ajax({
+            url: '/SalaryMaster/SaveSalary?Id='+Id+'&salary='+salary,
+            type: 'post',
+            contentType: 'application/json',
+        }).then(function (response) {
+
+                generateexcel(response);
+                //current.hide();
+                //$("p").append("<b>Saved</b>");
+                //alert("Your Request has been Completed");
+
+            //$(current).text('Saved');
+        });
+    };
+    @*function generateexcel(Id) {
+        debugger
+
+        var url = '@Url.Action("DownloadExcel", "SalaryMaster")' + '?Id=' + Id;
+
+        // Redirect the user to the constructed URL
+        window.location.href = url;
+    }*@
+    //    $.ajax({
+    //        url: '/SalaryMaster/DownloadExcel?Id=' + Id ,
+    //        type: 'post',
+    //        contentType: 'application/json',
+    //    }).then(function (response) {
+
+    //        var blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+
+    //            // Create a temporary URL for the blob
+    //            var url = window.URL.createObjectURL(blob);
+
+    //            // Create a link element and set its attributes to trigger the download
+    //            var a = document.createElement('a');
+    //            a.href = url;
+    //            a.download = 'excel_file.xlsx'; // Set the desired file name
+
+    //            // Programmatically click the link to initiate the download
+    //            a.click();
+
+    //            // Clean up resources
+    //            window.URL.revokeObjectURL(url);
+
+    //      //  $(current).text('Saved');
+    //    });
+    //};
+
+</script>

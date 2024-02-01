@@ -1,0 +1,45 @@
+﻿@model HospitalPortal.Models.ViewModels.ReportDTO
+@{
+    ViewBag.Title = "HealthCheckUp";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Health CheckUp</h2>
+@if (Model.ViewCmplteCheckUp == null)
+{
+
+    <span>No Records</span>}
+else
+{
+<table id="table_id" class="display">
+    <thead>
+        <tr>
+            <th>
+                Lab Name
+            </th>
+            <th>
+                Action
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.ViewCmplteCheckUp)
+        {
+            <tr>
+                <td>@item.LabName</td>
+                <td><a href="/Report/ViewHealthDetails?CenterId=@item.Center_Id" class="btn btn-primary">View Details</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
+}
+<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+
+
+<script src="https://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css">
+
+<script type="text/javascript">
+        $('#table_id').DataTable();
+</script>
+

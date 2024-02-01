@@ -1,0 +1,74 @@
+﻿
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_Home.cshtml";
+}
+<script src="~/Scripts/Library/angular.min.js"></script>
+<script src="~/Scripts/Controllers/loginCtrl.js"></script>
+
+<!-- banner1 -->
+<div class="banner1">
+    <div class="container">
+    </div>
+</div>
+
+<!-- //banner1 -->
+<!-- login -->
+<div class="login" ng-app="myApp" ng-controller="loginCtrl">
+    <div class="container">
+        <h6>Login</h6>
+        <h3>
+            Welcome to PS Wellness.Please enter your
+            <a href="/Home/Login">Login</a> details to login here.
+        </h3>
+        <form ng-submit="login(user)">
+            <input type="text" name="Name" ng-model="user.Username" class="form-control span12" } value="User Name" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'User Name';}" />
+            <input type="password" ng-model="user.Password" class="form-controlspan12 form-control lock" } name="Password" value="Password" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Password';}">
+            <div class="remember">
+                @*<div class="w3agile_checkbox1">
+                        <label class="checkbox"><input type="checkbox" name="Checkbox" checked=""><i> </i>Remember me</label>
+                    </div>*@
+                <div class="w3agile_forgot">
+                    <h4><a href="#" id="anchr">Forgot Password?</a></h4>
+                </div>
+                <div class="row">
+                    <input type="text" value="" id="txt" style="display:none;" />
+                    <input type="button" value="Button" id="btn" style="display:none;" />
+                </div>
+                <div class="clearfix"> </div>
+            </div>
+            <label style="color:{{color}}">
+                {{message}}
+            </label>
+            <input type="submit" value="Login">
+        </form>
+
+        <div class="agile_back_home">
+            <a href="/Home/Home">back to home</a>
+        </div>
+    </div>
+</div>
+<script src="~/HomeJS/jquery-2.1.4.min.js"></script>
+<script>
+
+
+    $('#anchr').click(function () {
+        debugger
+    $('#txt').show(); // show textbox
+    $('#btn').show(); //show button
+  });
+  $('#btn').click(function(){
+      let detail = $('#txt').val();
+      $.ajax({
+          url: "/Home/ForgotPassword?detail=" + detail,
+          type: "get",
+          success: function (response) {
+              console.log(response);
+          },
+          error: function (error) {
+              console.log(error.responseText);
+              msg.text("");
+          }
+      });
+  });
+</script>

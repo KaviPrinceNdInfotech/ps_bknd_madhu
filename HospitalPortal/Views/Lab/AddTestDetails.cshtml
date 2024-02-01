@@ -1,0 +1,88 @@
+﻿@model HospitalPortal.Models.ViewModels.AddTestByLabDTO
+@{
+    ViewBag.Title = "AddTestDetails";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    string role = HospitalPortal.Utility.UserIdentity.UserRole;
+}
+
+<h2 style="text-align:center">Add Lab Test</h2>
+
+
+<style>
+    #mainContainer{
+
+    }
+</style>
+
+@using (Html.BeginForm())
+{
+
+    <div style="margin-bottom:3%">
+        <a href="/Lab/ShowTest?id=@Model.Lab_Id" class="btn btn-primary">Show All</a>
+    </div>
+    
+    
+    <div id="mainContainer">
+        @if (TempData["msg"] != null)
+        {
+        <span class="alert alert-success">
+            @TempData["msg"]
+        </span>
+        }
+        @Html.HiddenFor(a=>a.Lab_Id)
+        <div class="row">
+            @*@if (role == "admin")
+            {
+                <div class="form-group" id="PackageNamesdiv">
+                    Enter Test Category *:
+                    @Html.TextBoxFor(a => a.TestName, new { @class = "form-control" })
+                </div>
+            }
+            else
+            {*@
+            <div class="col-md-3">Select Any Category</div>
+            <div class="col-md-5">
+              @Html.DropDownListFor(a => a.Test_Id, Model.Tests, "Select", new { @class = "form-control" })
+                <span style="color:red">If Test Not Available. Please(✓)</span>
+                @Html.CheckBoxFor(a => a.IsTestAvailable)
+                <div class="form-group" id="TestNamesdiv" style="display:none;">
+                    Enter Test Category *:
+                    @Html.TextBoxFor(a => a.TestName, new { @class = "form-control" })
+                </div>
+            </div>
+            @*}*@
+        </div>
+
+        <div class="row">
+            <div class="col-md-3">
+                Test Name
+            </div>
+            <div class="col-md-5">
+                @Html.TextAreaFor(a => a.TestDescription, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3">
+                Test Amount
+            </div>
+            <div class="col-md-5">
+                @Html.TextBoxFor(a => a.TestAmount, new { @class = "form-control" })
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-3">
+                <input type="submit" class="btn btn-primary" value="Submit" />           
+             </div>
+        </div>
+    </div>
+}
+
+<script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
+<script>
+    $("#IsTestAvailable").click(function () {
+        $("#TestNamesdiv").toggle();
+    });
+</script>

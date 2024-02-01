@@ -1,0 +1,145 @@
+﻿@model HospitalPortal.Models.ViewModels.UpdateDepartment
+@{
+    ViewBag.Title = "ViewMore";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2 style="margin-bottom:2%;">Requested Department &amp; Specialist</h2>
+<style>
+    #main{
+        width:60%;
+    }
+
+</style>
+<div id="main">
+    @using (Html.BeginForm("ViewMore","Common", FormMethod.Get))
+    {
+    <div class="row" style="margin-bottom:2%;">
+        <div class="col-md-4">
+            <select id="term" name="term" class="form-control" required="required">
+                <option value="">
+                    Select Any
+                </option>
+                <option value="Doctor">
+                    Doctor
+                </option>
+                <option value="Hospital">
+                    Hospital
+                </option>
+                <option value="Vendor">
+                    Vendor
+                </option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <input type="submit" value="Search" id="btnCheck" class="btn btn-primary" />
+        </div>
+    </div>
+    }
+    @if (Model.DepartmentList == null)
+    {
+        <h3>@TempData["msg"]</h3>
+    }
+    else
+    {
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Department</th>
+                    <th>Specialist</th>
+                    <th>Requested From</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.DepartmentList)
+                {
+            <tr>
+                <td>@item.Department</td>
+                <td>@item.Specialist</td>
+                <td>@item.Requested</td>
+                <td>
+                    @if (item.IsApproved == false)
+                    {
+                        <a href="/Common/updateDep?id=@item.Id" class="btn btn-primary">Not Approved/Decline</a>
+                    }
+                    else
+                    {
+                        <a href="" class="btn btn-danger">Approved</a>
+                    }
+
+                    <a href="/Common/deleteDep?id=@item.Id" class="btn btn-primary">Delete</a>
+                </td>
+            </tr>
+                }
+            </tbody>
+        </table>
+        }
+</div>
+<script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
+<script>
+    $("#btnCheck").click(function () {
+        debugger
+        var term = $("#tp").val();
+        if (term == "Doctor") {
+            $.ajax({
+                url: "/Common/ViewMore?term=" + term,
+                type: "get",
+                success: function (response) {
+                    console.log(response);
+                    $("#prevAtt").html(response);
+                },
+                error: function (error) {
+                    console.log(error.responseText);
+                    msg.text("");
+                }
+            });
+        }
+        if (term == "Hospital") {
+            $.ajax({
+                url: "/Common/ViewMore?term=" + term,
+                type: "get",
+                success: function (response) {
+                    console.log(response);
+                    $("#prevAtt").html(response);
+                },
+                error: function (error) {
+                    console.log(error.responseText);
+                    msg.text("");
+                }
+            });
+        }
+
+        if (term == "Vendor") {
+            $.ajax({
+                url: "/Common/ViewMore?term=" + term,
+                type: "get",
+                success: function (response) {
+                    console.log(response);
+                    $("#prevAtt").html(response);
+                },
+                error: function (error) {
+                    console.log(error.responseText);
+                    msg.text("");
+                }
+            });
+        }
+
+        //if (term == "Weekly") {
+        //    $.ajax({
+        //        url: "/ViewReport/WeeklyDoctor?term=" + term,
+        //        type: "get",
+        //        success: function (response) {
+        //            console.log(response);
+        //            $("#prevAtt").html(response);
+        //        },
+        //        error: function (error) {
+        //            console.log(error.responseText);
+        //            msg.text("");
+        //        }
+        //    });
+        //}
+    });
+</script>
+
+

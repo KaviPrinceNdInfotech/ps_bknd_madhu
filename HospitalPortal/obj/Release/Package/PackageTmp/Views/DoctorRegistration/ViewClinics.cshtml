@@ -1,0 +1,33 @@
+﻿@model HospitalPortal.Models.RequestModel.AddClinicDTO
+@{
+    ViewBag.Title = "ViewClinics";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>View Clinics</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Clinic Name</th>
+            <th>Available Time</th>
+            <th>Address</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var item in Model.Clinic)
+        {
+            <tr>
+                <td>@item.ClinicName</td>
+                <td>@item.AppointedTime</td>
+                <td>@item.FullAddress, @item.CityName, @item.StateName</td>
+                <td><a href="/DoctorRegistration/EditClinic?id=@item.Id" class="btn btn-primary"><i class="fa fa-pencil"></i></a>
+                    <a href="/DoctorRegistration/DeleteClinic?id=@item.Id" class="btn btn-danger"><i class="fa fa-trash-o"></i></a>
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>
+

@@ -1,0 +1,80 @@
+﻿@model HospitalPortal.Models.ViewModels.ReportDTO
+
+@{
+    ViewBag.Title = "ViewAll";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>
+                Patient Name
+            </th>
+            <th>
+                Patient Address
+            </th>
+            <th>
+                Mobile No.
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>@Model.ViewLabDetails.FirstOrDefault().PatientName</td>
+            <td>@Model.ViewLabDetails.FirstOrDefault().PatientAddress</td>
+            <td>@Model.ViewLabDetails.FirstOrDefault().ContactNumber</td>
+        </tr>
+    </tbody>
+</table>
+@if (Model.ViewLabDetails.Count() == 0)
+{
+    if (TempData["MSG"] != null)
+    {
+        <H2>@TempData["MSG"]</H2>
+    }
+}
+else {
+<h2 style="text-align:center">Test Taken</h2>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <td>Dated</td>
+            <td>Test Amount</td>
+            <td>Test</td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.ViewLabDetails)
+        {
+        <tr>
+            <td>
+                @if (item.TestDate1 != null)
+                {
+                    <p style="color:red">
+                        @item.TestDate1
+                </p>
+
+                }
+            </td>
+            <td>
+                &#8377; @item.Amount
+            </td>
+            <td>
+                <p style="color:red"> @item.TestName</p>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+<div class="row">
+    <div class="col-md-3">
+        <h2>Total Amount</h2>
+        @if (ViewBag.Total != null)
+        {
+            <h2 style="color:red">&#8377; @ViewBag.Total</h2>
+        }
+    </div>
+</div>
+}
+

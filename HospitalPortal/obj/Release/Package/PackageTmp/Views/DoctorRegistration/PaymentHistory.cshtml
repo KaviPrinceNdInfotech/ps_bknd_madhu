@@ -1,0 +1,54 @@
+﻿@model IEnumerable<HospitalPortal.Models.APIModels.ListPayment>
+
+@{
+    ViewBag.Title = "PaymentHistory";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Payment History</h2>
+<div style="margin:auto; width:90%">
+    @using (Html.BeginForm())
+    {
+        <div class="row" style="margin-bottom:2%;">|
+    <div class="col-md-3">
+        <input type="text" name="date" class="form-control datepicker" autocomplete="off" />
+    </div>
+            <div class="col-md-3">
+                <input type="submit" value="click" class="btn btn-primary" />
+            </div>
+    </div>
+        
+        
+    }
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Total Amount</th>
+                    <th>Appointment Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td> Rs. @item.Amount </td>
+                        <td>@item.AppointmentDate.Value.ToString("dd-MMM-yyyy")</td>
+                    </tr>
+                }
+                <tr>
+                    <td>
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    </td>
+                    <td>
+
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</div>
+<script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
+<link href="~/css/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
+<script>
+    $(".datepicker").datepicker().datepicker('setdate', 'today');
+</script>

@@ -1,0 +1,184 @@
+﻿@model HospitalPortal.Models.ViewModels.PayOutVM
+@{
+    ViewBag.Title = "Doctor";
+    Layout = "~/Views/Shared/_PayoutLayoutPage.cshtml";
+}
+
+<h2>Lab PayOut</h2>
+@*<div class=" row">
+    <div class="col-md-3">
+        <div class=" form-group">
+            <a href="@Url.Action("AdminLabExcel", "Payout")">
+                <img src="https://www.pinclipart.com/picdir/big/178-1780962_download-105-free-excel-icons-here-excel-download.png" alt="List View" style="width: 55px;">
+            </a>
+        </div>
+    </div>
+</div>*@
+@using (Html.BeginForm("Lab", "PayOut", FormMethod.Get))
+{
+<div class="row" style="margin-bottom: 2%;">
+    @*<fieldset>
+        <div class="col-md-3">
+            @Html.TextBoxFor(a => a.TestDate, new { @class = "datepicker form-control" })
+        </div>
+        <div class="col-md-3">
+            <input type="submit" class="btn btn-primary" id="test" value="Search" />
+        </div>
+    </fieldset>*@
+    <fieldset>
+        <div class="col-md-3">
+            @Html.TextBoxFor(a => a.LabName, new { @class = "form-control", placeholder="Search By Lab Name" })
+        </div>
+        <div class="col-md-3">
+            <input type="submit" class="btn btn-primary" value="Search" />
+        </div>
+    </fieldset>
+</div>
+}
+@if (Model.LabHistory == null)
+{
+        <h2 style="color:blueviolet">
+            @TempData["msg"]
+        </h2>
+}
+else
+{
+    <table id="tables" class="table table-responsive">
+        <thead>
+            <tr>
+                <th>
+                    User Id
+                </th>
+                <th>
+                    Lab Name
+                </th>
+                <th>
+                    Basic Amount
+                </th>
+                <th>
+                    Transaction Fee
+                </th>
+                <th>
+                    GST in %
+                </th>
+                <th>
+                    Total Amount
+                </th>
+                @*<th>Deducted Amout</th>*@
+                <th>
+                    Commission in %
+                </th>
+                <th>
+                    TDS in %
+                </th>
+                <th>
+                    Payable Amount
+                </th>
+                <th>
+                    Action
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.LabHistory)
+            {
+                <tr>
+                    <td>
+                        @item.lABId
+                    </td>
+                    <td>
+                        @item.LabName
+                    </td>
+                    <td>
+                        @item.Amount
+                    </td>
+                    @{
+                        double? razorpaycomm = @item.Amountwithrazorpaycomm;
+                        double? basicamt = @item.Amount;
+                        double? razarfeeamt = razorpaycomm - basicamt;
+
+                    }
+                    <td>@razarfeeamt</td>
+                    <td>
+                        @ViewBag.gstAmount
+                    </td>
+                    @{
+
+                        double? GSTAmt = (item.Amount * ViewBag.gstAmount) / 100;
+                        //double? WithGSTAmt = item.Amount + GSTAmt;
+                        double? WithGSTAmt = item.Amount + razarfeeamt - (GSTAmt);
+
+                    }
+                    <td>@WithGSTAmt</td>
+
+
+                    <td>@ViewBag.Amount</td>
+                    <td>@ViewBag.tdsAmount</td>
+                    @{
+
+                        //double? commAmt = (item.Amount * ViewBag.Amount) / 100;
+                        //double? tdsamt = (item.Amount * ViewBag.tdsAmount) / 100;
+                        //double? Value = item.Amount - (commAmt + tdsamt);
+                        double? commAmt = (item.Amount * ViewBag.Amount) / 100;
+                        double? tdsamt = (item.Amount * ViewBag.tdsAmount) / 100;
+                        double? Value = item.Amount - (commAmt + tdsamt);
+
+                    }
+
+                    <td>@Value</td>
+                    <td>
+                        <a href="/Payout/LabPay?Lab_Id=@item.Lab_Id&Amount=@Value" class="btn btn-primary">Pay</a>
+                    </td>
+                    <td>
+                        <a href="/Payout/ViewLabPayoutHistory?Id=@item.Lab_Id" class="btn btn-primary">View Payout History</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
+<link href="~/css/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
+
+<script>
+    $(".datepicker").datepicker().datepicker('setDate', 'today');
+
+
+        $("#test").click(function () {
+            debugger
+            var date = $("#TestDate").val();
+            $.ajax({
+                url: "/Payout/Lab?week=" + date + "",
+                type: "get",
+                success: function (response) {
+                    console.log(response);
+                    $("#prevAtt").html(response);
+                },
+                error: function (error) {
+                    console.log(error.responseText);
+                }
+            });
+
+        });
+
+        $("#test1").click(function () {
+            debugger
+            var name = $("#LabName").val();
+            $.ajax({
+                url: "/Payout/Lab?name=" + name + "",
+                type: "get",
+                success: function (response) {
+                    console.log(response);
+                    $("#prevAtt").html(response);
+                },
+                error: function (error) {
+                    console.log(error.responseText);
+
+                }
+            });
+
+        });
+</script>
+

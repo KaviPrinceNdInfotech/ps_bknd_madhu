@@ -1,0 +1,79 @@
+﻿@model HospitalPortal.Models.ViewModels.MainCategoryDTO
+@{
+    ViewBag.Title = "Add";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Add Vehicle Category</h2>
+
+<style>
+    #main {
+        width: 60%;
+    }
+</style>
+
+<div id="main">
+    @using (Html.BeginForm())
+    {
+        <div class="row">
+            <div class="col-md-4">
+                @Html.TextBoxFor(a => a.CategoryName, new { @class = "form-control", placeholder = "Enter the Category Name", required = "required" })
+            </div>
+            <div class="col-md-4">
+
+                <select id="AmbulanceType_id" name="AmbulanceType_id" class = "form-control", required = "required">
+                    <option value="">---Select---</option>  
+                    <option value="1">Regular</option> 
+                    <option value="2">Road Accident</option>  
+                    <option value="3">Funeral/MortuaryService</option>
+                </select>
+                @*@Html.DropDownList("AmbulanceType_id", new List<SelectListItem> {
+                @Html.DropDownList("Type", new List<SelectListItem> {
+               new SelectListItem() { Text="Normal Service", Value="normal"},
+               new SelectListItem() { Text="Ambulance Service", Value="normal"},
+                new SelectListItem() { Text="Funeral Service", Value="funeral"},
+               new SelectListItem() { Text="Regular", Value="Regular"},
+                    new SelectListItem() { Text="Road Accident", Value="Road Accident"},
+                    new SelectListItem() { Text="Funeral/MortuaryService", Value="Funeral/MortuaryService"},
+           }, "--- Select ---", new { @class = "form-control", required = "required" })*@
+            </div>
+            <div class="col-md-4">
+                <input type="submit" class="btn btn-primary" value="Submit" />
+            </div>
+        </div>
+    }
+
+
+    @if (Model.MainCategoryList == null)
+    {
+        <h2>@TempData["msg"]</h2>
+    }
+    else
+    {
+        <table class="table table-bordered" style="margin-top:3%;">
+            <thead>
+                <tr>
+                    <th>Category Name</th>
+                    <th>Type</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.MainCategoryList)
+                {
+                    <tr>
+                        <td>@item.CategoryName</td>
+                        <td>@item.Type</td>
+                        
+                        <td>
+                            @*<a href="/Category/Delete?Id=@item.Id" class="btn btn-primary">Delete</a>*@
+                            <a href="/Category/Delete?Id=@item.Id" class="btn btn-danger" onclick="return confirm('Are You Sure to Delete?')"><i class="fa fa-trash-o"></i></a>
+                           
+                            <a href="/Category/Edit?Id=@item.Id" class="btn btn-primary" onclick="return confirm('Are You Sure to Edit?')"><i class="fa fa-edit"></i></a>
+                        </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

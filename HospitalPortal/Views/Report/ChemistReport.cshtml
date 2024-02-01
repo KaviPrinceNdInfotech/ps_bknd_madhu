@@ -1,0 +1,44 @@
+﻿@model HospitalPortal.Models.ViewModels.ReportDTO
+
+@{
+    ViewBag.Title = "ChemistReport";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Chemist List</h2>
+
+<table id="table_id" class="display">
+    <thead>
+        <tr>
+            <th>
+                Chemist Name
+            </th>
+            <th>
+                Shop Name
+            </th>
+            <th>
+                Action
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.ChemistReport)
+        {
+            <tr>
+                <td>@item.ChemistName</td>
+                <td>@item.ShopName</td>
+                <td><a href="/Report/ViewChemistDetails?ChemistId=@item.Id" class="btn btn-primary">View Details</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+
+
+<script src="https://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css">
+
+<script type="text/javascript">
+        $('#table_id').DataTable();
+</script>
+

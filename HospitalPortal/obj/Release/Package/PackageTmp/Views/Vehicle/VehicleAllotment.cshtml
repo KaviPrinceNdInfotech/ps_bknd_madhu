@@ -1,0 +1,105 @@
+﻿@model HospitalPortal.Models.ViewModels.VehicleAllotmentDTO
+@{
+    ViewBag.Title = "VehicleAllotment";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Vehicle Allotment to Old Driver</h2>
+@*@using (Html.BeginForm())
+{
+    <div class="row">
+        <div class="col-md-3">
+            <h3>Select Any Type</h3>
+        </div>
+        <div class="col-md-3">
+            @Html.DropDownListFor(a => a.Id, Model.VehicleList, "Select", new { @class = "form-control" })
+        </div>
+        <div class="col-md-3">
+            <input type="submit" value="Search" class="btn btn-primary">
+        </div>
+    </div>
+}*@
+
+@using (Html.BeginForm("VehicleAllotment", "Vehicle"))
+{
+    <div class="row">
+        <div class="col-md-3" style="margin-top:-1%">
+            <h3>Enter Vehicle Number</h3>
+        </div>
+        <div class="col-md-3">
+            @Html.TextBoxFor(a => a.VehicleNumber, new {@class="form-control" })
+        </div>
+        <div class="col-md-3">
+            <input type="submit" value="Search" class="btn btn-primary">
+        </div>
+    </div>
+}
+
+<div style="margin-top:2%;">
+    @if (Model.VehicleLists == null)
+    {
+
+    }
+    else
+    {
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Vehicle Number</th>
+                    <th>Driver Name</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.VehicleLists)
+                {
+                    <tr>
+                        <td>@item.VehicleNumber</td>
+                        <td>@item.DriverName</td>
+                        <td><a href="/Vehicle/UpdateDriver?Id=@item.VehicleId" class="btn btn-primary">Update</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<script>
+    $("#VehicleNumber").autocomplete({
+        source: function (request, response) {
+            debugger
+            $.ajax({
+                url: '/Vehicle/GetVehicleNumberList',
+                data: { term: request.term },
+                type: 'POST',
+                success: function (data) {
+                    if (!data.length) {
+                        debugger
+                        var result = [
+                         {
+                             label: 'No Vehicle found',
+                             value: response.term
+                         }
+                        ];
+                        response(result);
+                    }
+                    else {
+
+                        response($.map(data, function (item) {
+                            debugger
+                            id = item.Id
+                            console.log(id);
+                            return {
+                                label: item.VehicleNumber,
+                                value: item.VehicleNumber,
+                                id: item.Id,
+                            };
+                        }));
+                    }
+                }
+            });
+        },
+  });
+</script>

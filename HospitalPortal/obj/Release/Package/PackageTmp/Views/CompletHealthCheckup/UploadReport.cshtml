@@ -1,0 +1,107 @@
+﻿@model HospitalPortal.Models.ViewModels.CheckUpReportDTO
+
+@{
+    ViewBag.Title = "UploadReport";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Upload Report</h2>
+
+@using (Html.BeginForm("UploadPatientReport", "CompletHealthCheckup", FormMethod.Post, new { @encType = "multipart/form-data" }))
+{
+    
+    <div class="row">
+        <div class="col-md-3">Patient Reg. No.* :</div>
+        <div class="col-md-3">
+           @Html.TextBoxFor(a => a.PatientRegNo)
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-12">
+            <span id="addNewabt" class="btn btn-info">
+                + Add New
+            </span>
+        </div>
+    </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table table-bordered" id="attrTable">
+                        <thead>
+                            <tr>
+                                <th>Test Name</th>
+                                <th>Report</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    @Html.HiddenFor(a => a.UploadHealthReport[0].Id, new { id = "Id" })
+                                    @*<input type="text" name="Id" id="Id" class="form-control" />*@
+                                    <input type="text" name="term" id="txtPd" class="form-control txtPd" placeholder="Enter Test Name" />
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(a => a.UploadHealthReport[0].File, new { @class = "form-control ", type = "file" })
+                                </td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+    if (TempData["msg"] != null)
+    {
+    <div class="form-group">
+        @TempData["msg"]
+    </div>
+    }
+    <div class="row">
+        <div class="col-md-3">
+            <input type="submit" value="submit" class="btn btn-primary" />
+        </div>
+    </div>
+}
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>  
+<script src="~/js/bulkEntry.js"></script>
+<script src="~/js/TestList.js"></script>
+<script>
+    $("#PatientRegNo").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: '/CompletHealthCheckup/GetPatientName',
+                data: { term: request.term },
+                type: 'POST',
+                success: function (data) {
+                    if (!data.length) {
+                        debugger
+                        var result = [
+                         {
+                             label: 'No Patient found',
+                             value: response.term
+                         }
+                        ];
+                        response(result);
+                    }
+                    else {
+                      
+                        response($.map(data, function (item) {
+                            debugger
+                            id = item.Id
+                            console.log(id);
+                            return {
+                                label: item.PatientRegNo,
+                                value: item.PatientRegNo,
+                                id: item.Id,
+                            };
+                        }));
+                    }
+                }
+            });
+        },
+    });
+</script>

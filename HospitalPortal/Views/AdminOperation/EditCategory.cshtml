@@ -1,0 +1,26 @@
+﻿@model HospitalPortal.Models.DomainModels.LabTest
+
+@{
+    ViewBag.Title = "EditCategory";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Edit Category</h2>
+@using (Html.BeginForm())
+{
+    <div style="margin-bottom:3%">
+        <a href="/AdminOperation/ShowTest" class="btn btn-primary">Show All</a>
+    </div>
+        <div class="row">
+
+            <div class="col-md-3">  Enter Test Category *:</div>
+            <div class="col-md-3">
+                @Html.HiddenFor(a =>a.Id)
+                @Html.TextBoxFor(a => a.TestName, new { @class = "form-control" })
+            </div>
+            <div class="col-md-3">
+                <input type="submit" class="btn btn-primary" value="Submit" />
+            </div>
+        </div>
+}
+

@@ -1,0 +1,22 @@
+﻿@{
+    ViewBag.Title = "AddPackage";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Content/chosen.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-1.9.1.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script src="~/Scripts/chosen.jquery.min.js"></script>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            @Html.ListBox("lstChosenEmployee", ViewBag.Employees as SelectList, new { style = "width:90%" })
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#lstChosenEmployee").chosen();
+    });
+</script>

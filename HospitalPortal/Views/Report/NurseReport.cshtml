@@ -1,0 +1,67 @@
+﻿@model HospitalPortal.Models.ViewModels.ReportDTO
+@{
+    ViewBag.Title = "NurseReport";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>NurseReport</h2>
+<div style="margin:auto; width:90%">
+    @using (Html.BeginForm())
+    {
+    <div class="row">
+        <div class="col-md-3">
+            Select Nurse Type
+        </div>
+        <div class="col-md-3">
+            @Html.DropDownListFor(x => x.Id, Model.NurseTypeList, "Select Nurse Type", new { @class = "form-control", style = "height: calc(3.25rem + 2px) !important;" })
+        </div>
+        <div class="col-md-3">
+            <input type="submit" value="Filter" class="btn btn-primary" />
+        </div>
+    </div>
+    }
+    <div style="margin-top:3%">
+        @if (Model.NurseList == null)
+        {
+
+        }
+        else
+        {
+            <table id="table_id" class="display">
+                <thead>
+                    <tr>
+                        <th>
+                            Nurse Name
+                        </th>
+                        <th>
+                            Nurse Type
+                        </th>
+                        <th>
+                            Action
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.NurseList)
+                    {
+                        <tr>
+                            <td>@item.NurseName</td>
+                            <td>@item.NurseTypeName</td>
+                            <td><a href="/Report/ViewNurseList?Id=@item.Id" class="btn btn-primary">View Details</a></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+
+
+    <script src="https://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css">
+
+    <script type="text/javascript">
+        $('#table_id').DataTable();
+    </script>
+
+</div>

@@ -1,0 +1,188 @@
+﻿@model HospitalPortal.Models.ViewModels.VehicleTypeDTO
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+}
+
+<style>
+    #mainContainer
+    {
+        width:60%;
+        margin-top:1%;
+        margin-left:1%;
+    }
+
+</style>
+
+@using (Html.BeginForm())
+{
+<div id="mainContainer">
+
+    <div class="row">
+        <div class="col-md-6">
+            @Html.ActionLink("Show All", "All", null, new { @class = "btn btn-info" })
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Add Vehicle Type</h3>
+        </div>
+    </div>
+    
+
+    @if (TempData["msg"] != null)
+    {
+        string msg = TempData["msg"].ToString();
+        <div class="row">
+            <div class="col-md-12">
+                @if (msg == "ok")
+                {
+                    <div class="alert alert-success">
+                        Saved Successfully.
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-danger">
+                        @msg
+                    </div>
+                }
+            </div>
+        </div>
+    }
+    
+    @*@Html.HiddenFor(a => a.Id)
+        @Html.HiddenFor(a=>a.IsDeleted)*@
+    @*@Html.Partial("~/Views/Shared/_DisplayMessage.cshtml")*@
+
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                Vehicle Category*@Html.DropDownListFor(a => a.CategoryId, Model.CategoryList, "Select", new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                Vehicle Type * @Html.TextBoxFor(a => a.VehicleTypeName, new { @class = "form-control" })
+                <span class="red">
+                    @Html.ValidationMessageFor(a => a.VehicleTypeName)
+                </span>
+            </div>
+            <div style="margin-top:2%">
+                <h2>Price List</h2>
+                <b>Under 500 km Price</b>
+                <table class="table-bordered table">
+                    <thead>
+                        <tr>
+                            <th>Serial No.</th>
+                            <th>Distance (IN KM)</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>0 - 05</td>
+                            <td>@Html.TextBoxFor(a => a.under5KM, new { @class = "form-control" })</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>6 - 10</td>
+                            <td>@Html.TextBoxFor(a => a.under6_10KM, new { @class = "form-control" })</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>11-20</td>
+                            <td>@Html.TextBoxFor(a => a.under11_20KM, new { @class = "form-control" })</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>21 - 40</td>
+                            <td>@Html.TextBoxFor(a => a.under21_40KM, new { @class = "form-control" })</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>41-60</td>
+                            <td>@Html.TextBoxFor(a => a.under41_60KM, new { @class = "form-control" })</td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td>61 - 80</td>
+                            <td>@Html.TextBoxFor(a => a.under61_80KM, new { @class = "form-control" })</td>
+                        </tr>
+                        <tr>
+                            <td>7</td>
+                            <td>81-100</td>
+                            <td>@Html.TextBoxFor(a => a.under81_100KM, new { @class = "form-control" })</td>
+                        </tr>
+                        <tr>
+                            <td>8</td>
+                            <td>101-150</td>
+                            <td>@Html.TextBoxFor(a => a.under100_150KM, new { @class = "form-control" })</td>
+                        </tr>
+                        <tr>
+                            <td>9</td>
+                            <td>151-200</td>
+                            <td>@Html.TextBoxFor(a => a.under151_200KM, new { @class = "form-control" })</td>
+                        </tr>
+                        <tr>
+                            <td>10</td>
+                            <td>201-250</td>
+                            <td>@Html.TextBoxFor(a => a.under201_250KM, new { @class = "form-control" })</td>
+                        </tr>
+                        <tr>
+                            <td>11</td>
+                            <td>251-300</td>
+                            <td>@Html.TextBoxFor(a => a.under251_300KM, new { @class = "form-control" })</td>
+                        </tr>
+                        <tr>
+                            <td>12</td>
+                            <td>301-350</td>
+                            <td>@Html.TextBoxFor(a => a.under301_350KM, new { @class = "form-control" })</td>
+                        </tr>
+                        <tr>
+                            <td>13</td>
+                            <td>351-400</td>
+                            <td>@Html.TextBoxFor(a => a.under351_400KM, new { @class = "form-control" })</td>
+                        </tr>
+                        <tr>
+                            <td>14</td>
+                            <td>401-450</td>
+                            <td>@Html.TextBoxFor(a => a.under401_450KM, new { @class = "form-control" })</td>
+                        </tr>
+                        <tr>
+                            <td>15</td>
+                            <td>451-500</td>
+                            <td>@Html.TextBoxFor(a => a.under451_500KM, new { @class = "form-control" })</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div style="margin-top:2%">
+                <b>Above 500 km Price</b>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Serial No.</th>
+                            <th> K.M. Reading Garage to Garage</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Start up point to dropping point and back to start up point</td>
+                            <td>@Html.TextBoxFor(a => a.Above500KM, new { @class = "form-control" })</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-info" />
+            </div>
+        </div>
+    </div>
+</div>
+
+}

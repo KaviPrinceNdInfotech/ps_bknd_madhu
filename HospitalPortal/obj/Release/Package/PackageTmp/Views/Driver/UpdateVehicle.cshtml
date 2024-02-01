@@ -1,0 +1,31 @@
+﻿@model HospitalPortal.Models.ViewModels.VehicleAllotmentDTO
+
+@{
+    ViewBag.Title = "UpdateVehicle";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Update Vehicle</h2>
+
+@using (Html.BeginForm("Update", "Driver", FormMethod.Post))
+{
+
+    if (TempData["msg"] != null)
+    {
+        <div class="alert alert-info" > @TempData["msg"]</div>
+    }
+
+    @Html.HiddenFor(a=>a.Id)
+
+    <div class="row">
+        <div class="col-md-3" style="margin-top:-1%">
+            <h3>Enter Vehicle Number</h3>
+        </div>
+        <div class="col-md-3">
+            @Html.TextBoxFor(a => a.VehicleNumber, new { @class = "form-control" })
+        </div>
+        <div class="col-md-3">
+            <input type="submit" value="Update" class="btn btn-primary">
+        </div>
+    </div>
+}

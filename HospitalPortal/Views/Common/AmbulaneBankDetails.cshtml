@@ -1,0 +1,43 @@
+﻿@model HospitalPortal.Models.ViewModels.AmbulaneBankDetailsVM
+@{
+    ViewBag.Title = "AmbulaneBankDetails";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Ambulane Bank Details</h2>
+
+
+@if (Model.BankDetails != null)
+{
+    
+    <table class="table table-bordered">
+        <tr>
+            <th>Account No</th>
+            <td>@Model.AccountNo</td>
+        </tr>
+        <tr>
+            <th>Branch Name</th>
+            <td>@Model.BranchName</td>
+        </tr>
+        <tr>
+            <th>Account Holder Name</th>
+            <td>@Model.HolderName</td>
+        </tr>
+        <tr>
+            <th>Branch Address</th>
+            <td>@Model.BranchAddress</td>
+        </tr>
+        <tr>
+            <th>IFSC Code</th>
+            <td>@Model.IFSCCode</td>
+        </tr>
+        <tr>
+            <th>Cheque Image</th>
+            <td><img src="~/Images/@Model.CancelCheque" /></td>
+        </tr>
+    </table>
+}
+else
+{
+    <span>No Records</span>
+}

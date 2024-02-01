@@ -1,0 +1,40 @@
+﻿@model HospitalPortal.Models.RequestModel.refundAmountDTO
+@{
+    ViewBag.Title = "RefundMoney";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Refund Money</h2>
+@if (TempData["msg"] != null)
+{
+    string msg = TempData["msg"].ToString();
+    <div class="row">
+        <div class="col-md-12">
+            @if (msg == "Successfully Refunded")
+            {
+                <div class="alert alert-success">
+                    Successfully Refunded.
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-danger">
+                    @msg
+                </div>
+            }
+        </div>
+    </div>
+}
+<br />
+@using (Html.BeginForm())
+{
+    <div class="row">
+        <div class="col-md-3">
+            @Html.HiddenFor(a => a.Patient_Id)
+            @Html.TextBoxFor(a => a.Amount, new { @class = "form-control" })
+        </div>
+        <div class="col-md-3">
+            <input type="submit" class="btn btn-primary" value="Refund" />
+        </div>
+    </div>
+}

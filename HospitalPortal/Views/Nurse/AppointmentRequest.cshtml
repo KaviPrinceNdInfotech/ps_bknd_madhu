@@ -1,0 +1,89 @@
+﻿@model IEnumerable<HospitalPortal.Models.ViewModels.NurseAppointmentRequestList>
+@{
+    ViewBag.Title = "AppointmentRequest";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style>
+    #main{
+        width:80%;
+        margin-left:1%;
+    }
+    .row{
+        margin-top:1%;
+    }
+</style>
+
+<div id="main">
+    <h2>Appointment Request</h2>
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <td>Requsest Date</td>
+                        <td>Name</td>
+                        <th>Mobile No</th>
+                        <th>Location</th>
+                        <th>Service Date</th>
+                        <th>Service Type</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                
+                <tbody>
+                  @foreach (var item in Model)
+                  {
+                    <tr>
+                        <td>@item.RequestDate.ToString("dd-MMM-yyyy")</td>
+                        <td>@item.PatientName</td>
+                        <td>@item.MobileNumber</td>
+                        <td>@item.LocationName</td>
+                        <td>
+                        @if(item.ServiceType == "Other")
+                            {
+                             @item.StartDate.Value.ToString("dd-MMM-yyyy")  <span>- @item.EndDate.Value.ToString("dd-MMM-yyyy")</span>
+                        }
+                        else 
+                        {
+                            @item.ServiceDate.Value.ToString("dd-MMM-yyyy")
+                        }
+
+                        </td>
+                        <td>
+                            @if (item.ServiceType == "Other")
+                            {
+                              <span>24 * 7 Service</span>
+                            }
+                            else if (item.ServiceType == "12HrSlot")
+                            {
+                                <span>12 Hrs Service for @item.ServiceTime</span>
+                            }
+                            else
+                            {
+                                <span>24 Hrs Service</span>
+                            }
+
+                        </td>
+                        <td>
+                            @if(item.ServiceAcceptanceDate == null )
+                            {
+                                <a href="/Nurse/AcceptAppointent?serviceId=@item.Id" class="btn btn-info">Accept</a>
+                            }
+                            else
+                            {
+                                <span>Request Accepted at : @item.ServiceAcceptanceDate.Value.ToShortTimeString()
+                            @item.ServiceAcceptanceDate.Value.ToString("dd-MMM-yyyy")
+                            </span>
+                            }
+                        </td>
+                    </tr>
+                  }
+                      
+                </tbody>
+                              
+            </table>
+        </div>
+    </div>
+</div>
+

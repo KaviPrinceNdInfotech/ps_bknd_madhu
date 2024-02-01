@@ -1,0 +1,73 @@
+﻿@model HospitalPortal.Models.ViewModels.VendorPaymentDTO
+@{
+    ViewBag.Title = "VendorReport";
+    Layout = null;
+}
+
+
+@using (Html.BeginForm())
+{
+    <div class="row" style="margin-bottom:2%;">
+        |
+        <div class="col-md-3">
+            <input type="text" name="date" autocomplete="off" class="form-control datepicker" placeholder="Search by Date" />
+        </div>
+        <div class="col-md-3">
+            <input type="submit" value="click" class="btn btn-primary" />
+        </div>
+    </div>
+}
+
+@if (Model.Vendorses == null)
+{
+    <h2>No Records</h2>}
+
+else
+{
+    <table id="table_id" class="table table-bordered">
+        <thead>
+            <tr>
+                <th>
+                    Vendor Name
+                </th>
+                <th>
+                    Company's Name
+                </th>
+                <th>
+                    No. Of Drivers Added!!
+                </th>
+                <th>
+                    Total Amount
+                </th>
+                <th>
+                    Action
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Vendorses)
+            {
+                <tr>
+                    <td>@item.VendorName</td>
+                    <td>@item.CompanyName</td>
+                    <td>@item.Counts</td>
+                    @{
+                        double amt = item.Counts * ViewBag.tds;
+                    }
+                    <td>
+                        @amt
+                    </td>
+                    <td><a href="/Vendor/DriverDetails?id=@item.Id" class="btn btn-primary">View Details</a></td>
+                </tr>
+                        }
+        </tbody>
+    </table>
+                        }
+<script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
+<link href="~/css/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
+<script type="text/javascript">
+        //$('#table_id').DataTable();
+
+    $(".datepicker").datepicker().datepicker('setdate', 'today');
+</script>

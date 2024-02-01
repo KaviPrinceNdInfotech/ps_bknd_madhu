@@ -1,0 +1,68 @@
+﻿@{
+    int loginId = Convert.ToInt32(User.Identity.Name);
+    int id = new HospitalPortal.Models.DomainModels.DbEntities().Chemists.FirstOrDefault(a => a.AdminLogin_Id == loginId).Id;
+    bool CurrentStatus = new HospitalPortal.Models.DomainModels.DbEntities().Chemists.FirstOrDefault(a => a.Id == id).IsApproved;
+
+}
+
+<div class="sidebar-nav">
+    <ul>
+        <li class="nav-header"><a href="/Admin/Dashboard/" style="cursor:pointer"> <i class="fa fa-bars"></i> Dashboard</a></li>
+        <li class="nav-header">
+            <a href="/Chemist/Edit?id=@id" style="cursor:pointer">
+                <i class="fa fa-pencil"></i> Manage Profile
+            </a>
+        </li>
+        <li class="nav-header">
+            <a href="/Bank/UpdateBank?id=@id" style="cursor:pointer">
+                <i class="fa fa-pencil"></i> Update Bank Details
+            </a>
+        </li>
+        @if (CurrentStatus == false) { }
+        else
+        {
+            <li class="nav-header">
+                <a href="/Chemist/OrderHistory" style="cursor:pointer">
+                    <i class="fa fa-bars"></i> Order History
+                </a>
+            </li>
+            <li class="nav-header">
+                <a href="/Chemist/PaymentReport?id=@id" style="cursor:pointer">
+                    <i class="fa fa-bars"></i> My Payment History
+                </a>
+            </li>
+            <li class="nav-header">
+                <a href="/Chemist/PayoutReport?id=@id" style="cursor:pointer">
+                    <i class="fa fa-bars"></i> My Payout Report
+                </a>
+            </li>
+            <li class="nav-header">
+                <a href="/Chemist/AddChemistMedicine?id=@id" style="cursor:pointer">
+                    <i class="fa fa-bars"></i>Add Medicine
+                </a>
+            </li>
+            <li class="nav-header">
+                <a href="/Chemist/MedicineList?id=@id" style="cursor:pointer">
+                    <i class="fa fa-bars"></i>Medicine List
+                </a>
+            </li>
+            @*<li>
+                <a href="#" data-target=".regList-menu" class="nav-header" data-toggle="collapse">
+                    <i class="fa fa-user"></i> Registrations Details <i class="fa fa-collapse"></i>
+                </a>
+            </li>
+
+            <li>
+                <ul class="regList-menu nav nav-list collapse">
+                    <li>
+                        <a href="/Vehicle/All?vendorId=@vendorId" style="cursor:pointer"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Vehicle Entries</a>
+                    </li>
+
+
+
+                    <li>
+                </ul>
+            </li>*@
+        }
+    </ul>
+</div>

@@ -1,0 +1,35 @@
+﻿@model IEnumerable<HospitalPortal.Models.DomainModels.MediaHospital>
+
+@{
+    ViewBag.Title = "ListMedia";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>ListMedia</h2>
+
+<table class="table table-hover">ListMedia
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Title)
+        </th>
+        <th>
+          Image
+        </th>
+        <th>Action</th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Title)
+        </td>
+        <td>
+           <img src="~/Images/@item.ImageName" width="80" height="70"/>
+        </td>
+        <td>         
+            @Html.ActionLink("Delete", "DeleteMedia","Admin", new { id=item.Id }, new { onclick = "return confirm('Are sure wants to delete?');", @class="btn btn-danger"})
+        </td>
+    </tr>
+}
+
+</table>

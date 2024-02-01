@@ -1,0 +1,61 @@
+﻿@model HospitalPortal.Models.ViewModels.CityMasterDTO
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+}
+
+<style>
+    #mainContainer {
+        width: 60%;
+        margin-top: 1%;
+        margin-left: 1%;
+    }
+</style>
+
+@using (Html.BeginForm())
+{
+    <div id="mainContainer">
+
+        <div class="row">
+            <div class="col-md-6">
+                @Html.ActionLink("Back", "All", null, new { @class = "btn btn-info" })
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <h3>Edit City</h3>
+            </div>
+        </div>
+
+        @Html.HiddenFor(a => a.Id)
+        @Html.HiddenFor(a=>a.IsDeleted)
+        @Html.Partial("~/Views/Shared/_DisplayMessage.cshtml")
+
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    State * @Html.DropDownListFor(a => a.StateMaster_Id, Model.States, "Select", new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.StateMaster_Id)
+                    </span>
+                </div>
+                <div class="form-group">
+                    District * @Html.TextBoxFor(a => a.CityName, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.CityName)
+                    </span>
+                </div>
+
+
+
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-info" />
+                </div>
+            </div>
+        </div>
+    </div>
+    
+}
+

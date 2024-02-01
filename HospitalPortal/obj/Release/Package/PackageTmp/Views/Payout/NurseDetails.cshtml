@@ -1,0 +1,149 @@
+﻿@model HospitalPortal.Models.ViewModels.NurseCommissionReports
+@{
+    ViewBag.Title = "NurseDetails";
+    Layout = "~/Views/Shared/_PayoutLayoutPage.cshtml";
+}
+
+<link href="/Styles/bootstrap.min.css" rel="stylesheet" />
+<h2>PayOut Details of <span style="color:red">@Model.NurseName</span></h2>
+
+@*<div class=" row">
+    <div class="col-md-3">
+        <div class=" form-group">
+            <a href="@Url.Action("AdminNurseExcel", "Payout", new { NurseId = Model.NurseId })">
+                <img src="https://www.pinclipart.com/picdir/big/178-1780962_download-105-free-excel-icons-here-excel-download.png" alt="List View" style="width: 55px;">
+            </a>
+
+        </div>
+    </div>
+</div>*@
+
+@using (Html.BeginForm())
+{
+    <div class="row">
+        <div class="col-md-3">
+            <input type="hidden" name="NurseId" id="NurseId" value="@Model.NurseId" />
+            @Html.TextBoxFor(a => a.ServiceAcceptanceDate, new { @class = "datepicker form - control", required = "required" })
+        </div>
+        <div class="col-md-3">
+            <input type="submit" value="Click" />
+        </div>
+    </div>
+}
+
+@if (Model.NurseAppointmentList == null)
+{
+    if (TempData["msg"] != null)
+    {
+        <h3 style="color:red">@TempData["msg"]</h3>
+    }
+}
+else
+{
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Request Date</th>
+                @*<th>Total Amt</th>
+        <th>Add GST</th>
+        <th>Payable Amount</th>*@
+                <th>
+                    Basic Amount
+                </th>
+                <th>
+                    Transaction Fee
+                </th>
+                <th>
+                    GST in %
+                </th>
+                <th>
+                    Total Amount
+                </th>
+                @*<th>Deducted Amout</th>*@
+                <th>
+                    Commission in %
+                </th>
+                <th>
+                    TDS in %
+                </th>
+                <th>
+                    Payable Amount
+                </th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.NurseAppointmentList)
+            {
+                <tr>
+                    <td>@item.RequestDate</td>
+                    @*<td>Rs. @item.TotalFee</td>
+        @{
+            if(item.TotalFee == null)
+            {
+                item.TotalFee = 0;
+            }
+            else
+            {
+                item.TotalFee = item.TotalFee;
+            }
+            double? amt = (item.TotalFee * ViewBag.Amount / 100);
+            double? DeductedAmt = item.TotalFee - amt;
+        }
+        <td>
+            @amt
+        </td>
+        <td>
+            @DeductedAmt
+        </td>*@
+                    <td>
+                        Rs. @item.TotalFee
+                    </td>
+                    @{
+                        double? razorpaycomm = @item.Amountwithrazorpaycomm;
+                        double? basicamt = @item.TotalFee;
+                        double? razarfeeamt = razorpaycomm - basicamt;
+
+                    }
+                    <td>@razarfeeamt</td>
+                    <td>
+                        @ViewBag.gstAmount
+                    </td>
+                    @{
+
+                        double? GSTAmt = (item.TotalFee * ViewBag.gstAmount) / 100;
+                        //double? WithGSTAmt = item.Amount + GSTAmt;
+                        double? WithGSTAmt = item.TotalFee + razarfeeamt - (GSTAmt);
+
+                    }
+                    <td>@WithGSTAmt</td>
+
+
+                    <td>@ViewBag.Amount</td>
+                    <td>@ViewBag.tdsAmount</td>
+                    @{
+
+                        double? commAmt = (item.TotalFee * ViewBag.Amount) / 100;
+                        double? tdsamt = (item.TotalFee * ViewBag.tdsAmount) / 100;
+                        double? Value = item.TotalFee - (commAmt + tdsamt);
+
+                    }
+
+                    <td>@Value</td>
+                    <td>
+                        <a href="/Payout/NursePay?Nurse_Id=@item.Nurse_Id&Amount=@Value" class="btn btn-primary">Pay</a>
+
+                        <a href="/Payout/ViewNursePayoutHistory?Id=@item.Nurse_Id" class="btn btn-primary">View Payout History</a>
+                    </td>
+                </tr>
+                        }
+        </tbody>
+    </table>
+   }
+<script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
+<link href="~/css/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
+<script>
+    $(".datepicker").datepicker().datepicker('setDate', 'today');
+</script>

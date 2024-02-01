@@ -1,0 +1,145 @@
+﻿@model HospitalPortal.Models.ViewModels.ReportDTO
+
+@{
+    ViewBag.Title = "Vehicle";
+    Layout = null;
+}
+<link href="/Styles/bootstrap.min.css" rel="stylesheet" />
+
+<h2>Driver List</h2>
+<div style="margin:auto; width:85%">
+
+    <div class="row" style="margin-bottom: 3%;">
+            <div class="col-md-3">
+                @Html.TextBoxFor(a => a.JoiningDate, new { @class = "datepicker form-control", required = "required" })
+            </div>
+            <div class="col-md-3">
+                <input type="button" id="test" value="Search" class="btn btn-primary" />
+            </div>
+            <div class="col-md-3">
+                @Html.TextBoxFor(a => a.VendorName, new { @class = "datepicker form-control", required = "required", placeholder = "Search by Name" })
+            </div>
+            <div class="col-md-3">
+                <input type="button" id="test2" value="Search" class="btn btn-primary" />
+            </div>
+        </div>*@
+
+    @if (Model.VendorCommissionReport == null)
+    {
+        if (TempData["msg"] != null)
+        {
+            @TempData["msg"];
+        }
+    }
+    else
+    {
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>
+                        Franchise Name
+                    </th>
+                    <th>
+                        Company Name
+                    </th>
+                    <th>
+                        Commission Amount(in %)
+                    </th>
+                    <th>
+                        Total Added
+                    </th>
+                    <th>
+                        After Deduction
+                    </th>
+                    <th>
+                        Payable Amount
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.VendorCommissionReport)
+                {
+                    <tr>
+                        <td>@item.VendorName</td>
+                        <td>@item.CompanyName</td>
+                        <td>
+                            @ViewBag.Commission %
+                        </td>
+                        @{
+                            double amt = (Math.Round(ViewBag.Payment * ViewBag.Commission) / 100);
+                            double Value = amt * item.Counts;
+                        }
+                        <td>@item.Counts</td>
+                        <td>₹ @amt</td>
+                        <td>₹ @Value</td>
+                    </tr>
+                            }
+            </tbody>
+        </table>
+                            }
+
+    <nav aria-label="Page navigation example">
+        @*<ul class="pagination">
+                <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                @for (int i = 1; i <= Model.TotalPages; i++)
+                {
+                    if (i == Model.PageNumber)
+                    {
+                        <li class="page-item active"><a class="page-link" href="/CommisionReport/Doctor?pageNumber=@i">@i</a></li>
+
+                    }
+                    else
+                    {
+                        <li class="page-item"><a class="page-link" href="/Patient/PatientList?pageNumber=@i">@i</a></li>
+
+                    }
+                }
+                @*<li class="page-item"><a class="page-link" href="#">Next</a></li>
+            </ul>*@
+    </nav>
+
+</div>
+<script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
+<link href="~/css/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
+@*<script>
+     $(".datepicker").datepicker({});
+
+     $("#test").click(function () {
+         var date = $("#AppointmentDate").val();
+         $.ajax({
+             url: "/CommisionReport/Doctor?term=Doctor&AppointmentDate=" + date + "",
+             type: "get",
+             success: function (response) {
+                 console.log(response);
+                 $("#prevAtt").html(response);
+             },
+             error: function (error) {
+                 console.log(error.responseText);
+
+             }
+         });
+
+     });
+
+
+     $("#test2").click(function () {
+         debugger
+         var name = $("#DoctorName").val();
+         var date = $("#AppointmentDate").val();
+         $.ajax({
+             url: "/VendorCommission/Doctor?term=Doctor&Name='"+name+"'&AppointmentDate=" + date + "",
+             type: "get",
+             success: function (response) {
+                 console.log(response);
+                 $("#prevAtt").html(response);
+             },
+             error: function (error) {
+                 console.log(error.responseText);
+
+             }
+         });
+
+     });
+    </script>*@

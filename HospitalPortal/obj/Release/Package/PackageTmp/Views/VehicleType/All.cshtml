@@ -1,0 +1,84 @@
+﻿@model HospitalPortal.Models.ViewModels.VehicleTypeLISTvm
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+<style>
+    #mainContainer {
+        width: 100%;
+        margin-top: 1%;
+        margin-left: 1%;
+    }
+</style>
+
+<div class="row">
+    <div class="col-md-6">
+        <h3>Vehicle Types</h3>
+    </div>
+</div>
+
+    <div id="mainContainer">
+       
+        <div class="row">
+            <div class="col-md-6">
+                @Html.ActionLink("Add More", "Add", null, new { @class = "btn btn-info" })
+            </div>
+        </div>
+
+        @using (Html.BeginForm())
+        {
+            <div class="row" style="margin-bottom:2%;">
+                <div class="col-md-6">
+                    Select Vehicle Category:  @Html.DropDownListFor(a => a.CategoryId, Model.CategoryList, "Select", new { @class = "form-control" })
+                </div>
+                <div class="col-md-3">
+                    <input type="submit" class="btn btn-primary" value="Search" style="margin-top: 8.5%;" />
+                </div>
+            </div>
+        }
+
+        
+        
+
+
+        <div class="row">
+            <div class="col-md-12">
+                @if (Model.ListVehicleType == null)
+                {
+
+                }
+                else
+                {
+               <table class="table table-bordered">
+                 <thead>
+                     <tr>
+                         <th>Vehicle Type</th>
+                         <th>Category Name</th>
+                         <th>Action</th>
+                     </tr>
+                 </thead>
+                   <tbody>
+                       @foreach (var item in Model.ListVehicleType)
+                       {
+                           <tr>
+                               <td>@item.VehicleTypeName</td>
+                               <td>@item.CategoryName</td>
+                               <td>
+                                   <a href="/VehicleType/Edit?id=@item.Id" class="btn btn-primary" onclick="return confirm('Are You Sure to Edit?')">Edit</a>
+                                   <a href="/VehicleType/Delete?id=@item.Id" class="btn btn-danger" onclick="return confirm('Are You Sure to Delete?')">Delete</a>
+                                  
+                                   <a href="/VehicleType/PriceList?VehicleType=@item.Id" class="btn btn-info">Price List</a>
+                                   @*@Html.ActionLink("Edit","VehicleType",new { id = item.Id }, new { @class="btn btn-info"})*@
+                                   @*@Html.ActionLink("Delete", "VehicleType", new { id = item.Id }, new { @class = "btn btn-danger" })*@
+                               </td>
+                           </tr>
+                       }
+                   </tbody>
+               </table>
+                }
+            </div>
+        </div>
+    </div>
+
+

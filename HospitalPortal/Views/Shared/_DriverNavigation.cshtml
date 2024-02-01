@@ -1,0 +1,66 @@
+﻿@{
+    int loginId = Convert.ToInt32(User.Identity.Name);
+    int id = new HospitalPortal.Models.DomainModels.DbEntities().Drivers.FirstOrDefault(a => a.AdminLogin_Id == loginId).Id;
+    bool CurrentStatus = new HospitalPortal.Models.DomainModels.DbEntities().Drivers.FirstOrDefault(a => a.Id == id).IsApproved;
+}
+
+<div class="sidebar-nav">
+    <ul>
+        <li class="nav-header"><a href="/Admin/Dashboard/" style="cursor:pointer"> <i class="fa fa-bars"></i> Dashboard</a></li>
+        <li>
+        </li>
+        <li class="nav-header">
+            <a href="/Driver/Edit?id=@id" style="cursor:pointer">
+                <i class="fa fa-pencil"></i> Manage Profile
+            </a>
+        </li>
+        <li class="nav-header">
+            <a href="/Bank/UpdateBank?id=@loginId" style="cursor:pointer">
+                <i class="fa fa-pencil"></i> Update Bank Details
+            </a>
+        </li>
+
+        <!--Vehicle allotment Update-->
+        <li style="cursor:pointer;" data-target=".vehicle-menu" class="nav-header" data-toggle="collapse">
+            <i class="fa fa-money"></i>Vehicle Allotment<i class="fa fa-collapse"></i>
+        </li>
+        <li>
+            <ul class="vehicle-menu nav nav-list collapse">
+                <li>
+                    <a href="/Vehicle/VehicleAllotment" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Update Old Driver</a>
+                </li>
+                <li>
+                    <a href="/Vehicle/UpdateVehicle" style="cursor:pointer;"> <span class="fa fa-user"></span>Update New Driver</a>
+                </li>
+            </ul>
+        </li>
+
+        @if (CurrentStatus == false) { }
+        else
+        {
+            <li class="nav-header">
+                <a href="/RoleUpdate/ViewMore?id=@loginId" style="cursor:pointer"><span class="fa fa-list"></span> <span class="fa fa-user"></span>View Specialist &amp; Department</a>
+            </li>
+                                <li class="nav-header">
+                                    <a href="/Driver/UpdateVehicle?id=@id" style="cursor:pointer"><span class="fa fa-list"></span> <span class="fa fa-user"></span>Update Vehicle</a>
+                                </li>
+
+                                <li class="nav-header">
+                                    <a href="/AmbulancePayment/Show?id=@id" style="cursor:pointer"><span class="fa fa-list"></span> <span class="fa fa-user"></span>My Payment History</a>
+                                </li>
+                                <li class="nav-header">
+                                    <a href="/AmbulancePayment/Driver?id=@id" style="cursor:pointer"><span class="fa fa-list"></span> <span class="fa fa-user"></span>My Commission History</a>
+                                </li>
+                                <li class="nav-header">
+                                    <a href="/AmbulancePayment/DriverTDS?id=@id" style="cursor:pointer"><span class="fa fa-list"></span> <span class="fa fa-user"></span>My TDS History</a>
+                                </li>
+                                <li class="nav-header">
+                                    <a href="/AmbulancePayment/DriverReport" style="cursor:pointer"><span class="fa fa-list"></span> <span class="fa fa-user"></span>My Report</a>
+                                </li>
+                                <li class="nav-header">
+                                    <a href="/Driver/TravelHistory?id=@id" style="cursor:pointer"><span class="fa fa-list"></span> <span class="fa fa-user"></span>My Travel History</a>
+                                </li>
+                              
+        }
+    </ul>
+</div>

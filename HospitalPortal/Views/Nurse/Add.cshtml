@@ -1,0 +1,358 @@
+﻿@model HospitalPortal.Models.ViewModels.NurseDTO
+@{
+    if (User.Identity.IsAuthenticated)
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_SignUp.cshtml";
+    }
+
+}
+
+<style>
+    #mainContainer {
+        width: 60%;
+        margin-top: 1%;
+        margin-left: 1%;
+    }
+</style>
+
+@using (Html.BeginForm("Add", "Nurse", FormMethod.Post, new { @encType = "multipart/form-data" }))
+{
+    <div id="mainContainer">
+
+        @*<div class="row">
+               <div class="col-md-6">
+                  @Html.ActionLink("Show All", "All", null, new { @class="btn btn-info"})
+               </div>
+            </div>*@
+
+        <div class="row">
+            <div class="col-md-6">
+                <h3>Nurse Registration</h3>
+            </div>
+        </div>
+
+        @Html.HiddenFor(a => a.Vendor_Id)
+        @Html.HiddenFor(a => a.HospitalId)
+
+        @*@Html.HiddenFor(a => a.Id)
+            @Html.HiddenFor(a=>a.IsDeleted)
+            @Html.HiddenFor(a=>a.AdminLogin_Id)
+        *@
+        @Html.Partial("~/Views/Shared/_DisplayMessage.cshtml")
+
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    Nurse Name * @Html.TextBoxFor(a => a.NurseName, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.NurseName)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    Nurse Profile * @Html.DropDownListFor(a => a.NurseType_Id, Model.NurseTypes, "Select", new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.NurseType_Id)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        @*Getting  12 Hours of a Day Fees*@
+                        <div class="col-md-4">
+                            Fee / 12 Hrs* @Html.TextBoxFor(a => a.HrsFeex24, new { @class = "form-control", type = "number" })
+                            <span class="red">
+                                @Html.ValidationMessageFor(a => a.HrsFeex24)
+                            </span>
+                        </div>
+                        @*Getting a single Day Fees*@
+                        <div class="col-md-4">
+                            Fee / 24 Hrs* @Html.TextBoxFor(a => a.MonthFee, new { @class = "form-control", type = "number" })
+                            <span class="red">
+                                @Html.ValidationMessageFor(a => a.MonthFee)
+                            </span>
+                        </div>
+
+                        @*Getting a per Day Fees*@
+                        <div class="col-md-4">
+                            Fee / 24x7 * @Html.TextBoxFor(a => a.Fee, new { @class = "form-control", type = "number" })
+                            <span class="red">
+                                @Html.ValidationMessageFor(a => a.Fee)
+                            </span>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    Mobile Number * @Html.TextBoxFor(a => a.MobileNumber, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.MobileNumber)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    Email Id *  @Html.TextBoxFor(a => a.EmailId, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.EmailId)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    Password * @Html.PasswordFor(a => a.Password, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.Password)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    Confirm Your Password * @Html.PasswordFor(a => a.ConfirmPassword, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.ConfirmPassword)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    State * @Html.DropDownListFor(a => a.StateMaster_Id, Model.States, "Select", new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.StateMaster_Id)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    @{ Html.EnableClientValidation(false);}
+                    City  @Html.DropDownListFor(a => a.CityMaster_Id,
+Enumerable.Empty<SelectListItem>()
+, "Select", new { @class = "form-control" })
+                    <span class="red">
+
+                        @Html.ValidationMessageFor(a => a.CityMaster_Id)
+                        @{ Html.EnableClientValidation(true);}
+
+
+                    </span>
+                </div>
+                @*<div class="form-group">
+            If City Not Available. Please (✓)
+            @Html.CheckBoxFor(a => a.IsCityAvailable)
+        </div>*@
+                <div class="form-group">
+                    Other City (If you are not able to find it above )
+                    @Html.TextBoxFor(a => a.OtherCity, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.OtherCity)
+                    </span>
+                </div>
+
+                @*<div class="form-group" id="CityNamesdiv" style="display:none">
+            New City Name:
+            @Html.TextBoxFor(a => a.CityName, new { @class = "form-control" })
+        </div>*@
+                <div class="form-group">
+                    Address * @Html.TextAreaFor(a => a.Location, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.Location)
+                    </span>
+                </div>
+                <div class="form-group">
+                    PinCode * @Html.TextBoxFor(a => a.PinCode, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.PinCode)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    Franchise ID * @Html.TextBoxFor(a => a.RefId, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.RefId)
+                    </span>
+                </div>
+                <div class="form-group">
+                    Certificate Image  @Html.TextBoxFor(a => a.CertificateFile, new { @class = "form-control", type = "file" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.CertificateFile)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    Certificate Name  @Html.TextBoxFor(a => a.CertificateNumber, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.CertificateNumber)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    Pan Number  @Html.TextBoxFor(a => a.PAN, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.PAN)
+                    </span>
+                </div>
+
+                @*<div class="form-group">
+            PAN Number*  @Html.TextBoxFor(a => a.PAN, new { @class = "form-control" })
+            <span class="red">
+                @Html.ValidationMessageFor(a => a.PAN)
+            </span>
+        </div>*@
+
+                @*<div class="form-group">
+            Aadhar Number*  @Html.TextBoxFor(a => a.AadharNumber, new { @class = "form-control" })
+            <span class="red">
+                @Html.ValidationMessageFor(a => a.AadharNumber)
+            </span>
+        </div>*@
+                @*<div class="form-group">
+            Kindaly Check
+            <input type="radio" name="image1"  value="Aadhar" id="Image1">Aadhar Image
+            <input type="radio" name="image1" value="Pan" id="Image2">Pan Image
+        </div>*@
+                @*<div class="form-group" id="AadharimageDiv" style="display:none">
+        <div class="form-group">
+            Aadhar Image 1*  @Html.TextBoxFor(a => a.AadharImageFile, new { @class = "form-control", type = "file" })
+            <span class="red">
+                @Html.ValidationMessageFor(a => a.AadharImageFile)
+            </span>
+        </div>
+        <div class="form-group">
+            Aadhar Image 2*  @Html.TextBoxFor(a => a.AadharImageFile2, new { @class = "form-control", type = "file" })
+            <span class="red">
+                @Html.ValidationMessageFor(a => a.AadharImageFile)
+            </span>
+        </div>
+        </div>*@
+                @*<div class="form-group" id="PanimageDiv" style="display:none">
+            <div class="form-group">
+                Pan Image*  @Html.TextBoxFor(a => a.PanImageFile, new { @class = "form-control", type = "file" })
+                <span class="red">
+                    @Html.ValidationMessageFor(a => a.PanImageFile)
+                </span>
+            </div>
+        </div>*@
+                @*<div class="form-group">
+            Has Police Verification
+            @Html.CheckBoxFor(a => a.IsVerifiedByPolice)
+        </div>*@
+
+                @*<div class="form-group" id="verificationDiv" style="display:none">
+            Police verification doc.
+            @Html.TextBoxFor(a => a.VerificationImage, new { type = "file" })
+        </div>*@
+
+                @Html.Partial("~/Views/Shared/_Terms&ConditionView.cshtml")
+
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            Nurse Image *  @Html.TextBoxFor(a => a.NurseImageBase, new { @class = "form-control", type = "file" })
+                            <span class="red">
+                                @Html.ValidationMessageFor(a => a.NurseImageBase)
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            Aadhar Image  @Html.TextBoxFor(a => a.AadharImageBase, new { @class = "form-control", type = "file" })
+                            <span class="red">
+                                @Html.ValidationMessageFor(a => a.AadharImageBase)
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-info" />
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@if (!User.Identity.IsAuthenticated)
+{
+    <link rel="stylesheet" type="text/css" href="/lib/bootstrap/css/bootstrap.css">
+    @Html.Partial("~/Views/Shared/_script.cshtml")
+}
+<script src="/Scripts/Library/jquery-1.7.1.min.js"></script>
+<script>
+
+    $("#IsCityAvailable").click(function () {
+        $("#CityNamesdiv").toggle();
+    });
+
+    $("#StateMaster_Id").change(function () {
+        var stateId = $(this).val();
+        var city = $("#CityMaster_Id");
+        city.empty();
+        city.append("<option value=''>Select</option>");
+        $.ajax({
+            url: '/Common/GetCitiesByState?stateId=' + stateId,
+            type: 'get',
+            success: function (response) {
+                $.each(response, function (key, val) {
+                    city.append("<option value='" + val.Id + "'>" + val.CityName + "</option>");
+                });
+            },
+            error: function (error) {
+                console.log(error.responseText);
+            }
+        });
+    });
+
+    $("#IsVerifiedByPolice").click(function () {
+        $("#verificationDiv").toggle();
+
+    });
+    $('input:radio[id="Image1"]').change(function () {
+        if ($(this).val() == 'Aadhar') {
+            $("#PanimageDiv").css("display", "none");
+            $("#AadharimageDiv").toggle();
+        }
+    });
+
+    $('input:radio[id="Image2"]').change(function () {
+        if ($(this).val() == 'Pan') {
+            $("#AadharimageDiv").css("display", "none");
+            $("#PanimageDiv").toggle();
+        }
+
+    });
+    //$("#Image1").click(function () {
+    //    debugger
+    //    var name = $("input[name='image1']").val();
+
+
+
+    //    alert(name);
+    //    if (name == "Aadhar") {
+    //        $("#AadharimageDiv").toggle();
+    //    }
+    //    else (name == "Pan")
+    //    {
+    //        $("#PanimageDiv").toggle();
+    //    }
+    //});
+</script>
+
+
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places"></script>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyAVJ6WcbMb96HxFwYJTgo3a00yxYj-ha80"></script>
+
+
+
+
+@*<script type="text/javascript">
+    google.maps.event.addDomListener(window, 'load', function () {
+        var options = {
+            types: ['(cities)'],
+            componentRestrictions: { country: "in" }
+        };
+        var input = document.getElementById('Location');
+        var places = new google.maps.places.Autocomplete(input, options);
+    });
+</script>*@

@@ -1,0 +1,93 @@
+﻿@model HospitalPortal.Models.ViewModels.ComplaintVM
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h4>Complaint History</h4>
+
+@using (Html.BeginForm())
+{
+    <div class="row">
+        <div class="col-md-4">
+            @Html.TextBoxFor(a => a.ComplaintDate, new { @class = "datepicker form-control", required = "required", placeholder = "Select By Date" })
+        </div>
+        <div class="col-md-4">
+            <input type="submit" value="Select" class="btn btn-danger" />
+        </div>
+    </div>
+}
+@using (Html.BeginForm("ViewComp","Complaint"))
+{
+    <div class="row">
+        <div class="col-md-3">
+            <select id="term" name="term" class="form-control">
+                <option>Select Any</option>
+                <option value="Doctor">Doctor</option>
+                <option value="Hospital">Hospital</option>
+                <option value="Driver">Driver</option>
+                <option value="Ambulance">Ambulance</option>
+                <option value="Patient">Patient</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <input type="submit" value="Check" id="btnCheck" class="btn btn-primary" />
+        </div>
+    </div>
+}
+@if (Model.Complaint_Doc == null)
+{
+    <h2>No Complaints Registered Yet</h2>
+}
+else
+{
+    <table class="table table-bordered" style="margin-top:5%;">
+        <tr>
+            <th>Complainant's Role</th>
+            <th>Complainant's User</th>
+            <th>Complaint</th>
+            <th>Date</th>
+            <th>Is Resolved</th>
+            <th>Action</th>
+        </tr>
+        <tbody>
+            @foreach (var item in Model.Complaint_Doc)
+                {
+                <tr>
+                    <td>@item.Role</td>
+                    <td>@item.UserName</td>
+                    <td>@item.Complaints</td>
+                    <td>
+                        @if (item.ComplaintDate != null)
+                        {
+                            @item.ComplaintDate.Value.ToString("dd-MMM-yyyy");
+
+                        }
+                    </td>
+                    <td>
+                        @if (item.IsResolved == true)
+                        {
+                            <span style="color:chartreuse">@item.IsResolved</span>
+                        }
+                        else
+                        {
+                            <span style="color:red">
+                                @item.IsResolved
+                            </span>
+                        }
+                    </td>
+                    <td><a href="/Complaint/ViewDetails?role=@item.Role&Id=@item.Login_Id">View More</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+<script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
+<link href="~/css/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
+<script>
+    $(".datepicker").datepicker({
+        dateFormat: "yy/mm/dd",
+    }).val();
+</script>
+

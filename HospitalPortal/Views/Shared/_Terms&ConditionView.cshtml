@@ -1,0 +1,9 @@
+﻿
+
+@if (User.Identity.IsAuthenticated) { }
+else
+{
+<div class="form-group">
+    Terms &amp; Condition * <input type="checkbox" name="IsTerms&ConditionChecked" required="required" >  <a href="/Home/TermsCondition" target="_blank">Terms &amp; Conditions</a><br>
+</div>
+}

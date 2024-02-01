@@ -1,0 +1,94 @@
+﻿
+@{
+    ViewBag.Title = "TDSHospital";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Hospital TDS </h2>
+
+<div class="row">
+    <div class="col-md-4">
+        <select id="tp" class="form-control" required="required">
+            <option value="Daily">
+                Select Any
+            </option>
+            <option value="Doctor">
+                Doctor
+            </option>
+        </select>
+    </div>
+    <div class="col-md-4">
+        <input type="button" value="Check" id="btnCheck" class="btn btn-primary" />
+    </div>
+
+
+</div>
+<div id="prevAtt" style="margin-top:5%;">
+
+</div>
+
+<script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
+<script>
+    $("#btnCheck").click(function () {
+        debugger
+        var term = $("#tp").val();
+        if (term == "Doctor") {
+            $.ajax({
+                url: "/HospitalTDS/Doctor?term=" + term,
+                type: "get",
+                success: function (response) {
+                    console.log(response);
+                    $("#prevAtt").html(response);
+                },
+                error: function (error) {
+                    console.log(error.responseText);
+                    msg.text("");
+                }
+            });
+        }
+        //if (term == "Monthly") {
+        //    $.ajax({
+        //        url: "/ViewReport/MonthlyDoctor?term=" + term,
+        //        type: "get",
+        //        success: function (response) {
+        //            console.log(response);
+        //            $("#prevAtt").html(response);
+        //        },
+        //        error: function (error) {
+        //            console.log(error.responseText);
+        //            msg.text("");
+        //        }
+        //    });
+        //}
+
+        //if (term == "Yearly") {
+        //    $.ajax({
+        //        url: "/ViewReport/yearlyDoctor?term=" + term,
+        //        type: "get",
+        //        success: function (response) {
+        //            console.log(response);
+        //            $("#prevAtt").html(response);
+        //        },
+        //        error: function (error) {
+        //            console.log(error.responseText);
+        //            msg.text("");
+        //        }
+        //    });
+        //}
+
+        //if (term == "Weekly") {
+        //    $.ajax({
+        //        url: "/ViewReport/WeeklyDoctor?term=" + term,
+        //        type: "get",
+        //        success: function (response) {
+        //            console.log(response);
+        //            $("#prevAtt").html(response);
+        //        },
+        //        error: function (error) {
+        //            console.log(error.responseText);
+        //            msg.text("");
+        //        }
+        //    });
+        //}
+    });
+</script>

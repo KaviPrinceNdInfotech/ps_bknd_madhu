@@ -1,0 +1,76 @@
+﻿@model HospitalPortal.Models.ViewModels.ViewDoctorReports
+
+@{
+    ViewBag.Title = "ViewUploadReports";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>View Upload Reports</h2>
+
+@using (Html.BeginForm("DoctorReports","Common", FormMethod.Get))
+{
+    <div class="row" style="margin-bottom:3%;">
+        <div class="col-md-3">
+            Search By Patient ID
+        </div>
+        <div class="col-md-3" style="margin-left: -6%;">
+            <input type="text" name="term" id="term" />
+        </div>
+        <div class="col-md-3">
+            <input type="submit" value="Filter" class="btn btn-primary" />
+        </div>
+    </div>
+}
+@if (Model.patientItem == null)
+{
+    @Html.Partial("~/Views/Shared/_DisplayNoRecordsMessage.cshtml")
+}
+else
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Patient ID</th>
+                <th>Patient Name</th>
+                <th>Doctor Name</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.patientItem)
+            {
+                <tr>
+                    <td>@item.PatientRegNo</td>
+                    <td>@item.PatientName</td>
+                    <td>@item.DoctorName</td>
+                    <td><a href="/Common/DoctorTestReports?id=@item.Patient_Id" class="btn btn-primary">View Test List</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+
+    <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                @for (int i = 1; i <= Model.TotalPages; i++)
+                {
+                    if (i == Model.PageNumber)
+                    {
+                        <li class="page-item active"><a class="page-link" href="/Common/DoctorReports?pageNumber=@i">@i</a></li>
+
+                    }
+                    else
+                    {
+                        <li class="page-item"><a class="page-link" href="/Common/DoctorReports?pageNumber=@i">@i</a></li>
+
+                    }
+                }
+            </ul>
+        </nav>
+}
+
+
+
+
+
+

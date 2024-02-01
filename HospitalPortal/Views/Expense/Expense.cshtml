@@ -1,0 +1,92 @@
+﻿@model HospitalPortal.Models.ViewModels.ExpenseReportDTO
+@{
+    ViewBag.Title = "Expense";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Expense</h2>
+
+
+
+
+
+
+<div style="margin:auto; width:80% ">
+    <div class="row" style="margin-bottom:6%; margin-top:3%;">
+        <div class="col-md-3">
+            <a href="/Expense/ViewExpenseDetail" class="btn btn-primary">View Details</a>
+        </div>
+    </div>
+
+    <h2 style="margin-left: 12%;
+    margin-bottom: 3%;
+ color:mediumvioletred">Entry Of Expenses</h2>
+   
+    @using (Html.BeginForm())
+    {
+        <div class="row">
+            <div class="col-md-3">Name Of Product/Expense</div>
+            <div class="col-md-6">
+                @Html.TextBoxFor(a=> a.Expense, new {@class="form-control", required = "required", placeholder = "Enter Name of Expense" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                Type Of Expense
+            </div>
+            <div class="col-md-6">
+                @Html.TextBoxFor(a => a.Type_Of_Expense, new { @class = "form-control", required = "required", placeholder = "Enter Type of Expense Like 'Supply, Offerings, Sale etc'" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                Transaction Type
+            </div>
+            <div class="col-md-6">
+               @Html.DropDownList("Transaction_Type", new List<SelectListItem>() { new SelectListItem() { Text = "Credit", Value = "Credit" }, new SelectListItem() { Text = "Debit", Value = "Debit", }
+               }, "Select Transaction Type ", new { @class = "form-control", required = "required" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                Description Of Product/Expense
+            </div>
+            <div class="col-md-6">
+                @Html.TextAreaFor(a=> a.Expense_Description, new { @class="form-control", required="required", cols = "20", rows="10", placeholder="Enter only 200 Words of Expense Description" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                Amount
+            </div>
+            <div class="col-md-6">
+                @Html.TextBoxFor(a=> a.Amount, new { @class="form-control", required="required", placeholder = "Enter Expense Amount" })
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3">
+                Transaction Date
+            </div>
+            <div class="col-md-6">
+                @Html.TextBoxFor(a => a.TransactionDate, new { @class = "datepicker form-control", required = "required" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                @TempData["msg"]
+            </div>
+            <div class="col-md-3">
+                <input type="submit" value="Submit" class="btn btn-primary" />
+            </div>
+        </div>
+    }
+</div>
+
+
+<script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
+<link href="~/css/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
+<script>
+    $(".datepicker").datepicker({});
+</script>

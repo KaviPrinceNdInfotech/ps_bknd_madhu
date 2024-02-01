@@ -1,0 +1,88 @@
+﻿@model HospitalPortal.Models.ViewModels.HealthCheckUpPackageDTO
+
+@{
+    ViewBag.Title = "AddPackage";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    string role = HospitalPortal.Utility.UserIdentity.UserRole;
+}
+
+<h2>Add Package</h2>
+
+
+<div style="margin-bottom:3%">
+    <a href="/CompletHealthCheckup/ViewPackage?id=@Model.CenterId" class="btn btn-primary">Show All</a>
+</div>
+
+@using (Html.BeginForm())
+{
+
+    if (TempData["msg"] != null)
+    {
+        <span class="alert alert-success">
+            @TempData["msg"]
+        </span>
+    }
+    <div class="row">
+        @Html.HiddenFor(a => a.CenterId)
+        <div class="col-md-12">
+            @if (role == "admin")
+            {
+                <div class="form-group" id="PackageNamesdiv">
+                    Enter Package Name *:
+                    @Html.TextBoxFor(a => a.PackageName, new { @class = "form-control" })
+                </div>
+            }
+            else
+            {
+                <div class="form-group">
+                    Select Package Name *:
+                    @Html.DropDownListFor(a => a.packageId, Model.PackageList, "Select Any", new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    If Package Not Available. Please (✓)
+                    @Html.CheckBoxFor(a => a.IsPackageAvailable)
+                    <div class="form-group" id="PackageNamesdiv" style="display:none;">
+                        Enter Package Name *:
+                        @Html.TextBoxFor(a => a.PackageName, new { @class = "form-control" })
+                    </div>
+                </div>
+            }
+            <div class="form-group">
+                Enter Test Name *:
+                @Html.TextBoxFor(a => a.TestName, new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                Enter Test Description *:
+                @Html.TextBoxFor(a => a.TestDesc, new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                Enter Test Amount *:
+                @Html.TextBoxFor(a => a.TestAmt, new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Submit" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+}
+<script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
+<script>
+    $("#IsPackageAvailable").click(function () {
+        $("#PackageNamesdiv").toggle();
+    });
+
+    $("#PackageId").change(function () {
+        debugger
+        var packageId = $(this).val();
+        $.ajax({
+            url: '/CompleteHealthCheckup/GetPackage?packageId=' + packageId,
+            type: 'get',
+            success: function (response) {
+
+            },
+            error: function (error) {
+                console.log(error.responseText);
+            }
+        });
+    })
+</script>

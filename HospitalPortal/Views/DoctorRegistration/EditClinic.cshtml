@@ -1,0 +1,152 @@
+﻿@model HospitalPortal.Models.RequestModel.EditClinicDTO
+@{
+    ViewBag.Title = "EditClinic";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Edit Clinic</h2>
+
+<style>
+    #mainContainer {
+        width: 60%;
+        margin-top: 1%;
+        margin-left: 1%;
+    }
+</style>
+
+@using (Html.BeginForm("EditClinic", "DoctorRegistration", FormMethod.Post, new { @encType = "multipart/form-data" }))
+{
+    <div id="mainContainer">
+
+
+        <div class="row">
+            <div class="col-md-6">
+                <h3>Update Profile</h3>
+            </div>
+        </div>
+        @Html.HiddenFor(a => a.Id)
+        @Html.HiddenFor(a => a.CityMaster_Id)
+        
+        @Html.Partial("~/Views/Shared/_DisplayMessageUpdate.cshtml")
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    Clinic Name * @Html.TextBoxFor(a => a.ClinicName, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.ClinicName)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    State * @Html.DropDownListFor(a => a.StateMaster_Id, Model.States, "Select", new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.StateMaster_Id)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    City * @Html.DropDownListFor(a => a.CityMaster_Id,
+                        Model.Cities
+                        , "Select", new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.CityMaster_Id)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    Address * @Html.TextAreaFor(a => a.FullAddress, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.FullAddress)
+                    </span>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-5">
+                            Start Time *  @Html.TextBoxFor(a => a.StartTime, new { @class = "form-control", type = "time", required = "required" })
+                            <span class="red">
+                                @Html.ValidationMessageFor(a => a.StartTime)
+                            </span>
+                        </div>
+                        <div class="col-md-2" style="margin-top:5%;"><b>To </b></div>
+
+                        <div class="col-md-5">
+                            End Time  *  @Html.TextBoxFor(a => a.EndTime, new { @class = "form-control", type = "time", required = "required" })
+                            <span class="red">
+                                @Html.ValidationMessageFor(a => a.EndTime)
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-info" />
+                </div>
+            </div>
+        </div>
+    </div>
+                        }
+
+
+<script src="/Scripts/Library/jquery-1.7.1.min.js"></script>
+<link href="~/css/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
+<script src="/Scripts/Library/jquery-ui-1.8.20.min.js"></script>
+
+<script>
+    $(".datepicker").datepicker().datepicker('setdate', 'today');
+</script>
+<script>
+    //$("#StateMaster_Id").change(function () {
+    //    var stateId = $(this).val();
+    //    var city = $("#CityMaster_Id");
+    //    city.empty();
+    //    city.append("<option value=''>Select</option>");
+    //    $.ajax({
+    //        url: '/Common/GetCitiesByState?stateId='+stateId,
+    //        type: 'get',
+    //        success: function (response) {
+    //            $.each(response, function (key,val) {
+    //                city.append("<option value='"+val.Id+"'>"+val.CityName+"</option>");
+    //            });
+    //        },
+    //        error: function (error) {
+    //            console.log(error.responseText);
+    //        }
+    //    });
+    //});
+
+    $("#Department_Id").change(function () {
+        let depId = $(this).val();
+        var childDd = $("#Specialist_Id");
+        childDd.empty();
+        childDd.append('<option value="">Select</option>')
+        $.get('/Common/GetSpecialistByDept?depId=' + depId).then(function (response) {
+            $.each(response, function (key, val) {
+                childDd.append(`<option value="${val.Id}">${val.SpecialistName}</option>`);
+            });
+        }).error(function (response) {
+            console.log(response.responseText);
+        });
+    });
+
+
+    $('input:radio[id="Image1"]').change(function () {
+        if ($(this).val() == 'Aadhar') {
+            $("#PanimageDiv").css("display", "none");
+            $("#AadharimageDiv").toggle();
+        }
+    });
+
+    $('input:radio[id="Image2"]').change(function () {
+        if ($(this).val() == 'Pan') {
+            $("#AadharimageDiv").css("display", "none");
+            $("#PanimageDiv").toggle();
+        }
+    });
+</script>
+
+
+
+@Html.Partial("~/Views/Shared/_StateCityLocCascading.cshtml")
+

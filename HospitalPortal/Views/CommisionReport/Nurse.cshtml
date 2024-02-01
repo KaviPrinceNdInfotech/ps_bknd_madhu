@@ -1,0 +1,49 @@
+﻿@model HospitalPortal.Models.ViewModels.NurseDTO
+@{
+    ViewBag.Title = "Nurse";
+    Layout = null;
+}
+
+<h2>Nurse</h2>
+
+<link href="/Styles/bootstrap.min.css" rel="stylesheet" />
+
+@if (Model.Nurse4Commission == null)
+{
+    <h3>No Records</h3>
+}
+else
+{
+    <table id="table_id" class="table table-bordered">
+        <thead>
+            <tr>
+                <th>
+                    Nurse Name
+                </th>
+                <th>
+                    Action
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Nurse4Commission)
+            {
+                <tr>
+                    <td>@item.NurseName</td>
+                    <td><a href="NurseDetails?NurseId=@item.Nurse_Id" class="btn btn-primary">View Details</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+
+
+<script src="https://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css">
+
+<script type="text/javascript">
+        $('#table_id').DataTable();
+</script>
+
+

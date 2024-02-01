@@ -1,0 +1,68 @@
+﻿@model HospitalPortal.Models.ViewModels.Appointment
+
+@{
+    ViewBag.Title = "ShowAppointment";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Show Appointment</h2>
+
+@using (Html.BeginForm())
+{
+    <div class="row">
+        <div class="col-md-3">@Html.TextBox("AppointmentDate", null, htmlAttributes: new { @class = "form-control", type="date", placeholder = "Appointment Date" })</div>
+        <div class="col-md-3">@Html.TextBox("term", null, htmlAttributes: new { @class = "form-control", placeholder = "Search By Doctor Name" })</div>
+        <div class="col-md-3"><input type="submit" id="btnSubmit" class="btn btn-primary" value="Find" /></div>
+    </div>
+}
+@if (Model.viewAppointment == null)
+{
+    <h3>There is no Data Present</h3>
+
+}
+else
+{
+<table class="table table-striped" >
+    <thead>
+        <tr>
+            <th>Doctor Name</th>
+            <th>Clinic Name</th>
+            <th>Clinic Address</th>
+            <th>Department</th>
+            <th>Specialist</th>
+            <th>Patient Name</th>
+            <th>Appointment Date</th>
+            <th>Start Slot Time</th>
+            <th>End Slot Time</th>
+        </tr>
+    </thead>
+    @foreach(var item in Model.viewAppointment)
+    {
+        <tr>
+            <td>@item.DoctorName</td>
+            <td>@item.ClinicName</td>
+            <td>@item.Location,
+            @item.CityName, @item.StateName</td>
+            <td>@item.DepartmentName</td>
+            <td>@item.SpecialistName</td>
+            <td>@item.PatientName</td>
+            <td>@if (item.AppointmentDate != null)
+                    {
+                <span>
+                    @item.AppointmentDate.Value.ToString("dd-MMM-yyyy")
+                </span>
+            }</td>
+            <td>@item.StartSlotTime</td>
+            <td>@item.EndSlotTime</td>
+        </tr>
+    }
+</table>
+}
+
+
+<script type="text/javascript">
+
+         $(".datepicker").datepicker();
+
+    
+    </script>

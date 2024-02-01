@@ -1,0 +1,41 @@
+﻿
+@{
+    ViewBag.Title = "Vendor";
+    Layout = "~/Views/Shared/_PayoutLayoutPage.cshtml";
+}
+<h2>Franchise Payout</h2>
+
+<div class="row">
+    <div class="col-md-4">
+        <select id="tp" class="form-control" required="required">
+            <option value="">
+                Select Any
+            </option>
+            <option value="Doctor">
+                Doctor
+            </option>
+            <option value="Vehicle">
+                Vehicle
+            </option>
+            <option value="Lab">
+                Lab
+            </option>
+            @*<option value="HealthCheckUp">
+                Health Check Up
+            </option>*@
+            <option value="Nurse">
+                Nurse
+            </option>
+            <option value="Chemist">
+                Chemist
+            </option>
+        </select>
+    </div>
+    <div class="col-md-4">
+        <input type="button" value="Check" id="btnCheck" class="btn btn-primary" />
+    </div>
+</div>
+<div id="prevAtt" style="margin-top:5%;">
+
+</div>
+<script src="~/Scripts/VendorPayout.js"></script>

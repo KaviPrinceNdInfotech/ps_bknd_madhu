@@ -1,0 +1,53 @@
+﻿@model HospitalPortal.Models.ViewModels.ViewPayOutHistory
+@{
+    ViewBag.Title = "ViewPayoutHistory";
+    Layout = "~/Views/Shared/_PayoutLayoutPage.cshtml";
+
+}
+
+<h2>Nurse Payout History</h2>
+
+<div style="margin:auto; width:95%">
+    <div style="margin-top:3%; margin-bottom:3%;">
+        Nurse Name : <h2 style="color:brown">
+            @if (Model.HistoryOfNurse_Payout != null)
+            {
+                @Model.HistoryOfNurse_Payout.FirstOrDefault().NurseName
+            }
+            else
+            {@Model.NurseName @*@Model.HistoryOfHealth_Payout.FirstOrDefault().LabName*@ }
+        </h2>
+    </div>
+    @if (Model.HistoryOfNurse_Payout == null)
+    {
+        if (TempData["msg"] != null)
+        {
+            <h4 style="color:red">@TempData["msg"]</h4>
+        }
+    }
+    else
+    {
+        <table class="table table-bordered">
+            <tr>
+                <th>Serial No</th>
+                <th>Nurse Name</th>
+                <th>Payment Date</th>
+                <th>Amount</th>
+            </tr>
+            <tbody>
+                @{int RowNo = 0;}
+                @foreach (var item in Model.HistoryOfNurse_Payout)
+                {
+                    <tr>
+                        <td>
+                            @{RowNo++;} @RowNo
+                        </td>
+                        <td>@item.NurseName</td>
+                        <td>@item.PaymentDate</td>
+                        <td>@item.Amount</td>
+                    </tr>
+                                }
+            </tbody>
+        </table>
+                                }
+</div>

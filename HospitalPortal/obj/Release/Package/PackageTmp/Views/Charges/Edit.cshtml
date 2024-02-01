@@ -1,0 +1,21 @@
+﻿@model HospitalPortal.Models.ViewModels.ChargeDTO
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Edit @Model.Role Charges</h2>
+
+@using (Html.BeginForm())
+{
+    <div class="row">
+        @Html.HiddenFor(a => a.Id)
+        @Html.HiddenFor(a => a.Role)
+        <div class="form-group col-md-3">
+            @Html.TextBoxFor(a => a.Amount, new {@class="form-control" })
+        </div>
+        <div class="form-group col-md-3">
+            <input type="submit" class="btn btn-primary" value="Submit" />
+        </div>
+    </div>
+}

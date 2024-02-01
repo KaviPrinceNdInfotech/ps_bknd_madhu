@@ -1,0 +1,136 @@
+﻿@model HospitalPortal.Models.ViewModels.DoctorDTO
+@{
+
+    ViewBag.Title = "UpdateDepartment";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Update Department</h2>
+
+
+@using (Html.BeginForm())
+{
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-bordered" id="attrTable">
+            <thead>
+                <tr>
+                    <th>Department</th>
+                    <th>Specialization</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        Department * @Html.DropDownListFor(a => a.Department_Id, Model.DepartmentList, "Select", new { @class = "form-control" })
+                    </td>
+                    <td>
+                        Specialist * @Html.DropDownListFor(a => a.Specialist_Id,
+   Enumerable.Empty<SelectListItem>()
+, "Select", new { @class = "form-control" })
+                    </td>
+                    <td>
+                        @*<span class="btn btn-info" id="btnAddAttr"> <i class="fas fa-plus"></i></span>*@
+                        <input type="submit" value="Submit" class="btn btn-primary" />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    </div>
+}
+<table id="employee" class="table table-bordered" style="margin-top:10px;">
+    <thead class="bg-danger text-center text-white">
+        <tr>
+            <th>Department</th>
+            <th>Specialization</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var i in Model.DeptList)
+        {
+            <tr>
+                <td>@i.DepartmentName</td>
+                <td>@i.SpecialistName</td>
+                <td><a href="/DoctorRegistration/DeleteDepartment?Id=@i.Id">Delete</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
+
+
+<script src="/Scripts/Library/jquery-1.7.1.min.js"></script>
+<link href="~/css/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
+<script>
+    $("#Department_Id").change(function () {
+        let depId = $(this).val();
+        var childDd = $("#Specialist_Id");
+        childDd.empty();
+        childDd.append('<option value="">Select</option>')
+        $.get('/Common/GetSpecialistByDept?depId=' + depId).then(function (response) {
+            $.each(response, function (key, val) {
+                childDd.append(`<option value="${val.Id}">${val.SpecialistName}</option>`);
+            });
+        }).error(function (response) {
+            console.log(response.responseText);
+        });
+    });
+   
+</script>
+
+<script>
+    $(".datepicker").datepicker().datepicker('setdate', 'today');
+    $(function () {
+        $("#btnAddAttr").click(function () {
+        debugger
+        var employee = new Object();
+        employee.Department_Id = $('#Department_Id').val();
+        employee.Specialist_Id = $('#Specialist_Id').val();
+        if (employee != null) {
+            $.ajax({
+                type: "POST",
+                url: "/DoctorRegistration/AddDepartmentSpecialization",
+                data: JSON.stringify(employee),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function () {
+                    getAllEmployees();
+                    alert("SuccessFully Updated");
+                },
+                failure: function(response) {
+                    alert(response.responseText);
+                },
+                error: function(response) {
+                    alert(response.responseText);
+                }
+            });
+        }
+        });
+
+        function getAllEmployees() {
+            debugger
+            $.ajax({
+                url: '/DoctorRegistration/GetRecords',
+                dataType: "json",
+                method: 'GET',
+                success: function (data) {
+                    //var employeeTable = $('#employee tbody');
+                    //employeeTable.empty();
+                    //$(data).each(function (index, emp) {
+                    //    employeeTable.append('<tr><td>'+"<input type='hidden' value=" + emp.Id + "/>" + emp.DepartmentName + '</td><td>'
+                    //        + emp.SpecialistName + '</td><td>'+"<span class='btn btn-danger' id='btnDeleteAttr'><i class='fa fa-trash-o'></i></span>"+'</td></tr>');
+                    //});
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            });
+        }
+    });
+</script>

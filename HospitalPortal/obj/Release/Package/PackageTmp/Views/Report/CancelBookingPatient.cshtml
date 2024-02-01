@@ -1,0 +1,55 @@
+﻿
+@model HospitalPortal.Models.ViewModels.cancelReport
+@{
+    ViewBag.Title = "CancelBookingPatient";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>CancelBookingPatient</h2>
+
+<style>
+    #mainContainer {
+        width: 100%;
+        margin-left: 1%;
+        margin-top: 1%;
+    }
+</style>
+<div id="mainContainer">
+
+    <div class="row">
+        <div class="col-md-12">
+            <h3>Patient Cancel</h3><hr />
+        </div>
+    </div>
+
+
+    @using (Html.BeginForm())
+    {
+        <div id="doublescroll">
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr style="background-color:gainsboro">
+
+                                <th>Patient Name</th>
+                                <th>Pick-Up Place</th>
+                                <th>Drop Place</th>
+                                <th>Request Date</th>
+
+                        </thead>
+                        @foreach (var item in Model.CancelBookingVM)
+                        {
+                            <tr style="background-color:oldlace">
+                                <td>@item.PatientName</td>
+                                <td>@item.PickUp_Place</td>
+                                <td>@item.Drop_Place</td>
+                                <td>@item.RequestDate</td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+</div>

@@ -1,0 +1,178 @@
+﻿@model HospitalPortal.Models.ViewModels.PayOutVM
+@{
+    ViewBag.Title = "Doctor";
+    Layout = "~/Views/Shared/_PayoutLayoutPage.cshtml";
+}
+
+<h2>Health Checkup PayOut</h2>
+<div class="row" style="margin-bottom: 2%;">
+    <fieldset>
+        <div class="col-md-3">
+            @Html.TextBoxFor(a => a.TestDate, new { @class = "datepicker form-control" })
+        </div>
+        <div class="col-md-3">
+            <input type="submit" class="btn btn-primary" id="test" value="Search" />
+        </div>
+        <div class="col-md-3">
+            @Html.TextBoxFor(a => a.LabName, new { @class = "form-control", placeholder="Search By Lab Name" })
+        </div>
+        <div class="col-md-3">
+            <input type="submit" class="btn btn-primary" id="test1" value="Search" />
+        </div>
+    </fieldset>
+</div>
+
+
+@if (Model.HealthHistory == null)
+{
+    if (TempData["msg"] != null)
+    {
+        <h2 style="color:blueviolet">
+            @TempData["msg"]
+        </h2>
+    }
+}
+else
+{
+
+    <table id="tables" class="table table-responsive">
+        <thead>
+            <tr>
+                <th>
+                    Lab Name
+                </th>
+                <th>
+                    Total Amount
+                </th>
+                @*<th>
+            Deducted Amount
+        </th>
+        <th>
+            Payable Amount
+        </th>*@
+                <th>
+                    Basic Amount
+                </th>
+                <th>
+                    GST in %
+                </th>
+                <th>
+                    Total Amount
+                </th>
+                @*<th>Deducted Amout</th>*@
+                <th>
+                    Commission in %
+                </th>
+                <th>
+                    TDS in %
+                </th>
+                <th>
+                    Payable Amount
+                </th>
+                <th>
+                    Action
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.HealthHistory)
+            {
+                <tr>
+                    <td>
+                        @item.LabName
+                    </td>
+                    @*<td>
+            @item.Amount
+        </td>
+        @{
+            double amt = (Math.Round(item.Amount * ViewBag.Amount) / 100);
+            double Value = item.Amount - amt;
+        }
+
+        <td>@amt</td>
+        <td>@Value</td>*@
+                    <td>
+                        @item.Amount
+                    </td>
+
+                    <td>
+                        @ViewBag.gstAmount
+                    </td>
+                    @{
+
+                        double? GSTAmt = (item.Amount * ViewBag.gstAmount) / 100;
+                        double? WithGSTAmt = item.Amount + GSTAmt;
+
+                    }
+                    <td>@WithGSTAmt</td>
+
+
+                    <td>@ViewBag.Amount</td>
+                    <td>@ViewBag.tdsAmount</td>
+                    @{
+
+                        double? commAmt = (item.Amount * ViewBag.Amount) / 100;
+                        double? tdsamt = (item.Amount * ViewBag.tdsAmount) / 100;
+                        double? Value = item.Amount - (commAmt + tdsamt);
+
+                    }
+
+                    <td>@Value</td>
+                    <td>
+                        <a href="/Payout/HealthPay?Center_Id=@item.Center_Id&Amount=@Value" class="btn btn-primary">Pay</a>
+                    </td>
+                    <td>
+                        <a href="/Payout/ViewHealthPayoutHistory?Id=@item.Center_Id" class="btn btn-primary">View Payout History</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+<script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
+<link href="~/css/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
+
+<script>
+    $(".datepicker").datepicker().datepicker('setDate', 'today');
+
+
+        $("#test").click(function () {
+            debugger
+            var date = $("#TestDate").val();
+            $.ajax({
+                url: "/Payout/Health?week=" + date + "",
+                type: "get",
+                success: function (response) {
+                    console.log(response);
+                    $("#prevAtt").html(response);
+                },
+                error: function (error) {
+                    console.log(error.responseText);
+
+                }
+            });
+
+        });
+
+        $("#test1").click(function () {
+            debugger
+            var name = $("#LabName").val();
+            $.ajax({
+                url: "/Payout/Lab?name=" + name + "",
+                type: "get",
+                success: function (response) {
+                    console.log(response);
+                    $("#prevAtt").html(response);
+                },
+                error: function (error) {
+                    console.log(error.responseText);
+
+                }
+            });
+
+        });
+</script>
+

@@ -1,0 +1,2210 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{4BF8FB9D-A0E8-497C-A71A-0811E05394C3}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>HospitalPortal</RootNamespace>
+    <AssemblyName>HospitalPortal</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <Use64BitIISExpress>
+    </Use64BitIISExpress>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AutoMapper, Version=3.1.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.3.1.0\lib\net40\AutoMapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="AutoMapper.Net4, Version=3.1.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.3.1.0\lib\net40\AutoMapper.Net4.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="BouncyCastle.Crypto, Version=1.8.9.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
+      <HintPath>..\packages\BouncyCastle.1.8.9\lib\BouncyCastle.Crypto.dll</HintPath>
+    </Reference>
+    <Reference Include="ClosedXML, Version=0.102.1.0, Culture=neutral, PublicKeyToken=fd1eb21b62ae805b, processorArchitecture=MSIL">
+      <HintPath>..\packages\ClosedXML.0.102.1\lib\netstandard2.0\ClosedXML.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.Logging, Version=3.3.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <HintPath>..\packages\Common.Logging.3.3.1\lib\net40\Common.Logging.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Common.Logging.Core, Version=3.3.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <HintPath>..\packages\Common.Logging.Core.3.3.1\lib\net40\Common.Logging.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DocumentFormat.OpenXml, Version=2.16.0.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
+      <HintPath>..\packages\DocumentFormat.OpenXml.2.16.0\lib\net46\DocumentFormat.OpenXml.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EPPlus, Version=6.2.8.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPPlus.6.2.8\lib\net462\EPPlus.dll</HintPath>
+    </Reference>
+    <Reference Include="EPPlus.Interfaces, Version=6.1.1.0, Culture=neutral, PublicKeyToken=a694d7f3b0907a61, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPPlus.Interfaces.6.1.1\lib\net462\EPPlus.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="EPPlus.System.Drawing, Version=6.1.1.0, Culture=neutral, PublicKeyToken=2308d35469c9bac0, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPPlus.System.Drawing.6.1.1\lib\net462\EPPlus.System.Drawing.dll</HintPath>
+    </Reference>
+    <Reference Include="ExcelDataReader, Version=3.6.0.0, Culture=neutral, PublicKeyToken=93517dbe6a4012fa, processorArchitecture=MSIL">
+      <HintPath>..\packages\ExcelDataReader.3.6.0\lib\net45\ExcelDataReader.dll</HintPath>
+    </Reference>
+    <Reference Include="ExcelDataReader.DataSet, Version=3.6.0.0, Culture=neutral, PublicKeyToken=93517dbe6a4012fa, processorArchitecture=MSIL">
+      <HintPath>..\packages\ExcelDataReader.DataSet.3.6.0\lib\net35\ExcelDataReader.DataSet.dll</HintPath>
+    </Reference>
+    <Reference Include="ExcelNumberFormat, Version=1.1.0.0, Culture=neutral, PublicKeyToken=23c6f5d73be07eca, processorArchitecture=MSIL">
+      <HintPath>..\packages\ExcelNumberFormat.1.1.0\lib\net20\ExcelNumberFormat.dll</HintPath>
+    </Reference>
+    <Reference Include="Irony, Version=1.0.11.0, Culture=neutral, PublicKeyToken=ca48ace7223ead47, processorArchitecture=MSIL">
+      <HintPath>..\packages\Irony.NetCore.1.0.11\lib\net461\Irony.dll</HintPath>
+    </Reference>
+    <Reference Include="itextsharp, Version=5.5.13.3, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\packages\iTextSharp.5.5.13.3\lib\itextsharp.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.IO.RecyclableMemoryStream, Version=1.4.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IO.RecyclableMemoryStream.1.4.1\lib\net46\Microsoft.IO.RecyclableMemoryStream.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.Common, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.WebForms.140.1000.523\lib\net40\Microsoft.ReportViewer.Common.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.DataVisualization, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.WebForms.140.1000.523\lib\net40\Microsoft.ReportViewer.DataVisualization.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.Design, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.WebForms.140.1000.523\lib\net40\Microsoft.ReportViewer.Design.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.ProcessingObjectModel, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.WebForms.140.1000.523\lib\net40\Microsoft.ReportViewer.ProcessingObjectModel.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WebDesign, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.WebForms.140.1000.523\lib\net40\Microsoft.ReportViewer.WebDesign.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WebForms, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.WebForms.140.1000.523\lib\net40\Microsoft.ReportViewer.WebForms.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WinForms, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.WebForms.140.1000.523\lib\net40\Microsoft.ReportViewer.WinForms.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.Types, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.SqlServer.Types.14.0.314.76\lib\net40\Microsoft.SqlServer.Types.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="Quartz, Version=2.6.2.0, Culture=neutral, PublicKeyToken=f6b8c98a402cc8a4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Quartz.2.6.2\lib\net40\Quartz.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SendGrid, Version=9.8.0.0, Culture=neutral, PublicKeyToken=4f047e93159395ca, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sendgrid.9.9.0\lib\net452\SendGrid.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SixLabors.Fonts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=d998eea7b14cab13, processorArchitecture=MSIL">
+      <HintPath>..\packages\SixLabors.Fonts.1.0.0\lib\netstandard2.0\SixLabors.Fonts.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.IO, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.4.3.0\lib\net462\System.IO.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Packaging, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.Packaging.6.0.0\lib\net461\System.IO.Packaging.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net" />
+    <Reference Include="System.Net.Http, Version=4.1.1.3, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Net.Http.4.3.4\lib\net46\System.Net.Http.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.4.3.0\lib\net462\System.Runtime.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.6.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.7.0\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Remoting" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Security.Cryptography.Algorithms, Version=4.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Algorithms.4.3.0\lib\net463\System.Security.Cryptography.Algorithms.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Encoding, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Encoding.4.3.0\lib\net46\System.Security.Cryptography.Encoding.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Primitives.4.3.0\lib\net46\System.Security.Cryptography.Primitives.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.X509Certificates, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.X509Certificates.4.3.0\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Text.RegularExpressions, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Text.RegularExpressions.4.3.1\lib\net463\System.Text.RegularExpressions.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Threading.Tasks" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="XLParser, Version=1.5.2.0, Culture=neutral, PublicKeyToken=63397e1e46bb91b4, processorArchitecture=MSIL">
+      <HintPath>..\packages\XLParser.1.5.2\lib\net461\XLParser.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Web.Razor">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Webpages">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Webpages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Webpages.Deployment">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Webpages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Webpages.Razor">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Webpages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Helpers">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\packages\AutoMapper.3.1.0\lib\net40\AutoMapper.Net4.dll">
+      <Link>AutoMapper.Net4.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\chosen-sprite%402x.png" />
+    <Content Include="Content\chosen-sprite.png" />
+    <Content Include="Content\chosen.css" />
+    <Content Include="Content\chosen.min.css" />
+    <Content Include="css\bootstrap-theme.css" />
+    <Content Include="css\bootstrap-theme.min.css" />
+    <Content Include="css\bootstrap.css" />
+    <Content Include="css\bootstrap.min.css" />
+    <Content Include="css\chosen-sprite%402x.png" />
+    <Content Include="css\chosen-sprite.png" />
+    <Content Include="css\chosen.css" />
+    <Content Include="css\chosen.min.css" />
+    <Content Include="css\component.css" />
+    <Content Include="css\datepicker.css" />
+    <Content Include="css\flexslider.css" />
+    <Content Include="css\font-awesome.css" />
+    <Content Include="css\font-awesome.min.css" />
+    <Content Include="css\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="css\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="css\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="css\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="css\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="css\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="css\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="css\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="css\images\ui-icons_222222_256x240.png" />
+    <Content Include="css\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="css\images\ui-icons_454545_256x240.png" />
+    <Content Include="css\images\ui-icons_888888_256x240.png" />
+    <Content Include="css\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="css\immersive-slider.css" />
+    <Content Include="css\jquery-ui.css" />
+    <Content Include="css\jquery-ui.min.css" />
+    <Content Include="css\jquery.flipster.css" />
+    <Content Include="css\jquery.ui.autocomplete.min.css" />
+    <Content Include="css\lightbox.css" />
+    <Content Include="css\memenu.css" />
+    <Content Include="css\style.css" />
+    <Content Include="css\style_grid.css" />
+    <Content Include="daterangepicker.css" />
+    <Content Include="daterangepicker.js" />
+    <Content Include="fonts\fontawesome-webfont.svg" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Gallery\20181213166313413431341341343134134134.jpg" />
+    <Content Include="giphy.gif" />
+    <Content Include="Global.asax" />
+    <Content Include="HomeCSS\bootstrap.css" />
+    <Content Include="HomeCSS\flexslider.css" />
+    <Content Include="HomeCSS\responsiveslides.css" />
+    <Content Include="HomeCSS\style.css" />
+    <Content Include="HomeCSS\style1.css" />
+    <Content Include="HomeJS\bars.js" />
+    <Content Include="HomeJS\bootstrap.js" />
+    <Content Include="HomeJS\counterup.min.js" />
+    <Content Include="HomeJS\demo.js" />
+    <Content Include="HomeJS\jquery-2.1.4.min.js" />
+    <Content Include="HomeJS\jquery.flexisel.js" />
+    <Content Include="HomeJS\jquery.flexslider.js" />
+    <Content Include="HomeJS\jquery.min.js" />
+    <Content Include="HomeJS\Responsive.js" />
+    <Content Include="HomeJS\responsiveslides.min.js" />
+    <Content Include="HomeJS\waypoints.min.js" />
+    <Content Include="Home\1.jpg" />
+    <Content Include="Home\1.png" />
+    <Content Include="Home\10.jpg" />
+    <Content Include="Home\11.jpg" />
+    <Content Include="Home\12.jpg" />
+    <Content Include="Home\13.jpg" />
+    <Content Include="Home\2.jpg" />
+    <Content Include="Home\2.png" />
+    <Content Include="Home\3.jpg" />
+    <Content Include="Home\3.png" />
+    <Content Include="Home\4.jpg" />
+    <Content Include="Home\4.png" />
+    <Content Include="Home\5.jpg" />
+    <Content Include="Home\5.png" />
+    <Content Include="Home\6.jpg" />
+    <Content Include="Home\7.jpg" />
+    <Content Include="Home\8.jpg" />
+    <Content Include="Home\9.jpg" />
+    <Content Include="Home\android.png" />
+    <Content Include="Home\banner.jpg" />
+    <Content Include="Home\banner1.jpg" />
+    <Content Include="Home\close.png" />
+    <Content Include="Home\favicon.ico" />
+    <Content Include="Home\img-sp.png" />
+    <Content Include="Home\logo.png" />
+    <Content Include="Home\search-icon.png" />
+    <Content Include="Home\tick.png" />
+    <Content Include="Images\01.jpg" />
+    <Content Include="Images\20185221539282882882828828828828288288288.jpg" />
+    <Content Include="Images\20185221539282932932829329329328293293293.jpg" />
+    <Content Include="Images\20185221754363123123631231231236312312312.jpg" />
+    <Content Include="Images\20185221813169789781697897897816978978978.jpg" />
+    <Content Include="Images\20185231219498418414984184184149841841841.jpg" />
+    <Content Include="Images\20185231242186906901869069069018690690690.jpg" />
+    <Content Include="Images\2018523124441601604416016016044160160160.jpg" />
+    <Content Include="Images\20185231246112862861128628628611286286286.jpg" />
+    <Content Include="Images\20185231247559359355935935935593593593.jpg" />
+    <Content Include="Images\20185231250228118112281181181122811811811.jpg" />
+    <Content Include="Images\20185241625399769763997697697639976976976.jpg" />
+    <Content Include="Images\20185241625399869863998698698639986986986.jpg" />
+    <Content Include="Images\201852416254027274027272740272727.png" />
+    <Content Include="Images\201852416404032324032323240323232.jpg" />
+    <Content Include="Images\201852416404066664066666640666666.jpg" />
+    <Content Include="Images\20185241658522172175221721721752217217217.jpg" />
+    <Content Include="Images\20185241726556626625566266266255662662662.jpg" />
+    <Content Include="Images\20185241726556756755567567567555675675675.png" />
+    <Content Include="Images\20185241726556796795567967967955679679679.jpg" />
+    <Content Include="Images\20185241744473533534735335335347353353353.jpg" />
+    <Content Include="Images\20185241744473633634736336336347363363363.png" />
+    <Content Include="Images\20185241854565395395653953953956539539539.jpg" />
+    <Content Include="Images\20185241854565515515655155155156551551551.jpg" />
+    <Content Include="Images\20185251040233803802338038038023380380380.jpg" />
+    <Content Include="Images\20185251040233933932339339339323393393393.jpg" />
+    <Content Include="Images\20185251121254554552545545545525455455455.jpg" />
+    <Content Include="Images\20185251124644544564454454456445445445.jpg" />
+    <Content Include="Images\20186141821408128124081281281240812812812.jpg" />
+    <Content Include="Images\20186141821408298294082982982940829829829.jpg" />
+    <Content Include="Images\20186141829306066063060660660630606606606.jpg" />
+    <Content Include="Images\20186141829306286283062862862830628628628.jpg" />
+    <Content Include="Images\20186141831108728721087287287210872872872.jpg" />
+    <Content Include="Images\20186141831108798791087987987910879879879.jpg" />
+    <Content Include="Images\20186141833415535534155355355341553553553.jpg" />
+    <Content Include="Images\20186141833415565564155655655641556556556.jpg" />
+    <Content Include="Images\20186141836376176173761761761737617617617.jpg" />
+    <Content Include="Images\20186141836376216213762162162137621621621.jpg" />
+    <Content Include="Images\20186141837595955955959559559559595595595.jpg" />
+    <Content Include="Images\20186141837596366365963663663659636636636.jpg" />
+    <Content Include="Images\20186141839257797792577977977925779779779.jpg" />
+    <Content Include="Images\20186141839258008002580080080025800800800.jpg" />
+    <Content Include="Images\20186141845555665665556656656655566566566.jpg" />
+    <Content Include="Images\20186141845555685685556856856855568568568.jpg" />
+    <Content Include="Images\20186141847148448441484484484414844844844.jpg" />
+    <Content Include="Images\20186141847148678671486786786714867867867.jpg" />
+    <Content Include="Images\20186151155114504501145045045011450450450.jpg" />
+    <Content Include="Images\20186151155114544541145445445411454454454.jpg" />
+    <Content Include="Images\573637299c.png" />
+    <Content Include="Images\ambulance.jpg" />
+    <Content Include="Images\ambulance.png" />
+    <Content Include="Images\Banner1.jpg" />
+    <Content Include="Images\Banner2.jpeg" />
+    <Content Include="Images\blog-icon1.png" />
+    <Content Include="Images\blog-icon2.png" />
+    <Content Include="Images\blog-icon3.png" />
+    <Content Include="Images\blog-icon4.png" />
+    <Content Include="Images\blog-icon5.png" />
+    <Content Include="Images\businesslogo.jpg" />
+    <Content Include="Images\BuyMedicin.png" />
+    <Content Include="Images\c01.jpg" />
+    <Content Include="Images\c02.jpg" />
+    <Content Include="Images\c03.jpg" />
+    <Content Include="Images\c04.jpg" />
+    <Content Include="Images\c05.jpg" />
+    <Content Include="Images\c06.jpg" />
+    <Content Include="Images\c07.jpg" />
+    <Content Include="Images\c08.jpg" />
+    <Content Include="Images\carousel-arrows-light.png" />
+    <Content Include="Images\checkUp.png" />
+    <Content Include="Images\dc1.jpg" />
+    <Content Include="Images\dc2.jpg" />
+    <Content Include="Images\dc3.jpg" />
+    <Content Include="Images\Doctor.png" />
+    <Content Include="Images\Doctor1.jpg" />
+    <Content Include="Images\Doctor512.png" />
+    <Content Include="Images\download.jpg" />
+    <Content Include="Images\Embrecolab.jpg" />
+    <Content Include="Images\g1.png" />
+    <Content Include="Images\g2.png" />
+    <Content Include="Images\g3.png" />
+    <Content Include="Images\heart.png" />
+    <Content Include="Images\hospitallogo.jpg" />
+    <Content Include="Images\images.png" />
+    <Content Include="Images\Lab.jpg" />
+    <Content Include="Images\LAB.png" />
+    <Content Include="Images\logo.png" />
+    <Content Include="Images\logo1.png" />
+    <Content Include="Images\marker.png" />
+    <Content Include="Images\Medcine.jpg" />
+    <Content Include="Images\nurse.png" />
+    <Content Include="Images\pharmacy.png" />
+    <Content Include="Images\PsLogo.png" />
+    <Content Include="Images\quotes_alt.png" />
+    <Content Include="Images\slider1.jpg" />
+    <Content Include="Images\slider2.jpg" />
+    <Content Include="Images\slider3.jpg" />
+    <Content Include="Images\under_construction.png" />
+    <Content Include="Images\user.jpg" />
+    <Content Include="jquery.flexisel.js" />
+    <Content Include="jquery.validate.unobtrusive.js" />
+    <Content Include="jquery.validate.unobtrusive.min.js" />
+    <Content Include="js\accordion.js" />
+    <Content Include="js\bars.js" />
+    <Content Include="js\bootstrap-datepicker.js" />
+    <Content Include="js\bootstrap-multiselect.css" />
+    <Content Include="js\bootstrap-multiselect.js" />
+    <Content Include="js\bootstrap.js" />
+    <Content Include="js\bootstrap.min.js" />
+    <Content Include="js\bulkEntry.js" />
+    <Content Include="js\classie.js" />
+    <Content Include="js\counterup.min.js" />
+    <Content Include="js\demo.js" />
+    <Content Include="js\easing.js" />
+    <Content Include="js\FranchiseAutoComplete.js" />
+    <Content Include="js\imagezoom.js" />
+    <Content Include="js\jarallax.js" />
+    <Content Include="css\bootstrap-theme.css.map" />
+    <Content Include="css\bootstrap-theme.min.css.map" />
+    <Content Include="css\bootstrap.css.map" />
+    <Content Include="css\bootstrap.min.css.map" />
+    <None Include="js\jquery-1.10.2.intellisense.js" />
+    <Content Include="js\jquery-1.10.2.js" />
+    <Content Include="js\jquery-1.10.2.min.js" />
+    <Content Include="js\jquery-1.11.1.min.js" />
+    <Content Include="js\jquery-1.7.js" />
+    <Content Include="js\jquery-2.1.4.min.js" />
+    <Content Include="js\jquery-ui.js" />
+    <Content Include="js\jquery.doubleScroll.js" />
+    <Content Include="js\jquery.flexslider.js" />
+    <Content Include="js\jquery.flipster.js" />
+    <Content Include="js\jquery.immersive-slider.js" />
+    <Content Include="js\jquery.min.js" />
+    <Content Include="js\lightbox-plus-jquery.min.js" />
+    <Content Include="js\main.js" />
+    <Content Include="js\memenu.js" />
+    <Content Include="js\move-top.js" />
+    <Content Include="js\responsiveslides.min.js" />
+    <Content Include="js\simpleCart.min.js" />
+    <Content Include="js\SmoothScroll.min.js" />
+    <Content Include="js\TestList.js" />
+    <Content Include="js\uisearch.js" />
+    <Content Include="js\waypoints.min.js" />
+    <Content Include="LabReports\2018931354231261262312612612623126126126.jpg" />
+    <Content Include="Lcss\animate.css" />
+    <Content Include="Lcss\bootstrap.css" />
+    <Content Include="Lcss\custom.css" />
+    <Content Include="Lcss\demo.css" />
+    <Content Include="Lcss\export.css" />
+    <Content Include="Lcss\font-awesome.css" />
+    <Content Include="Lcss\graph.css" />
+    <Content Include="Lcss\intlTelInput.css" />
+    <Content Include="Lcss\jqcandlestick.css" />
+    <Content Include="Lcss\jquery-ui.min.css" />
+    <Content Include="Lcss\jquery-ui.theme.min.css" />
+    <Content Include="Lcss\monthly.css" />
+    <Content Include="Lcss\owl.carousel.css" />
+    <Content Include="Lcss\SidebarNav.min.css" />
+    <Content Include="Lcss\style.css" />
+    <Content Include="lib\bootstrap\css\bootstrap-theme.css" />
+    <Content Include="lib\bootstrap\css\bootstrap-theme.min.css" />
+    <Content Include="lib\bootstrap\css\bootstrap.css" />
+    <Content Include="lib\bootstrap\css\bootstrap.min.css" />
+    <Content Include="lib\bootstrap\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="lib\bootstrap\js\bootstrap-confirmation.min.js" />
+    <Content Include="lib\bootstrap\js\bootstrap.js" />
+    <Content Include="lib\bootstrap\js\bootstrap.min.js" />
+    <Content Include="lib\fancy-zoom\css\fancyzoom.css" />
+    <Content Include="lib\fancy-zoom\img\closebox.png" />
+    <Content Include="lib\fancy-zoom\index.html" />
+    <Content Include="lib\fancy-zoom\src\fancyzoom.js" />
+    <Content Include="lib\flot\API.txt" />
+    <Content Include="lib\flot\examples\ajax.html" />
+    <Content Include="lib\flot\examples\annotating.html" />
+    <Content Include="lib\flot\examples\arrow-down.gif" />
+    <Content Include="lib\flot\examples\arrow-left.gif" />
+    <Content Include="lib\flot\examples\arrow-right.gif" />
+    <Content Include="lib\flot\examples\arrow-up.gif" />
+    <Content Include="lib\flot\examples\basic.html" />
+    <Content Include="lib\flot\examples\graph-types.html" />
+    <Content Include="lib\flot\examples\hs-2004-27-a-large_web.jpg" />
+    <Content Include="lib\flot\examples\image.html" />
+    <Content Include="lib\flot\examples\index.html" />
+    <Content Include="lib\flot\examples\interacting-axes.html" />
+    <Content Include="lib\flot\examples\interacting.html" />
+    <Content Include="lib\flot\examples\layout.css" />
+    <Content Include="lib\flot\examples\multiple-axes.html" />
+    <Content Include="lib\flot\examples\navigate.html" />
+    <Content Include="lib\flot\examples\percentiles.html" />
+    <Content Include="lib\flot\examples\pie.html" />
+    <Content Include="lib\flot\examples\realtime.html" />
+    <Content Include="lib\flot\examples\resize.html" />
+    <Content Include="lib\flot\examples\selection.html" />
+    <Content Include="lib\flot\examples\setting-options.html" />
+    <Content Include="lib\flot\examples\stacking.html" />
+    <Content Include="lib\flot\examples\symbols.html" />
+    <Content Include="lib\flot\examples\thresholding.html" />
+    <Content Include="lib\flot\examples\time.html" />
+    <Content Include="lib\flot\examples\tracking.html" />
+    <Content Include="lib\flot\examples\turning-series.html" />
+    <Content Include="lib\flot\examples\visitors.html" />
+    <Content Include="lib\flot\examples\zooming.html" />
+    <Content Include="lib\flot\excanvas.js" />
+    <Content Include="lib\flot\excanvas.min.js" />
+    <Content Include="lib\flot\FAQ.txt" />
+    <Content Include="lib\flot\jquery.colorhelpers.js" />
+    <Content Include="lib\flot\jquery.flot.crosshair.js" />
+    <Content Include="lib\flot\jquery.flot.fillbetween.js" />
+    <Content Include="lib\flot\jquery.flot.image.js" />
+    <Content Include="lib\flot\jquery.flot.js" />
+    <Content Include="lib\flot\jquery.flot.navigate.js" />
+    <Content Include="lib\flot\jquery.flot.pie.js" />
+    <Content Include="lib\flot\jquery.flot.resize.js" />
+    <Content Include="lib\flot\jquery.flot.selection.js" />
+    <Content Include="lib\flot\jquery.flot.stack.js" />
+    <Content Include="lib\flot\jquery.flot.symbol.js" />
+    <Content Include="lib\flot\jquery.flot.threshold.js" />
+    <Content Include="lib\flot\jquery.js" />
+    <Content Include="lib\flot\LICENSE.txt" />
+    <Content Include="lib\flot\NEWS.txt" />
+    <Content Include="lib\flot\PLUGINS.txt" />
+    <Content Include="lib\flot\README.txt" />
+    <Content Include="lib\font-awesome\css\font-awesome.css" />
+    <Content Include="lib\font-awesome\css\font-awesome.min.css" />
+    <Content Include="lib\font-awesome\fonts\fontawesome-webfont.svg" />
+    <Content Include="lib\fullcalendar-1.6.4\changelog.txt" />
+    <Content Include="lib\fullcalendar-1.6.4\demos\agenda-views.html" />
+    <Content Include="lib\fullcalendar-1.6.4\demos\basic-views.html" />
+    <Content Include="lib\fullcalendar-1.6.4\demos\cupertino\images\animated-overlay.gif" />
+    <Content Include="lib\fullcalendar-1.6.4\demos\cupertino\images\ui-bg_diagonals-thick_90_eeeeee_40x40.png" />
+    <Content Include="lib\fullcalendar-1.6.4\demos\cupertino\images\ui-bg_flat_15_cd0a0a_40x100.png" />
+    <Content Include="lib\fullcalendar-1.6.4\demos\cupertino\images\ui-bg_glass_100_e4f1fb_1x400.png" />
+    <Content Include="lib\fullcalendar-1.6.4\demos\cupertino\images\ui-bg_glass_50_3baae3_1x400.png" />
+    <Content Include="lib\fullcalendar-1.6.4\demos\cupertino\images\ui-bg_glass_80_d7ebf9_1x400.png" />
+    <Content Include="lib\fullcalendar-1.6.4\demos\cupertino\images\ui-bg_highlight-hard_100_f2f5f7_1x100.png" />
+    <Content Include="lib\fullcalendar-1.6.4\demos\cupertino\images\ui-bg_highlight-hard_70_000000_1x100.png" />
+    <Content Include="lib\fullcalendar-1.6.4\demos\cupertino\images\ui-bg_highlight-soft_100_deedf7_1x100.png" />
+    <Content Include="lib\fullcalendar-1.6.4\demos\cupertino\images\ui-bg_highlight-soft_25_ffef8f_1x100.png" />
+    <Content Include="lib\fullcalendar-1.6.4\demos\cupertino\images\ui-icons_2694e8_256x240.png" />
+    <Content Include="lib\fullcalendar-1.6.4\demos\cupertino\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="lib\fullcalendar-1.6.4\demos\cupertino\images\ui-icons_3d80b3_256x240.png" />
+    <Content Include="lib\fullcalendar-1.6.4\demos\cupertino\images\ui-icons_72a7cf_256x240.png" />
+    <Content Include="lib\fullcalendar-1.6.4\demos\cupertino\images\ui-icons_ffffff_256x240.png" />
+    <Content Include="lib\fullcalendar-1.6.4\demos\cupertino\jquery-ui.min.css" />
+    <Content Include="lib\fullcalendar-1.6.4\demos\default.html" />
+    <Content Include="lib\fullcalendar-1.6.4\demos\external-dragging.html" />
+    <Content Include="lib\fullcalendar-1.6.4\demos\gcal.html" />
+    <Content Include="lib\fullcalendar-1.6.4\demos\json.html" />
+    <Content Include="lib\fullcalendar-1.6.4\demos\selectable.html" />
+    <Content Include="lib\fullcalendar-1.6.4\demos\theme.html" />
+    <Content Include="lib\fullcalendar-1.6.4\fullcalendar\fullcalendar.css" />
+    <Content Include="lib\fullcalendar-1.6.4\fullcalendar\fullcalendar.js" />
+    <Content Include="lib\fullcalendar-1.6.4\fullcalendar\fullcalendar.min.js" />
+    <Content Include="lib\fullcalendar-1.6.4\fullcalendar\fullcalendar.print.css" />
+    <Content Include="lib\fullcalendar-1.6.4\fullcalendar\gcal.js" />
+    <Content Include="lib\fullcalendar-1.6.4\lib\jquery-ui.custom.min.js" />
+    <Content Include="lib\fullcalendar-1.6.4\lib\jquery.min.js" />
+    <Content Include="lib\fullcalendar-1.6.4\license.txt" />
+    <Content Include="lib\jquery-1.11.1.js" />
+    <Content Include="lib\jquery-1.11.1.min.js" />
+    <Content Include="lib\jQuery-Knob\index.html" />
+    <Content Include="lib\jQuery-Knob\js\jquery.knob.js" />
+    <Content Include="lib\jquery.imagesloaded.min.js" />
+    <Content Include="lib\jquery.isotope.min.js" />
+    <Content Include="lib\jquery.masonry.min.js" />
+    <Content Include="lib\jquery.peity.min.js" />
+    <Content Include="Ljs\AddBedroom.js" />
+    <Content Include="Ljs\AddHomeAmenity.js" />
+    <Content Include="Ljs\AddMoreAmenity.js" />
+    <Content Include="Ljs\amcharts.js" />
+    <Content Include="Ljs\bootstrap.js" />
+    <Content Include="Ljs\bulkEntry.js" />
+    <Content Include="Ljs\Chart.bundle.js" />
+    <Content Include="Ljs\Chart.js" />
+    <Content Include="Ljs\Chart.min.js" />
+    <Content Include="Ljs\chartinator.js" />
+    <Content Include="Ljs\classie.js" />
+    <Content Include="Ljs\custom.js" />
+    <Content Include="Ljs\DeleteRow.js" />
+    <Content Include="Ljs\export.min.js" />
+    <Content Include="Ljs\images\dragIconRoundBig.svg" />
+    <Content Include="Ljs\images\lens.svg" />
+    <Content Include="Ljs\index.js" />
+    <Content Include="Ljs\index1.js" />
+    <Content Include="Ljs\index2.js" />
+    <Content Include="Ljs\intlTelInput.js" />
+    <Content Include="Ljs\jquery-1.11.1.min.js" />
+    <Content Include="Ljs\jquery-1.7.1.min.js" />
+    <Content Include="Ljs\jquery-ui-1.8.20.min.js" />
+    <Content Include="Ljs\jquery.cookie.js" />
+    <Content Include="Ljs\jquery.flot.js" />
+    <Content Include="Ljs\jquery.jqcandlestick.min.js" />
+    <Content Include="Ljs\jquery.nicescroll.js" />
+    <Content Include="Ljs\light.js" />
+    <Content Include="Ljs\metisMenu.min.js" />
+    <Content Include="Ljs\modernizr.custom.js" />
+    <Content Include="Ljs\monthly.js" />
+    <Content Include="Ljs\owl.carousel.js" />
+    <Content Include="Ljs\pie-chart.js" />
+    <Content Include="Ljs\saleProduct.js" />
+    <Content Include="Ljs\scripts.js" />
+    <Content Include="Ljs\serial.js" />
+    <Content Include="Ljs\SidebarNav.min.js" />
+    <Content Include="Ljs\SimpleChart.js" />
+    <Content Include="Ljs\SocietyAmenities.js" />
+    <Content Include="Ljs\Test.js" />
+    <Content Include="Ljs\TestList.js" />
+    <Content Include="Ljs\utils.js" />
+    <Content Include="Ljs\validator.min.js" />
+    <Content Include="Models\DomainModels\Model1.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Model1.edmx</DependentUpon>
+      <LastGenOutput>Model1.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\DomainModels\Model1.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Model1.edmx</DependentUpon>
+      <LastGenOutput>Model1.cs</LastGenOutput>
+    </Content>
+    <Content Include="Scripts\AddCommision.js" />
+    <Content Include="Scripts\AllOrder.js" />
+    <Content Include="Scripts\AutoComplete.js" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\chosen.jquery.js" />
+    <Content Include="Scripts\chosen.jquery.min.js" />
+    <Content Include="Scripts\chosen.proto.js" />
+    <Content Include="Scripts\chosen.proto.min.js" />
+    <Content Include="Scripts\clone.js" />
+    <Content Include="Scripts\Controllers\changePasswordController.js" />
+    <Content Include="Scripts\Controllers\loginCtrl.js" />
+    <Content Include="Scripts\Controllers\MedicController.js" />
+    <Content Include="Scripts\date.js" />
+    <Content Include="Scripts\doctorSkill.js" />
+    <Content Include="Scripts\EditAlert.js" />
+    <None Include="Scripts\jquery-1.4.1-vsdoc.js" />
+    <Content Include="Scripts\jquery-1.4.1.js" />
+    <Content Include="Scripts\jquery-1.4.1.min.js" />
+    <None Include="Scripts\jquery-1.9.1.intellisense.js" />
+    <Content Include="Scripts\jquery-1.9.1.js" />
+    <Content Include="Scripts\jquery-1.9.1.min.js" />
+    <Content Include="Scripts\jquery-ui-1.8.20.min.js" />
+    <Content Include="Scripts\jquery-ui.js" />
+    <Content Include="Scripts\Library\angucomplete-alt.js" />
+    <Content Include="Scripts\Library\angular-route.js" />
+    <Content Include="Scripts\Library\angular-route.min.js" />
+    <Content Include="Scripts\Library\angular.js" />
+    <Content Include="Scripts\Library\angular.min.js" />
+    <Content Include="Scripts\Library\jquery-1.7.1.min.js" />
+    <Content Include="Scripts\Library\jquery-ui-1.8.20.min.js" />
+    <Content Include="Scripts\Library\jquery.validate.min.js" />
+    <Content Include="Scripts\Library\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\Library\VehicleList.js" />
+    <Content Include="Scripts\myScript.js" />
+    <Content Include="Scripts\popper.min.js" />
+    <Content Include="Scripts\prototype.js" />
+    <Content Include="Scripts\VendorPayout.js" />
+    <Content Include="Scripts\ViewReport.js" />
+    <Content Include="ServiceImages\ambulance.png" />
+    <Content Include="ServiceImages\healthcheckup.png" />
+    <Content Include="ServiceImages\lab.png" />
+    <Content Include="ServiceImages\medicine.jpg" />
+    <Content Include="SqlServerTypes\readme.htm" />
+    <Content Include="SqlServerTypes\x64\msvcr120.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlServerTypes\x64\SqlServerSpatial140.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlServerTypes\x86\msvcr120.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlServerTypes\x86\SqlServerSpatial140.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="style.css" />
+    <Content Include="stylesheets\elements.css" />
+    <Content Include="stylesheets\isotope.css" />
+    <Content Include="stylesheets\jquery-ui.css" />
+    <Content Include="stylesheets\jquery.ui.autocomplete.css" />
+    <Content Include="stylesheets\premium2.css" />
+    <Content Include="stylesheets\premium.css" />
+    <Content Include="stylesheets\template.css" />
+    <Content Include="stylesheets\theme2.css" />
+    <Content Include="stylesheets\theme.css" />
+    <Content Include="text.png" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="BL\Common.cs" />
+    <Compile Include="BL\GenerateBookingId.cs" />
+    <Compile Include="BL\Job.cs" />
+    <Compile Include="BL\JobSchedule.cs" />
+    <Compile Include="BL\NearestMedicine.cs" />
+    <Compile Include="BL\Notification.cs" />
+    <Compile Include="Controllers\AddTestController.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\AdminOperationController.cs" />
+    <Compile Include="Controllers\AmbulancePaymentController.cs" />
+    <Compile Include="Controllers\AmbulanceReportController.cs" />
+    <Compile Include="Controllers\ApiTestController.cs" />
+    <Compile Include="Controllers\BankController.cs" />
+    <Compile Include="Controllers\CategoryController.cs" />
+    <Compile Include="Controllers\ChargesController.cs" />
+    <Compile Include="Controllers\ChemistApiController.cs" />
+    <Compile Include="Controllers\CommisionReportController.cs" />
+    <Compile Include="Controllers\CommissionController.cs" />
+    <Compile Include="Controllers\CommonApiController.cs" />
+    <Compile Include="Controllers\ComplaintApiController.cs" />
+    <Compile Include="Controllers\ComplaintController.cs" />
+    <Compile Include="Controllers\CompletHealthCheckupController.cs" />
+    <Compile Include="Controllers\ContentManagmentController.cs" />
+    <Compile Include="Controllers\DoctorApiController.cs" />
+    <Compile Include="Controllers\DoctorAppointmentController.cs" />
+    <Compile Include="Controllers\DriverApiController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\ExpenseController.cs" />
+    <Compile Include="Controllers\ForgotPasswordController.cs" />
+    <Compile Include="Controllers\FranchisesApiController.cs" />
+    <Compile Include="Controllers\GalleryController.cs" />
+    <Compile Include="Controllers\HealthCheckUpApiController.cs" />
+    <Compile Include="Controllers\HealthPackageController.cs" />
+    <Compile Include="Controllers\HealthPackageMasterController.cs" />
+    <Compile Include="Controllers\HelloController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\HospitalAPIController.cs" />
+    <Compile Include="Controllers\HospitalCommissionController.cs" />
+    <Compile Include="Controllers\HospitalPaymentController.cs" />
+    <Compile Include="Controllers\HospitalTDSController.cs" />
+    <Compile Include="Controllers\LabApiController.cs" />
+    <Compile Include="Controllers\LabController.cs" />
+    <Compile Include="Controllers\CommonController.cs" />
+    <Compile Include="Controllers\ChemistController.cs" />
+    <Compile Include="Controllers\LocationController.cs" />
+    <Compile Include="Controllers\MedicMasterController.cs" />
+    <Compile Include="Controllers\NurseAPIController.cs" />
+    <Compile Include="Controllers\NurseAppointmentAPIController.cs" />
+    <Compile Include="Controllers\NurseController.cs" />
+    <Compile Include="Controllers\HospitalController.cs" />
+    <Compile Include="Controllers\NurseServicesController.cs" />
+    <Compile Include="Controllers\PatientApiController.cs" />
+    <Compile Include="Controllers\PatientController.cs" />
+    <Compile Include="Controllers\PatientMedicineController.cs" />
+    <Compile Include="Controllers\PayoutController.cs" />
+    <Compile Include="Controllers\ReportController.cs" />
+    <Compile Include="Controllers\RoleUpdateController.cs" />
+    <Compile Include="Controllers\Rwa_ReportController.cs" />
+    <Compile Include="Controllers\SalaryMasterController.cs" />
+    <Compile Include="Controllers\ScanReportsController.cs" />
+    <Compile Include="Controllers\SignupApiController.cs" />
+    <Compile Include="Controllers\SpecialistController.cs" />
+    <Compile Include="Controllers\DepartmentController.cs" />
+    <Compile Include="Controllers\CityController.cs" />
+    <Compile Include="Controllers\DriverController.cs" />
+    <Compile Include="Controllers\EmployeeController.cs" />
+    <Compile Include="Controllers\TDSReportController.cs" />
+    <Compile Include="Controllers\Test1Controller.cs" />
+    <Compile Include="Controllers\TestApiController.cs" />
+    <Compile Include="Controllers\TestController.cs" />
+    <Compile Include="Controllers\TestListController.cs" />
+    <Compile Include="Controllers\TestReportController.cs" />
+    <Compile Include="Controllers\UnsuccessfulAttemptController.cs" />
+    <Compile Include="Controllers\UpdateTokenController.cs" />
+    <Compile Include="Controllers\VehicleController.cs" />
+    <Compile Include="Controllers\RwaController.cs" />
+    <Compile Include="Controllers\DoctorRegistrationController.cs" />
+    <Compile Include="Controllers\VehicleTypeApiController.cs" />
+    <Compile Include="Controllers\VendorCommissionController.cs" />
+    <Compile Include="Controllers\VendorController.cs" />
+    <Compile Include="Controllers\VehicleTypeController.cs" />
+    <Compile Include="Controllers\StateController.cs" />
+    <Compile Include="Controllers\VendorPaymentController.cs" />
+    <Compile Include="Controllers\VendorPayoutController.cs" />
+    <Compile Include="Controllers\VendorReportController.cs" />
+    <Compile Include="Controllers\ViewReportController.cs" />
+    <Compile Include="Controllers\WalletController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Infrastructure\AutomapperConfig.cs" />
+    <Compile Include="Models\APIModels\AddMedicineCartRequest.cs" />
+    <Compile Include="Models\APIModels\AppointmentClass.cs" />
+    <Compile Include="Models\APIModels\AppointmentOFhospital.cs" />
+    <Compile Include="Models\APIModels\BookHealthCheckUp.cs" />
+    <Compile Include="Models\APIModels\BookNurseAppointmentRequest.cs" />
+    <Compile Include="Models\APIModels\CancelAppointementDTO.cs" />
+    <Compile Include="Models\APIModels\Complaint4Patient.cs" />
+    <Compile Include="Models\APIModels\ContentVM.cs" />
+    <Compile Include="Models\APIModels\AppointmentDetailDoctorDTO.cs" />
+    <Compile Include="Models\APIModels\DoctorListVM.cs" />
+    <Compile Include="Models\APIModels\DoctorLoginResponse.cs" />
+    <Compile Include="Models\APIModels\Doctor_Complaint.cs" />
+    <Compile Include="Models\APIModels\DriverComplaint.cs" />
+    <Compile Include="Models\APIModels\GetBankDetails.cs" />
+    <Compile Include="Models\APIModels\GetWalletDTO.cs" />
+    <Compile Include="Models\APIModels\HealthCheckUpVM.cs" />
+    <Compile Include="Models\APIModels\HospitalFicilityVM.cs" />
+    <Compile Include="Models\APIModels\HospitalLabVM.cs" />
+    <Compile Include="Models\APIModels\kartCount.cs" />
+    <Compile Include="Models\APIModels\Lab_Comp.cs" />
+    <Compile Include="Models\APIModels\NurseAppointmentHistory.cs" />
+    <Compile Include="Models\APIModels\NurseTypeAPI.cs" />
+    <Compile Include="Models\APIModels\Nurse_Complaints.cs" />
+    <Compile Include="Models\APIModels\PatientListC.cs" />
+    <Compile Include="Models\APIModels\PatientListVM.cs" />
+    <Compile Include="Models\APIModels\PatientReportMasterVM.cs" />
+    <Compile Include="Models\APIModels\PaymentHistroyForDosctor.cs" />
+    <Compile Include="Models\APIModels\RegisterNurseLocationApi.cs" />
+    <Compile Include="Models\APIModels\Rmwithparm.cs" />
+    <Compile Include="Models\APIModels\UpdateBankDetails.cs" />
+    <Compile Include="Models\APIModels\ValuesController1.cs" />
+    <Compile Include="Models\APIModels\ValuesController2.cs" />
+    <Compile Include="Models\APIModels\WalletDTO.cs" />
+    <Compile Include="Models\DomainModels\AddFranchiseDepartment.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\AdminLogin.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\AmbulanceType.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\AppLog.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\BankDetail.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\Banner.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\Bannerprofessional.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\BookTestLab.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\CancelledAppointment.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\Charge.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\CheckUpReport.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\ChekcupCenterDepartment.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\Chemist.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\chemistcomplaint.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\ChemistMedicine.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\ChemistPayOut.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\CityMaster.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\CityTemp.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\CmpltCheckUp.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\CommissionMaster.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\Content.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\Department.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\DepartmentTemp.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\Discount.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\Doctor.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\DoctorBookingMode.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\DoctorChooseDepartment.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\DoctorClinic.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\DoctorComplaint.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\DoctorDepartment.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\DoctorPayOut.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\DoctorReport.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\DoctorSkill.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\DoctorTimeSlot.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\Driver.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\DriverComplaint.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\DriverLocation.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\DriverPayOut.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\Employee.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\ExpenseReport.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\FraAddVehicleType.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\FranchiseComplaint.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\FranchiseGstMaster.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\franchiseRole.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\FranchiseTDSMaster.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\Franchise_Department.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\Franchise_Specialist.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\Gallery.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\GEtAllMedicines_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\GetMedicineCart_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\GetNearDriver_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\GetNurseAppointmentList_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\GSTMaster.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\HealthBooking.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\HealthCheckUp.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\HealthCheckupCenter.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\HealthCheckUpPackage.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\HealthLabTest.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\HealthPackageMaster.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\HealthPayOut.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\HopitalFaciltiy.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\Hospital.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\HospitalDepartment.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\HospitalDoctor.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\HospitalDoctorDepartment.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\HospitalNurse.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\HospitalReport.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\Lab.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\LabBooking.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\LabComplaint.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\LabPayOut.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\LabReport.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\LabTest.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\Location.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\Mail.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\MainCategory.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\MediaHospital.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\Medicine.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\MedicineCart.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\Medicinedeliver.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\MedicineDeliveryCharge.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\MedicineOrder.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\MedicineOrderDetail.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\MedicinePrescriptionDetail.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\MedicineType.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\Medicine_Pay.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\Medium.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\Model1.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model1.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\Model1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\Model1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model1.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\NearDriver.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\Nurse.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\NurseComplaint.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\NursePayout.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\NurseService.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\NurseServiceRequest.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\NurseType.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\Nurse_Location.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\Nurse_Rep.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\PageMaster.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\Patient.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\PatientAppointment.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\PatientComplaint.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\PatientRequest.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\PatientSubject.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\PaymentMaster.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\PayoutMaster.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\PenaltyAmount.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\PFMaster.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\PrescriptionAppointment.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\Review.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\RWA.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\RWAGstMaster.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\RWAPayment.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\RwaPayout.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\RWATDSMaster.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\RWA_Complaints.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\RWA_PaymentReport.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\SalaryMaster.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\Specialist.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\spVehicleCategory_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\spVehicleList_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\sp_AppointmentHistory_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\sp_getChemistOrder_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\sp_GetNearestMedicalShop_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\sp_getOrderDetail_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\sp_getOrder_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\sp_PatientAppointments_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\sp_SearchNurse_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\StateMaster.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\TDSMaster.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\TempDepartment.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\TestInLab.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\TestLab.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\TimeSlot.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\TravelMaster.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\TravelRecordMaster.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\udf_AppointmentSlots_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\udf_getAppointmentSlots_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\UserWallet.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\usp_AppintmentSlots_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\usp_getAppintmentSlots_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\usp_GetBookingList_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\Vehicle.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\VehicleCharge.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\VehicleTemp.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\VehicleType.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\Vendor.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\VendorPayOut.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\driverlogin.cs" />
+    <Compile Include="Models\HospitalList.cs" />
+    <Compile Include="Models\RequestModel\AddCityLocationReq.cs" />
+    <Compile Include="Models\RequestModel\AddClinicDTO.cs" />
+    <Compile Include="Models\RequestModel\DeliveryUpdateDTO.cs" />
+    <Compile Include="Models\RequestModel\DoctorSpecializationAndDepRep.cs" />
+    <Compile Include="Models\RequestModel\EditClinicDTO.cs" />
+    <Compile Include="Models\RequestModel\HealthPackageMasterDTO.cs" />
+    <Compile Include="Models\RequestModel\refundAmountDTO.cs" />
+    <Compile Include="Models\RequestModel\StatusResetRequest.cs" />
+    <Compile Include="Models\RequestModel\TermsConditionChecked.cs" />
+    <Compile Include="Models\RequestModel\TrasnsactionPwdRequestModel.cs" />
+    <Compile Include="Models\RequestModel\VehicleEditDto.cs" />
+    <Compile Include="Models\TestNurseBooking.cs" />
+    <Compile Include="Models\Validation\FormValidations.cs" />
+    <Compile Include="Models\Validation\MobileNumberValidation.cs" />
+    <Compile Include="Models\ViewModels\AddContentVM.cs" />
+    <Compile Include="Models\ViewModels\AmbulancesReport.cs" />
+    <Compile Include="Models\ViewModels\AmbulaneBankDetailsVM.cs" />
+    <Compile Include="Models\ViewModels\BannerAddDTO.cs" />
+    <Compile Include="Models\ViewModels\Banner_List.cs" />
+    <Compile Include="Models\ViewModels\CancelBookingVM.cs" />
+    <Compile Include="Models\ViewModels\ChargeDTO.cs" />
+    <Compile Include="Models\ViewModels\ChemistCommissionReport.cs" />
+    <Compile Include="Models\ViewModels\CommissionDTO.cs" />
+    <Compile Include="Models\ViewModels\ComplaintVM.cs" />
+    <Compile Include="Models\ViewModels\CompleteCheckup.cs" />
+    <Compile Include="Models\APIModels\DoctorSearchResult.cs" />
+    <Compile Include="Models\APIModels\FileVM.cs" />
+    <Compile Include="Models\APIModels\HealthCheckUpFile.cs" />
+    <Compile Include="Models\APIModels\LabFiles.cs" />
+    <Compile Include="Models\APIModels\NurseSearch.cs" />
+    <Compile Include="Models\APIModels\OrderReq.cs" />
+    <Compile Include="Models\APIModels\PatientCartModel.cs" />
+    <Compile Include="Models\APIModels\PatientOrderDetailMode.cs" />
+    <Compile Include="Models\APIModels\ReturnMessage.cs" />
+    <Compile Include="Models\APIModels\UpdateMedicineQtyModel.cs" />
+    <Compile Include="Models\CommonClasses\StateCityAbs.cs" />
+    <Compile Include="Models\ViewModels\AppointmentDetails.cs" />
+    <Compile Include="Models\ViewModels\ChemistReport.cs" />
+    <Compile Include="Models\ViewModels\DoctorCommissionReport.cs" />
+    <Compile Include="Models\ViewModels\DoctorReports.cs" />
+    <Compile Include="Models\ViewModels\DoctorslotDTO.cs" />
+    <Compile Include="Models\ViewModels\EmployeeNameVM.cs" />
+    <Compile Include="Models\ViewModels\EverifyUploadModel.cs" />
+    <Compile Include="Models\ViewModels\ExpenseReportDTO.cs" />
+    <Compile Include="Models\ViewModels\FranchiseTDSDTO.cs" />
+    <Compile Include="Models\ViewModels\GallertDTO.cs" />
+    <Compile Include="Models\ViewModels\GSTMasterDTO.cs" />
+    <Compile Include="Models\ViewModels\HealthCheckListVM.cs" />
+    <Compile Include="Models\ViewModels\HealthCheckUpPackageDTO.cs" />
+    <Compile Include="Models\ViewModels\HealthCheckUpRoprt.cs" />
+    <Compile Include="Models\ViewModels\HealthCommissionReport.cs" />
+    <Compile Include="Models\ViewModels\HealthTest.cs" />
+    <Compile Include="Models\ViewModels\HospitalNurseCommissionReport.cs" />
+    <Compile Include="Models\ViewModels\HospitalNurseDTO.cs" />
+    <Compile Include="Models\ViewModels\HospitalReportDTO.cs" />
+    <Compile Include="Models\ViewModels\LabCommissionReport.cs" />
+    <Compile Include="Models\ViewModels\LabReportsVM.cs" />
+    <Compile Include="Models\ViewModels\LabReportDTO.cs" />
+    <Compile Include="Models\ViewModels\LabTestReport.cs" />
+    <Compile Include="Models\ViewModels\MailVM.cs" />
+    <Compile Include="Models\ViewModels\MainCategoryDTO.cs" />
+    <Compile Include="Models\ViewModels\MediaHospitalDto.cs" />
+    <Compile Include="Models\ViewModels\MedicineList.cs" />
+    <Compile Include="Models\ViewModels\MedicinePrescriptionDTO.cs" />
+    <Compile Include="Models\ViewModels\MedicineVM.cs" />
+    <Compile Include="Models\ViewModels\NurseAppointmentModel.cs" />
+    <Compile Include="Models\ViewModels\NurseAppointmentRequestList.cs" />
+    <Compile Include="Models\ViewModels\NurseCommissionReports.cs" />
+    <Compile Include="Models\ViewModels\NurseListVM.cs" />
+    <Compile Include="Models\ViewModels\NurseLocationAPI.cs" />
+    <Compile Include="Models\ViewModels\NurseReport.cs" />
+    <Compile Include="Models\ViewModels\PageMasterDTO.cs" />
+    <Compile Include="Models\ViewModels\PaymentMasterDTO.cs" />
+    <Compile Include="Models\ViewModels\PayoutMasterDTO.cs" />
+    <Compile Include="Models\ViewModels\PayOutVM.cs" />
+    <Compile Include="Models\ViewModels\PrescriptionDTO.cs" />
+    <Compile Include="Models\ViewModels\ReportDetails.cs" />
+    <Compile Include="Models\ViewModels\ReportDTO.cs" />
+    <Compile Include="Models\ViewModels\RequestedCity.cs" />
+    <Compile Include="Models\ViewModels\rwaPaymentDTO.cs" />
+    <Compile Include="Models\ViewModels\rwaReport.cs" />
+    <Compile Include="Models\ViewModels\RWATDSDTO.cs" />
+    <Compile Include="Models\ViewModels\ScanReportVM.cs" />
+    <Compile Include="Models\ViewModels\SharetoVendorDTO.cs" />
+    <Compile Include="Models\ViewModels\TDSMasterDTO.cs" />
+    <Compile Include="Models\ViewModels\TestListByHealthCheckUp.cs" />
+    <Compile Include="Models\ViewModels\AddTestByLabDTO.cs" />
+    <Compile Include="Models\ViewModels\Appointment.cs" />
+    <Compile Include="Models\ViewModels\AppointmentSearchBy Patient.cs" />
+    <Compile Include="Models\ViewModels\BookedTests.cs" />
+    <Compile Include="Models\ViewModels\BookLabClass.cs" />
+    <Compile Include="Models\ViewModels\ChangePasswordModel.cs" />
+    <Compile Include="Models\ViewModels\CheckupCenterDepartmentDTO.cs" />
+    <Compile Include="Models\ViewModels\CheckupCenterDTO.cs" />
+    <Compile Include="Models\ViewModels\CheckUpReportDTO.cs" />
+    <Compile Include="Models\ViewModels\ChemistDTO.cs" />
+    <Compile Include="Models\ViewModels\ChemistOrderHistory.cs" />
+    <Compile Include="Models\ViewModels\CityMasterDTO.cs" />
+    <Compile Include="Models\ViewModels\DepartmentDTO.cs" />
+    <Compile Include="Models\ViewModels\DoctorDTO.cs" />
+    <Compile Include="Models\ViewModels\DoctorSkillsDTO.cs" />
+    <Compile Include="Models\ViewModels\DriverDTO.cs" />
+    <Compile Include="Models\ViewModels\EmployeeDTO.cs" />
+    <Compile Include="Models\ViewModels\Handler1.ashx.cs">
+      <DependentUpon>Handler1.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ViewModels\HealthCheckupCenterDTO.cs" />
+    <Compile Include="Models\ViewModels\HealthCheckupPatientList.cs" />
+    <Compile Include="Models\ViewModels\HospitalDepartmentDTO.cs" />
+    <Compile Include="Models\ViewModels\HospitalDoctorDTO.cs" />
+    <Compile Include="Models\ViewModels\HospitalDTO.cs" />
+    <Compile Include="Models\ViewModels\HospitalFacilityDTO.cs" />
+    <Compile Include="Models\ViewModels\LabDTO.cs" />
+    <Compile Include="Models\ViewModels\LabListItems.cs" />
+    <Compile Include="Models\ViewModels\LabListViaTest_VM.cs" />
+    <Compile Include="Models\ViewModels\LabVM.cs" />
+    <Compile Include="Models\ViewModels\LocationDTO.cs" />
+    <Compile Include="Models\ViewModels\LoginModel.cs" />
+    <Compile Include="Models\ViewModels\MedicineDTO.cs" />
+    <Compile Include="Models\ViewModels\NearestChemist.cs" />
+    <Compile Include="Models\ViewModels\NurseDTO.cs" />
+    <Compile Include="Models\ViewModels\NurseLocationModel.cs" />
+    <Compile Include="Models\ViewModels\PatientAppointmentVM.cs" />
+    <Compile Include="Models\ViewModels\PatientDTO.cs" />
+    <Compile Include="Models\ViewModels\PatientHistory.cs" />
+    <Compile Include="Models\ViewModels\PatientList.cs" />
+    <Compile Include="Models\ViewModels\PatientListModel.cs" />
+    <Compile Include="Models\ViewModels\PatientTestListVM.cs" />
+    <Compile Include="Models\ViewModels\RegisterNurseLocation.cs" />
+    <Compile Include="Models\ViewModels\returnMessage.cs" />
+    <Compile Include="Models\ViewModels\RWADTO.cs" />
+    <Compile Include="Models\ViewModels\ShowAppointmentVM.cs" />
+    <Compile Include="Models\ViewModels\ShowMedicineModel.cs" />
+    <Compile Include="Models\ViewModels\SlotTimingList.cs" />
+    <Compile Include="Models\ViewModels\SlotTimingVM.cs" />
+    <Compile Include="Models\ViewModels\SpecialistDTO.cs" />
+    <Compile Include="Models\ViewModels\StateMasterDTO.cs" />
+    <Compile Include="Models\ViewModels\TestArray.cs" />
+    <Compile Include="Models\ViewModels\TestDTO.cs" />
+    <Compile Include="Models\ViewModels\TestListByLab.cs" />
+    <Compile Include="Models\ViewModels\TimeSpans.cs" />
+    <Compile Include="Models\ViewModels\TravelHistoryVM.cs" />
+    <Compile Include="Models\ViewModels\UpdateBank.cs" />
+    <Compile Include="Models\ViewModels\UpdateDepartment.cs" />
+    <Compile Include="Models\ViewModels\uploadDoc_Report.cs" />
+    <Compile Include="Models\ViewModels\VehicleAllotmentDTO.cs" />
+    <Compile Include="Models\ViewModels\VehicleChargesDTO.cs" />
+    <Compile Include="Models\ViewModels\VehicleDTO.cs" />
+    <Compile Include="Models\ViewModels\VehicleList.cs" />
+    <Compile Include="Models\ViewModels\VehicleTempDTO.cs" />
+    <Compile Include="Models\ViewModels\VehicleTypeDTO.cs" />
+    <Compile Include="Models\ViewModels\VehicleTypeLISTvm.cs" />
+    <Compile Include="Models\ViewModels\VendorAddedVehicleVM.cs" />
+    <Compile Include="Models\ViewModels\VendorCommissionReport.cs" />
+    <Compile Include="Models\ViewModels\VendorData.cs" />
+    <Compile Include="Models\ViewModels\VendorDTO.cs" />
+    <Compile Include="Models\ViewModels\VendorId.cs" />
+    <Compile Include="Models\ViewModels\VendorPaymentDTO.cs" />
+    <Compile Include="Models\ViewModels\VendorPayOutListVM.cs" />
+    <Compile Include="Models\ViewModels\ViewAppointment.cs" />
+    <Compile Include="Models\ViewModels\ViewAppointmentByDoctorVM.cs" />
+    <Compile Include="Models\ViewModels\ViewChemistDetails.cs" />
+    <Compile Include="Models\ViewModels\ViewDoctorReports.cs" />
+    <Compile Include="Models\ViewModels\ViewHealthCheckup.cs" />
+    <Compile Include="Models\ViewModels\ViewHealthDetails.cs" />
+    <Compile Include="Models\ViewModels\ViewLabDetails.cs" />
+    <Compile Include="Models\ViewModels\ViewNurseList.cs" />
+    <Compile Include="Models\ViewModels\ViewPayOutHistory.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\CommonRepository.cs" />
+    <Compile Include="SqlServerTypes\Loader.cs" />
+    <Compile Include="Utilities\Constants.cs" />
+    <Compile Include="Utilities\CookieHelper.cs" />
+    <Compile Include="Utilities\CustomHelper.cs" />
+    <Compile Include="Utilities\EmailOperations.cs" />
+    <Compile Include="Utilities\FileOperation.cs" />
+    <Compile Include="Utilities\Message.cs" />
+    <Compile Include="Utilities\Mime.cs" />
+    <Compile Include="Utilities\MultiFileUploadProvider.cs" />
+    <Compile Include="Utilities\StringCipher.cs" />
+    <Compile Include="Utilities\UserIdentity.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\web.config" />
+    <Content Include="packages.config" />
+    <Content Include="lib\.DS_Store" />
+    <Content Include="lib\bootstrap\css\bootstrap-theme.css.map" />
+    <Content Include="lib\bootstrap\css\bootstrap.css.map" />
+    <Content Include="lib\bootstrap\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="lib\bootstrap\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="lib\bootstrap\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="lib\fancy-zoom\src\fancyzoom.coffee" />
+    <Content Include="lib\flot\examples\data-eu-gdp-growth-1.json" />
+    <Content Include="lib\flot\examples\data-eu-gdp-growth-2.json" />
+    <Content Include="lib\flot\examples\data-eu-gdp-growth-3.json" />
+    <Content Include="lib\flot\examples\data-eu-gdp-growth-4.json" />
+    <Content Include="lib\flot\examples\data-eu-gdp-growth-5.json" />
+    <Content Include="lib\flot\examples\data-eu-gdp-growth.json" />
+    <Content Include="lib\flot\examples\data-japan-gdp-growth.json" />
+    <Content Include="lib\flot\examples\data-usa-gdp-growth.json" />
+    <Content Include="lib\flot\Makefile" />
+    <Content Include="lib\font-awesome\fonts\fontawesome-webfont.eot" />
+    <Content Include="lib\font-awesome\fonts\fontawesome-webfont.ttf" />
+    <Content Include="lib\font-awesome\fonts\fontawesome-webfont.woff" />
+    <Content Include="lib\font-awesome\fonts\FontAwesome.otf" />
+    <Content Include="lib\font-awesome\less\bordered-pulled.less" />
+    <Content Include="lib\font-awesome\less\core.less" />
+    <Content Include="lib\font-awesome\less\fixed-width.less" />
+    <Content Include="lib\font-awesome\less\font-awesome.less" />
+    <Content Include="lib\font-awesome\less\icons.less" />
+    <Content Include="lib\font-awesome\less\larger.less" />
+    <Content Include="lib\font-awesome\less\list.less" />
+    <Content Include="lib\font-awesome\less\mixins.less" />
+    <Content Include="lib\font-awesome\less\path.less" />
+    <Content Include="lib\font-awesome\less\rotated-flipped.less" />
+    <Content Include="lib\font-awesome\less\spinning.less" />
+    <Content Include="lib\font-awesome\less\stacked.less" />
+    <Content Include="lib\font-awesome\less\variables.less" />
+    <Content Include="lib\font-awesome\scss\font-awesome.scss" />
+    <Content Include="lib\font-awesome\scss\_bordered-pulled.scss" />
+    <Content Include="lib\font-awesome\scss\_core.scss" />
+    <Content Include="lib\font-awesome\scss\_fixed-width.scss" />
+    <Content Include="lib\font-awesome\scss\_icons.scss" />
+    <Content Include="lib\font-awesome\scss\_larger.scss" />
+    <Content Include="lib\font-awesome\scss\_list.scss" />
+    <Content Include="lib\font-awesome\scss\_mixins.scss" />
+    <Content Include="lib\font-awesome\scss\_path.scss" />
+    <Content Include="lib\font-awesome\scss\_rotated-flipped.scss" />
+    <Content Include="lib\font-awesome\scss\_spinning.scss" />
+    <Content Include="lib\font-awesome\scss\_stacked.scss" />
+    <Content Include="lib\font-awesome\scss\_variables.scss" />
+    <Content Include="lib\fullcalendar-1.6.4\.DS_Store" />
+    <Content Include="lib\fullcalendar-1.6.4\demos\json-events.php" />
+    <Content Include="lib\jQuery-Knob\knob.jquery.json" />
+    <Content Include="lib\jQuery-Knob\README.md" />
+    <Content Include="Views\Shared\_AdminLayout.cshtml" />
+    <Content Include="Views\Shared\_Navigation.cshtml" />
+    <Content Include="Views\Admin\ChangePassword.cshtml" />
+    <Content Include="Views\Admin\Dashboard.cshtml" />
+    <Content Include="Views\Admin\Login.cshtml" />
+    <Content Include="Views\State\Add.cshtml" />
+    <Content Include="Views\Shared\_DisplayMessage.cshtml" />
+    <Content Include="Views\State\Edit.cshtml" />
+    <Content Include="Views\State\All.cshtml" />
+    <Content Include="Views\Department\Add.cshtml" />
+    <Content Include="Views\Department\All.cshtml" />
+    <Content Include="Views\Department\Edit.cshtml" />
+    <Content Include="Views\VehicleType\Add.cshtml" />
+    <Content Include="Views\VehicleType\All.cshtml" />
+    <Content Include="Views\VehicleType\Edit.cshtml" />
+    <Content Include="Views\City\Add.cshtml" />
+    <Content Include="Views\City\All.cshtml" />
+    <Content Include="Views\City\Edit.cshtml" />
+    <Content Include="Views\Specialist\Add.cshtml" />
+    <Content Include="Views\Specialist\All.cshtml" />
+    <Content Include="Views\Specialist\Edit.cshtml" />
+    <Content Include="Views\Vendor\Add.cshtml" />
+    <Content Include="Views\Vendor\All.cshtml" />
+    <Content Include="Views\Vendor\Edit.cshtml" />
+    <Content Include="Views\Driver\Add.cshtml" />
+    <Content Include="Views\Driver\All.cshtml" />
+    <Content Include="Views\Driver\Edit.cshtml" />
+    <Content Include="Views\Vehicle\Add.cshtml" />
+    <Content Include="Views\Vehicle\All.cshtml" />
+    <Content Include="Views\Vehicle\Edit.cshtml" />
+    <Content Include="Views\Hospital\Add.cshtml" />
+    <Content Include="Views\Hospital\All.cshtml" />
+    <Content Include="Views\Hospital\Edit.cshtml" />
+    <Content Include="Views\Nurse\Add.cshtml" />
+    <Content Include="Views\Nurse\All.cshtml" />
+    <Content Include="Views\Nurse\Edit.cshtml" />
+    <Content Include="Models\ViewModels\Handler1.ashx" />
+    <Content Include="fonts\fontawesome-webfont.eot" />
+    <Content Include="fonts\fontawesome-webfont.ttf" />
+    <Content Include="fonts\fontawesome-webfont.woff" />
+    <Content Include="fonts\fontawesome-webfont.woff2" />
+    <Content Include="fonts\FontAwesome.otf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="LabReports\20189313542669692669696926696969.pdf" />
+    <Content Include="File\TERMS AND CONDITIONS PS WELLNESS.pdf" />
+    <Content Include="app-debug.apk" />
+    <None Include="job_scheduling_data_2_0.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <EntityDeploy Include="Models\DomainModels\Model1.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Model1.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\DomainModels\Model1.edmx.diagram">
+      <DependentUpon>Model1.edmx</DependentUpon>
+    </Content>
+    <None Include="Properties\PublishProfiles\hospitalProject.pubxml" />
+    <Content Include="Views\Chemist\Add.cshtml" />
+    <Content Include="Views\Chemist\All.cshtml" />
+    <Content Include="Views\Chemist\Edit.cshtml" />
+    <Content Include="Views\Lab\Add.cshtml" />
+    <Content Include="Views\Lab\All.cshtml" />
+    <Content Include="Views\Lab\Edit.cshtml" />
+    <Content Include="Views\CompletHealthCheckup\Add.cshtml" />
+    <Content Include="Views\CompletHealthCheckup\All.cshtml" />
+    <Content Include="Views\CompletHealthCheckup\Edit.cshtml" />
+    <Content Include="Views\Rwa\Add.cshtml" />
+    <Content Include="Views\Rwa\All.cshtml" />
+    <Content Include="Views\Rwa\Edit.cshtml" />
+    <Content Include="Views\Employee\Add.cshtml" />
+    <Content Include="Views\Employee\All.cshtml" />
+    <Content Include="Views\Employee\Edit.cshtml" />
+    <Content Include="Views\DoctorRegistration\Add.cshtml" />
+    <Content Include="Views\DoctorRegistration\All.cshtml" />
+    <Content Include="Views\Shared\_VendorNavigation.cshtml" />
+    <Content Include="Views\Common\SignupLinks.cshtml" />
+    <Content Include="Views\Shared\_DoctorNavigation.cshtml" />
+    <Content Include="Views\DoctorRegistration\Edit.cshtml" />
+    <Content Include="Views\Shared\_DisplayMessageUpdate.cshtml" />
+    <Content Include="Views\Shared\_ChemistNavigation.cshtml" />
+    <Content Include="Views\Shared\_CompleteHealthCheckupNavigation.cshtml" />
+    <Content Include="Views\Shared\_NurseNavigation.cshtml" />
+    <Content Include="Views\Shared\_RwaNavigation.cshtml" />
+    <Content Include="Views\Shared\_PatientNavigation.cshtml" />
+    <Content Include="Views\Patient\Edit.cshtml" />
+    <Content Include="Views\Patient\Add.cshtml" />
+    <Content Include="Views\Patient\All.cshtml" />
+    <Content Include="Views\Shared\_DriverNavigation.cshtml" />
+    <Content Include="Views\Shared\_HospitalNavigation.cshtml" />
+    <Content Include="Views\DoctorRegistration\Skills.cshtml" />
+    <Content Include="Views\Hospital\AddDepartment.cshtml" />
+    <Content Include="Views\Hospital\Departments.cshtml" />
+    <Content Include="Views\Hospital\Facilities.cshtml" />
+    <Content Include="Views\Hospital\AddFacilty.cshtml" />
+    <Content Include="Views\CompletHealthCheckup\Departments.cshtml" />
+    <Content Include="Views\CompletHealthCheckup\AddDepartment.cshtml" />
+    <Content Include="Views\Hospital\AddDoctor.cshtml" />
+    <Content Include="Views\Hospital\Doctors.cshtml" />
+    <Content Include="Views\Hospital\EditDoctor.cshtml" />
+    <Content Include="Views\Shared\_LabNavigation.cshtml" />
+    <Content Include="Views\Shared\_script.cshtml" />
+    <Content Include="Views\Location\Add.cshtml" />
+    <Content Include="Views\Location\All.cshtml" />
+    <Content Include="Views\Location\Edit.cshtml" />
+    <Content Include="Views\Shared\_StateCityLocCascading.cshtml" />
+    <Content Include="Views\DoctorRegistration\ViewAppoinments.cshtml" />
+    <Content Include="Views\DoctorAppointment\ShowAppointment.cshtml" />
+    <Content Include="Views\Patient\PatientList.cshtml" />
+    <Content Include="Views\MedicMaster\MedicMaster.cshtml" />
+    <Content Include="Views\Test\Add.cshtml" />
+    <Content Include="Views\Test\All.cshtml" />
+    <Content Include="Views\Test\Edit.cshtml" />
+    <Content Include="Views\Lab\AddTestDetails.cshtml" />
+    <Content Include="Views\Lab\ShowTest.cshtml" />
+    <Content Include="Views\Lab\EditTest.cshtml" />
+    <Content Include="Views\Lab\LabTestHistory.cshtml" />
+    <Content Include="Views\Patient\AppointmentHistroy.cshtml" />
+    <Content Include="Views\Patient\TestHistory.cshtml" />
+    <Content Include="Views\Chemist\OrderHistory.cshtml" />
+    <Content Include="Views\Nurse\RegisterLocation.cshtml" />
+    <Content Include="Views\Nurse\Locations.cshtml" />
+    <Content Include="Views\DoctorRegistration\DoctorPatientList.cshtml" />
+    <Content Include="Views\Lab\LabPatientList.cshtml" />
+    <Content Include="Views\CompletHealthCheckup\UploadReport.cshtml" />
+    <Content Include="Views\CompletHealthCheckup\ViewPatientList.cshtml" />
+    <Content Include="Views\CompletHealthCheckup\TestList.cshtml" />
+    <Content Include="Views\Patient\ViewTestReport.cshtml" />
+    <Content Include="Views\Patient\ViewCheckUpHistory.cshtml" />
+    <Content Include="Views\Lab\UploadReport.cshtml" />
+    <Content Include="Views\Lab\ViewUploadReports.cshtml" />
+    <Content Include="Views\Lab\TestList.cshtml" />
+    <Content Include="Views\Patient\ViewLabTestHistory.cshtml" />
+    <Content Include="Views\Patient\ViewLabReport.cshtml" />
+    <Content Include="Views\Report\DoctorReport.cshtml" />
+    <Content Include="Views\Nurse\AppointmentRequest.cshtml" />
+    <Content Include="Views\Nurse\MyAppointments.cshtml" />
+    <Content Include="Views\Report\ViewDoctorDetails.cshtml" />
+    <Content Include="Views\Report\LabReport.cshtml" />
+    <Content Include="Views\Report\ViewLabDetails.cshtml" />
+    <Content Include="Views\Report\ViewChemistDetails.cshtml" />
+    <Content Include="Views\Report\ChemistReport.cshtml" />
+    <Content Include="Views\Report\ViewAll.cshtml" />
+    <Content Include="Views\Report\ViewMedicinePurchase.cshtml" />
+    <Content Include="Views\Report\ViewDoctorAppointment.cshtml" />
+    <Content Include="Views\ViewReport\Doctor.cshtml" />
+    <Content Include="Views\ViewReport\DailyDoctor.cshtml" />
+    <Content Include="Views\ViewReport\MonthlyDoctor.cshtml" />
+    <Content Include="Views\ViewReport\yearlyDoctor.cshtml" />
+    <Content Include="Views\ViewReport\WeeklyDoctor.cshtml" />
+    <Content Include="Views\ViewReport\Lab.cshtml" />
+    <Content Include="Views\ViewReport\DailyLab.cshtml" />
+    <Content Include="Views\ViewReport\MonthlyLab.cshtml" />
+    <Content Include="Views\ViewReport\yearlyLab.cshtml" />
+    <Content Include="Views\ViewReport\WeeklyLab.cshtml" />
+    <Content Include="Views\ViewReport\DailyChe.cshtml" />
+    <Content Include="Views\ViewReport\Chemist.cshtml" />
+    <Content Include="Views\ViewReport\MonthlyChe.cshtml" />
+    <Content Include="Views\ViewReport\yearlyChe.cshtml" />
+    <Content Include="Views\ViewReport\WeeklyChe.cshtml" />
+    <Content Include="Views\CompletHealthCheckup\AddDescription.cshtml" />
+    <Content Include="Views\Admin\AddContent.cshtml" />
+    <Content Include="Views\CompletHealthCheckup\ViewAppointmentList.cshtml" />
+    <Content Include="Views\Payout\Doctor.cshtml" />
+    <Content Include="Views\Payout\ViewPayoutHistory.cshtml" />
+    <Content Include="Views\Shared\_Home.cshtml" />
+    <Content Include="Views\Home\Home.cshtml" />
+    <Content Include="Views\Home\Services.cshtml" />
+    <Content Include="Views\Home\About.cshtml" />
+    <Content Include="Views\Home\Login.cshtml" />
+    <Content Include="Views\Common\HomeSignUp.cshtml" />
+    <Content Include="Views\Home\MailUs.cshtml" />
+    <Content Include="Views\Common\ViewComplaint.cshtml" />
+    <Content Include="Views\Report\NurseReport.cshtml" />
+    <Content Include="Views\Report\ViewNurseList.cshtml" />
+    <Content Include="Views\Report\HealthCheckUp.cshtml" />
+    <Content Include="Views\Report\ViewHealthDetails.cshtml" />
+    <Content Include="Views\Report\ViewHealth.cshtml" />
+    <Content Include="Views\ViewReport\Health.cshtml" />
+    <Content Include="Views\ViewReport\DailyHealth.cshtml" />
+    <Content Include="Views\ViewReport\MonthlyHealth.cshtml" />
+    <Content Include="Views\ViewReport\yearlyHealth.cshtml" />
+    <Content Include="Views\ViewReport\WeeklyHealth.cshtml" />
+    <Content Include="Views\Payout\Lab.cshtml" />
+    <Content Include="Views\Payout\ViewLabPayoutHistory.cshtml" />
+    <Content Include="Views\Payout\Health.cshtml" />
+    <Content Include="Views\Payout\ViewHealthPayoutHistory.cshtml" />
+    <Content Include="Views\Complaint\Complaint.cshtml" />
+    <Content Include="Views\Complaint\Doctor.cshtml" />
+    <Content Include="Views\Complaint\ViewDetails.cshtml" />
+    <Content Include="Views\Payout\Chemist.cshtml" />
+    <Content Include="Views\Payout\ViewChemistPayoutHistory.cshtml" />
+    <Content Include="Views\ScanReports\Lab.cshtml" />
+    <Content Include="Views\ScanReports\LabList.cshtml" />
+    <Content Include="Views\ScanReports\Health.cshtml" />
+    <Content Include="Views\ScanReports\HealthList.cshtml" />
+    <Content Include="Views\DoctorRegistration\ViewReports.cshtml" />
+    <Content Include="Views\DoctorRegistration\TestList.cshtml" />
+    <Content Include="Views\ScanReports\Doctor.cshtml" />
+    <Content Include="Views\ScanReports\DoctorList.cshtml" />
+    <Content Include="Views\Hospital\AddNurse.cshtml" />
+    <Content Include="Views\Hospital\ShowNurse.cshtml" />
+    <Content Include="Views\HospitalPayment\HospitalPayment.cshtml" />
+    <Content Include="Views\HospitalPayment\Doctor.cshtml" />
+    <Content Include="Views\HospitalPayment\ViewDoctorDetails.cshtml" />
+    <Content Include="Views\Common\Commision.cshtml" />
+    <Content Include="Views\CommisionReport\Commision.cshtml" />
+    <Content Include="Views\CommisionReport\Doctor.cshtml" />
+    <Content Include="Views\CommisionReport\Lab.cshtml" />
+    <Content Include="Views\CommisionReport\Health.cshtml" />
+    <Content Include="Views\CommisionReport\NurseDetails.cshtml" />
+    <Content Include="Views\CommisionReport\Nurse.cshtml" />
+    <Content Include="Views\CommisionReport\Medicine.cshtml" />
+    <Content Include="Views\CommisionReport\ChemistDetails.cshtml" />
+    <Content Include="Views\CommisionReport\Hospital.cshtml" />
+    <Content Include="Views\CommisionReport\Driver.cshtml" />
+    <Content Include="Views\Payout\Nurse.cshtml" />
+    <Content Include="Views\Payout\NurseDetails.cshtml" />
+    <Content Include="Views\Payout\ViewNursePayoutHistory.cshtml" />
+    <Content Include="Views\ViewReport\Nurse.cshtml" />
+    <Content Include="Views\ViewReport\Nurses.cshtml" />
+    <Content Include="Views\ViewReport\DailyNurse.cshtml" />
+    <Content Include="Views\ViewReport\MonthlyNurse.cshtml" />
+    <Content Include="Views\ViewReport\yearlyNurse.cshtml" />
+    <Content Include="Views\ViewReport\WeeklyNurse.cshtml" />
+    <Content Include="Views\Common\Payout.cshtml" />
+    <Content Include="Views\Report\Vendor.cshtml" />
+    <Content Include="Views\Report\Doctor.cshtml" />
+    <Content Include="Views\Report\Driver.cshtml" />
+    <Content Include="Views\Report\Vehicle.cshtml" />
+    <Content Include="Views\Report\DoctorDetails.cshtml" />
+    <Content Include="Views\Report\DriverDetails.cshtml" />
+    <Content Include="Views\Report\VehicleDetails.cshtml" />
+    <Content Include="Views\VendorCommission\Vendor.cshtml" />
+    <Content Include="Views\VendorCommission\Doctor.cshtml" />
+    <Content Include="Views\VendorCommission\Vehicle.cshtml" />
+    <Content Include="Views\VendorCommission\Driver.cshtml" />
+    <Content Include="Views\Common\Payment.cshtml" />
+    <Content Include="Views\VendorPayout\Vendor.cshtml" />
+    <Content Include="Views\VendorPayout\Doctor.cshtml" />
+    <Content Include="Views\VendorPayout\Driver.cshtml" />
+    <Content Include="Views\VendorPayout\Vehicle.cshtml" />
+    <Content Include="Views\VendorPayout\VendorPayoutHistory.cshtml" />
+    <Content Include="Views\VendorReport\VendorReport.cshtml" />
+    <Content Include="Views\VendorReport\Doctor.cshtml" />
+    <Content Include="Views\VendorReport\Daily.cshtml" />
+    <Content Include="Views\VendorReport\DailyDoc.cshtml" />
+    <Content Include="Views\VendorReport\Driver.cshtml" />
+    <Content Include="Views\VendorReport\Vehicle.cshtml" />
+    <Content Include="Views\VendorReport\WeeklyDoc.cshtml" />
+    <Content Include="Views\VendorReport\MonthlyDoc.cshtml" />
+    <Content Include="Views\VendorReport\YearlyDoc.cshtml" />
+    <Content Include="Views\VendorReport\DailyDri.cshtml" />
+    <Content Include="Views\VendorReport\WeeklyDri.cshtml" />
+    <Content Include="Views\VendorReport\MonthlyDri.cshtml" />
+    <Content Include="Views\VendorReport\YearlyDri.cshtml" />
+    <Content Include="Views\VendorReport\DailyVeh.cshtml" />
+    <Content Include="Views\VendorReport\WeeklyVeh.cshtml" />
+    <Content Include="Views\VendorReport\MonthlyVeh.cshtml" />
+    <Content Include="Views\VendorReport\YearlyVeh.cshtml" />
+    <Content Include="Views\Common\TDS.cshtml" />
+    <Content Include="Views\TDSReport\TDS.cshtml" />
+    <Content Include="Views\TDSReport\Doctor.cshtml" />
+    <Content Include="Views\TDSReport\Lab.cshtml" />
+    <Content Include="Views\TDSReport\Health.cshtml" />
+    <Content Include="Views\TDSReport\Nurse.cshtml" />
+    <Content Include="Views\TDSReport\NurseDetails.cshtml" />
+    <Content Include="Views\TDSReport\Medicine.cshtml" />
+    <Content Include="Views\TDSReport\ChemistDetails.cshtml" />
+    <Content Include="Views\SalaryMaster\Employee.cshtml" />
+    <Content Include="Views\SalaryMaster\ViewHistory.cshtml" />
+    <Content Include="Views\Expense\Expense.cshtml" />
+    <Content Include="Views\Expense\ViewExpenseDetail.cshtml" />
+    <Content Include="Views\Rwa_Report\RwaList.cshtml" />
+    <Content Include="Views\Rwa_Report\PatientList.cshtml" />
+    <Content Include="Views\Rwa_Report\ViewReport.cshtml" />
+    <Content Include="Views\Rwa_Report\Daily.cshtml" />
+    <Content Include="Views\Rwa_Report\Weekly.cshtml" />
+    <Content Include="Views\Rwa_Report\Yearly.cshtml" />
+    <Content Include="Views\Rwa_Report\Monthly.cshtml" />
+    <Content Include="Views\Rwa_Report\RWA.cshtml" />
+    <Content Include="Views\Rwa_Report\RwaPayOut.cshtml" />
+    <Content Include="Views\Rwa_Report\ViewHistory.cshtml" />
+    <Content Include="Views\ContentManagment\Add.cshtml" />
+    <Content Include="Views\Rwa\PayOutReport.cshtml" />
+    <Content Include="Views\Rwa\PaymentReport.cshtml" />
+    <Content Include="Views\CompletHealthCheckup\PayoutReport.cshtml" />
+    <Content Include="Views\CompletHealthCheckup\PaymentReport.cshtml" />
+    <Content Include="Views\Chemist\PayoutReport.cshtml" />
+    <Content Include="Views\Chemist\PaymentReport.cshtml" />
+    <Content Include="Views\Vendor\Doctor.cshtml" />
+    <Content Include="Views\Vendor\DailyDoc.cshtml" />
+    <Content Include="Views\Vendor\WeeklyDoc.cshtml" />
+    <Content Include="Views\Vendor\MonthlyDoc.cshtml" />
+    <Content Include="Views\Vendor\YearlyDoc.cshtml" />
+    <Content Include="Views\Vendor\DailyDri.cshtml" />
+    <Content Include="Views\Vendor\WeeklyDri.cshtml" />
+    <Content Include="Views\Vendor\MonthlyDri.cshtml" />
+    <Content Include="Views\Vendor\YearlyDri.cshtml" />
+    <Content Include="Views\Vendor\DailyVeh.cshtml" />
+    <Content Include="Views\Vendor\WeeklyVeh.cshtml" />
+    <Content Include="Views\Vendor\MonthlyVeh.cshtml" />
+    <Content Include="Views\Vendor\YearlyVeh.cshtml" />
+    <Content Include="Views\Vendor\Driver.cshtml" />
+    <Content Include="Views\Vendor\Vehicle.cshtml" />
+    <Content Include="Views\Vendor\VendorPayoutHistory.cshtml" />
+    <Content Include="Views\Vendor\DoctorDetails.cshtml" />
+    <Content Include="Views\Vendor\DriverDetails.cshtml" />
+    <Content Include="Views\Vendor\VehicleDetails.cshtml" />
+    <Content Include="Views\Vendor\VehiclePayment.cshtml" />
+    <Content Include="Views\Vendor\DriverPayment.cshtml" />
+    <Content Include="Views\Vendor\DoctorPayment.cshtml" />
+    <Content Include="Views\Vendor\DoctorTDS.cshtml" />
+    <Content Include="Views\Vendor\Vendortds.cshtml" />
+    <Content Include="Views\Vendor\Drivertds.cshtml" />
+    <Content Include="Views\Vendor\Vehicletds.cshtml" />
+    <Content Include="Views\Vendor\Vendor.cshtml" />
+    <Content Include="Views\TestList\Index.cshtml" />
+    <Content Include="Views\DoctorRegistration\PaymentHistory.cshtml" />
+    <Content Include="Views\DoctorRegistration\ViewPayoutHistory.cshtml" />
+    <Content Include="Views\TDSReport\DoctorTDS.cshtml" />
+    <Content Include="Views\TDSReport\Vendortds.cshtml" />
+    <Content Include="Views\TDSReport\Drivertds.cshtml" />
+    <Content Include="Views\TDSReport\Vehicletds.cshtml" />
+    <Content Include="Views\TDSReport\DoctortdsList.cshtml" />
+    <Content Include="Views\TDSReport\DrivertdsList.cshtml" />
+    <Content Include="Views\TDSReport\VehicletdsList.cshtml" />
+    <Content Include="Views\Vehicle\VehicleAllotment.cshtml" />
+    <Content Include="Views\Vehicle\UpdateDriver.cshtml" />
+    <Content Include="Views\Lab\PayoutReport.cshtml" />
+    <Content Include="Views\Lab\PaymentReport.cshtml" />
+    <Content Include="Views\Vehicle\UpdateVehicle.cshtml" />
+    <Content Include="Views\Vehicle\UpdateVehicles.cshtml" />
+    <Content Include="Views\Gallery\Gallery.cshtml" />
+    <Content Include="Views\AddTest\Add.cshtml" />
+    <Content Include="Views\AddTest\All.cshtml" />
+    <Content Include="Views\AddTest\Edit.cshtml" />
+    <Content Include="Views\Common\Edit.cshtml" />
+    <Content Include="Views\Common\EditCommission.cshtml" />
+    <Content Include="Views\Report\HealthCheckupVendor.cshtml" />
+    <Content Include="Views\Report\HealthCheckupVDetails.cshtml" />
+    <Content Include="Views\Report\LabVendor.cshtml" />
+    <Content Include="Views\Report\NurseVendor.cshtml" />
+    <Content Include="Views\Report\LabVDetails.cshtml" />
+    <Content Include="Views\Report\NurseVDetails.cshtml" />
+    <Content Include="Views\AmbulancePayment\Index.cshtml" />
+    <Content Include="Views\AmbulanceReport\Index.cshtml" />
+    <Content Include="Views\Complaint\ViewComp.cshtml" />
+    <Content Include="Views\DoctorRegistration\UpdateBank.cshtml" />
+    <Content Include="Views\Shared\UpdateBank.cshtml" />
+    <Content Include="Views\Bank\UpdateBank.cshtml" />
+    <Content Include="Views\RoleUpdate\Department.cshtml" />
+    <Content Include="Views\RoleUpdate\ViewMore.cshtml" />
+    <Content Include="Views\Common\ViewMore.cshtml" />
+    <Content Include="Views\RoleUpdate\ViewCity.cshtml" />
+    <Content Include="Views\RoleUpdate\Add.cshtml" />
+    <Content Include="Views\Common\ViewVehicle.cshtml" />
+    <Content Include="Views\Category\Add.cshtml" />
+    <Content Include="Views\VendorCommission\Lab.cshtml" />
+    <Content Include="Views\VendorCommission\HealthCheckuUp.cshtml" />
+    <Content Include="Views\VendorPayout\Lab.cshtml" />
+    <Content Include="Views\VehicleType\PriceList.cshtml" />
+    <Content Include="Views\VendorReport\Chemist.cshtml" />
+    <Content Include="Views\VendorReport\DailyChe.cshtml" />
+    <Content Include="Views\VendorReport\WeeklyChe.cshtml" />
+    <Content Include="Views\VendorReport\MonthlyChe.cshtml" />
+    <Content Include="Views\VendorReport\YearlyChe.cshtml" />
+    <Content Include="Views\VendorReport\DailyNur.cshtml" />
+    <Content Include="Views\VendorReport\WeeklyNur.cshtml" />
+    <Content Include="Views\VendorReport\MonthlyNur.cshtml" />
+    <Content Include="Views\VendorReport\YearlyNur.cshtml" />
+    <Content Include="Views\VendorReport\DailyLab.cshtml" />
+    <Content Include="Views\VendorReport\WeeklyLab.cshtml" />
+    <Content Include="Views\VendorReport\MonthlyLab.cshtml" />
+    <Content Include="Views\VendorReport\YearlyLab.cshtml" />
+    <Content Include="Views\VendorReport\DailyHealth.cshtml" />
+    <Content Include="Views\VendorReport\WeeklyHealth.cshtml" />
+    <Content Include="Views\VendorReport\MonthlyHealth.cshtml" />
+    <Content Include="Views\VendorReport\YearlyHealth.cshtml" />
+    <Content Include="Views\VendorReport\Nurse.cshtml" />
+    <Content Include="Views\VendorReport\Lab.cshtml" />
+    <Content Include="Views\VendorReport\HealthCheckUp.cshtml" />
+    <Content Include="Views\Shared\_SignUp.cshtml" />
+    <Content Include="Views\Shared\_SignUpLayout.cshtml" />
+    <Content Include="Views\Vendor\Chemist.cshtml" />
+    <Content Include="Views\Vendor\Nurse.cshtml" />
+    <Content Include="Views\Vendor\Lab.cshtml" />
+    <Content Include="Views\Vendor\HealthCheckUp.cshtml" />
+    <Content Include="Views\Vendor\DailyChe.cshtml" />
+    <Content Include="Views\Vendor\DailyHealth.cshtml" />
+    <Content Include="Views\Vendor\DailyLab.cshtml" />
+    <Content Include="Views\Vendor\DailyNur.cshtml" />
+    <Content Include="Views\Vendor\MonthlyChe.cshtml" />
+    <Content Include="Views\Vendor\MonthlyHealth.cshtml" />
+    <Content Include="Views\Vendor\MonthlyLab.cshtml" />
+    <Content Include="Views\Vendor\MonthlyNur.cshtml" />
+    <Content Include="Views\Vendor\WeeklyChe.cshtml" />
+    <Content Include="Views\Vendor\WeeklyHealth.cshtml" />
+    <Content Include="Views\Vendor\WeeklyLab.cshtml" />
+    <Content Include="Views\Vendor\WeeklyNur.cshtml" />
+    <Content Include="Views\Vendor\YearlyChe.cshtml" />
+    <Content Include="Views\Vendor\YearlyHealth.cshtml" />
+    <Content Include="Views\Vendor\YearlyLab.cshtml" />
+    <Content Include="Views\Vendor\YearlyNur.cshtml" />
+    <Content Include="Views\Vendor\HealthCheckupVDetails.cshtml" />
+    <Content Include="Views\Vendor\HealthCheckupVendor.cshtml" />
+    <Content Include="Views\Vendor\LabVDetails.cshtml" />
+    <Content Include="Views\Vendor\LabVendor.cshtml" />
+    <Content Include="Views\Vendor\NurseVDetails.cshtml" />
+    <Content Include="Views\Vendor\NurseVendor.cshtml" />
+    <Content Include="Views\Charges\Common.cshtml" />
+    <Content Include="Views\Vendor\CommissionReport.cshtml" />
+    <Content Include="Views\Commission\CommissionReport.cshtml" />
+    <Content Include="Views\Commission\Doctor.cshtml" />
+    <Content Include="Views\Commission\Lab.cshtml" />
+    <Content Include="Views\Commission\HealthCheckuUp.cshtml" />
+    <Content Include="Views\Commission\Nurse.cshtml" />
+    <Content Include="Views\Charges\Edit.cshtml" />
+    <Content Include="Views\Charges\VehicleList.cshtml" />
+    <Content Include="Views\Charges\EditCharges.cshtml" />
+    <Content Include="Views\Driver\UpdateVehicle.cshtml" />
+    <Content Include="Views\Commission\Vehicle.cshtml" />
+    <Content Include="Views\Common\RWAPayment.cshtml" />
+    <Content Include="Views\VendorPayout\HealthCheckUp.cshtml" />
+    <Content Include="Views\VendorPayout\Nurse.cshtml" />
+    <Content Include="Views\VendorPayout\Chemist.cshtml" />
+    <Content Include="Views\VendorCommission\Nurse.cshtml" />
+    <Content Include="Views\VendorCommission\Chemist.cshtml" />
+    <Content Include="Views\Hospital\HospitalReport.cshtml" />
+    <Content Include="Views\Hospital\ViewUploadReports.cshtml" />
+    <Content Include="Views\Hospital\TestList.cshtml" />
+    <Content Include="Views\AmbulancePayment\Show.cshtml" />
+    <Content Include="Views\AmbulancePayment\ViewDetails.cshtml" />
+    <Content Include="Views\AmbulancePayment\Driver.cshtml" />
+    <Content Include="Views\AmbulancePayment\DriverTDS.cshtml" />
+    <Content Include="Views\AmbulancePayment\DriverReport.cshtml" />
+    <Content Include="Views\AmbulancePayment\Daily.cshtml" />
+    <Content Include="Views\AmbulanceReport\Monthly.cshtml" />
+    <Content Include="Views\AmbulanceReport\Ambulance.cshtml" />
+    <Content Include="Views\AmbulanceReport\MonthlyRecord.cshtml" />
+    <Content Include="Views\AmbulanceReport\Daily.cshtml" />
+    <Content Include="Views\AmbulanceReport\DailyRecord.cshtml" />
+    <Content Include="Views\AmbulanceReport\Weekly.cshtml" />
+    <Content Include="Views\AmbulanceReport\WeeklyReport.cshtml" />
+    <Content Include="Views\AmbulanceReport\Yearly.cshtml" />
+    <Content Include="Views\AmbulanceReport\YearlyRecord.cshtml" />
+    <Content Include="Views\Payout\Ambulance.cshtml" />
+    <Content Include="Views\TDSReport\Driver.cshtml" />
+    <Content Include="Views\HospitalCommission\Hospital.cshtml" />
+    <Content Include="Views\HospitalCommission\Doctor.cshtml" />
+    <Content Include="Views\HospitalCommission\ViewDoctorDetails.cshtml" />
+    <Content Include="Views\HospitalTDS\TDSHospital.cshtml" />
+    <Content Include="Views\HospitalTDS\Doctor.cshtml" />
+    <Content Include="Views\HospitalTDS\ViewDoctorDetails.cshtml" />
+    <Content Include="Views\Vendor\ChemsitPayment.cshtml" />
+    <Content Include="Views\Admin\ShareToVendor.cshtml" />
+    <Content Include="Views\Home\TermsCondition.cshtml" />
+    <Content Include="Views\Error\NotFound.cshtml" />
+    <Content Include="Views\Common\LabReport.cshtml" />
+    <Content Include="Views\Common\LabTestReport.cshtml" />
+    <Content Include="Views\Shared\_DisplayMessageNoRecords.cshtml" />
+    <Content Include="Views\Shared\_DisplayNoRecordsMessage.cshtml" />
+    <Content Include="Views\Common\DoctorReports.cshtml" />
+    <Content Include="Views\Common\DoctorTestReports.cshtml" />
+    <Content Include="Views\Common\HealthReport.cshtml" />
+    <Content Include="Views\Common\HealthTestReport.cshtml" />
+    <Content Include="Views\DoctorRegistration\MyTDS.cshtml" />
+    <Content Include="Views\DoctorRegistration\MyCommission.cshtml" />
+    <Content Include="Views\Driver\TravelHistory.cshtml" />
+    <Content Include="Views\DoctorRegistration\UpdateDepartment.cshtml" />
+    <Content Include="Views\Category\Edit.cshtml" />
+    <Content Include="Views\Home\SignIn.cshtml" />
+    <Content Include="Views\RoleUpdate\All.cshtml" />
+    <Content Include="Views\ContentManagment\Edit.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Common\BankDetails.cshtml" />
+    <Content Include="Views\Common\AmbulaneBankDetails.cshtml" />
+    <Content Include="Views\Payout\WeeklyReport.cshtml" />
+    <Content Include="Views\HealthPackage\AddPackage.cshtml" />
+    <Content Include="Views\AdminOperation\AddPackage.cshtml" />
+    <Content Include="Views\CompletHealthCheckup\AddPackage.cshtml" />
+    <Content Include="Views\AdminOperation\AddTestDetails.cshtml" />
+    <Content Include="Views\AdminOperation\ShowTest.cshtml" />
+    <Content Include="Views\CompletHealthCheckup\ViewPackage.cshtml" />
+    <Content Include="Views\AdminOperation\ViewPackage.cshtml" />
+    <Content Include="Views\Common\EditFrachiseCommission.cshtml" />
+    <Content Include="Views\Shared\_DeliveryStatus.cshtml" />
+    <Content Include="Views\Shared\_ModalPopUpScript.cshtml" />
+    <Content Include="Views\Admin\TransactionLogin.cshtml" />
+    <Content Include="Views\Admin\Payout.cshtml" />
+    <Content Include="Views\UnsuccessfulAttempt\Unsuccess.cshtml" />
+    <Content Include="Views\Shared\_PayoutLayoutPage.cshtml" />
+    <Content Include="Views\Payout\DoctorList.cshtml" />
+    <Content Include="Views\Payout\NurseList.cshtml" />
+    <Content Include="Views\Payout\LabList.cshtml" />
+    <Content Include="Views\Payout\HealthCheckUpList.cshtml" />
+    <Content Include="Views\Payout\ChemistList.cshtml" />
+    <Content Include="Views\Shared\_Terms&amp;ConditionView.cshtml" />
+    <Content Include="Views\VendorPayout\VendorPayOutList.cshtml" />
+    <Content Include="Views\HospitalCommission\Nurse.cshtml" />
+    <Content Include="Views\HospitalCommission\ViewNurseDetails.cshtml" />
+    <Content Include="Views\AdminOperation\EditTest.cshtml" />
+    <Content Include="Views\AdminOperation\AddTestCartegory.cshtml" />
+    <Content Include="Views\AdminOperation\RefundMoney.cshtml" />
+    <Content Include="Views\AdminOperation\EditCategory.cshtml" />
+    <Content Include="Views\Common\EditRwaPayment.cshtml" />
+    <Content Include="Views\AdminOperation\ViewHealthTest.cshtml" />
+    <Content Include="Scripts\jquery-1.9.1.min.map" />
+    <Content Include="Views\Test\Index.cshtml" />
+    <Content Include="Views\Shared\_ScrollerScript.cshtml" />
+    <Content Include="Views\DoctorRegistration\RegisterClinic.cshtml" />
+    <Content Include="Views\DoctorRegistration\ViewClinics.cshtml" />
+    <Content Include="Views\DoctorRegistration\EditClinic.cshtml" />
+    <Content Include="Views\HealthPackageMaster\Add.cshtml" />
+    <Content Include="Views\HealthPackageMaster\Edit.cshtml" />
+    <Content Include="Views\HealthPackageMaster\All.cshtml" />
+    <Content Include="Views\AdminOperation\EditHealthTest.cshtml" />
+    <Content Include="Views\AdminOperation\EditPacakge.cshtml" />
+    <Content Include="Views\Report\CancelBookingDriver.cshtml" />
+    <Content Include="Views\Report\CancelBookingPatient.cshtml" />
+    <Content Include="Views\Admin\ListMedia.cshtml" />
+    <Content Include="Views\Admin\MediaSection.cshtml" />
+    <Content Include="Views\Admin\DiscountList.cshtml" />
+    <Content Include="Views\Admin\DiscountCreate.cshtml" />
+    <Content Include="Views\Nurse\EverifyDocs.cshtml" />
+    <Content Include="Views\Common\ComingSoon.cshtml" />
+    <Content Include="Views\Admin\AddBanner.cshtml" />
+    <Content Include="Views\Admin\BannerList.cshtml" />
+    <Content Include="Views\Home\PrivacyPolicy.cshtml" />
+    <Content Include="Views\Patient\MedicineOrderHistory.cshtml" />
+    <Content Include="Views\ScanReports\Hospital.cshtml" />
+    <Content Include="Views\ScanReports\HospitalList.cshtml" />
+    <Content Include="Views\Common\GST.cshtml" />
+    <Content Include="Views\Common\EditGST.cshtml" />
+    <Content Include="Views\Report\DoctorCancelReportByUser.cshtml" />
+    <Content Include="Views\Report\NurseCancelReportByUser.cshtml" />
+    <Content Include="Views\Nurse\DocumentList.cshtml" />
+    <Content Include="Views\Report\CancelAppointmentBydoctor.cshtml" />
+    <Content Include="Views\Report\CancelAppointmentByNurse.cshtml" />
+    <Content Include="Views\Common\RWATDS.cshtml" />
+    <Content Include="Views\Common\EditRWATDS.cshtml" />
+    <Content Include="Views\Common\FranchiseTDS.cshtml" />
+    <Content Include="Views\Common\EditFranchiseTDS.cshtml" />
+    <Content Include="Views\Prescription\Prescription.cshtml" />
+    <Content Include="Views\Common\RWAGST.cshtml" />
+    <Content Include="Views\Common\EditRwaGST.cshtml" />
+    <Content Include="Views\Common\FranchiseGST.cshtml" />
+    <Content Include="Views\Common\EditFranchiseGST.cshtml" />
+    <Content Include="Views\DoctorRegistration\PatientPerticuler.cshtml" />
+    <Content Include="Views\Charges\MedicineDeliveryCharge.cshtml" />
+    <Content Include="Views\DoctorRegistration\Prescription.cshtml" />
+    <Content Include="Views\Payout\ViewDriver_AmbulancePayoutHistory.cshtml" />
+    <Content Include="Views\Payout\AmbulanceList.cshtml" />
+    <Content Include="Views\DoctorRegistration\PrescriptionPdf.cshtml" />
+    <Content Include="Views\DoctorRegistration\ViewPrescriptionReport.cshtml" />
+    <Content Include="Views\Admin\ChangeTransactionPassword.cshtml" />
+    <Content Include="Views\Charges\DoctorSlot.cshtml" />
+    <Content Include="Views\Charges\ViewDoctorSlot.cshtml" />
+    <Content Include="Views\Chemist\AddChemistMedicine.cshtml" />
+    <Content Include="Views\Chemist\MedicineList.cshtml" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Controllers\Doc_Report\HealthCheckUpReports\" />
+    <Folder Include="HealthCheckUpReports\" />
+    <Folder Include="HospitalReports\" />
+    <Folder Include="Themes\ckeditor\" />
+    <Folder Include="Views\HospitalAPI\" />
+    <Folder Include="Views\NurseServices\" />
+    <Folder Include="Views\PatientList\" />
+    <Folder Include="Views\Test1\" />
+    <Folder Include="Views\TestApi\" />
+    <Folder Include="Views\VendorPayment\" />
+    <Folder Include="Views\Wallet\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>55405</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:55405/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

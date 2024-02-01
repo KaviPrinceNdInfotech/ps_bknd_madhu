@@ -1,0 +1,144 @@
+﻿
+@{
+    ViewBag.Title = "Complaint";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>View Complaint</h2>
+
+<div style="margin:auto; width:90%">
+    @using (Html.BeginForm())
+    {
+    <div class="row">
+        <div class="col-md-3">
+            Select Subjects
+        </div>
+        <div class="col-md-3">
+            <select id="tp" class="form-control" required="required">
+                <option>Select Any</option>
+                <option value="1">Doctor</option>
+                <option value="11">Chemist</option>
+                <option value="8">Franchise</option>
+                <option value="3">Driver</option>
+                <option value="4">Ambulance</option>
+                <option value="5">Patient</option>
+                <option value="9">Lab</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <input type="button" value="Check" id="btnCheck" class="btn btn-primary" />
+        </div>
+    </div>
+    }
+</div>
+
+<div id="prevAtt" style="margin-left: 27%;margin-top: 6%;">
+
+</div>
+
+<script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
+<script>
+    $("#btnCheck").click(function () {
+        debugger
+        var term = $("#tp").val();
+        if (term == "1") {
+            $.ajax({
+                url: "/Complaint/Doctor?term=" + term,
+                type: "get",
+                success: function (response) {
+                    console.log(response);
+                    $("#prevAtt").html(response);
+                },
+                error: function (error) {
+                    console.log(error.responseText);
+                    msg.text("");
+                }
+            });
+        }
+        if (term == "8") {
+            $.ajax({
+                url: "/Complaint/Doctor?term=" + term,
+                type: "get",
+                success: function (response) {
+                    console.log(response);
+                    $("#prevAtt").html(response);
+                },
+                error: function (error) {
+                    console.log(error.responseText);
+                    msg.text("");
+                }
+            });
+        }
+        if (term == "3") {
+            $.ajax({
+                url: "/Complaint/Doctor?term=" + term,
+                type: "get",
+                success: function (response) {
+                    console.log(response);
+                    $("#prevAtt").html(response);
+                },
+                error: function (error) {
+                    console.log(error.responseText);
+                    msg.text("");
+                }
+            });
+        }
+        if (term == "4") {
+            $.ajax({
+                url: "/Complaint/Doctor?term=" + term,
+                type: "get",
+                success: function (response) {
+                    console.log(response);
+                    $("#prevAtt").html(response);
+                },
+                error: function (error) {
+                    console.log(error.responseText);
+                    msg.text("");
+                }
+            });
+        }
+        if (term == "9") {
+            $.ajax({
+                url: "/Complaint/Doctor?term=" + term,
+                type: "get",
+                success: function (response) {
+                    console.log(response);
+                    $("#prevAtt").html(response);
+                },
+                error: function (error) {
+                    console.log(error.responseText);
+                    msg.text("");
+                }
+            });
+        }
+        if (term == "11") {
+            $.ajax({
+                url: "/Complaint/Doctor?term=" + term,
+                type: "get",
+                success: function (response) {
+                    console.log(response);
+                    $("#prevAtt").html(response);
+                },
+                error: function (error) {
+                    console.log(error.responseText);
+                    msg.text("");
+                }
+            });
+        }
+        if (term == "5") {
+            $.ajax({
+                url: "/Complaint/Doctor?term=" + term,
+                type: "get",
+                success: function (response) {
+                    console.log(response);
+                    $("#prevAtt").html(response);
+                },
+                error: function (error) {
+                    console.log(error.responseText);
+                    msg.text("");
+                }
+            });
+        }
+    });
+</script>
+

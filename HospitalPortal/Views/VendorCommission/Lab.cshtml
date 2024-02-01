@@ -1,0 +1,177 @@
+﻿@model HospitalPortal.Models.ViewModels.ReportDTO
+
+@{
+    ViewBag.Title = "Lab";
+    Layout = null;
+}
+<link href="/Styles/bootstrap.min.css" rel="stylesheet" />
+
+<h2 style="text-align:center;">Lab List</h2>
+<div style="margin:auto; width:85%">
+
+    <div class="row" style="margin-bottom: 3%;">
+        <div class="col-md-3">
+            From
+            @Html.TextBoxFor(a => a.JoiningDate, new { @class = "datepicker form-control" })
+        </div>
+        <div class="col-md-3">
+            To
+            <input type="text" class="datepicker form-control" name="EndDate" id="EndDate" />
+        </div>
+        <div class="col-md-2">
+            <input type="button" id="test" value="Search" class="btn btn-primary" />
+        </div>
+        <div class="col-md-3">
+            @Html.TextBoxFor(a => a.VendorName, new { @class = "form-control", required = "required", placeholder = "Search by Name" })
+        </div>
+        <div class="col-md-1">
+            <input type="button" id="test2" value="Search" class="btn btn-primary" />
+        </div>
+    </div>
+
+    @if (Model.VendorCommissionReport == null)
+    {
+        if (TempData["msg"] != null)
+        {
+            @TempData["msg"];
+        }
+    }
+    else
+    {
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>
+                        Lab Commission Amt(in %)
+                    </th>
+                    <th>Amount</th>
+                    <th>
+                        After Deduction
+                    </th>
+                    <th>
+                        Payable Amount
+                    </th>
+                    <th>Vendor Commisson Amount</th>
+                    <th>After Deduction 5%</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.VendorCommissionReport)
+                {
+                    <tr>
+                        <td>
+                            @ViewBag.Commission %
+                        </td>
+                        <td>@item.Amount</td>
+                        @{
+
+                            //Calculate The Amount for Doctor Commission
+                            double amt = (Math.Round(item.Amount * ViewBag.Commission) / 100);
+                            //Total Amount for Doctor
+                            double Value = (double)item.Amount - amt;
+                            //Vendor Declare Amount for Doctor
+                            //double Percent = (Math.Round(Value * ViewBag.paymentPercent) / 100);
+                            //Commission Amount of Vendor
+                            double vendorCut = (Math.Round(Value * ViewBag.vendorCommission) / 100);
+                            double asd = Math.Round(vendorCut, 0, MidpointRounding.AwayFromZero);
+                        }
+                        <td>₹ @amt</td>
+                        <td>₹ @Value</td>
+                        <td>@ViewBag.VendorCommission</td>
+                        <td>₹ @asd</td>
+                    </tr>
+                            }
+            </tbody>
+
+        </table>
+                            }
+
+    <nav aria-label="Page navigation example">
+        @*<ul class="pagination">
+                <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                @for (int i = 1; i <= Model.TotalPages; i++)
+                {
+                    if (i == Model.PageNumber)
+                    {
+                        <li class="page-item active"><a class="page-link" href="/CommisionReport/Doctor?pageNumber=@i">@i</a></li>
+
+                    }
+                    else
+                    {
+                        <li class="page-item"><a class="page-link" href="/Patient/PatientList?pageNumber=@i">@i</a></li>
+
+                    }
+                }
+                @*<li class="page-item"><a class="page-link" href="#">Next</a></li>
+            </ul>*@
+    </nav>
+
+</div>
+<script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
+<link href="~/css/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
+<script>
+    $(".datepicker").datepicker({});
+
+    $("#test").click(function () {
+        debugger
+        var date = $("#JoiningDate").val();
+        var EndDate = $("#EndDate").val();
+
+        if (date == null && EndDate == null) {
+            alert("Kindly Select Date");
+        }
+
+        $.ajax({
+            url: "/VendorCommission/Lab?term=Lab&JoiningDate=" + date + "&EndDate=" + EndDate + "",
+            type: "get",
+            success: function (response) {
+                console.log(response);
+                $("#prevAtt").html(response);
+            },s
+            error: function (error) {
+                console.log(error.responseText);
+
+            }
+        });
+    });
+
+</script>
+@* $("#test").click(function () {
+         var date = $("#AppointmentDate").val();
+         $.ajax({
+             url: "/CommisionReport/Doctor?term=Doctor&AppointmentDate=" + date + "",
+             type: "get",
+             success: function (response) {
+                 console.log(response);
+                 $("#prevAtt").html(response);
+             },
+             error: function (error) {
+                 console.log(error.responseText);
+
+             }
+         });
+
+     });
+
+
+     $("#test2").click(function () {
+         debugger
+         var name = $("#DoctorName").val();
+         var date = $("#AppointmentDate").val();
+         $.ajax({
+             url: "/VendorCommission/Doctor?term=Doctor&Name='"+name+"'&AppointmentDate=" + date + "",
+             type: "get",
+             success: function (response) {
+                 console.log(response);
+                 $("#prevAtt").html(response);
+             },
+             error: function (error) {
+                 console.log(error.responseText);
+
+             }
+         });
+
+     });
+    </script>*@

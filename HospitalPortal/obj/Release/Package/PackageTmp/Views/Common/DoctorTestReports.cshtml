@@ -1,0 +1,45 @@
+﻿@model HospitalPortal.Models.ViewModels.ViewDoctorReports
+@{
+    ViewBag.Title = "TestList";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2 style="margin-bottom:5%;">Test List of Patient @Model.test.FirstOrDefault().PatientName</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Patient Name</th>
+            <td>@Model.test.FirstOrDefault().PatientName</td>
+            <th>Patient Address</th>
+            <td>
+                @Model.test.FirstOrDefault().Location,
+                @Model.test.FirstOrDefault().CityName,
+                @Model.test.FirstOrDefault().StateName
+            </td>
+            <th>Email ID</th>
+            <td>
+                @Model.test.FirstOrDefault().EmailId
+            </td>
+        </tr>
+        <tr>
+            <th>Mobile No.</th>
+            <td>@Model.test.FirstOrDefault().MobileNumber</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th>Test List</th>
+            <th>Uploaded On</th>
+        </tr>
+        @foreach (var item in Model.test)
+        {
+            <tr>
+                <td><a href="~/Images/@item.Image1" target="_blank" class="btn btn-default">View Test Report</a></td>
+                <td>@item.UploadDate.Date.ToShortDateString()</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+

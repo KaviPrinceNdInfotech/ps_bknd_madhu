@@ -1,0 +1,60 @@
+﻿@model HospitalPortal.Models.ViewModels.rwaReport
+
+
+@{
+    ViewBag.Title = "PatientList";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<h2>Patient List</h2>
+@using (Html.BeginForm())
+{
+    <div class="row">
+        <div class="col-md-4">
+            @Html.TextBoxFor(a => a.Reg_Date, new { @class = "datepicker form-control", required = "required" })
+        </div>
+        <div class="col-md-4">
+            <input type="button" id="test" value="Search" class="btn btn-primary" />
+        </div>
+    </div>
+}
+
+@if (Model.rwaList == null)
+{
+    @TempData["msg"]
+}
+else
+{
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>
+                Patient Name
+            </th>
+            <th>
+                Registration Date
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.rwaList)
+        {
+            <tr>
+                <td>@item.PatientName</td>
+                <td>
+                    @item.Reg_Date.Date.ToShortDateString()
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+}
+<script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
+@*<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>*@
+<script src="https://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css">
+<script>
+    $(".datepicker").datepicker().datepicker('setDate', 'today');
+</script>
+<script type="text/javascript">
+        $('#table_id').DataTable();
+</script>

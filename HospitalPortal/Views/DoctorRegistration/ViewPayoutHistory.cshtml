@@ -1,0 +1,97 @@
+﻿@model HospitalPortal.Models.ViewModels.ViewPayOutHistory
+@{
+    ViewBag.Title = "ViewPayoutHistory";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+}
+
+<h2>Doctor Payout History</h2>
+
+<div style="margin:auto; width:95%">
+    <div class="row" style="">
+    <div class="col-md-2">
+        Doctor Name :
+    </div>
+        <div class="col-md-3">
+            <h2 style="color:brown">@Model.DoctorName</h2>
+        </div>
+        </div>
+     
+    <div class="row" style="margin-bottom:2%;">
+        @using (Html.BeginForm())
+                {
+            <div class="col-md-3">
+                <h4>Search By Date</h4>
+            </div>
+            <div class="col-md-3">
+                @Html.TextBoxFor(a => a.PaymentDate, new { @class = "form-control datepicker" })
+            </div>
+            <div class="col-md-3">
+                <input type="submit" class="btn btn-primary" value="Search" />
+            </div>
+                }
+    </div>
+
+
+    @if (Model.HistoryOfDoc_Payout == null)
+    {
+        if (TempData["msg"] != null)
+        {
+            <h3>@TempData["msg"]</h3>
+        }
+    }
+    else
+    {
+        <table class="display" id="table_id">
+            <tr>
+                <th>Serial No</th>
+                <th>Payment Date</th>
+                <th>Amount</th>
+                <th>Status</th>
+            </tr>
+            <tbody>
+                @{int RowNo = 0;}
+                @foreach (var item in Model.HistoryOfDoc_Payout)
+                {
+                    <tr>
+                        <td>
+                            @{RowNo++;} @RowNo
+                        </td>
+                        <td>
+                            @if (item.PaymentDate != null)
+                            {
+                                <span>@item.PaymentDate.Value.ToString("dd-MMM-yyyy")</span>
+                            }
+
+                        </td>
+                        <td>@item.Amount</td>
+                        <td>
+                         
+                            @if (Convert.ToInt32(item.IsPaid) == 1)
+                            {
+                                <span style="color:forestgreen">Paid</span>
+                            }
+                            else
+                            {
+                                <span style="color:red">Not Paid</span>
+                            }
+                        </td>
+                    </tr>
+                                }
+            </tbody>
+        </table>
+                                }
+</div>
+<script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
+<link href="~/css/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
+<script>
+    $('.datepicker').datepicker().datepicker('setDate', 'today');
+</script>
+
+<script src="https://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css">
+
+<script type="text/javascript">
+        $('#table_id').DataTable();
+</script>

@@ -1,0 +1,156 @@
+﻿
+@{
+    ViewBag.Title = "VendorReport";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Vendor Report</h2>
+
+<div class="row">
+    <div class="col-md-4">
+        <select id="tp" class="form-control" required="required">
+            <option value="">
+                Select Any
+            </option>
+            <option value="Doctor">
+                Doctor
+            </option>
+            <option value="Driver">
+                Driver
+            </option>
+            <option value="Vehicle">
+                Vehicle
+            </option>
+            <option value="Chemist">
+                Chemist
+            </option>
+            <option value="Nurse">
+                Nurse
+            </option>
+            <option value="Lab">
+                Lab
+            </option>
+            <option value="HealthCheckUp">
+                HealthCheckUp
+            </option>
+        </select>
+    </div>
+    <div class="col-md-4">
+        <input type="button" value="Check" id="btnCheck" class="btn btn-primary" />
+    </div>
+</div>
+<div id="prevAtt" style="margin-top:5%;">
+
+</div>
+
+<script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
+<script>
+    $("#btnCheck").click(function () {
+        debugger
+        var term = $("#tp").val();
+        if (term == "Doctor") {
+            $.ajax({
+                url: "/VendorReport/Doctor?term=" + term,
+                type: "get",
+                success: function (response) {
+                    console.log(response);
+                    $("#prevAtt").html(response);
+                },
+                error: function (error) {
+                    console.log(error.responseText);
+                    msg.text("");
+                }
+            });
+        }
+        if (term == "Driver") {
+            $.ajax({
+                url: "/VendorReport/Driver?term=" + term,
+                type: "get",
+                success: function (response) {
+                    console.log(response);
+                    $("#prevAtt").html(response);
+                },
+                error: function (error) {
+                    console.log(error.responseText);
+                    msg.text("");
+                }
+            });
+        }
+
+        if (term == "Vehicle") {
+            $.ajax({
+                url: "/VendorReport/Vehicle?term=" + term,
+                type: "get",
+                success: function (response) {
+                    console.log(response);
+                    $("#prevAtt").html(response);
+                },
+                error: function (error) {
+                    console.log(error.responseText);
+                    msg.text("");
+                }
+            });
+        }
+
+        if (term == "Chemist") {
+            $.ajax({
+                url: "/VendorReport/Chemist?term=" + term,
+                type: "get",
+                success: function (response) {
+                    console.log(response);
+                    $("#prevAtt").html(response);
+                },
+                error: function (error) {
+                    console.log(error.responseText);
+                    msg.text("");
+                }
+            });
+        }
+
+        if (term == "Nurse") {
+            $.ajax({
+                url: "/VendorReport/Nurse?term=" + term,
+                type: "get",
+                success: function (response) {
+                    console.log(response);
+                    $("#prevAtt").html(response);
+                },
+                error: function (error) {
+                    console.log(error.responseText);
+                    msg.text("");
+                }
+            });
+        }
+
+        if (term == "Lab") {
+            $.ajax({
+                url: "/VendorReport/Lab?term=" + term,
+                type: "get",
+                success: function (response) {
+                    console.log(response);
+                    $("#prevAtt").html(response);
+                },
+                error: function (error) {
+                    console.log(error.responseText);
+                    msg.text("");
+                }
+            });
+        }
+
+        if (term == "HealthCheckUp") {
+            $.ajax({
+                url: "/VendorReport/HealthCheckUp?term=" + term,
+                type: "get",
+                success: function (response) {
+                    console.log(response);
+                    $("#prevAtt").html(response);
+                },
+                error: function (error) {
+                    console.log(error.responseText);
+                    msg.text("");
+                }
+            });
+        }
+    });
+</script>
+

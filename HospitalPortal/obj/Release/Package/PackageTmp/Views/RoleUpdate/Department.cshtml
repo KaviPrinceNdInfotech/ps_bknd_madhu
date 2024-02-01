@@ -1,0 +1,46 @@
+﻿@model HospitalPortal.Models.ViewModels.UpdateDepartment
+@{
+    ViewBag.Title = "Department";
+    if (User.Identity.IsAuthenticated)
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    int loginId = Convert.ToInt32(User.Identity.Name);
+}
+
+<h2>Add Department</h2>
+
+<style>
+    #main{
+        width:60%;
+    }
+</style>
+
+<div id="main">
+    <a href="/RoleUpdate/ViewMore?id=@loginId" class="btn btn-primary">View List</a>
+
+    @using (Html.BeginForm())
+    {
+        @Html.Partial("~/Views/Shared/_DisplayMessage.cshtml")
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    Department* : @Html.TextBoxFor(a=>a.Department, new {@class="form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.Department)
+                    </span>
+                </div>
+                <div class="form-group">
+                    Specialist* : @Html.TextBoxFor(a => a.Specialist, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.Specialist)
+                    </span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-info" />
+                </div>
+            </div>
+        </div>
+    }
+</div>
+

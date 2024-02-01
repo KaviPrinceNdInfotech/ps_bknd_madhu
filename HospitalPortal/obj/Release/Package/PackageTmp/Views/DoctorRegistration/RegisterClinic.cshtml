@@ -1,0 +1,153 @@
+﻿@model HospitalPortal.Models.RequestModel.AddClinicDTO
+@{
+    ViewBag.Title = "RegisterClinic";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Register Clinic</h2>
+
+<style>
+    #main {
+        width: 100%;
+        margin: auto;
+    }
+</style>
+
+<script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
+<script src="~/Scripts/Library/jquery-ui-1.8.20.min.js"></script>
+<script src="~/js/jquery-1.10.2.min.js"></script>
+@Html.Partial("~/Views/Shared/_StateCityLocCascading.cshtml")
+<a href="/DoctorRegistration/ViewClinics" class="btn btn-primary">Show Clinic</a>
+@if (Model.noOfClinic == 2)
+{
+    <span>You've Reached the Most Added Clinics.</span>
+}
+else
+{
+<div id="main" style="background-color:lightgray">
+    @using (Html.BeginForm("RegisterClinic", "DoctorRegistration", FormMethod.Post))
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <h3>Clinic Details</h3>
+                <span id="addNew" class="btn btn-info">
+                    + Add New
+                </span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-bordered" id="dataTable">
+                    <thead>
+                        <tr style="background-color:#657594;color:white">
+                            <th>Clinic Name*</th>
+                            <th>Full Address</th>
+                            <th>Open Time</th>
+                            <th>Close Time</th>
+                            <th>Action</th>
+                        </tr>
+
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                @Html.TextBoxFor(a => a.Clinic[0].ClinicName, new { @class = "form-control" })
+                            </td>
+                            <td>
+                                @Html.TextBoxFor(a => a.Clinic[0].FullAddress, new { @class = "form-control" })
+
+                                @Html.DropDownListFor(a => a.Clinic[0].StateMaster_Id, Model.States, "Select", new { @class = "form-control h", })
+
+                                @Html.DropDownListFor(a => a.Clinic[0].CityMaster_Id, Enumerable.Empty<SelectListItem>(), "Select", new { @class = "form-control c" })
+                            </td>
+                            <td>
+                                @Html.TextBoxFor(a => a.Clinic[0].StartTime, new { @class = "form-control", type = "time" })
+                            </td>
+                            <td>
+                                @Html.TextBoxFor(a => a.Clinic[0].EndTime, new { @class = "form-control", required = "required", type = "time" })
+                            </td>
+
+                            <td><span class="rm btn btn-danger" onclick="remove(this)">Remove</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+
+
+    <div class="row">
+        <div class="col-md-2" style="margin-top:2%">
+            <input type="submit" class="btn btn-info form-control" value="Submit" />
+        </div>
+    </div>
+    }
+</div>
+}
+<script>
+
+    function remove(obj) {
+        $(obj).parent().parent().remove();
+    }
+
+    $("#addNew").click(function (e) {
+
+        e.preventDefault();
+        var $tableBody = $("#dataTable");
+        var $trLast = $tableBody.find("tr:last");
+        let trCount = $trLast.index();
+        if (trCount == 1) {
+            alert("Not more than 2 Clinic Register");
+            return;
+        }
+        var $trNew = $trLast.clone();
+        var suffix = $trNew.find(':input:first').attr('name').match(/\d+/);
+        //$trNew.find("td:last").html('<a href="#" class="remove">Remove</a>');
+        $.each($trNew.find(':input'), function (i, val) {
+            // Replaced Name
+            var oldN = $(this).attr('name');
+            if (typeof oldN !== typeof undefined && oldN !== false) {
+                var newN = oldN.replace('[' + suffix + ']', '[' + (parseInt(suffix) + 1) + ']');
+                $(this).attr('name', newN);
+                //Replaced value
+                var type = $(this).attr('type');
+                if (typeof type !== typeof undefined && type !== false) {
+                    if (type.toLowerCase() == "text") {
+                        $(this).attr('value', '');
+                    }
+                    if (type.toLowerCase() == "number") {
+                        $(this).val(0);
+                    }
+                }
+                // If you have another Type then replace with default value
+                $(this).removeClass("input-validation-error");
+            }
+        });
+        $trLast.after($trNew);
+        auto();
+    });
+
+    $(".h").change(function () {
+        var stateId = $(this).val();
+        var city = $(".c");
+        city.empty();
+        city.append("<option value=''>Select</option>");
+        $.ajax({
+            url: '/Common/GetCitiesByState?stateId=' + stateId,
+            type: 'get',
+            success: function (response) {
+                $.each(response, function (key, val) {
+                    city.append("<option value='" + val.Id + "'>" + val.CityName + "</option>");
+                    console.log(val.CityName);
+                });
+
+            },
+            error: function (error) {
+                console.log(error.responseText);
+            }
+        });
+    });
+
+</script>
+
+

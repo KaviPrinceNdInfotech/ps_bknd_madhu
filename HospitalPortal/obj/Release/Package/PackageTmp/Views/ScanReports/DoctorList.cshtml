@@ -1,0 +1,44 @@
+﻿@model HospitalPortal.Models.ViewModels.ScanReportVM
+
+<div style="margin:auto">
+
+    @using (Html.BeginForm())
+    {
+        <div class="row">
+            <div class="col-md-3">
+                @Html.TextBoxFor(a => a.DoctorName, new { @class = "form-control" })
+            </div>
+            <div class="col-md-3">
+                <input type="submit" value="filter" />
+            </div>
+        </div>
+    }
+
+    @if (Model.DoctorList.Count() <= 0)
+    {
+        if (TempData["msg"] != null)
+        {
+            <h2>@TempData["msg"]</h2>
+        }
+    }
+    else
+    {
+        <table class="table table-bordered">
+            <tr>
+                <th>Doctor Name</th>
+                <th>Action</th>
+            </tr>
+            <tbody>
+                @foreach (var item in Model.DoctorList)
+                {
+                    <tr>
+                        <td>@item.DoctorName</td>
+                        <td><a href="/DoctorRegistration/ViewReports?id=@item.Id">View Reports</a></td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    }
+</div>
+

@@ -1,0 +1,74 @@
+﻿@model IEnumerable<HospitalPortal.Models.ViewModels.HospitalDoctorDTO>
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<style>
+    #mainContainer {
+        width: 99%;
+        margin-top: 1%;
+        margin-left: 1%;
+        overflow-y:scroll;
+    }
+</style>
+
+<div id="mainContainer">
+
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Our Doctors</h3>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>DoctorName</th>
+                        <th>MobileNumber</th>
+                        <th>EmailId</th>
+                        <th>Address</th>
+                        <th>DeparmentName</th>
+                        <th>SpecialistName</th>
+                        <th>AadharNumber</th>
+                        <th>Aadhar Doc.</th>
+                        <th>LicenceNumber</th>
+                        <th>Licence Doc.</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.DoctorName</td>
+                            <td>@item.MobileNumber</td>
+                            <td>@item.EmailId</td>
+                            <td>@item.Location, @item.CityName,@item.StateName</td>
+                            <td>@item.DepartmentName</td>
+                            <td>@item.SpecialistName</td>
+                            <td>@item.AadharNumber</td>
+                            <td>
+                               @if(!string.IsNullOrEmpty(item.AadharImage))
+                               {
+                                   <img class="thumb" src="/Images/@item.AadharImage" />
+                               }
+                            </td>
+                            <td>@item.LicenceNumber</td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(item.LicenceImage))
+                            {
+                                <img class="thumb" src="/Images/@item.LicenceImage" />
+                            }
+                            </td>
+                            <td>
+                                <a href="@Url.Action("RemoveDoctor", new {docId = item.Id,hospitalId=item.Hospital_Id})" class="btn btn-danger"><i class="fa fa-trash-o"></i></a>
+                                <a href="@Url.Action("EditDoctor", new {docId = item.Id})" class="btn btn-info"><i class="fa fa-pencil"></i></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

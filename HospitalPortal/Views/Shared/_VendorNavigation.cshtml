@@ -1,0 +1,244 @@
+﻿@{ 
+    int loginId = Convert.ToInt32(User.Identity.Name);
+    int vendorId = new HospitalPortal.Models.DomainModels.DbEntities().Vendors.FirstOrDefault(a=>a.AdminLogin_Id==loginId).Id;
+    bool CurrentStatus = new HospitalPortal.Models.DomainModels.DbEntities().Vendors.FirstOrDefault(a => a.Id == vendorId).IsApproved;
+}
+
+
+<div class="sidebar-nav">
+    <ul>
+        <li class="nav-header"><a href="/Admin/Dashboard/" style="cursor:pointer"> <i class="fa fa-bars"></i> Dashboard</a></li>
+        <li class="nav-header"><a href="/Vendor/Edit?id=@vendorId" style="cursor:pointer">
+                                   <i class="fa fa-pencil"></i> Edit Profile</a></li>
+        <li class="nav-header">
+            <a href="/Bank/UpdateBank?id=@loginId" style="cursor:pointer">
+                <i class="fa fa-pencil"></i> Update Bank Details
+            </a>
+        </li>
+
+        <!--Vehicle allotment Update-->
+        <li style="cursor:pointer;" data-target=".vehicle-menu" class="nav-header" data-toggle="collapse">
+            <i class="fa fa-money"></i>Vehicle Allotment<i class="fa fa-collapse"></i>
+        </li>
+        <li>
+            <ul class="vehicle-menu nav nav-list collapse">
+                <li>
+                    <a href="/Vehicle/VehicleAllotment" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Update Old Driver</a>
+                </li>
+                <li>
+                    <a href="/Vehicle/UpdateVehicle" style="cursor:pointer;"> <span class="fa fa-user"></span>Update New Driver</a>
+                </li>
+            </ul>
+        </li>
+        <!--Gallery Add and Show-->
+        <li class="nav-header">
+            <a href="/Gallery/Gallery" style="cursor:pointer">
+                <i class="fa fa-pencil"></i> Gallery
+            </a>
+        </li>
+
+        @if (CurrentStatus == false) { }
+        else
+        {
+        <li class="nav-header"><a href="/Gallery/Gallery/" style="cursor:pointer"><i class="fa fa-image"></i>  Add Gallery</a></li>
+        <li class="nav-header"><a href="/AddTest/All/" style="cursor:pointer"><i class="fa fa-list"></i>  Add Test</a></li>
+        <li class="nav-header"><a href="/RoleUpdate/Department?id=@loginId" style="cursor:pointer"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Add Specialist &amp; Department</a></li>
+        <li class="nav-header"><a href="/RoleUpdate/Add?id=@loginId" style="cursor:pointer"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Add Vehicle Type</a></li>
+        <li class="nav-header">
+            <a href="/RoleUpdate/ViewMore?id=@loginId" style="cursor:pointer"><span class="fa fa-list"></span> <span class="fa fa-user"></span>View Specialist &amp; Department</a>
+        </li>
+        <li class="nav-header">
+            <a href="/Department/All?Id=@loginId" style="cursor:pointer"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>View Department and Specialist</a>
+        </li>
+        @*<li class="nav-header">
+            <a href="/Specialist/All" style="cursor:pointer"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Add Specialist</a>
+        </li>*@
+        <li>
+            <a href="#" data-target=".reg-menu" class="nav-header" data-toggle="collapse">
+                <i class="fa fa-user"></i> Registrations <i class="fa fa-collapse"></i>
+            </a>
+        </li>
+        <!-- SubMenus Start-->
+        <li>
+            <ul class="reg-menu nav nav-list collapse">
+                <li>
+                    <a href="/Vehicle/Add?vendorId=@vendorId" style="cursor:pointer"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Vehicle Registration</a>
+                </li>
+
+                <li>
+                    <a href="/Driver/Add?vendorId=@vendorId" style="cursor:pointer"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Driver Registration</a>
+                </li>
+
+                <li>
+                    <a href="/DoctorRegistration/Add?vendorId=@vendorId" style="cursor:pointer"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Doctor Registration</a>
+                </li>
+                <li>
+                    <a href="/Patient/Add?vendorId=@vendorId" style="cursor:pointer"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Pateint Registration</a>
+                </li>
+                <li>
+                    <a href="/Chemist/Add?vendorId=@vendorId" style="cursor:pointer"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Chemist Registration</a>
+                </li>
+                <li>
+                    <a href="/Nurse/Add?vendorId=@vendorId" style="cursor:pointer"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Nurse Registration</a>
+                </li>
+                <li>
+                    <a href="/Lab/Add?vendorId=@vendorId" style="cursor:pointer"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Lab Registration</a>
+                </li>
+                <li>
+                    <a href="/CompletHealthCheckup/Add?vendorId=@vendorId" style="cursor:pointer"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Health CheckUp Registration</a>
+                </li>
+                <li>
+                    <a href="/Rwa/Add?vendorId=@vendorId" style="cursor:pointer"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>RWA Registration</a>
+                </li>
+            </ul>
+        </li>
+
+
+        <li>
+            <a href="#" data-target=".regList-menu" class="nav-header" data-toggle="collapse">
+                <i class="fa fa-user"></i> Registrations Details <i class="fa fa-collapse"></i>
+            </a>
+        </li>
+        <!-- SubMenus Start-->
+        <li>
+            <ul class="regList-menu nav nav-list collapse">
+                <li>
+                    <a href="/Vehicle/All?vendorId=@vendorId" style="cursor:pointer"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Vehicle Entries</a>
+                </li>
+
+                <li>
+                    <a href="/Driver/All?vendorId=@vendorId" style="cursor:pointer"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Driver Entries</a>
+                </li>
+
+                <li>
+                    <a href="/DoctorRegistration/All?vendorId=@vendorId" style="cursor:pointer"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Doctor Entries</a>
+                </li>
+                <li>
+                    <a href="/Patient/PatientList?fid=@vendorId" style="cursor:pointer"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Patient Entries</a>
+                </li>
+                <li>
+                    <a href="/Chemist/All?vendorId=@vendorId" style="cursor:pointer"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Chemist Entries</a>
+                </li>
+                <li>
+                    <a href="/Nurse/All?vendorId=@vendorId" style="cursor:pointer"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Nurse Entries</a>
+                </li>
+                <li>
+                    <a href="/Lab/All?vendorId=@vendorId" style="cursor:pointer"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Lab Entries</a>
+                </li>
+                <li>
+                    <a href="/CompletHealthCheckup/All?vendorId=@vendorId" style="cursor:pointer"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Health CheckUp Entries</a>
+                </li>
+                <li>
+                    <a href="/Rwa/All?vendorId=@vendorId" style="cursor:pointer"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>RWA Entries</a>
+                </li>
+            </ul>
+        </li>
+
+
+
+        <li>
+            <a href="#" data-target=".Vendor-menu" class="nav-header" data-toggle="collapse">
+                <i class="fa fa-calendar"></i>My Y/M/W/D Report<i class="fa fa-collapse"></i>
+            </a>
+        </li>
+        <!--Y/M/W/D Report-->
+        <li>
+            <ul class="Vendor-menu nav nav-list collapse">
+                <li>
+                    <a href="/Vendor/Doctor?id=@vendorId" style="cursor:pointer"><span class="fa fa-history"></span> <span class="fa fa-user"></span>For Doctor</a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            @*<ul class="Vendor-menu nav nav-list collapse">
+                <li>
+                    <a href="/Vendor/Driver?id=@vendorId" style="cursor:pointer"><span class="fa fa-history"></span> <span class="fa fa-user"></span>For Driver</a>
+                </li>
+            </ul>*@
+            <ul class="Vendor-menu nav nav-list collapse">
+                <li>
+                    <a href="/Vendor/Vehicle?id=@vendorId" style="cursor:pointer"><span class="fa fa-history"></span> <span class="fa fa-user"></span>For Vehicle</a>
+                </li>
+            </ul>
+
+            <ul class="Vendor-menu nav nav-list collapse">
+                <li>
+                    <a href="/Vendor/Lab?id=@vendorId" style="cursor:pointer"><span class="fa fa-history"></span> <span class="fa fa-user"></span>For Lab</a>
+                </li>
+            </ul>
+            <ul class="Vendor-menu nav nav-list collapse">
+                <li>
+                    <a href="/Vendor/Nurse?id=@vendorId" style="cursor:pointer"><span class="fa fa-history"></span> <span class="fa fa-user"></span>For Nurse</a>
+                </li>
+            </ul>
+
+            <ul class="Vendor-menu nav nav-list collapse">
+                <li>
+                    <a href="/Vendor/Chemist?id=@vendorId" style="cursor:pointer"><span class="fa fa-history"></span> <span class="fa fa-user"></span>For Chemist</a>
+                </li>
+            </ul>
+            <ul class="Vendor-menu nav nav-list collapse">
+                <li>
+                    <a href="/Vendor/HealthCheckUp?id=@vendorId" style="cursor:pointer"><span class="fa fa-history"></span> <span class="fa fa-user"></span>For Health Check Up</a>
+                </li>
+            </ul>
+        </li>
+
+
+        <li>
+            <a href="#" data-target=".payment-menu" class="nav-header" data-toggle="collapse">
+                <i class="fa fa-calendar"></i>My Payment Report<i class="fa fa-collapse"></i>
+            </a>
+        </li>
+        <!--Y/M/W/D Report-->
+        <li>
+            <ul class="payment-menu nav nav-list collapse">
+                <li>
+                    <a href="/Vendor/Vendor" style="cursor:pointer"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Payment Report</a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a href="#" data-target=".Commission-menu" class="nav-header" data-toggle="collapse">
+                <i class="fa fa-calendar"></i>My Commission Report<i class="fa fa-collapse"></i>
+            </a>
+        </li>
+
+        <li>
+            <ul class="Commission-menu nav nav-list collapse">
+                <li>
+                    <a href="/Commission/CommissionReport" style="cursor:pointer"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Commission Report</a>
+                </li>
+            </ul>
+        </li>
+
+        <li>
+            <a href="#" data-target=".payout-menu" class="nav-header" data-toggle="collapse">
+                <i class="fa fa-calendar"></i>My Payout Report<i class="fa fa-collapse"></i>
+            </a>
+        </li>
+        <!--Y/M/W/D Report-->
+        <li>
+            <ul class="payout-menu nav nav-list collapse">
+                <li>
+                    <a href="/Vendor/VendorPayoutHistory?id=@vendorId" style="cursor:pointer"><span class="fa fa-history"></span> <span class="fa fa-user"></span>My Payout Report</a>
+                </li>
+            </ul>
+        </li>
+
+        <li>
+            <a href="#" data-target=".tds-menu" class="nav-header" data-toggle="collapse">
+                <i class="fa fa-calendar"></i>My TDS Report<i class="fa fa-collapse"></i>
+            </a>
+        </li>
+        <!--TDS Report-->
+        <li>
+            <ul class="tds-menu nav nav-list collapse">
+                <li>
+                    <a href="/Vendor/Vendortds" style="cursor:pointer"><span class="fa fa-history"></span> <span class="fa fa-user"></span>TDS Report</a>
+                </li>
+            </ul>
+        </li>
+        }
+    </ul>
+</div>

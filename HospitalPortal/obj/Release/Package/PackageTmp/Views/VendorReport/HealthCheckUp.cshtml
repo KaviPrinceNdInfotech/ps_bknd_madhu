@@ -1,0 +1,108 @@
+﻿
+
+@{
+    ViewBag.Title = "Lab";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>HealthCheckUp</h2>
+
+<div class="row">
+    <div class="col-md-4">
+        <select id="tp" class="form-control" required="required">
+            <option value="Daily">
+                Select Any
+            </option>
+            <option value="Daily">
+                Daily
+            </option>
+            <option value="Weekly">
+                Weekly
+            </option>
+            <option value="Monthly">
+                Monthly
+            </option>
+            <option value="Yearly">
+                Yearly
+            </option>
+
+
+        </select>
+    </div>
+    <div class="col-md-4">
+        <input type="button" value="Check" id="btnCheck" class="btn btn-primary" />
+    </div>
+
+
+</div>
+<div id="prevAtt" style="margin-left: 27%; margin-top: 6%;">
+
+</div>
+
+<script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
+<script>
+    $("#btnCheck").click(function () {
+        debugger
+        var term = $("#tp").val();
+        if (term == "Daily") {
+            $.ajax({
+                url: "/VendorReport/DailyHealth?term=" + term,
+                type: "get",
+                success: function (response) {
+                    console.log(response);
+                    $("#prevAtt").html(response);
+                },
+                error: function (error) {
+                    console.log(error.responseText);
+                    msg.text("");
+                }
+            });
+        }
+        if (term == "Monthly") {
+            $.ajax({
+                url: "/VendorReport/MonthlyHealth?term=" + term,
+                type: "get",
+                success: function (response) {
+                    console.log(response);
+                    $("#prevAtt").html(response);
+                },
+                error: function (error) {
+                    console.log(error.responseText);
+                    msg.text("");
+                }
+            });
+        }
+
+        if (term == "Yearly") {
+            $.ajax({
+                url: "/VendorReport/YearlyHealth?term=" + term,
+                type: "get",
+                success: function (response) {
+                    console.log(response);
+                    $("#prevAtt").html(response);
+                },
+                error: function (error) {
+                    console.log(error.responseText);
+                    msg.text("");
+                }
+            });
+        }
+
+        if (term == "Weekly") {
+            $.ajax({
+                url: "/VendorReport/WeeklyHealth?term=" + term,
+                type: "get",
+                success: function (response) {
+                    console.log(response);
+                    $("#prevAtt").html(response);
+                },
+                error: function (error) {
+                    console.log(error.responseText);
+                    msg.text("");
+                }
+            });
+        }
+    });
+</script>
+
+

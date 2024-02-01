@@ -1,0 +1,80 @@
+﻿@model HospitalPortal.Models.ViewModels.ViewHealthCheckup
+@{
+    ViewBag.Title = "ViewAppointmentList";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>View Appointment List</h2>
+<div style="margin:auto; width:90%">
+    @using (Html.BeginForm())
+    {
+        <div class="row" style="">
+            <div class="col-md-4">
+                Search By Request Date
+            </div>
+            <div class="col-md-4" style="margin-left: -13%;">
+                <input type="date" name="date" id="date" class="form-control" />
+            </div>
+            <div class="col-md-4" style="margin-left: -3%;">
+                <input type="submit" value="Filter" class="btn btn-primary" />
+            </div>
+        </div>
+    }
+    <div style="margin-top:3%">
+        @if (TempData["msg"] != null)
+        {
+            <span style="color:red">@TempData["msg"]</span>
+        }
+        else
+        {
+            <table class="table table-bordered">
+                <tr>
+                    <th>Booking ID</th>
+                    <th>Patient Name</th>
+                    <th>Patient Address</th>
+                    <th>Contact No</th>
+                    <th>Test Date</th>
+                    <th>Amount Paid</th>
+                    <th>Status</th>
+                </tr>
+                <tbody>
+                    @foreach (var item in Model.HealthList)
+                    {
+                        <tr>
+                            <td>@item.BookingId</td>
+                            <td>@item.PatientName</td>
+                            <td>@item.PatientAddress</td>
+                            <td>@item.ContactNo</td>
+                            <td>
+                                @if (item.TestDate != null)
+                                {
+                                    <span>
+                                        @item.TestDate.Date.ToString("dd-MMM-yyyy")
+                                    </span>
+                                }
+                            </td>
+                            <td>@item.Amount</td>
+                            <td>
+                                @if (Convert.ToInt32(item.IsTaken) == 0)
+                    {
+
+                                    <a href="/CompletHealthCheckup/UpdateTestStatus?HealthId=@item.Id" class="btn btn-primary">Not Taken</a>
+                                }
+                                else
+                                {
+                                    <a href="/CompletHealthCheckup/UpdateTestStatus?HealthId=@item.Id" class="btn btn-primary">Taken</a>
+                                }
+                            </td>
+
+                        </tr>
+
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>
+<script>
+    $("#date").datepicker();
+</script>
+

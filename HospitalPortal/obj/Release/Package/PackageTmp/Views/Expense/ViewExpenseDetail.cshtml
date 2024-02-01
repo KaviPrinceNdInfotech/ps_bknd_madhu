@@ -1,0 +1,158 @@
+﻿@model HospitalPortal.Models.ViewModels.ExpenseReportDTO
+@{
+    ViewBag.Title = "ViewExpenseDetail";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>View Expense Detail</h2>
+
+<div style="margin:auto; width:90%">
+    <div class="row" style="margin-top:3%; margin-bottom:6%;">
+        @using (Html.BeginForm())
+        {
+
+            @*<div class="col-md-2">*@
+            @*Search
+                 @Html.DropDownList("Transaction_Type", new List<SelectListItem>() { new SelectListItem() { Text = "Credit", Value = "Credit" }, new SelectListItem() { Text = "Debit", Value = "Debit", }
+                }, "Select Transaction Type ", new { @class = "form-control", required = "required" })*@
+            @*<div class="col-md-2" style="margin-top:2%;">
+                    <select id="tp" class="form-control" required="required">
+                        <option value="Daily">
+                            Select Any
+                        </option>
+                        <option value="Daily">
+                            Daily
+                        </option>
+                        <option value="Yearly">
+                            Yearly
+                        </option>
+
+                        <option value="Monthly">
+                            Monthly
+                        </option>
+
+                        <option value="Weekly">
+                            Weekly
+                        </option>
+                    </select>
+
+                </div>
+                <div class="col-md-1" style="margin-top: 1.9% !important;">
+                    <input type="submit" value="Find" id="btnCheck" class="btn btn-primary" />
+                </div>*@
+            <form method="get">
+                <div class="col-md-2">
+                    Search
+                    <select id="tp" class="form-control" name="term">
+                        <option value="">Select Any</option>
+                        <option value="Daily">Daily</option>
+                        <option value="Yearly">Yearly</option>
+                        <option value="Monthly">Monthly</option>
+                        <option value="Weekly">Weekly</option>
+                    </select>
+                </div>
+                <div class="col-md-1" style="margin-top: 1.9% !important;">
+                    <input type="submit" value="Find" id="btnCheck1" class="btn btn-primary" />
+                </div>
+            </form>
+
+          
+        }
+
+        @using (Html.BeginForm("ViewExpenseDetail", "Expense"))
+        {
+
+            <div class="col-md-2">
+                Search By Date
+                @Html.TextBoxFor(a => a.TransactionDate, new { @class = "datepicker form-control", required = "required" })
+            </div>
+            <div class="col-md-1" style="margin-top: 1.9% !important;">
+                <input type="submit" value="Look" class="btn btn-primary" />
+            </div>
+
+
+        }
+
+
+        @using (Html.BeginForm("ViewExpenseDetail", "Expense"))
+        {
+
+            <div class="col-md-2">
+                Start Date
+                @Html.TextBoxFor(a => a.StartDate, new { @class = "datepicker form-control", required = "required" })
+
+
+            </div>
+            <div class="col-md-2">
+                End Date
+                @Html.TextBoxFor(a => a.EndDate, new { @class = "datepicker form-control", required = "required" })
+
+
+            </div>
+            <div class="col-md-2" style="margin-top: 1.9% !important;">
+                <input type="submit" value="Look" class="btn btn-primary" />
+            </div>
+
+
+        }
+
+
+
+
+    </div>
+
+    @if (Model.ExpenselList== null)
+    {
+        @TempData["msg"]
+    }
+    else
+    {
+        if (@TempData["msg"] != null || @TempData["msg"] != "")
+        {
+            @TempData["msg"]
+        }
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Expense Name</th>
+                    <th>Type of Expense</th>
+                    <th>Transaction Type</th>
+                    <th>Amount</th>
+                    <th>Transaction Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.ExpenselList)
+                {
+                    <tr>
+                        <td>@item.Expense</td>
+                        <td>@item.Type_Of_Expense</td>
+                        <td>
+                            @if (item.Transaction_Type == "Credit")
+                            {<span style="color:forestgreen">@item.Transaction_Type</span>}
+                        else
+                        {<span style="color:red">@item.Transaction_Type</span>}
+                        </td>
+                        <td>₹ @item.Amount</td>
+                        <td>@item.TransactionDate.Value.Date.ToShortDateString()</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+
+<script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
+<link href="~/css/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
+<script>
+    $(".datepicker").datepicker({});
+</script>
+
+  
+<script>
+            $('#tp').val('@ViewBag.termselect');
+</script>
+    
+

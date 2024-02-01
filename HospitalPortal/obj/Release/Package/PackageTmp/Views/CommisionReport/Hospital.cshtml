@@ -1,0 +1,16 @@
+﻿
+@{
+    ViewBag.Title = "Hospital";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Hospital</h2>
+
+<div style="margin:auto">
+    <img src="~/Images/under_construction.png" />
+    @if (TempData["msg"] != null)
+    {
+        <h2 style="margin-left: 11%;">@TempData["msg"]</h2>
+    }
+</div>
+

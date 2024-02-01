@@ -1,0 +1,79 @@
+﻿@model HospitalPortal.Models.ViewModels.TestListByLab
+@{
+    ViewBag.Title = "ShowTest";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Show Test List</h2>
+@using (Html.BeginForm())
+{
+    <div style="margin-bottom:3%;">
+        <a href="/Lab/AddTestDetails?id=@Model.labId" class="btn btn-primary">Add More</a>
+    </div>
+
+    <div class="row" style="margin-bottom:3%;">
+        <div class="col-md-3">Search By Test Category</div>
+        <div class="col-md-3"><input type="text" name="term" id="term" /></div>
+        <div class="col-md-3"><input type="submit" value="Filter" class="btn btn-primary" /></div>
+    </div>
+
+    
+
+    if (Model.TestsList.Count() == 0)
+    {
+        <h2>No Records</h2>
+    }
+    else
+    {
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+             
+                <th>Test Category</th>
+                <th>Test Amount</th>
+                <th>Test Name / Description</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+       
+            @foreach (var item in Model.TestsList)
+            {
+                <tr>
+                <td><input type="hidden" value="@item.Id" />@item.TestName</td>
+                <td>&#8377; @item.TestAmount</td>
+                <td>@item.TestDescription</td>
+                <td>
+                    @if (item.LabId != null)
+                    {
+                      <a href="/Lab/EditTest?testid=@item.Id" class="btn btn-info">Edit</a>
+                      <a href="/Lab/DeleteTest?Delid=@item.Id" class="btn btn-danger" onclick="return confirm('Are You Sure to Delete?')">Delete</a>
+                    }
+                    else
+                    {
+
+                    }
+                </td>
+                </tr>
+            }
+        
+    </table>
+    }
+}
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+        @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+            if (i == Model.PageNumber)
+            {
+                <li class="page-item active"><a class="page-link" href="/Lab/TestHistory?pageNumber=@i">@i</a></li>
+
+            }
+            else
+            {
+                <li class="page-item"><a class="page-link" href="/Lab/TestHistory?pageNumber=@i">@i</a></li>
+
+            }
+        }
+    </ul>
+</nav>
+

@@ -1,0 +1,97 @@
+﻿@{ 
+    int loginId = Convert.ToInt32(User.Identity.Name);
+    int id = new HospitalPortal.Models.DomainModels.DbEntities().HealthCheckupCenters.FirstOrDefault(a => a.AdminLogin_Id == loginId).Id;
+    bool CurrentStatus = new HospitalPortal.Models.DomainModels.DbEntities().HealthCheckupCenters.FirstOrDefault(a => a.Id == id).IsApproved;
+
+}
+
+<div class="sidebar-nav">
+    <ul>
+        <li class="nav-header">
+        <a href="/Admin/Dashboard/" style="cursor:pointer"> 
+            <i class="fa fa-bars"></i> Dashboard</a></li>
+        <li class="nav-header">
+            <a href="/CompletHealthCheckup/Edit?id=@id" style="cursor:pointer">
+                <i class="fa fa-pencil"></i> Update Profile
+            </a>
+        </li>
+        <li class="nav-header">
+            <a href="/Bank/UpdateBank?id=@id" style="cursor:pointer">
+                <i class="fa fa-pencil"></i> Update Bank Details
+            </a>
+        </li>
+@if (CurrentStatus == false) { }
+else
+{
+        <li class="nav-header">
+            <a href="/CompletHealthCheckup/AddDepartment?hospitalId=@id" style="cursor:pointer">
+                <i class="fa fa-plus"></i> Add Department
+            </a>
+        </li>
+        <li class="nav-header">
+            <a href="/CompletHealthCheckup/Departments?hospitalId=@id" style="cursor:pointer">
+                <i class="fa fa-bars"></i> Show Departments
+            </a>
+        </li>
+        <li class="nav-header">
+            <a href="/CompletHealthCheckup/UploadReport?id=@id" style="cursor:pointer">
+                <i class="fa fa-upload"></i> Upload Test Reports
+            </a>
+        </li>
+        <li class="nav-header">
+            <a href="/Common/LabReport" style="cursor:pointer">
+                <i class="fa fa-history"></i> View Lab Reports
+            </a>
+        </li>
+        <li class="nav-header">
+            <a href="/Common/HealthReport" style="cursor:pointer">
+                <i class="fa fa-history"></i> View Health Reports
+            </a>
+        </li>
+        <li class="nav-header">
+            <a href="/Common/DoctorReports" style="cursor:pointer">
+                <i class="fa fa-history"></i> View Doctor Reports
+            </a>
+        </li>
+        <li class="nav-header">
+            <a href="/CompletHealthCheckup/ViewPatientList?id=@id" style="cursor:pointer">
+                <i class="fa fa-search"></i> View Patient List 
+            </a>
+        </li>
+
+        <li class="nav-header">
+            <a href="/CompletHealthCheckup/AddPackage?Center_Id=@id" style="cursor:pointer">
+                <i class="fa fa-plus"></i> Add Package 
+            </a>
+        </li>
+
+        <li class="nav-header">
+            <a href="/CompletHealthCheckup/ViewAppointmentList?id=@id" style="cursor:pointer">
+                <i class="fa fa-search"></i> View Appointments 
+            </a>
+        </li>
+        <li class="nav-header">
+            <a href="/CompletHealthCheckup/PaymentReport?id=@id" style="cursor:pointer">
+                <i class="fa fa-search"></i> My Payment History
+            </a>
+        </li>
+
+        <li class="nav-header">
+            <a href="/CompletHealthCheckup/PayoutReport?id=@id" style="cursor:pointer">
+                <i class="fa fa-search"></i> My Payout Report
+            </a>
+        </li>
+        @*<li>
+            <ul class="regList-menu nav nav-list collapse">
+                <li>
+                    <a href="/Vehicle/All?vendorId=@vendorId" style="cursor:pointer"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Vehicle Entries</a>
+                </li>
+
+           
+
+                <li>
+            </ul>
+        </li>*@
+}
+    </ul>
+</div>

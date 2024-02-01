@@ -1,0 +1,68 @@
+﻿@model HospitalPortal.Models.ViewModels.GallertDTO
+@{
+    ViewBag.Title = "Gallery";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Gallery</h2>
+
+<style>
+    main{
+        margin:auto;
+        width:80%;
+    }
+</style>
+
+<div id="main">
+    <div class="row">
+        <div class="col-md-12">
+            @using (Html.BeginForm("Gallery", "Gallery", FormMethod.Post, new { encType = "multipart/form-data" }))
+            {
+                <div class="row">
+                    <div class="col-md-3">
+                        @Html.TextBoxFor(a=> a.ImageName, new {@class="form-control", placeholder="Enter the Image Name"})
+                    </div>
+                    <div class="col-md-3">
+                        @Html.TextBoxFor(a=> a.Image, new { @class = "form-control", type = "file" })
+                    </div>
+                    <div class="col-md-3">
+                        <input type="submit" value="Submit"  class="btn btn-primary"/>
+                    </div>
+                    <div class="col-md-3">
+                        @if(TempData["msg"] != null)
+                        {
+                            @TempData["msg"]
+                        }
+                    </div>
+                </div>
+            }
+            
+        </div>
+    </div>
+    @if (Model.GalleryList == null)
+            {
+
+            }
+            else
+            {
+        <table class="table table-bordered" style="margin-top:3%">
+            <thead>
+                <tr>
+                    <th>Image Name</th>
+                    <th>Image</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.GalleryList)
+                {
+                    <tr>
+                        <td>@item.ImageName</td>
+                        <td><img src="~/Gallery/@item.Images" width="200px" height="200px" /></td>
+                        <td><a href="/Gallery/Delete?Id=@item.Id" onclick="return confirm('Are you sure to Delete?')">Delete</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

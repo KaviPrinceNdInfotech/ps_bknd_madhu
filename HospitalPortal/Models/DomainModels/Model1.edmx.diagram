@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="e51b3189a163499fbe410e26adb1305b" Name="Diagram1" ZoomLevel="74">
+        <EntityTypeShape EntityType="Model.RWAPayment" Width="1.5" PointX="5" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.UserWallet" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.VehicleTemp" Width="1.5" PointX="12.75" PointY="13.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.AdminLogin" Width="1.5" PointX="0.5" PointY="5.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.BankDetail" Width="1.5" PointX="5.25" PointY="6" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.BookTestLab" Width="1.5" PointX="3" PointY="30" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.CancelledAppointment" Width="1.5" PointX="6" PointY="29.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.Charge" Width="1.5" PointX="9.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.CheckUpReport" Width="1.5" PointX="3" PointY="25.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.ChekcupCenterDepartment" Width="1.5" PointX="17.125" PointY="4.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.ChemistPayOut" Width="1.5" PointX="14" PointY="6" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.CityMaster" Width="1.5" PointX="3" PointY="14.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.CityTemp" Width="1.5" PointX="9.25" PointY="18" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.CmpltCheckUp" Width="1.5" PointX="3" PointY="36" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.CommissionMaster" Width="1.5" PointX="16" PointY="20.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.Content" Width="1.5" PointX="17.75" PointY="15.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.Department" Width="1.5" PointX="7.5" PointY="53.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.DepartmentTemp" Width="1.5" PointX="16.625" PointY="6.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.DoctorComplaint" Width="1.5" PointX="7.625" PointY="56.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.DoctorDepartment" Width="1.5" PointX="17.75" PointY="18.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.DoctorPayOut" Width="1.5" PointX="6" PointY="59.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.DoctorReport" Width="1.5" PointX="6" PointY="26" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.DoctorSkill" Width="1.5" PointX="19.75" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.Employee" Width="1.5" PointX="0.5" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.ExpenseReport" Width="1.5" PointX="19.75" PointY="12.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.Gallery" Width="1.5" PointX="11.75" PointY="19.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.HealthBooking" Width="1.5" PointX="9" PointY="30.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.HealthPayOut" Width="1.5" PointX="2.875" PointY="8.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.HopitalFaciltiy" Width="1.5" PointX="19.75" PointY="19.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.HospitalDepartment" Width="1.5" PointX="18.75" PointY="6.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.HospitalDoctor" Width="1.5" PointX="12.875" PointY="41.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.HospitalDoctorDepartment" Width="1.5" PointX="24.25" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.HospitalNurse" Width="1.5" PointX="18.875" PointY="41.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.HospitalReport" Width="1.5" PointX="9" PointY="26.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.LabPayOut" Width="1.5" PointX="3" PointY="52" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.LabReport" Width="1.5" PointX="12" PointY="36.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.Location" Width="1.5" PointX="17.375" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.Mail" Width="1.5" PointX="21.5" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.MainCategory" Width="1.5" PointX="4.5" PointY="21" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.Medicine" Width="1.5" PointX="21.75" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.MedicineCart" Width="1.5" PointX="21.75" PointY="13.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.MedicineOrder" Width="1.5" PointX="20.125" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.MedicineOrderDetail" Width="1.5" PointX="21.75" PointY="16.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.MedicineType" Width="1.5" PointX="5.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.Nurse_Location" Width="1.5" PointX="21.75" PointY="19.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.NursePayout" Width="1.5" PointX="17.75" PointY="12" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.NurseServiceRequest" Width="1.5" PointX="20.75" PointY="6.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.NurseType" Width="1.5" PointX="9.75" PointY="57.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.PageMaster" Width="1.5" PointX="19.75" PointY="22.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.PatientAppointment" Width="1.5" PointX="12" PointY="29.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.PatientComplaint" Width="1.5" PointX="5.25" PointY="51.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.PatientRequest" Width="1.5" PointX="9" PointY="22.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.PaymentMaster" Width="1.5" PointX="21.75" PointY="22.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.PayoutMaster" Width="1.5" PointX="27.125" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.RwaPayout" Width="1.5" PointX="14.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.SalaryMaster" Width="1.5" PointX="2.375" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.Specialist" Width="1.5" PointX="9.75" PointY="53.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.StateMaster" Width="1.5" PointX="0.75" PointY="14.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.TDSMaster" Width="1.5" PointX="21.875" PointY="3.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.TempDepartment" Width="1.5" PointX="23.75" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.TestLab" Width="1.5" PointX="7.625" PointY="43.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.TravelMaster" Width="1.5" PointX="9" PointY="38.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.Vehicle" Width="1.5" PointX="7.5" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.VehicleType" Width="1.5" PointX="6.75" PointY="19.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.VendorPayOut" Width="1.5" PointX="7" PointY="6" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.AppLog" Width="1.5" PointX="23.75" PointY="12.75" IsExpanded="true" />
+        <AssociationConnector Association="Model.FK__VehicleTe__Categ__60C757A0" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK__VehicleTe__Login__5090EFD7" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK__BankDetai__Login__269AB60B" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK__CityTemp__Login___4CC05EF3" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK__PatientCo__Login__489AC854" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK__Cancelled__Cance__25C68D63" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK__Cancelled__Hospi__22EA20B8" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK__Cancelled__Hospi__23DE44F1" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK__Cancelled__Speci__200DB40D" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK__CityMaste__State__2739D489" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK__CityTemp__State___4DB4832C" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK__Specialis__Depar__4C6B5938" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK__SalaryMas__Emp_I__0E04126B" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK__PatientAp__Hospi__1A54DAB7" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK__PatientAp__Hospi__793DFFAF" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK__HospitalN__Nurse__76619304" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK__MedicineO__Locat__0697FACD" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK__VehicleTy__Categ__5FD33367" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK__PatientAp__Speci__1B48FEF0" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK__PatientAp__Speci__47A6A41B" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK__PatientRe__Vehic__0E591826" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK__TravelMas__Vehic__1E8F7FEF" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK__TravelMas__Vehic__216BEC9A" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="Model.LabBooking" Width="1.5" PointX="15.25" PointY="36.875" />
+        <AssociationConnector Association="Model.FK__LabBookin__Test___48BAC3E5" />
+        <AssociationConnector Association="Model.FK__LabBookin__TestI__515009E6" />
+        <EntityTypeShape EntityType="Model.Driver" Width="1.5" PointX="13.625" PointY="18.625" />
+        <EntityTypeShape EntityType="Model.Hospital" Width="1.5" PointX="3" PointY="43.75" />
+        <EntityTypeShape EntityType="Model.RWA" Width="1.5" PointX="15.375" PointY="14" />
+        <EntityTypeShape EntityType="Model.Vendor" Width="1.5" PointX="0.75" PointY="29.25" />
+        <AssociationConnector Association="Model.FK__Hospital__AdminL__395884C4" />
+        <AssociationConnector Association="Model.FK__RWA__AdminLogin___498EEC8D" />
+        <AssociationConnector Association="Model.FK__Vendor__AdminLog__51300E55" />
+        <AssociationConnector Association="Model.FK__Hospital__CityMa__48CFD27E" />
+        <AssociationConnector Association="Model.FK__RWA__CityMaster___4A8310C6" />
+        <AssociationConnector Association="Model.FK_Vendor_City" />
+        <AssociationConnector Association="Model.FK__Driver__VehicleT__45544755" />
+        <AssociationConnector Association="Model.FK__TravelMas__Drive__2077C861" />
+        <AssociationConnector Association="Model.FK__Hospital__Vendor__595B4002" />
+        <AssociationConnector Association="Model.FK__HospitalN__Hospi__7755B73D" />
+        <AssociationConnector Association="Model.FK__HospitalR__Hospi__7869D707" />
+        <AssociationConnector Association="Model.FK__PatientAp__Hospi__1960B67E" />
+        <AssociationConnector Association="Model.FK__PatientAp__Hospi__7849DB76" />
+        <AssociationConnector Association="Model.FK_Hospital_StateMaster" />
+        <AssociationConnector Association="Model.FK__RWA__StateMaster__4B7734FF" />
+        <AssociationConnector Association="Model.FK__RwaPayout__Rwa_I__3429BB53" />
+        <AssociationConnector Association="Model.FK_Vendor_State" />
+        <AssociationConnector Association="Model.FK__Vehicle__Vendor___6166761E" />
+        <AssociationConnector Association="Model.FK__VendorPay__Vendo__6ABAD62E" />
+        <EntityTypeShape EntityType="Model.Patient" Width="1.5" PointX="0.75" PointY="28.875" />
+        <AssociationConnector Association="Model.FK__BookTestL__Patie__56E8E7AB" />
+        <AssociationConnector Association="Model.FK__Cancelled__Patie__1E256B9B" />
+        <AssociationConnector Association="Model.FK__CheckUpRe__Patie__22751F6C" />
+        <AssociationConnector Association="Model.FK__CmpltChec__Patie__29221CFB" />
+        <AssociationConnector Association="Model.FK__DoctorRep__Patie__31B762FC" />
+        <AssociationConnector Association="Model.FK__HealthBoo__Patie__43F60EC8" />
+        <AssociationConnector Association="Model.FK__HospitalR__Patie__795DFB40" />
+        <AssociationConnector Association="Model.FK__LabReport__Patie__40F9A68C" />
+        <AssociationConnector Association="Model.FK__PatientAp__Patie__46B27FE2" />
+        <AssociationConnector Association="Model.FK__PatientRe__Patie__0D64F3ED" />
+        <AssociationConnector Association="Model.FK__TravelMas__Patie__1F83A428" />
+        <EntityTypeShape EntityType="Model.LabTest" Width="1.5" PointX="8.75" PointY="4.625" />
+        <AssociationConnector Association="Model.FK__BookTestL__Test___55F4C372" />
+        <AssociationConnector Association="Model.FK__CheckUpRe__TestI__3AC1AA49" />
+        <AssociationConnector Association="Model.FK__HospitalRe__Test__7A521F79" />
+        <AssociationConnector Association="Model.FK__LabBooking__Test__52442E1F" />
+        <AssociationConnector Association="Model.FK__LabReport__Test__41EDCAC5" />
+        <AssociationConnector Association="Model.FK__TestLab__Test_Id__51300E55" />
+        <EntityTypeShape EntityType="Model.VehicleCharge" Width="1.5" PointX="15.75" PointY="27" />
+        <AssociationConnector Association="Model.FK__VehicleCh__Categ__0D99FE17" />
+        <AssociationConnector Association="Model.FK__VehicleCh__TypeI__0E8E2250" />
+        <EntityTypeShape EntityType="Model.DoctorClinic" Width="1.5" PointX="12.375" PointY="9.75" />
+        <EntityTypeShape EntityType="Model.HealthPackageMaster" Width="1.5" PointX="16.375" PointY="9.75" />
+        <EntityTypeShape EntityType="Model.HealthCheckUpPackage" Width="2.875" PointX="1" PointY="18.625" />
+        <EntityTypeShape EntityType="Model.HealthLabTest" Width="1.5" PointX="0.75" PointY="21.75" />
+        <EntityTypeShape EntityType="Model.TravelRecordMaster" Width="1.5" PointX="20.5" PointY="25.625" />
+        <AssociationConnector Association="Model.FK__TravelRec__Drive__338A9CD5" />
+        <AssociationConnector Association="Model.FK__TravelRec__Patie__3296789C" />
+        <AssociationConnector Association="Model.FK__TravelRec__Vehic__347EC10E" />
+        <EntityTypeShape EntityType="Model.HealthCheckUp" Width="1.5" PointX="15.25" PointY="42.25" />
+        <AssociationConnector Association="Model.FK__CmpltChec__Test___14E61A24" />
+        <AssociationConnector Association="Model.FK__HealthBoo__Test___1F63A897" />
+        <EntityTypeShape EntityType="Model.Nurse" Width="1.5" PointX="5.25" PointY="10.125" />
+        <AssociationConnector Association="Model.FK__Nurse__AdminLogi__42E1EEFE" />
+        <AssociationConnector Association="Model.FK__Nurse__CityMaste__43D61337" />
+        <AssociationConnector Association="Model.FK__Nurse__StateMast__44CA3770" />
+        <AssociationConnector Association="Model.FK__Nurse__Vendor_Id__70FDBF69" />
+        <AssociationConnector Association="Model.FK__NursePayo__Nurse__2EA5EC27" />
+        <EntityTypeShape EntityType="Model.HealthCheckupCenter" Width="1.5" PointX="29.625" PointY="1.125" />
+        <AssociationConnector Association="Model.FK__HealthChe__Admin__3587F3E0" />
+        <AssociationConnector Association="Model.FK__CheckUpRe__Check__2180FB33" />
+        <AssociationConnector Association="Model.FK__HealthChe__CityM__1AD3FDA4" />
+        <AssociationConnector Association="Model.FK__CmpltChec__Cente__282DF8C2" />
+        <AssociationConnector Association="Model.FK__HealthChe__Cente__3493CFA7" />
+        <AssociationConnector Association="Model.FK__HealthChe__State__19DFD96B" />
+        <AssociationConnector Association="Model.FK__HealthPay__Healt__3864608B" />
+        <EntityTypeShape EntityType="Model.Medium" Width="1.5" PointX="11.375" PointY="22.75" />
+        <EntityTypeShape EntityType="Model.MediaHospital" Width="1.5" PointX="24.375" PointY="15.75" />
+        <EntityTypeShape EntityType="Model.Discount" Width="1.5" PointX="24.375" PointY="18.75" />
+        <EntityTypeShape EntityType="Model.NurseComplaint" Width="1.5" PointX="5.25" PointY="40.125" />
+        <AssociationConnector Association="Model.FK__NurseComp__Login__2AAB3E11" />
+        <EntityTypeShape EntityType="Model.Bannerprofessional" Width="1.5" PointX="15.75" PointY="34.375" />
+        <EntityTypeShape EntityType="Model.Banner" Width="1.5" PointX="24.375" PointY="21.75" />
+        <AssociationConnector Association="Model.FK__HealthChe__Cente__38C4533E" />
+        <EntityTypeShape EntityType="Model.DriverComplaint" Width="1.5" PointX="16.5" PointY="30.5" />
+        <AssociationConnector Association="Model.FK__DriverCom__Login__2EDAF651" />
+        <EntityTypeShape EntityType="Model.AmbulanceType" Width="1.5" PointX="2.25" PointY="55.625" />
+        <EntityTypeShape EntityType="Model.PatientSubject" Width="1.5" PointX="24.375" PointY="24.75" />
+        <AssociationConnector Association="Model.FK_AmbulanceType" />
+        <EntityTypeShape EntityType="Model.TimeSlot" Width="1.5" PointX="25.375" PointY="6.75" />
+        <EntityTypeShape EntityType="Model.DoctorChooseDepartment" Width="1.5" PointX="26.5" PointY="4.125" />
+        <EntityTypeShape EntityType="Model.RWA_PaymentReport" Width="1.5" PointX="26.375" PointY="9.75" />
+        <AssociationConnector Association="Model.FK_DoctorChooseDepartment_DoctorChooseDepartment" />
+        <EntityTypeShape EntityType="Model.RWA_Complaints" Width="1.5" PointX="26.375" PointY="13.75" />
+        <EntityTypeShape EntityType="Model.Doctor" Width="1.125" PointX="11" PointY="2.375" />
+        <AssociationConnector Association="Model.FK__Doctor__AdminLog__2A164134" />
+        <AssociationConnector Association="Model.FK__Cancelled__Docto__1F198FD4" />
+        <AssociationConnector Association="Model.FK__Doctor__StateMas__2DE6D218" />
+        <AssociationConnector Association="Model.FK__DoctorCom__Login__2EDAF651" />
+        <AssociationConnector Association="Model.FK__DoctorPay__Docto__2FCF1A8A" />
+        <AssociationConnector Association="Model.FK__DoctorRep__Docto__30C33EC3" />
+        <AssociationConnector Association="Model.FK__PatientAp__Docto__45BE5BA9" />
+        <EntityTypeShape EntityType="Model.Lab" Width="1.5" PointX="0.75" PointY="38" />
+        <AssociationConnector Association="Model.FK__BookTestL__Lab_I__55009F39" />
+        <AssociationConnector Association="Model.FK__LabPayOut__Lab_I__3F115E1A" />
+        <AssociationConnector Association="Model.FK__LabReport__Lab_I__40058253" />
+        <AssociationConnector Association="Model.FK__TestLab__Lab_Id__5224328E" />
+        <EntityTypeShape EntityType="Model.LabComplaint" Width="1.5" PointX="26.375" PointY="17.75" />
+        <EntityTypeShape EntityType="Model.chemistcomplaint" Width="1.5" PointX="26.375" PointY="21.75" />
+        <EntityTypeShape EntityType="Model.Chemist" Width="1.5" PointX="19" PointY="32.75" />
+        <AssociationConnector Association="Model.FK__Chemist__AdminLo__236943A5" />
+        <AssociationConnector Association="Model.FK__Chemist__Vendor___58671BC9" />
+        <AssociationConnector Association="Model.FK__ChemistPa__Chemi__2645B050" />
+        <EntityTypeShape EntityType="Model.FranchiseComplaint" Width="1.5" PointX="23.375" PointY="27.75" />
+        <EntityTypeShape EntityType="Model.Review" Width="1.5" PointX="26.375" PointY="24.75" />
+        <EntityTypeShape EntityType="Model.AddFranchiseDepartment" Width="1.5" PointX="0.75" PointY="11.75" />
+        <EntityTypeShape EntityType="Model.Franchise_Department" Width="1.5" PointX="28.375" PointY="10.75" />
+        <EntityTypeShape EntityType="Model.Franchise_Specialist" Width="1.5" PointX="28.375" PointY="13.75" />
+        <EntityTypeShape EntityType="Model.FraAddVehicleType" Width="1.5" PointX="28.375" PointY="16.75" />
+        <EntityTypeShape EntityType="Model.franchiseRole" Width="1.5" PointX="28.375" PointY="19.75" />
+        <EntityTypeShape EntityType="Model.Medicine_Pay" Width="1.5" PointX="28.375" PointY="22.75" />
+        <EntityTypeShape EntityType="Model.Medicinedeliver" Width="1.5" PointX="28.375" PointY="25.75" />
+        <EntityTypeShape EntityType="Model.Nurse_Rep" Width="1.5" PointX="25.375" PointY="29.75" />
+        <EntityTypeShape EntityType="Model.NearDriver" Width="1.5" PointX="27.375" PointY="29.75" />
+        <EntityTypeShape EntityType="Model.DriverLocation" Width="1.5" PointX="22.875" PointY="30.875" />
+        <AssociationConnector Association="Model.FK__DriverLoc__Drive__6ADAD1BF" />
+        <AssociationConnector Association="Model.FK__DriverLoc__Patie__7C055DC1" />
+        <EntityTypeShape EntityType="Model.TestInLab" Width="1.5" PointX="30.375" PointY="10.75" />
+        <EntityTypeShape EntityType="Model.DoctorBookingMode" Width="1.5" PointX="29.375" PointY="29.75" />
+        <EntityTypeShape EntityType="Model.PFMaster" Width="1.5" PointX="30.375" PointY="13.75" />
+        <EntityTypeShape EntityType="Model.GSTMaster" Width="1.5" PointX="30.375" PointY="16.75" />
+        <EntityTypeShape EntityType="Model.NurseService" Width="1.5" PointX="30.375" PointY="22.75" />
+        <EntityTypeShape EntityType="Model.PenaltyAmount" Width="1.5" PointX="16.375" PointY="23.75" />
+        <EntityTypeShape EntityType="Model.RWATDSMaster" Width="1.5" PointX="31.375" PointY="28.75" />
+        <EntityTypeShape EntityType="Model.FranchiseTDSMaster" Width="1.5" PointX="31.375" PointY="31.75" />
+        <EntityTypeShape EntityType="Model.RWAGstMaster" Width="1.5" PointX="32.375" PointY="6.75" />
+        <EntityTypeShape EntityType="Model.FranchiseGstMaster" Width="1.5" PointX="32.375" PointY="9.75" />
+        <EntityTypeShape EntityType="Model.MedicineDeliveryCharge" Width="1.5" PointX="32.375" PointY="12.75" />
+        <EntityTypeShape EntityType="Model.MedicinePrescriptionDetail" Width="1.5" PointX="32.375" PointY="15.75" />
+        <EntityTypeShape EntityType="Model.PrescriptionAppointment" Width="1.5" PointX="32.375" PointY="0.75" />
+        <EntityTypeShape EntityType="Model.DriverPayOut" Width="1.5" PointX="32.375" PointY="25.75" />
+        <EntityTypeShape EntityType="Model.DoctorTimeSlot" Width="1.5" PointX="25.375" PointY="33.75" />
+        <EntityTypeShape EntityType="Model.ChemistMedicine" Width="1.5" PointX="27.375" PointY="33.75" />
+        </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

@@ -1,0 +1,66 @@
+﻿@model HospitalPortal.Models.ViewModels.MainCategoryDTO
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style>
+    #mainContainer {
+        width: 60%;
+        margin-top: 1%;
+        margin-left: 1%;
+    }
+</style>
+
+@using (Html.BeginForm())
+{
+    <div id="mainContainer">
+
+        <div class="row">
+            <div class="col-md-6">
+                @Html.ActionLink("Back", "Add", null, new { @class = "btn btn-info" })
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <h3>Edit Vehicle Category</h3>
+            </div>
+        </div>
+
+        @Html.HiddenFor(a => a.Id)@Html.HiddenFor(a => a.IsDeleted)
+        @Html.Partial("~/Views/Shared/_DisplayMessage.cshtml")
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    Category Name* @Html.TextBoxFor(a => a.CategoryName, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.CategoryName)
+                    </span>
+                </div>
+                <div class="form-group">
+                    Type : (Current Type = @Model.Type)
+                    <select id="AmbulanceType_id" name="AmbulanceType_id" class="form-control" , required="required">
+                        
+                        <option value=@Model.AmbulanceType_id>@Model.Type</option>
+                        <option value="1">Regular</option>
+                        <option value="2">Road Accident</option>
+                        <option value="3">Funeral/MortuaryService</option>
+                    </select>
+                    @*@Html.DropDownList("Type",  new List<SelectListItem> {
+        new SelectListItem() { Text="Normal Service", Value="normal"},
+        new SelectListItem() { Text="Ambulance Service", Value="normal"},
+         new SelectListItem() { Text="Funeral Service", Value="funeral"},
+         }, "--- Select ---", new { @class = "form-control", required = "required" })*@
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.Type)
+                    </span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-info" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+}

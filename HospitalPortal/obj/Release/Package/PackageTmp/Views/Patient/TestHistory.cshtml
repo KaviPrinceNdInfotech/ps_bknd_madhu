@@ -1,0 +1,80 @@
+﻿@model HospitalPortal.Models.ViewModels.BookedTests
+@{
+    ViewBag.Title = "TestHistory";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Test History</h2>
+@using (Html.BeginForm())
+{
+  
+    <div class="row" style="margin-bottom:3%">
+        <div class="col-md-3">
+            Search By Test Date
+        </div>
+        <div class="col-md-3" style="margin-left: -13%;">
+            <input type="date" name="date" id="date" />
+        </div>
+        <div class="col-md-3">
+            <input type="submit" value="Filter" class="btn btn-primary" />
+        </div>
+    </div>
+}
+@if (Model.BookingHistory.Count() == 0)
+{
+    <h1>No Records</h1>
+}
+else
+{
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th>Lab Name</th>
+        <th>Mobile No</th>
+        <th>Test Name</th>
+        <th>Phone No</th>
+        <th>Test Amount</th>
+        <th>Test Date</th>
+        <th>Available Time</th>
+    </tr>
+</thead>
+    <tbody>
+        @foreach (var item in Model.BookingHistory)
+        {
+        <tr>
+            <td>@item.LabName</td>
+            <td>@item.MobileNumber</td>
+            <td>@item.TestName</td>
+            <td>@item.PhoneNumber</td>
+            <td>&#8377; @item.TestAmount</td>
+            <td>@if (item.TestDate != null)
+                    {
+                <span>
+                    @item.TestDate.Value.ToString("dd-MMM-yyyy")
+                </span>
+            }</td>
+            <td>@item.AvailableTime</td>
+        </tr>
+        }
+    </tbody>
+</table>
+}
+
+@*<nav aria-label="Page navigation example">
+    <ul class="pagination">
+        @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+            if (i == Model.PageNumber)
+            {
+                <li class="page-item active"><a class="page-link" href="/Patient/TestHistory?pageNumber=@i">@i</a></li>
+
+            }
+            else
+            {
+                <li class="page-item"><a class="page-link" href="/Patient/TestHistory?pageNumber=@i">@i</a></li>
+
+            }
+        }
+    </ul>
+</nav>*@
+

@@ -1,0 +1,75 @@
+﻿@{
+    int loginId = Convert.ToInt32(User.Identity.Name);
+    int id = new HospitalPortal.Models.DomainModels.DbEntities().Labs.FirstOrDefault(a => a.AdminLogin_Id == loginId).Id;
+    bool CurrentStatus = new HospitalPortal.Models.DomainModels.DbEntities().Labs.FirstOrDefault(a => a.Id == id).IsApproved;
+
+}
+
+<div class="sidebar-nav">
+    <ul>
+        <li class="nav-header"><a href="/Admin/Dashboard/" style="cursor:pointer"> <i class="fa fa-bars"></i> Dashboard</a></li>
+
+        <li class="nav-header">
+            <a href="/Lab/Edit?id=@id" style="cursor:pointer">
+                <i class="fa fa-pencil"></i> Manage Profile
+            </a>
+        </li>
+        @*<li class="nav-header"><a href="/AddTest/All/" style="cursor:pointer"><i class="fa fa-image"></i>  Add Test Category</a></li>*@
+        <li class="nav-header">
+            <a href="/Bank/UpdateBank?id=@id" style="cursor:pointer">
+                <i class="fa fa-pencil"></i> Update Bank Details
+            </a>
+        </li>
+        @if (CurrentStatus == false) { }
+        else
+        {
+            <li class="nav-header">
+                <a href="/AdminOperation/ShowTest?LabId=@id" style="cursor:pointer">
+                    <i class="fa fa-pencil"></i> Add Test Details
+                </a>
+            </li>
+
+            <li class="nav-header">
+                <a href="/Lab/LabTestHistory?id=@id" style="cursor:pointer">
+                    <i class="fa fa-history"></i> Test Booking History
+                </a>
+            </li>
+            <li class="nav-header">
+                <a href="/Lab/LabPatientList?id=@id" style="cursor:pointer">
+                    <i class="fa fa-list"></i> Patient List
+                </a>
+            </li>
+            <li class="nav-header">
+                <a href="/Lab/UploadReport?id=@id" style="cursor:pointer">
+                    <i class="fa fa-upload"></i> Upload Lab Reports
+                </a>
+            </li>
+            <li class="nav-header">
+                <a href="/Common/LabReport" style="cursor:pointer">
+                    <i class="fa fa-history"></i> View Lab Reports
+                </a>
+            </li>
+            <li class="nav-header">
+                <a href="/Common/HealthReport" style="cursor:pointer">
+                    <i class="fa fa-history"></i> View Health Reports
+                </a>
+            </li>
+            <li class="nav-header">
+                <a href="/Common/DoctorReports" style="cursor:pointer">
+                    <i class="fa fa-history"></i> View Doctor Reports
+                </a>
+            </li>
+            <li class="nav-header">
+                <a href="/Lab/PaymentReport?id=@id" style="cursor:pointer">
+                    <i class="fa fa-search"></i> My Payment History
+                </a>
+            </li>
+
+            <li class="nav-header">
+                <a href="/Lab/PayoutReport?id=@id" style="cursor:pointer">
+                    <i class="fa fa-search"></i> My Payout Report
+                </a>
+            </li>
+        }
+    </ul>
+</div>

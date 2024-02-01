@@ -1,0 +1,64 @@
+﻿@model HospitalPortal.Models.ViewModels.RequestedCity
+@{
+    ViewBag.Title = "ViewCity";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>City List</h2>
+
+
+<style>
+    #main{
+        width:60%;
+    }
+</style>
+
+
+<div id="main">
+    @if (Model.CityList == null)
+    {
+        <h2>@TempData["msg"]</h2>
+    }
+    else
+    {
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>
+                    State Name
+                </th>
+                <th>
+                    CityName
+                </th>
+                <th>
+                    Requested From
+                </th>
+                <th>
+                    Action
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.CityList)
+            {
+                <tr>
+                    <td>@item.StateName</td>
+                    <td>@item.CityName</td>
+                    <td>@item.Role</td>
+                    <td>
+                        @if (item.IsApproved == false)
+                        {
+                        <a href="/RoleUpdate/Update?Id=@item.CityId" class="btn btn-primary">Not Approved</a>
+                        }
+                        else
+                        {
+                            <a href="" class="btn btn-danger">Approved</a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+        
+    </table>
+    }
+</div>

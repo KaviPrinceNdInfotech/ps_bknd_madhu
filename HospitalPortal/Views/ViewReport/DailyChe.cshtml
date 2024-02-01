@@ -1,0 +1,71 @@
+﻿@model HospitalPortal.Models.ViewModels.ReportDetails
+@{
+    ViewBag.Title = "ViewReport";
+}
+
+<link href="/css/bootstrap.min.css" rel="stylesheet" />
+
+
+@using (Html.BeginForm())
+{
+    <div class="row">
+        <div class="col-md-4">
+            @Html.TextBoxFor(a => a.OrderDate, new { @class = "datepicker form-control", required = "required" })
+        </div>
+        <div class="col-md-4">
+            <input type="button" id="test" value="Search" class="btn btn-primary" />
+        </div>
+    </div>
+}
+
+@if (Model.ChemistsList == null)
+{
+        <h2 style="color:blueviolet">
+            @TempData["msg"]
+        </h2>
+}
+else
+{
+<table id="tables" class="table table-responsive">
+    <thead>
+        <tr>
+            <th>
+                Date
+            </th>
+            <th>
+                Amount
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.ChemistsList)
+        {
+            <tr>
+                <td>
+                    @item.OrderDate.ToString("dd-MMM-yyyy")
+                </td>
+                <td>
+                    @item.Amount
+                </td>
+            </tr>
+        }
+        <tr>
+            <td><h3>Total</h3></td>
+            <td>
+                @if (ViewBag.Total != null)
+                {
+                    <h3 style="color:red"> ₹ @ViewBag.Total</h3>
+                }
+            </td>
+        </tr>
+    </tbody>
+</table>
+}
+
+<script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
+<link href="~/css/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
+<script src="~/Scripts/ViewReport.js"></script>
+<script>
+    $(".datepicker").datepicker().datepicker('setdate', 'today');
+</script>

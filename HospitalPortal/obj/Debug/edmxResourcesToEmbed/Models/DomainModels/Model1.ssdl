@@ -1,0 +1,3655 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="AddFranchiseDepartment">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Dep_Id" Type="int" />
+    <Property Name="Spec_Id" Type="int" />
+    <Property Name="Status" Type="nvarchar" MaxLength="250" />
+    <Property Name="Admin_LoginId" Type="int" />
+  </EntityType>
+  <EntityType Name="AmbulanceType">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="AmbulanceType" Type="varchar" MaxLength="255" />
+  </EntityType>
+  <EntityType Name="Banner">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="BannerPath" Type="nvarchar" MaxLength="255" />
+    <Property Name="pro_id" Type="int" />
+  </EntityType>
+  <EntityType Name="Bannerprofessional">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" Nullable="false" />
+    <Property Name="professionals" Type="nvarchar" MaxLength="255" />
+  </EntityType>
+  <EntityType Name="chemistcomplaint">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="patsubid" Type="int" />
+    <Property Name="others" Type="nvarchar" MaxLength="250" />
+    <Property Name="Complaints" Type="nvarchar" MaxLength="250" />
+    <Property Name="IsDeleted" Type="bit" />
+    <Property Name="Login_Id" Type="int" />
+  </EntityType>
+  <EntityType Name="ChemistMedicine">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Chemist_Id" Type="int" />
+    <Property Name="Medicine_Id" Type="int" />
+    <Property Name="IsDeleted" Type="bit" />
+    <Property Name="EntryDate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="Discount">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Amount" Type="nvarchar" MaxLength="50" />
+    <Property Name="DiscountCoupon" Type="nvarchar" MaxLength="50" />
+    <Property Name="Professional_Id" Type="int" />
+  </EntityType>
+  <EntityType Name="DoctorBookingMode">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Mode" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="DoctorChooseDepartment">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="Department_id" Type="int" />
+    <Property Name="Specialist_id" Type="int" />
+    <Property Name="State_id" Type="int" />
+    <Property Name="City_id" Type="int" />
+    <Property Name="Patient_id" Type="int" />
+  </EntityType>
+  <EntityType Name="DoctorTimeSlot">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="StartTime" Type="time" Precision="7" />
+    <Property Name="EndTime" Type="time" Precision="7" />
+  </EntityType>
+  <EntityType Name="DriverComplaint">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Login_Id" Type="int" />
+    <Property Name="Subjects" Type="nvarchar" MaxLength="20" />
+    <Property Name="Complaints" Type="nvarchar" MaxLength="200" />
+    <Property Name="IsDeleted" Type="bit" />
+    <Property Name="IsResolved" Type="bit" />
+    <Property Name="Others" Type="nvarchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="FraAddVehicleType">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Category_Id" Type="int" />
+    <Property Name="VehicleType_Id" Type="int" />
+    <Property Name="Status" Type="nvarchar" MaxLength="250" />
+    <Property Name="Admin_LoginId" Type="int" />
+  </EntityType>
+  <EntityType Name="FranchiseGstMaster">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Department" Type="varchar" MaxLength="50" />
+    <Property Name="Name" Type="varchar" MaxLength="50" />
+    <Property Name="Amount" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="IsDeleted" Type="bit" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'admin_Hospital.admin_Hospital.franchiseRole' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="franchiseRole">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="RoleName" Type="varchar" MaxLength="250" />
+  </EntityType>
+  <EntityType Name="FranchiseTDSMaster">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Department" Type="varchar" MaxLength="50" />
+    <Property Name="Amount" Type="decimal" Precision="18" Scale="0" />
+    <Property Name="IsDeleted" Type="bit" />
+    <Property Name="Name" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="LabComplaint">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Login_Id" Type="int" />
+    <Property Name="Subjects" Type="nvarchar" MaxLength="20" />
+    <Property Name="Complaints" Type="nvarchar" MaxLength="200" />
+    <Property Name="IsDeleted" Type="bit" />
+    <Property Name="IsResolved" Type="bit" />
+    <Property Name="Others" Type="nvarchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="Media">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Title" Type="varchar(max)" />
+    <Property Name="ImagePath" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="MediaHospital">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Title" Type="varchar(max)" />
+    <Property Name="ImageName" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Medicinedeliver">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" />
+    <Property Name="MobileNumber" Type="varchar" MaxLength="100" />
+    <Property Name="Email" Type="nvarchar" MaxLength="30" />
+    <Property Name="DeliveryAddress" Type="nvarchar" MaxLength="100" />
+    <Property Name="CityMaster_Id" Type="int" />
+    <Property Name="StateMaster_Id" Type="int" />
+    <Property Name="PinCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="Patient_Id" Type="int" />
+  </EntityType>
+  <EntityType Name="MedicineDeliveryCharge">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Amount" Type="int" />
+  </EntityType>
+  <EntityType Name="MedicinePrescriptionDetail">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Doctor_Id" Type="int" />
+    <Property Name="Patient_Id" Type="int" />
+    <Property Name="Weight" Type="nvarchar" MaxLength="50" />
+    <Property Name="PresentComplaint" Type="nvarchar" MaxLength="250" />
+    <Property Name="Allergies" Type="nvarchar" MaxLength="250" />
+    <Property Name="Primarydiagnosis" Type="nvarchar" MaxLength="250" />
+    <Property Name="MedicineName1" Type="nvarchar" MaxLength="250" />
+    <Property Name="Dosage1" Type="nvarchar" MaxLength="250" />
+    <Property Name="Instruction1" Type="nvarchar" MaxLength="250" />
+    <Property Name="MedicineName2" Type="nvarchar" MaxLength="250" />
+    <Property Name="Dosage2" Type="nvarchar" MaxLength="250" />
+    <Property Name="Instruction2" Type="nvarchar" MaxLength="250" />
+    <Property Name="MedicineName3" Type="nvarchar" MaxLength="250" />
+    <Property Name="Dosage3" Type="nvarchar" MaxLength="250" />
+    <Property Name="Instruction3" Type="nvarchar" MaxLength="250" />
+    <Property Name="MedicineName4" Type="nvarchar" MaxLength="250" />
+    <Property Name="Dosage4" Type="nvarchar" MaxLength="250" />
+    <Property Name="Instruction4" Type="nvarchar" MaxLength="250" />
+    <Property Name="MedicineName5" Type="nvarchar" MaxLength="250" />
+    <Property Name="Dosage5" Type="nvarchar" MaxLength="250" />
+    <Property Name="Instruction5" Type="nvarchar" MaxLength="250" />
+    <Property Name="MedicineName6" Type="nvarchar" MaxLength="250" />
+    <Property Name="Dosage6" Type="nvarchar" MaxLength="250" />
+    <Property Name="Instruction6" Type="nvarchar" MaxLength="250" />
+    <Property Name="TestPrescribed" Type="nvarchar(max)" />
+    <Property Name="MedicineName7" Type="nvarchar" MaxLength="250" />
+    <Property Name="Dosage7" Type="nvarchar" MaxLength="250" />
+    <Property Name="Instruction7" Type="nvarchar" MaxLength="250" />
+    <Property Name="MedicineName8" Type="nvarchar" MaxLength="250" />
+    <Property Name="Dosage8" Type="nvarchar" MaxLength="250" />
+    <Property Name="Instruction8" Type="nvarchar" MaxLength="250" />
+    <Property Name="MedicineName9" Type="nvarchar" MaxLength="250" />
+    <Property Name="Dosage9" Type="nvarchar" MaxLength="250" />
+    <Property Name="Instruction9" Type="nvarchar" MaxLength="250" />
+    <Property Name="MedicineName10" Type="nvarchar" MaxLength="250" />
+    <Property Name="Dosage10" Type="nvarchar" MaxLength="250" />
+    <Property Name="Instruction10" Type="nvarchar" MaxLength="250" />
+    <Property Name="PastMedical_SurgicalHistory" Type="nvarchar" MaxLength="250" />
+    <Property Name="Furtherrefferal_Recommendations" Type="nvarchar" MaxLength="500" />
+    <Property Name="EntryDate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="NearDriver">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DriverId" Type="int" />
+    <Property Name="KM" Type="int" />
+    <Property Name="Name" Type="varchar" MaxLength="50" />
+    <Property Name="DL" Type="varchar" MaxLength="50" />
+    <Property Name="Charge" Type="int" />
+    <Property Name="TotalPrice" Type="int" />
+    <Property Name="DeviceId" Type="varchar(max)" />
+    <Property Name="ToatlDistance" Type="int" />
+  </EntityType>
+  <EntityType Name="Nurse_Rep">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Nurse_Id" Type="int" />
+    <Property Name="Patient_Id" Type="int" />
+    <Property Name="File" Type="nvarchar" MaxLength="500" />
+  </EntityType>
+  <EntityType Name="NurseComplaint">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Subjects" Type="nvarchar" MaxLength="255" />
+    <Property Name="Complaints" Type="nvarchar" MaxLength="255" />
+    <Property Name="IsDeleted" Type="bit" Nullable="false" />
+    <Property Name="IsResolved" Type="bit" Nullable="false" />
+    <Property Name="Others" Type="nvarchar" MaxLength="255" />
+    <Property Name="Login_Id" Type="int" />
+  </EntityType>
+  <EntityType Name="PatientSubjects">
+    <Key>
+      <PropertyRef Name="Subid" />
+    </Key>
+    <Property Name="Subid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="SubjectName" Type="varchar" MaxLength="100" Nullable="false" />
+  </EntityType>
+  <EntityType Name="PenaltyAmount">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Pro_Id" Type="int" />
+    <Property Name="Patient_Id" Type="int" />
+    <Property Name="Amount" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="UserWalletAmount" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="CancelDate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="PFMaster">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PFAmount" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="EMP_Id" Type="int" />
+    <Property Name="IsDeleted" Type="bit" />
+  </EntityType>
+  <EntityType Name="PrescriptionAppointments">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="IsDeleted" Type="bit" />
+    <Property Name="IsAppointment" Type="bit" />
+    <Property Name="PreferredAppointmentDateTime1" Type="nvarchar" MaxLength="50" />
+    <Property Name="PreferredAppointmentDateTime2" Type="nvarchar" MaxLength="50" />
+    <Property Name="PreferredAppointmentDateTime3" Type="nvarchar" MaxLength="50" />
+    <Property Name="HospitalName" Type="nvarchar" MaxLength="255" />
+    <Property Name="DoctorName" Type="nvarchar" MaxLength="255" />
+    <Property Name="DoctorSpeciality" Type="nvarchar" MaxLength="255" />
+    <Property Name="DoctorCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="RegistrationNumber" Type="nvarchar" MaxLength="50" />
+    <Property Name="EntryDate" Type="datetime" />
+    <Property Name="AppointmentHour1" Type="nvarchar" MaxLength="50" />
+    <Property Name="AppointmentMin1" Type="nvarchar" MaxLength="50" />
+    <Property Name="AppointmentHour2" Type="nvarchar" MaxLength="50" />
+    <Property Name="AppointmentMin2" Type="nvarchar" MaxLength="50" />
+    <Property Name="AppointmentHour3" Type="nvarchar" MaxLength="50" />
+    <Property Name="AppointmentMin3" Type="nvarchar" MaxLength="50" />
+    <Property Name="Doctor_Id" Type="int" />
+  </EntityType>
+  <EntityType Name="Review">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Rating1" Type="int" />
+    <Property Name="Rating2" Type="int" />
+    <Property Name="Rating3" Type="int" />
+    <Property Name="Rating4" Type="int" />
+    <Property Name="Rating5" Type="int" />
+    <Property Name="Name" Type="varchar" MaxLength="250" />
+    <Property Name="Description" Type="varchar(max)" />
+    <Property Name="Image" Type="varchar(max)" />
+    <Property Name="pro_Id" Type="int" />
+    <Property Name="Professional" Type="varchar" MaxLength="250" />
+    <Property Name="Patient_Id" Type="int" />
+  </EntityType>
+  <EntityType Name="RWA_PaymentReport">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="RWA_Id" Type="int" />
+    <Property Name="User_Id" Type="int" />
+    <Property Name="Bank_Id" Type="int" />
+    <Property Name="Payment_Id" Type="nvarchar" MaxLength="50" />
+    <Property Name="PaidAmount" Type="decimal" Precision="10" Scale="2" />
+    <Property Name="PaymentDate" Type="datetime" />
+    <Property Name="PaymentTime" Type="time" Precision="7" />
+    <Property Name="PaymentStatus" Type="bit" />
+  </EntityType>
+  <EntityType Name="RWAGstMaster">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Department" Type="varchar" MaxLength="50" />
+    <Property Name="Name" Type="varchar" MaxLength="50" />
+    <Property Name="Amount" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="IsDeleted" Type="bit" />
+  </EntityType>
+  <EntityType Name="RWAPayment">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Departement" Type="nvarchar" MaxLength="200" />
+    <Property Name="Name" Type="nvarchar" MaxLength="200" />
+    <Property Name="Amount" Type="decimal" Precision="10" Scale="2" />
+    <Property Name="IsDeleted" Type="bit" />
+  </EntityType>
+  <EntityType Name="RWATDSMaster">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="varchar" MaxLength="50" />
+    <Property Name="Amount" Type="float" />
+    <Property Name="IsDeleted" Type="bit" />
+    <Property Name="Department" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="TestInLab">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Lab_Id" Type="int" />
+    <Property Name="Test_Id" Type="int" />
+  </EntityType>
+  <EntityType Name="TimeSlot">
+    <Key>
+      <PropertyRef Name="Slotid" />
+    </Key>
+    <Property Name="Slotid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="SlotTime" Type="nvarchar" MaxLength="20" />
+  </EntityType>
+  <EntityType Name="UserWallet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="AdminId" Type="int" />
+    <Property Name="UserId" Type="int" />
+    <Property Name="Amount" Type="float" />
+    <Property Name="TransactionType" Type="nvarchar" MaxLength="10" />
+    <Property Name="walletAmount" Type="decimal" Precision="18" Scale="0" />
+  </EntityType>
+  <EntityType Name="VehicleTemp">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Login_Id" Type="int" />
+    <Property Name="VehicleTypeName" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="IsDeleted" Type="bit" Nullable="false" />
+    <Property Name="under5KM" Type="float" />
+    <Property Name="under6_10KM" Type="float" />
+    <Property Name="under11_20KM" Type="float" />
+    <Property Name="under21_40KM" Type="float" />
+    <Property Name="under41_60KM" Type="float" />
+    <Property Name="under61_80KM" Type="float" />
+    <Property Name="under81_100KM" Type="float" />
+    <Property Name="under100_150KM" Type="float" />
+    <Property Name="under151_200KM" Type="float" />
+    <Property Name="under201_250KM" Type="float" />
+    <Property Name="under251_300KM" Type="float" />
+    <Property Name="under301_350KM" Type="float" />
+    <Property Name="under351_400KM" Type="float" />
+    <Property Name="under401_450KM" Type="float" />
+    <Property Name="under451_500KM" Type="float" />
+    <Property Name="Above500KM" Type="float" />
+    <Property Name="IsApproved" Type="bit" />
+    <Property Name="Category_Id" Type="int" />
+  </EntityType>
+  <EntityType Name="AdminLogin">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Username" Type="nvarchar" MaxLength="100" />
+    <Property Name="Password" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="Role" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="PhoneNumber" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="Token" Type="nvarchar(max)" />
+    <Property Name="IsLoginApproved" Type="bit" />
+    <Property Name="TransactionPwd" Type="nvarchar" MaxLength="10" />
+    <Property Name="UserID" Type="nvarchar" MaxLength="50" />
+    <Property Name="Confirmpassword" Type="nvarchar" MaxLength="100" />
+    <Property Name="DeviceId" Type="nvarchar" MaxLength="500" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="AppLog">
+    <Key>
+      <PropertyRef Name="Date" />
+    </Key>
+    <Property Name="Date" Type="datetime" Nullable="false" />
+    <Property Name="Thread" Type="nvarchar(max)" />
+    <Property Name="Level" Type="nvarchar" MaxLength="50" />
+    <Property Name="Logger" Type="nvarchar(max)" />
+    <Property Name="Message" Type="nvarchar(max)" />
+    <Property Name="Exception" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="BankDetails">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Login_Id" Type="int" />
+    <Property Name="AccountNo" Type="nvarchar" MaxLength="20" />
+    <Property Name="IFSCCode" Type="nvarchar" MaxLength="10" />
+    <Property Name="BranchName" Type="nvarchar" MaxLength="30" />
+    <Property Name="BranchAddress" Type="nvarchar" MaxLength="200" />
+    <Property Name="HolderName" Type="nvarchar" MaxLength="20" />
+    <Property Name="CancelCheque" Type="nvarchar(max)" />
+    <Property Name="MobileNumber" Type="nvarchar" MaxLength="15" />
+    <Property Name="isverified" Type="bit" />
+  </EntityType>
+  <EntityType Name="BookTestLab">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Lab_Id" Type="int" />
+    <Property Name="Test_Id" Type="int" />
+    <Property Name="Patient_Id" Type="int" />
+    <Property Name="PatientName" Type="nvarchar" MaxLength="50" />
+    <Property Name="PatientAddress" Type="nvarchar" MaxLength="200" />
+    <Property Name="ContactNumber" Type="nvarchar" MaxLength="12" />
+    <Property Name="TestDate" Type="datetime" />
+    <Property Name="AvailabelTime1" Type="time" Precision="7" />
+    <Property Name="AvailableTime2" Type="time" Precision="7" />
+    <Property Name="IsTaken" Type="bit" />
+    <Property Name="Amount" Type="float" />
+    <Property Name="PaymentDate" Type="datetime" />
+    <Property Name="IsPaid" Type="bit" />
+    <Property Name="CityMaster_Id" Type="int" />
+    <Property Name="StateMaster_Id" Type="int" />
+    <Property Name="Slotid" Type="int" />
+    <Property Name="IsCancel" Type="bit" />
+    <Property Name="InvoiceNumber" Type="nvarchar" MaxLength="100" />
+    <Property Name="OrderId" Type="nvarchar" MaxLength="100" />
+    <Property Name="OrderDate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="CancelledAppointment">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Patient_Id" Type="int" />
+    <Property Name="AppointmentDate" Type="datetime" />
+    <Property Name="StartSlotTime" Type="time" Precision="7" />
+    <Property Name="EndSlotTime" Type="time" Precision="7" />
+    <Property Name="Doctor_Id" Type="int" />
+    <Property Name="Specialist_Id" Type="int" />
+    <Property Name="IsBooked" Type="bit" />
+    <Property Name="Amount" Type="float" />
+    <Property Name="IsPaid" Type="bit" />
+    <Property Name="PaymentDate" Type="datetime" />
+    <Property Name="Hospital_Id" Type="int" />
+    <Property Name="HospitalDoc_Id" Type="int" />
+    <Property Name="IsCancelled" Type="bit" />
+    <Property Name="CancelledId" Type="int" />
+  </EntityType>
+  <EntityType Name="Charges">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Amount" Type="float" />
+    <Property Name="Role" Type="nvarchar" MaxLength="10" />
+  </EntityType>
+  <EntityType Name="CheckUpReport">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Patient_Id" Type="int" />
+    <Property Name="File" Type="nvarchar" MaxLength="200" />
+    <Property Name="Checkup_Center_Id" Type="int" />
+    <Property Name="TestName" Type="varchar" MaxLength="200" />
+    <Property Name="TestId" Type="int" />
+  </EntityType>
+  <EntityType Name="ChekcupCenterDepartment">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Hospital_Id" Type="int" Nullable="false" />
+    <Property Name="Department_Id" Type="int" Nullable="false" />
+    <Property Name="IsDeleted" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Chemist">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="IsDeleted" Type="bit" Nullable="false" />
+    <Property Name="IsApproved" Type="bit" Nullable="false" />
+    <Property Name="ChemistName" Type="nvarchar" MaxLength="100" />
+    <Property Name="ShopName" Type="nvarchar" MaxLength="100" />
+    <Property Name="MobileNumber" Type="nvarchar" MaxLength="100" />
+    <Property Name="EmailId" Type="nvarchar" MaxLength="100" />
+    <Property Name="LicenceNumber" Type="nvarchar" MaxLength="200" />
+    <Property Name="Password" Type="nvarchar" MaxLength="100" />
+    <Property Name="StateMaster_Id" Type="int" Nullable="false" />
+    <Property Name="CityMaster_Id" Type="int" Nullable="false" />
+    <Property Name="Location" Type="nvarchar" MaxLength="100" />
+    <Property Name="GSTNumber" Type="nvarchar" MaxLength="100" />
+    <Property Name="AdminLogin_Id" Type="int" Nullable="false" />
+    <Property Name="PAN" Type="nvarchar" MaxLength="50" />
+    <Property Name="Lat" Type="float" />
+    <Property Name="Lng" Type="float" />
+    <Property Name="Location_Id" Type="int" />
+    <Property Name="LicenseValidity" Type="datetime" />
+    <Property Name="Vendor_Id" Type="int" />
+    <Property Name="JoiningDate" Type="datetime" />
+    <Property Name="Certificateimg" Type="nvarchar(max)" />
+    <Property Name="CityNames" Type="nvarchar" MaxLength="100" />
+    <Property Name="LocationName" Type="nvarchar" MaxLength="100" />
+    <Property Name="IsCheckedTermsCondition" Type="bit" Nullable="false" />
+    <Property Name="ChemistId" Type="nvarchar" MaxLength="20" />
+    <Property Name="RefId" Type="nvarchar" MaxLength="50" />
+    <Property Name="PinCode" Type="nvarchar" MaxLength="250" />
+    <Property Name="ConfirmPassword" Type="nvarchar" MaxLength="250" />
+    <Property Name="LicenceImage" Type="nvarchar" MaxLength="500" />
+    <Property Name="About" Type="nvarchar" MaxLength="500" />
+  </EntityType>
+  <EntityType Name="ChemistPayOut">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Chemist_Id" Type="int" />
+    <Property Name="Amount" Type="float" Nullable="false" />
+    <Property Name="PaymentDate" Type="datetime" />
+    <Property Name="IsPaid" Type="bit" />
+    <Property Name="IsGenerated" Type="bit" />
+    <Property Name="BankdetailsId" Type="int" />
+  </EntityType>
+  <EntityType Name="CityMaster">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CityName" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="StateMaster_Id" Type="int" Nullable="false" />
+    <Property Name="IsDeleted" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="CityTemp">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CityName" Type="nvarchar" MaxLength="200" />
+    <Property Name="Login_Id" Type="int" />
+    <Property Name="IsApproved" Type="bit" />
+    <Property Name="State_Id" Type="int" />
+  </EntityType>
+  <EntityType Name="CmpltCheckUp">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="BookingId" Type="nvarchar" MaxLength="20" />
+    <Property Name="PatientId" Type="int" />
+    <Property Name="TestDate" Type="datetime" />
+    <Property Name="PatientName" Type="nvarchar" MaxLength="200" />
+    <Property Name="PatientAddress" Type="nvarchar(max)" />
+    <Property Name="ContactNo" Type="nvarchar" MaxLength="20" />
+    <Property Name="RequestDate" Type="datetime" />
+    <Property Name="Amount" Type="float" />
+    <Property Name="PaymentDate" Type="datetime" />
+    <Property Name="IsPaid" Type="bit" />
+    <Property Name="Center_Id" Type="int" />
+    <Property Name="IsTaken" Type="bit" />
+    <Property Name="Test_Id" Type="int" />
+  </EntityType>
+  <EntityType Name="CommissionMaster">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="20" />
+    <Property Name="Commission" Type="float" />
+    <Property Name="IsDeleted" Type="bit" />
+  </EntityType>
+  <EntityType Name="Content">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PageName" Type="nvarchar" MaxLength="50" />
+    <Property Name="About" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="Department">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DepartmentName" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="IsDeleted" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="DepartmentTemp">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Department_Id" Type="int" />
+    <Property Name="Specialist_Id" Type="int" />
+  </EntityType>
+  <EntityType Name="Doctor">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="IsDeleted" Type="bit" Nullable="false" />
+    <Property Name="DoctorName" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="PhoneNumber" Type="nvarchar" MaxLength="30" />
+    <Property Name="MobileNumber" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="EmailId" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="StateMaster_Id" Type="int" Nullable="false" />
+    <Property Name="CityMaster_Id" Type="int" Nullable="false" />
+    <Property Name="Location" Type="nvarchar" MaxLength="200" Nullable="false" />
+    <Property Name="LicenceImage" Type="nvarchar" MaxLength="200" Nullable="false" />
+    <Property Name="LicenceNumber" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="ClinicName" Type="nvarchar" MaxLength="100" />
+    <Property Name="Department_Id" Type="int" Nullable="false" />
+    <Property Name="Specialist_Id" Type="int" Nullable="false" />
+    <Property Name="Fee" Type="float" Nullable="false" />
+    <Property Name="Password" Type="nvarchar" MaxLength="200" />
+    <Property Name="IsApproved" Type="bit" Nullable="false" />
+    <Property Name="AdminLogin_Id" Type="int" Nullable="false" />
+    <Property Name="PAN" Type="nvarchar" MaxLength="50" />
+    <Property Name="AadharNumber" Type="nvarchar" MaxLength="50" />
+    <Property Name="AadharImage" Type="nvarchar" MaxLength="2000" />
+    <Property Name="Vendor_Id" Type="int" />
+    <Property Name="StartTime" Type="time" Precision="7" />
+    <Property Name="EndTime" Type="time" Precision="7" />
+    <Property Name="SlotTime" Type="int" />
+    <Property Name="JoiningDate" Type="datetime" />
+    <Property Name="LicenseValidity" Type="datetime" />
+    <Property Name="PinCode" Type="nvarchar" MaxLength="15" />
+    <Property Name="AadharImage2" Type="nvarchar" MaxLength="300" />
+    <Property Name="PanImage" Type="nvarchar" MaxLength="200" />
+    <Property Name="HospitalId" Type="int" />
+    <Property Name="DoctorId" Type="nvarchar(max)" />
+    <Property Name="IsCheckedTermsCondition" Type="bit" />
+    <Property Name="StartTime2" Type="time" Precision="7" />
+    <Property Name="EndTime2" Type="time" Precision="7" />
+    <Property Name="SlotTime2" Type="int" />
+    <Property Name="RefId" Type="nvarchar" MaxLength="50" />
+    <Property Name="Experience" Type="int" />
+    <Property Name="About" Type="nvarchar" MaxLength="255" />
+    <Property Name="Disease" Type="nvarchar" MaxLength="100" />
+    <Property Name="Qualification" Type="nvarchar" MaxLength="250" />
+    <Property Name="RegistrationNumber" Type="nvarchar" MaxLength="250" />
+    <Property Name="SignaturePic" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="DoctorClinics">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DoctorId" Type="int" />
+    <Property Name="ClinicName" Type="nvarchar" MaxLength="100" />
+    <Property Name="StateId" Type="int" />
+    <Property Name="CityId" Type="int" />
+    <Property Name="LocationId" Type="int" />
+    <Property Name="FullAddress" Type="nvarchar" MaxLength="200" />
+    <Property Name="StartTime" Type="time" Precision="7" />
+    <Property Name="EndTime" Type="time" Precision="7" />
+  </EntityType>
+  <EntityType Name="DoctorComplaints">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Login_Id" Type="int" />
+    <Property Name="Subjects" Type="nvarchar" MaxLength="20" />
+    <Property Name="Complaints" Type="nvarchar" MaxLength="200" />
+    <Property Name="IsDeleted" Type="bit" />
+    <Property Name="IsResolved" Type="bit" />
+    <Property Name="Others" Type="nvarchar" MaxLength="15" />
+  </EntityType>
+  <EntityType Name="DoctorDepartment">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Doctor_Id" Type="int" Nullable="false" />
+    <Property Name="Department_Id" Type="int" Nullable="false" />
+    <Property Name="Specialist_Id" Type="int" Nullable="false" />
+    <Property Name="city_id" Type="int" />
+    <Property Name="State_id" Type="int" />
+  </EntityType>
+  <EntityType Name="DoctorPayOut">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Doctor_Id" Type="int" Nullable="false" />
+    <Property Name="Amount" Type="float" Nullable="false" />
+    <Property Name="IsPaid" Type="bit" />
+    <Property Name="PaymentDate" Type="datetime" />
+    <Property Name="IsGenerated" Type="bit" />
+    <Property Name="PaymentId" Type="int" />
+    <Property Name="Slot_id" Type="int" />
+  </EntityType>
+  <EntityType Name="DoctorReports">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Doctor_Id" Type="int" />
+    <Property Name="Patient_Id" Type="int" />
+    <Property Name="Image1" Type="nvarchar(max)" />
+    <Property Name="UploadDate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="DoctorSkill">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Doctor_Id" Type="int" Nullable="false" />
+    <Property Name="SkillName" Type="nvarchar" MaxLength="200" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Driver">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="IsDeleted" Type="bit" Nullable="false" />
+    <Property Name="DriverName" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="MobileNumber" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="EmailId" Type="nvarchar" MaxLength="100" />
+    <Property Name="StateMaster_Id" Type="int" Nullable="false" />
+    <Property Name="CityMaster_Id" Type="numeric" Precision="18" Scale="0" Nullable="false" />
+    <Property Name="Location" Type="nvarchar" MaxLength="200" />
+    <Property Name="DriverImage" Type="nvarchar" MaxLength="200" />
+    <Property Name="DlImage" Type="nvarchar" MaxLength="200" />
+    <Property Name="DlNumber" Type="nvarchar" MaxLength="200" Nullable="false" />
+    <Property Name="DlValidity" Type="datetime" />
+    <Property Name="Password" Type="nvarchar" MaxLength="30" Nullable="false" />
+    <Property Name="AdminLogin_Id" Type="int" Nullable="false" />
+    <Property Name="IsApproved" Type="bit" Nullable="false" />
+    <Property Name="PAN" Type="nvarchar" MaxLength="50" />
+    <Property Name="AadharNumber" Type="nvarchar" MaxLength="50" />
+    <Property Name="AadharImage" Type="nvarchar" MaxLength="2000" />
+    <Property Name="Vendor_Id" Type="int" />
+    <Property Name="IsVerifiedByPolice" Type="bit" />
+    <Property Name="VerificationDoc" Type="nvarchar" MaxLength="200" />
+    <Property Name="JoiningDate" Type="datetime" />
+    <Property Name="VehicleType_Id" Type="int" />
+    <Property Name="PinCode" Type="nvarchar" MaxLength="10" />
+    <Property Name="AadharImage2" Type="nvarchar" MaxLength="300" />
+    <Property Name="DlImage1" Type="nvarchar(max)" />
+    <Property Name="DlImage2" Type="nvarchar(max)" />
+    <Property Name="DlImage3" Type="nvarchar(max)" />
+    <Property Name="PanImage" Type="nvarchar" MaxLength="200" />
+    <Property Name="DriverId" Type="nvarchar" MaxLength="50" />
+    <Property Name="IsCheckedTermsCondition" Type="bit" />
+    <Property Name="RefId" Type="nvarchar" MaxLength="50" />
+    <Property Name="VehicleName" Type="nvarchar" MaxLength="100" />
+    <Property Name="State" Type="nvarchar" MaxLength="50" />
+    <Property Name="City" Type="nvarchar" MaxLength="50" />
+    <Property Name="Paidamount" Type="nvarchar" MaxLength="50" />
+    <Property Name="Status" Type="nvarchar" MaxLength="100" />
+    <Property Name="BranchName" Type="nvarchar" MaxLength="30" />
+    <Property Name="Lat" Type="float" />
+    <Property Name="Lang" Type="float" />
+    <Property Name="Charge" Type="int" />
+  </EntityType>
+  <EntityType Name="DriverLocation">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Driver_Id" Type="int" />
+    <Property Name="Lat_Driver" Type="float" />
+    <Property Name="Lang_Driver" Type="float" />
+    <Property Name="PatientId" Type="int" />
+    <Property Name="key" Type="bit" />
+    <Property Name="AmbulanceType_id" Type="int" />
+    <Property Name="VehicleType_id" Type="int" />
+    <Property Name="end_Lat" Type="float" />
+    <Property Name="end_Long" Type="float" />
+    <Property Name="start_Lat" Type="float" />
+    <Property Name="start_Long" Type="float" />
+    <Property Name="Status" Type="char" MaxLength="1" />
+    <Property Name="EntryDate" Type="datetime" />
+    <Property Name="IsPay" Type="char" MaxLength="1" />
+    <Property Name="Amount" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="TotalPrice" Type="int" />
+    <Property Name="ToatlDistance" Type="int" />
+    <Property Name="PaymentDate" Type="datetime" />
+    <Property Name="RejectedStatus" Type="bit" />
+  </EntityType>
+  <EntityType Name="DriverPayOut">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Driver_Id" Type="int" Nullable="false" />
+    <Property Name="Amount" Type="float" Nullable="false" />
+    <Property Name="IsPaid" Type="bit" />
+    <Property Name="PaymentDate" Type="datetime" />
+    <Property Name="IsGenerated" Type="bit" />
+  </EntityType>
+  <EntityType Name="Employee">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="IsDeleted" Type="bit" Nullable="false" />
+    <Property Name="EmployeetName" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="MobileNumber" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="EmailId" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="EmployeeAddress" Type="nvarchar" MaxLength="200" Nullable="false" />
+    <Property Name="Salary" Type="float" Nullable="false" />
+    <Property Name="EmployeeId" Type="nvarchar" MaxLength="100" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ExpenseReport">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Expense" Type="nvarchar" MaxLength="200" />
+    <Property Name="Type_Of_Expense" Type="nvarchar" MaxLength="50" />
+    <Property Name="Transaction_Type" Type="nvarchar" MaxLength="20" />
+    <Property Name="Expense_Description" Type="nvarchar" MaxLength="200" />
+    <Property Name="Amount" Type="float" />
+    <Property Name="IsDeleted" Type="bit" />
+    <Property Name="TransactionDate" Type="datetime" />
+    <Property Name="IsPaid" Type="bit" />
+    <Property Name="PaymentDate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="Franchise_Department">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DepartmentName" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="IsDeleted" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Franchise_Specialist">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="SpecialistName" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="Department_Id" Type="int" Nullable="false" />
+    <Property Name="IsDeleted" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="FranchiseComplaint">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Complaints" Type="nvarchar" MaxLength="200" />
+    <Property Name="IsDeleted" Type="bit" />
+    <Property Name="IsResolved" Type="bit" />
+    <Property Name="Others" Type="nvarchar" MaxLength="15" />
+    <Property Name="Login_Id" Type="int" />
+    <Property Name="patsubid" Type="int" />
+  </EntityType>
+  <EntityType Name="Gallery">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ImageName" Type="nvarchar" MaxLength="200" />
+    <Property Name="Images" Type="nvarchar(max)" />
+    <Property Name="IsDeleted" Type="bit" />
+    <Property Name="Franchise_Id" Type="int" />
+  </EntityType>
+  <EntityType Name="GSTMaster">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" />
+    <Property Name="Amount" Type="float" />
+    <Property Name="IsDeleted" Type="bit" />
+  </EntityType>
+  <EntityType Name="HealthBooking">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TotalAmount" Type="float" />
+    <Property Name="PatientId" Type="int" />
+    <Property Name="Test_Id" Type="int" />
+    <Property Name="Total" Type="int" />
+    <Property Name="IsPaid" Type="bit" />
+    <Property Name="PaymentDate" Type="datetime" />
+    <Property Name="TestDate" Type="datetime" />
+    <Property Name="Slotid" Type="int" />
+  </EntityType>
+  <EntityType Name="HealthCheckUp">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Center_Id" Type="int" Nullable="false" />
+    <Property Name="IsDeleted" Type="bit" />
+    <Property Name="PackageId" Type="int" />
+  </EntityType>
+  <EntityType Name="HealthCheckupCenter">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="IsDeleted" Type="bit" Nullable="false" />
+    <Property Name="IsApproved" Type="bit" Nullable="false" />
+    <Property Name="LabName" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="PhoneNumber" Type="nvarchar" MaxLength="100" />
+    <Property Name="MobileNumber" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="EmailId" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="Password" Type="nvarchar" MaxLength="30" />
+    <Property Name="LicenceImage" Type="nvarchar" MaxLength="200" />
+    <Property Name="LicenceNumber" Type="nvarchar" MaxLength="100" />
+    <Property Name="StateMaster_Id" Type="int" Nullable="false" />
+    <Property Name="CityMaster_Id" Type="int" Nullable="false" />
+    <Property Name="Location" Type="nvarchar" MaxLength="200" Nullable="false" />
+    <Property Name="AdminLogin_Id" Type="int" Nullable="false" />
+    <Property Name="PAN" Type="nvarchar" MaxLength="50" />
+    <Property Name="GSTNumber" Type="nvarchar" MaxLength="50" />
+    <Property Name="AadharImage" Type="nvarchar" MaxLength="2000" />
+    <Property Name="AadharNumber" Type="nvarchar" MaxLength="50" />
+    <Property Name="Location_Id" Type="int" Nullable="false" />
+    <Property Name="Vendor_Id" Type="int" />
+    <Property Name="JoiningDate" Type="datetime" />
+    <Property Name="RegNo" Type="nvarchar" MaxLength="100" />
+    <Property Name="RegImage" Type="nvarchar" MaxLength="200" />
+    <Property Name="Pincode" Type="nvarchar" MaxLength="20" />
+    <Property Name="HealthCheckUpId" Type="nvarchar(max)" />
+    <Property Name="IsCheckedTermsCondition" Type="bit" />
+    <Property Name="StateTime" Type="time" Precision="7" />
+    <Property Name="EndTime" Type="time" Precision="7" />
+    <Property Name="RefId" Type="nvarchar" MaxLength="50" />
+    <Property Name="year" Type="nvarchar" MaxLength="20" />
+    <Property Name="About" Type="nvarchar" MaxLength="150" />
+    <Property Name="HealthType" Type="nvarchar" MaxLength="150" />
+  </EntityType>
+  <EntityType Name="HealthCheckUpPackage">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="packageId" Type="int" />
+    <Property Name="TestAmt" Type="float" />
+    <Property Name="CenterId" Type="int" />
+    <Property Name="DiscountAmt" Type="float" />
+    <Property Name="Gst" Type="int" />
+  </EntityType>
+  <EntityType Name="HealthLabTest">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TestId" Type="int" />
+    <Property Name="HealthPackageID" Type="int" />
+    <Property Name="TestAmt" Type="float" />
+    <Property Name="TestName" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="HealthPackageMaster">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PackageName" Type="nvarchar" MaxLength="200" />
+  </EntityType>
+  <EntityType Name="HealthPayOut">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Health_Id" Type="int" />
+    <Property Name="Amount" Type="float" />
+    <Property Name="IsPaid" Type="bit" />
+    <Property Name="PaymentDate" Type="datetime" />
+    <Property Name="IsGenerated" Type="bit" />
+  </EntityType>
+  <EntityType Name="HopitalFaciltiy">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Hospital_Id" Type="int" Nullable="false" />
+    <Property Name="FacilityName" Type="nvarchar" MaxLength="200" Nullable="false" />
+    <Property Name="IsDeleted" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Hospital">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="IsDeleted" Type="bit" Nullable="false" />
+    <Property Name="HospitalName" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="StateMaster_Id" Type="int" Nullable="false" />
+    <Property Name="CityMaster_Id" Type="int" Nullable="false" />
+    <Property Name="Location" Type="nvarchar" MaxLength="200" Nullable="false" />
+    <Property Name="AuthorizationLetterImage" Type="nvarchar" MaxLength="200" Nullable="false" />
+    <Property Name="Password" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="IsApproved" Type="bit" Nullable="false" />
+    <Property Name="PhoneNumber" Type="nvarchar" MaxLength="30" />
+    <Property Name="EmailId" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="MobileNumber" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="AdminLogin_Id" Type="int" Nullable="false" />
+    <Property Name="Location_Id" Type="int" Nullable="false" />
+    <Property Name="Vendor_Id" Type="int" />
+    <Property Name="PinCode" Type="nvarchar" MaxLength="15" />
+    <Property Name="HospitalId" Type="nvarchar(max)" />
+    <Property Name="IsCheckedTermsCondition" Type="bit" />
+    <Property Name="RefId" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="HospitalDepartment">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Hospital_Id" Type="int" Nullable="false" />
+    <Property Name="Department_Id" Type="int" Nullable="false" />
+    <Property Name="IsDeleted" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="HospitalDoctor">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="IsDeleted" Type="bit" Nullable="false" />
+    <Property Name="DoctorName" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="PhoneNumber" Type="nvarchar" MaxLength="30" />
+    <Property Name="MobileNumber" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="EmailId" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="StateMaster_Id" Type="int" Nullable="false" />
+    <Property Name="CityMaster_Id" Type="int" Nullable="false" />
+    <Property Name="Location" Type="nvarchar" MaxLength="200" Nullable="false" />
+    <Property Name="LicenceImage" Type="nvarchar" MaxLength="200" />
+    <Property Name="LicenceNumber" Type="nvarchar" MaxLength="100" />
+    <Property Name="ClinicName" Type="nvarchar" MaxLength="100" />
+    <Property Name="Department_Id" Type="int" Nullable="false" />
+    <Property Name="Specialist_Id" Type="int" Nullable="false" />
+    <Property Name="IsApproved" Type="bit" Nullable="false" />
+    <Property Name="PAN" Type="nvarchar" MaxLength="50" />
+    <Property Name="AadharNumber" Type="nvarchar" MaxLength="50" />
+    <Property Name="AadharImage" Type="nvarchar" MaxLength="2000" />
+    <Property Name="Hospital_Id" Type="int" Nullable="false" />
+    <Property Name="StartTime" Type="time" Precision="7" />
+    <Property Name="EndTime" Type="time" Precision="7" />
+    <Property Name="SlotTime" Type="int" />
+    <Property Name="Fee" Type="float" />
+  </EntityType>
+  <EntityType Name="HospitalDoctorDepartment">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="HospitalDoctor_Id" Type="int" Nullable="false" />
+    <Property Name="Department_Id" Type="int" Nullable="false" />
+    <Property Name="Specialist_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="HospitalNurse">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="IsDeleted" Type="bit" />
+    <Property Name="NurseName" Type="nvarchar" MaxLength="100" />
+    <Property Name="NurseType_Id" Type="int" />
+    <Property Name="Hospital_Id" Type="int" />
+  </EntityType>
+  <EntityType Name="HospitalReport">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Department" Type="nvarchar" MaxLength="10" />
+    <Property Name="Hospital_Id" Type="int" />
+    <Property Name="Patient_Id" Type="int" />
+    <Property Name="Test" Type="int" />
+    <Property Name="File" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="Lab">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="IsDeleted" Type="bit" Nullable="false" />
+    <Property Name="IsApproved" Type="bit" Nullable="false" />
+    <Property Name="LabName" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="PhoneNumber" Type="nvarchar" MaxLength="100" />
+    <Property Name="MobileNumber" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="EmailId" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="Password" Type="nvarchar" MaxLength="30" />
+    <Property Name="LicenceImage" Type="nvarchar" MaxLength="200" />
+    <Property Name="LicenceNumber" Type="nvarchar" MaxLength="100" />
+    <Property Name="StateMaster_Id" Type="int" Nullable="false" />
+    <Property Name="CityMaster_Id" Type="int" Nullable="false" />
+    <Property Name="Location" Type="nvarchar" MaxLength="200" Nullable="false" />
+    <Property Name="AdminLogin_Id" Type="int" Nullable="false" />
+    <Property Name="PAN" Type="nvarchar" MaxLength="50" />
+    <Property Name="GSTNumber" Type="nvarchar" MaxLength="50" />
+    <Property Name="PanImage" Type="nvarchar" MaxLength="2000" />
+    <Property Name="AadharNumber" Type="nvarchar" MaxLength="50" />
+    <Property Name="Location_Id" Type="int" Nullable="false" />
+    <Property Name="StartTime" Type="time" Precision="7" />
+    <Property Name="EndTime" Type="time" Precision="7" />
+    <Property Name="Vendor_Id" Type="int" />
+    <Property Name="JoiningDate" Type="datetime" />
+    <Property Name="HospitalId" Type="int" />
+    <Property Name="lABId" Type="nvarchar(max)" />
+    <Property Name="IsCheckedTermsCondition" Type="bit" />
+    <Property Name="RefId" Type="nvarchar" MaxLength="50" />
+    <Property Name="About" Type="nvarchar" MaxLength="255" />
+    <Property Name="LabTypeName" Type="nvarchar" MaxLength="100" />
+    <Property Name="year" Type="nvarchar" MaxLength="100" />
+    <Property Name="ChooseDate" Type="datetime" />
+    <Property Name="fee" Type="float" />
+    <Property Name="WorkingDay" Type="varchar" MaxLength="50" />
+    <Property Name="PinCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="image" Type="nvarchar" MaxLength="500" />
+    <Property Name="LabTest_Id" Type="int" />
+  </EntityType>
+  <EntityType Name="LabBooking">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TotalAmount" Type="float" />
+    <Property Name="PatientId" Type="int" />
+    <Property Name="Test_Id" Type="int" />
+    <Property Name="Total" Type="int" />
+    <Property Name="IsPaid" Type="bit" />
+    <Property Name="PaymentDate" Type="datetime" />
+    <Property Name="TestId" Type="int" />
+    <Property Name="Test" Type="int" />
+    <Property Name="TestDate" Type="datetime" />
+    <Property Name="AvailabelTime1" Type="time" Precision="7" />
+    <Property Name="AvailabelTime2" Type="time" Precision="7" />
+  </EntityType>
+  <EntityType Name="LabPayOut">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Lab_Id" Type="int" />
+    <Property Name="Amount" Type="float" />
+    <Property Name="IsPaid" Type="bit" />
+    <Property Name="PaymentDate" Type="datetime" />
+    <Property Name="IsGenerated" Type="bit" />
+  </EntityType>
+  <EntityType Name="LabReport">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Lab_Id" Type="int" />
+    <Property Name="Patient_Id" Type="int" />
+    <Property Name="Test" Type="int" />
+    <Property Name="File" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="LabTest">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TestName" Type="nvarchar" MaxLength="200" />
+    <Property Name="Lab_Id" Type="int" />
+    <Property Name="TestAmount" Type="float" />
+    <Property Name="TestDesc" Type="nvarchar" MaxLength="200" />
+    <Property Name="Test_Id" Type="int" />
+  </EntityType>
+  <EntityType Name="Location">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="LocationName" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="City_Id" Type="int" Nullable="false" />
+    <Property Name="IsDeleted" Type="bit" Nullable="false" />
+    <Property Name="Lat" Type="float" Nullable="false" />
+    <Property Name="Lng" Type="float" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Mail">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" />
+    <Property Name="TelePhone" Type="nvarchar" MaxLength="15" />
+    <Property Name="Email" Type="nvarchar" MaxLength="30" />
+    <Property Name="Subjects" Type="nvarchar" MaxLength="50" />
+    <Property Name="Msg" Type="nvarchar" MaxLength="200" />
+  </EntityType>
+  <EntityType Name="MainCategory">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CategoryName" Type="nvarchar" MaxLength="50" />
+    <Property Name="IsDeleted" Type="bit" />
+    <Property Name="Type" Type="nvarchar" MaxLength="30" />
+    <Property Name="AmbulanceType_id" Type="int" />
+  </EntityType>
+  <EntityType Name="Medicine">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MedicineName" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="MedicineDescription" Type="nvarchar" MaxLength="200" />
+    <Property Name="MedicineType_Id" Type="int" />
+    <Property Name="IsDeleted" Type="bit" Nullable="false" />
+    <Property Name="MRP" Type="float" Nullable="false" />
+    <Property Name="BrandName" Type="nvarchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="Medicine Pay">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TotalAmount" Type="float" />
+    <Property Name="PatientId" Type="int" />
+    <Property Name="IsPaid" Type="bit" />
+    <Property Name="PaymentDate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="MedicineCart">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Patient_Id" Type="int" Nullable="false" />
+    <Property Name="Medicine_Id" Type="int" Nullable="false" />
+    <Property Name="Quantity" Type="int" Nullable="false" />
+    <Property Name="price" Type="float" />
+    <Property Name="TotalPrice" Type="float" />
+  </EntityType>
+  <EntityType Name="MedicineOrder">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="OrderDate" Type="datetime" Nullable="false" />
+    <Property Name="IsPaid" Type="bit" Nullable="false" />
+    <Property Name="IsDelivered" Type="bit" Nullable="false" />
+    <Property Name="Patient_Id" Type="int" Nullable="false" />
+    <Property Name="Chemist_Id" Type="int" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="100" />
+    <Property Name="MobileNumber" Type="nvarchar" MaxLength="10" />
+    <Property Name="DeliveryAddress" Type="nvarchar" MaxLength="200" />
+    <Property Name="StateMaster_Id" Type="int" />
+    <Property Name="PinCode" Type="nvarchar" MaxLength="20" />
+    <Property Name="CityMaster_Id" Type="int" />
+    <Property Name="OrderId" Type="nvarchar" MaxLength="200" Nullable="false" />
+    <Property Name="InvoiceNumber" Type="nvarchar" MaxLength="200" Nullable="false" />
+    <Property Name="Location_Id" Type="int" />
+    <Property Name="DeliveryStatus" Type="varchar" MaxLength="20" />
+    <Property Name="DeliveryDate" Type="datetime" />
+    <Property Name="Remarks" Type="varchar" MaxLength="200" />
+    <Property Name="Email" Type="nvarchar" MaxLength="30" />
+    <Property Name="Password" Type="nvarchar" MaxLength="30" />
+    <Property Name="Quantity" Type="int" />
+    <Property Name="finalPrice" Type="float" />
+  </EntityType>
+  <EntityType Name="MedicineOrderDetail">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Order_Id" Type="int" Nullable="false" />
+    <Property Name="Medicine_Id" Type="int" Nullable="false" />
+    <Property Name="Quantity" Type="int" Nullable="false" />
+    <Property Name="Amount" Type="float" Nullable="false" />
+  </EntityType>
+  <EntityType Name="MedicineType">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MedicineTypeName" Type="nvarchar" MaxLength="100" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Nurse">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="IsDeleted" Type="bit" Nullable="false" />
+    <Property Name="IsApproved" Type="bit" Nullable="false" />
+    <Property Name="NurseName" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="MobileNumber" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="EmailId" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="CertificateImage" Type="nvarchar" MaxLength="200" Nullable="false" />
+    <Property Name="CertificateNumber" Type="nvarchar" MaxLength="200" />
+    <Property Name="Password" Type="nvarchar" MaxLength="30" Nullable="false" />
+    <Property Name="StateMaster_Id" Type="int" Nullable="false" />
+    <Property Name="CityMaster_Id" Type="int" Nullable="false" />
+    <Property Name="Location" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="AdminLogin_Id" Type="int" Nullable="false" />
+    <Property Name="PAN" Type="nvarchar" MaxLength="50" />
+    <Property Name="AadharNumber" Type="nvarchar" MaxLength="50" />
+    <Property Name="AadharImage" Type="nvarchar" MaxLength="2000" />
+    <Property Name="IsVerifiedByPolice" Type="bit" Nullable="false" />
+    <Property Name="VerificationDoc" Type="nvarchar" MaxLength="200" />
+    <Property Name="NurseType_Id" Type="int" />
+    <Property Name="Fee" Type="float" Nullable="false" />
+    <Property Name="PinCode" Type="nvarchar" MaxLength="15" />
+    <Property Name="Vendor_Id" Type="int" />
+    <Property Name="JoiningDate" Type="datetime" />
+    <Property Name="NurseImage" Type="nvarchar" MaxLength="300" />
+    <Property Name="PanImage" Type="nvarchar" MaxLength="200" />
+    <Property Name="HrsFeex24" Type="decimal" Precision="10" Scale="2" />
+    <Property Name="MonthFee" Type="decimal" Precision="10" Scale="2" />
+    <Property Name="CityName" Type="nvarchar" MaxLength="100" />
+    <Property Name="NurseId" Type="nvarchar(max)" />
+    <Property Name="IsCheckedTermsCondition" Type="bit" />
+    <Property Name="Hospital_Id" Type="int" />
+    <Property Name="Data" Type="varbinary(max)" />
+    <Property Name="ContentType" Type="nvarchar(max)" />
+    <Property Name="FileName" Type="nvarchar" MaxLength="550" />
+    <Property Name="RefId" Type="nvarchar" MaxLength="50" />
+    <Property Name="experience" Type="int" />
+    <Property Name="about" Type="nvarchar" MaxLength="255" />
+    <Property Name="ClinicName" Type="varchar" MaxLength="30" />
+    <Property Name="Location_id" Type="int" />
+  </EntityType>
+  <EntityType Name="Nurse_Location">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Nurse_Id" Type="int" Nullable="false" />
+    <Property Name="Location_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="NursePayout">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Nurse_Id" Type="int" />
+    <Property Name="Amount" Type="float" />
+    <Property Name="IsPaid" Type="bit" />
+    <Property Name="PaymentDate" Type="datetime" />
+    <Property Name="IsGenerated" Type="bit" />
+  </EntityType>
+  <EntityType Name="NurseService">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Nurse_Id" Type="int" />
+    <Property Name="Patient_Id" Type="int" Nullable="false" />
+    <Property Name="MobileNumber" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="StartDate" Type="datetime" />
+    <Property Name="EndDate" Type="datetime" />
+    <Property Name="IsPaid" Type="bit" Nullable="false" />
+    <Property Name="PaymentDate" Type="datetime" />
+    <Property Name="ServiceAcceptanceDate" Type="datetime" />
+    <Property Name="RequestDate" Type="datetime" Nullable="false" />
+    <Property Name="ServiceStatus" Type="nvarchar" MaxLength="100" />
+    <Property Name="PerDayAmount" Type="float" />
+    <Property Name="NurseTypeId" Type="int" />
+    <Property Name="LocationId" Type="int" />
+    <Property Name="ServiceDate" Type="datetime" />
+    <Property Name="ServiceType" Type="nvarchar" MaxLength="20" />
+    <Property Name="ServiceTime" Type="varchar" MaxLength="20" />
+    <Property Name="TotalFee" Type="float" />
+    <Property Name="Slotid" Type="int" />
+    <Property Name="Location" Type="nvarchar" MaxLength="250" />
+    <Property Name="StateMaster_Id" Type="int" />
+    <Property Name="CityMaster_Id" Type="int" />
+    <Property Name="InvoiceNumber" Type="nvarchar" MaxLength="50" />
+    <Property Name="OrderId" Type="nvarchar" MaxLength="50" />
+    <Property Name="OrderDate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="NurseServiceRequest">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="NurseService_Id" Type="int" Nullable="false" />
+    <Property Name="Nurse_Id" Type="int" Nullable="false" />
+    <Property Name="IsDeleted" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="NurseType">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="IsDeleted" Type="bit" Nullable="false" />
+    <Property Name="NurseTypeName" Type="nvarchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="PageMaster">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PageName" Type="nvarchar" MaxLength="200" />
+    <Property Name="IsDeleted" Type="bit" />
+  </EntityType>
+  <EntityType Name="Patient">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PatientName" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="EmailId" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="MobileNumber" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="StateMaster_Id" Type="int" />
+    <Property Name="CityMaster_Id" Type="int" />
+    <Property Name="Location" Type="nvarchar" MaxLength="200" />
+    <Property Name="IsDeleted" Type="bit" Nullable="false" />
+    <Property Name="IsApproved" Type="bit" Nullable="false" />
+    <Property Name="AdminLogin_Id" Type="int" Nullable="false" />
+    <Property Name="Rwa_Id" Type="int" />
+    <Property Name="Reg_Date" Type="datetime" />
+    <Property Name="PinCode" Type="nvarchar" MaxLength="15" />
+    <Property Name="PatientRegNo" Type="nvarchar(max)" />
+    <Property Name="IsCheckedTermsCondition" Type="bit" />
+    <Property Name="vendorId" Type="int" />
+    <Property Name="RefId" Type="nvarchar" MaxLength="50" />
+    <Property Name="walletAmount" Type="decimal" Precision="18" Scale="0" />
+    <Property Name="Password" Type="nvarchar" MaxLength="30" />
+    <Property Name="About" Type="nvarchar" MaxLength="500" />
+    <Property Name="Gender" Type="varchar" MaxLength="10" />
+    <Property Name="DOB" Type="date" />
+  </EntityType>
+  <EntityType Name="PatientAppointment">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Patient_Id" Type="int" />
+    <Property Name="AppointmentDate" Type="datetime" />
+    <Property Name="StartSlotTime" Type="time" Precision="7" />
+    <Property Name="EndSlotTime" Type="time" Precision="7" />
+    <Property Name="Doctor_Id" Type="int" />
+    <Property Name="Specialist_Id" Type="int" />
+    <Property Name="IsBooked" Type="bit" />
+    <Property Name="IsPaid" Type="bit" />
+    <Property Name="PaymentDate" Type="datetime" />
+    <Property Name="Hospital_Id" Type="int" />
+    <Property Name="HospitalDoc_Id" Type="int" />
+    <Property Name="IsCancelled" Type="bit" />
+    <Property Name="WorkingShift" Type="varchar" MaxLength="30" />
+    <Property Name="Slot_id" Type="int" />
+    <Property Name="TotalFee" Type="float" />
+    <Property Name="BookingMode_Id" Type="int" />
+    <Property Name="InvoiceNumber" Type="nvarchar" MaxLength="50" />
+    <Property Name="OrderId" Type="nvarchar" MaxLength="50" />
+    <Property Name="OrderDate" Type="datetime" />
+    <Property Name="AppointmentIsDone" Type="bit" />
+  </EntityType>
+  <EntityType Name="PatientComplaints">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Subjects" Type="nvarchar" MaxLength="20" />
+    <Property Name="Complaints" Type="nvarchar" MaxLength="200" />
+    <Property Name="IsDeleted" Type="bit" />
+    <Property Name="IsResolved" Type="bit" />
+    <Property Name="Others" Type="nvarchar" MaxLength="15" />
+    <Property Name="Login_Id" Type="int" />
+    <Property Name="Roles" Type="nvarchar" MaxLength="15" />
+    <Property Name="ComplaintDate" Type="datetime" />
+    <Property Name="Rating" Type="int" />
+    <Property Name="patsubid" Type="int" />
+  </EntityType>
+  <EntityType Name="PatientRequest">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Patient_Id" Type="int" />
+    <Property Name="VehicelType_Id" Type="int" />
+    <Property Name="Latitude" Type="float" />
+    <Property Name="Longtitude" Type="float" />
+    <Property Name="Status" Type="bit" />
+    <Property Name="Request" Type="datetime" />
+    <Property Name="DropLatitude" Type="float" />
+    <Property Name="DropLongtitude" Type="float" />
+    <Property Name="StatusKey" Type="int" />
+  </EntityType>
+  <EntityType Name="PaymentMaster">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Department" Type="nvarchar" MaxLength="50" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" />
+    <Property Name="Amount" Type="float" />
+    <Property Name="IsDeleted" Type="bit" />
+  </EntityType>
+  <EntityType Name="PayoutMaster">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="30" />
+    <Property Name="Amount" Type="float" />
+    <Property Name="IsDeleted" Type="bit" />
+  </EntityType>
+  <EntityType Name="RWA">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="IsDeleted" Type="bit" Nullable="false" />
+    <Property Name="IsApproved" Type="bit" Nullable="false" />
+    <Property Name="AuthorityName" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="PhoneNumber" Type="nvarchar" MaxLength="100" />
+    <Property Name="MobileNumber" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="EmailId" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="Password" Type="nvarchar" MaxLength="30" />
+    <Property Name="StateMaster_Id" Type="int" Nullable="false" />
+    <Property Name="CityMaster_Id" Type="int" Nullable="false" />
+    <Property Name="Location" Type="nvarchar" MaxLength="200" Nullable="false" />
+    <Property Name="AdminLogin_Id" Type="int" Nullable="false" />
+    <Property Name="CertificateImage" Type="nvarchar" MaxLength="200" />
+    <Property Name="Vendor_Id" Type="int" />
+    <Property Name="JoiningDate" Type="datetime" />
+    <Property Name="RWAId" Type="nvarchar(max)" />
+    <Property Name="IsCheckedTermsCondition" Type="bit" />
+    <Property Name="Pincode" Type="varchar" MaxLength="6" />
+    <Property Name="LandlineNumber" Type="varchar" MaxLength="15" />
+    <Property Name="CertificateNo" Type="nvarchar" MaxLength="250" />
+    <Property Name="About" Type="nvarchar" MaxLength="500" />
+    <Property Name="PAN" Type="nvarchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="RWA_Complaints">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="RWA_Id" Type="int" />
+    <Property Name="Subjects" Type="nvarchar" MaxLength="20" />
+    <Property Name="Complaints" Type="nvarchar" MaxLength="200" />
+    <Property Name="IsDeleted" Type="bit" />
+    <Property Name="IsResolved" Type="bit" />
+    <Property Name="Others" Type="nvarchar" MaxLength="15" />
+  </EntityType>
+  <EntityType Name="RwaPayout">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Rwa_Id" Type="int" />
+    <Property Name="Amount" Type="float" />
+    <Property Name="IsGenerated" Type="bit" />
+    <Property Name="IsPaid" Type="bit" />
+    <Property Name="PaymentDate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="SalaryMaster">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Emp_Id" Type="int" />
+    <Property Name="Salary" Type="float" />
+    <Property Name="PaidDate" Type="datetime" />
+    <Property Name="IsPaid" Type="bit" />
+    <Property Name="GenerateDate" Type="datetime" />
+    <Property Name="IsGenerated" Type="bit" />
+    <Property Name="Leave" Type="int" />
+  </EntityType>
+  <EntityType Name="Specialist">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="SpecialistName" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="Department_Id" Type="int" Nullable="false" />
+    <Property Name="IsDeleted" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="StateMaster">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="StateName" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="IsDeleted" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="TDSMaster">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" />
+    <Property Name="Amount" Type="float" />
+    <Property Name="IsDeleted" Type="bit" />
+  </EntityType>
+  <EntityType Name="TempDepartment">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Department" Type="nvarchar" MaxLength="200" />
+    <Property Name="Specialist" Type="nvarchar" MaxLength="200" />
+    <Property Name="IsDeleted" Type="bit" />
+    <Property Name="Requested" Type="nvarchar" MaxLength="100" />
+    <Property Name="IsApproved" Type="bit" />
+  </EntityType>
+  <EntityType Name="TestLab">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Test_Id" Type="int" />
+    <Property Name="Lab_Id" Type="int" />
+    <Property Name="TestAmount" Type="float" />
+    <Property Name="TestDescription" Type="nvarchar" MaxLength="300" />
+  </EntityType>
+  <EntityType Name="TravelMaster">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="VehicleType_Id" Type="int" />
+    <Property Name="Patient_Id" Type="int" />
+    <Property Name="Driver_Id" Type="int" />
+    <Property Name="Lat_Driver" Type="float" />
+    <Property Name="Lang_Driver" Type="float" />
+    <Property Name="Vehicle_Id" Type="int" />
+    <Property Name="IsDriveCompleted" Type="bit" />
+    <Property Name="RequestDate" Type="datetime" />
+    <Property Name="DriverKey" Type="bit" />
+    <Property Name="StatusKey" Type="int" />
+  </EntityType>
+  <EntityType Name="TravelRecordMaster">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Patient_Id" Type="int" />
+    <Property Name="Driver_Id" Type="int" />
+    <Property Name="Lat_PickUp_Patient" Type="float" />
+    <Property Name="Lang_PickUp_Pateint" Type="float" />
+    <Property Name="Lang_Drop" Type="float" />
+    <Property Name="Lat_Drop" Type="float" />
+    <Property Name="PickUp_Place" Type="nvarchar" MaxLength="200" />
+    <Property Name="Drop_Place" Type="nvarchar" MaxLength="200" />
+    <Property Name="Vehicle_Id" Type="int" />
+    <Property Name="IsDriveCompleted" Type="bit" />
+    <Property Name="Amount" Type="float" />
+    <Property Name="Distance" Type="float" />
+    <Property Name="RequestDate" Type="datetime" />
+    <Property Name="FullAmount" Type="decimal" Precision="10" Scale="2" />
+    <Property Name="RecordId" Type="int" />
+    <Property Name="PaymentDate" Type="datetime" />
+    <Property Name="IsPaid" Type="bit" />
+    <Property Name="RideStartTime" Type="time" Precision="7" />
+    <Property Name="RideEndTime" Type="time" Precision="7" />
+    <Property Name="Is8HourRide" Type="bit" />
+    <Property Name="ExtraCharges" Type="float" />
+    <Property Name="CancelBy" Type="nvarchar" MaxLength="10" />
+  </EntityType>
+  <EntityType Name="Vehicle">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="IsDeleted" Type="bit" Nullable="false" />
+    <Property Name="VehicleNumber" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="Validity" Type="datetime" />
+    <Property Name="InsurranceDate" Type="datetime" />
+    <Property Name="PollutionDate" Type="datetime" />
+    <Property Name="IsApproved" Type="bit" Nullable="false" />
+    <Property Name="VehicleType_Id" Type="int" Nullable="false" />
+    <Property Name="Driver_Id" Type="int" />
+    <Property Name="Vendor_Id" Type="int" />
+    <Property Name="FitnessCertificateValidity" Type="datetime" />
+    <Property Name="InsuranceImage" Type="nvarchar" MaxLength="200" />
+    <Property Name="PollutionImage" Type="nvarchar" MaxLength="200" />
+    <Property Name="FitnessCerficateImage" Type="nvarchar" MaxLength="100" />
+    <Property Name="RegistrationDate" Type="datetime" />
+    <Property Name="RC_Image" Type="nvarchar(max)" />
+    <Property Name="RC_No" Type="nvarchar(max)" />
+    <Property Name="VehicleName" Type="nvarchar" MaxLength="100" />
+    <Property Name="VehicleImg" Type="nvarchar(max)" />
+    <Property Name="AccountNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="IFSCCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="BranchName" Type="nvarchar" MaxLength="50" />
+    <Property Name="BranchAddress" Type="nvarchar" MaxLength="50" />
+    <Property Name="HolderName" Type="nvarchar" MaxLength="50" />
+    <Property Name="CancelCheque" Type="nvarchar(max)" />
+    <Property Name="DriverCharges" Type="float" />
+    <Property Name="AccountHolderName" Type="nvarchar(max)" />
+    <Property Name="RefId" Type="nvarchar" MaxLength="50" />
+    <Property Name="VehicleCat_Id" Type="int" />
+    <Property Name="VehicleOwnerName" Type="nvarchar" MaxLength="250" />
+    <Property Name="PAN" Type="nvarchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="VehicleCharges">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Amount" Type="float" />
+    <Property Name="Category_Id" Type="int" />
+    <Property Name="TypeId" Type="int" />
+    <Property Name="AppliedFor" Type="nvarchar" MaxLength="10" />
+  </EntityType>
+  <EntityType Name="VehicleType">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="VehicleTypeName" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="IsDeleted" Type="bit" Nullable="false" />
+    <Property Name="under5KM" Type="float" />
+    <Property Name="under6_10KM" Type="float" />
+    <Property Name="under11_20KM" Type="float" />
+    <Property Name="under21_40KM" Type="float" />
+    <Property Name="under41_60KM" Type="float" />
+    <Property Name="under61_80KM" Type="float" />
+    <Property Name="under81_100KM" Type="float" />
+    <Property Name="under100_150KM" Type="float" />
+    <Property Name="under151_200KM" Type="float" />
+    <Property Name="under201_250KM" Type="float" />
+    <Property Name="under251_300KM" Type="float" />
+    <Property Name="under301_350KM" Type="float" />
+    <Property Name="under351_400KM" Type="float" />
+    <Property Name="under401_450KM" Type="float" />
+    <Property Name="under451_500KM" Type="float" />
+    <Property Name="Above500KM" Type="float" />
+    <Property Name="Category_Id" Type="int" />
+  </EntityType>
+  <EntityType Name="Vendor">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="IsDeleted" Type="bit" Nullable="false" />
+    <Property Name="CompanyName" Type="nvarchar" MaxLength="200" Nullable="false" />
+    <Property Name="MobileNumber" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="EmailId" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="StateMaster_Id" Type="int" Nullable="false" />
+    <Property Name="City_Id" Type="int" Nullable="false" />
+    <Property Name="Location" Type="nvarchar" MaxLength="200" Nullable="false" />
+    <Property Name="GSTNumber" Type="nvarchar" MaxLength="100" />
+    <Property Name="Password" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="IsApproved" Type="bit" Nullable="false" />
+    <Property Name="AdminLogin_Id" Type="int" Nullable="false" />
+    <Property Name="VendorName" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="AadharOrPANNumber" Type="nvarchar" MaxLength="50" />
+    <Property Name="AadharOrPANImage" Type="nvarchar" MaxLength="200" />
+    <Property Name="PanImage" Type="nvarchar(max)" />
+    <Property Name="PanNumber" Type="nvarchar" MaxLength="100" />
+    <Property Name="AadharOrPANImage2" Type="nvarchar" MaxLength="300" />
+    <Property Name="UniqueId" Type="nvarchar" MaxLength="200" />
+    <Property Name="IsCheckedTermsCondition" Type="bit" />
+    <Property Name="PinCode" Type="nvarchar" MaxLength="250" />
+    <Property Name="About" Type="nvarchar" MaxLength="500" />
+  </EntityType>
+  <EntityType Name="VendorPayOut">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Vendor_Id" Type="int" />
+    <Property Name="Amount" Type="float" />
+    <Property Name="IsPaid" Type="bit" />
+    <Property Name="PaymentDate" Type="datetime" />
+    <Property Name="IsGenerated" Type="bit" />
+  </EntityType>
+  <Association Name="FK__BankDetai__Login__269AB60B">
+    <End Role="AdminLogin" Type="Self.AdminLogin" Multiplicity="0..1" />
+    <End Role="BankDetails" Type="Self.BankDetails" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AdminLogin">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="BankDetails">
+        <PropertyRef Name="Login_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__BookTestL__Patie__56E8E7AB">
+    <End Role="Patient" Type="Self.Patient" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="BookTestLab" Type="Self.BookTestLab" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Patient">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="BookTestLab">
+        <PropertyRef Name="Patient_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Cancelled__Cance__25C68D63">
+    <End Role="PatientAppointment" Type="Self.PatientAppointment" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="CancelledAppointment" Type="Self.CancelledAppointment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PatientAppointment">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CancelledAppointment">
+        <PropertyRef Name="CancelledId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Cancelled__Docto__1F198FD4">
+    <End Role="Doctor" Type="Self.Doctor" Multiplicity="0..1" />
+    <End Role="CancelledAppointment" Type="Self.CancelledAppointment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Doctor">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CancelledAppointment">
+        <PropertyRef Name="Doctor_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Cancelled__Hospi__22EA20B8">
+    <End Role="HospitalDoctor" Type="Self.HospitalDoctor" Multiplicity="0..1" />
+    <End Role="CancelledAppointment" Type="Self.CancelledAppointment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="HospitalDoctor">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CancelledAppointment">
+        <PropertyRef Name="HospitalDoc_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Cancelled__Hospi__23DE44F1">
+    <End Role="HospitalDoctor" Type="Self.HospitalDoctor" Multiplicity="0..1" />
+    <End Role="CancelledAppointment" Type="Self.CancelledAppointment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="HospitalDoctor">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CancelledAppointment">
+        <PropertyRef Name="HospitalDoc_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Cancelled__Patie__1E256B9B">
+    <End Role="Patient" Type="Self.Patient" Multiplicity="0..1" />
+    <End Role="CancelledAppointment" Type="Self.CancelledAppointment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Patient">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CancelledAppointment">
+        <PropertyRef Name="Patient_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Cancelled__Speci__200DB40D">
+    <End Role="Specialist" Type="Self.Specialist" Multiplicity="0..1" />
+    <End Role="CancelledAppointment" Type="Self.CancelledAppointment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Specialist">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CancelledAppointment">
+        <PropertyRef Name="Specialist_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__CheckUpRe__Check__2180FB33">
+    <End Role="HealthCheckupCenter" Type="Self.HealthCheckupCenter" Multiplicity="0..1" />
+    <End Role="CheckUpReport" Type="Self.CheckUpReport" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="HealthCheckupCenter">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CheckUpReport">
+        <PropertyRef Name="Checkup_Center_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__CheckUpRe__Patie__22751F6C">
+    <End Role="Patient" Type="Self.Patient" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="CheckUpReport" Type="Self.CheckUpReport" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Patient">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CheckUpReport">
+        <PropertyRef Name="Patient_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__CheckUpRe__TestI__3AC1AA49">
+    <End Role="LabTest" Type="Self.LabTest" Multiplicity="0..1" />
+    <End Role="CheckUpReport" Type="Self.CheckUpReport" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="LabTest">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CheckUpReport">
+        <PropertyRef Name="TestId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Chemist__AdminLo__236943A5">
+    <End Role="AdminLogin" Type="Self.AdminLogin" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Chemist" Type="Self.Chemist" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AdminLogin">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Chemist">
+        <PropertyRef Name="AdminLogin_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Chemist__Vendor___58671BC9">
+    <End Role="Vendor" Type="Self.Vendor" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Chemist" Type="Self.Chemist" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Vendor">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Chemist">
+        <PropertyRef Name="Vendor_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__ChemistPa__Chemi__2645B050">
+    <End Role="Chemist" Type="Self.Chemist" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="ChemistPayOut" Type="Self.ChemistPayOut" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Chemist">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ChemistPayOut">
+        <PropertyRef Name="Chemist_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__CityMaste__State__2739D489">
+    <End Role="StateMaster" Type="Self.StateMaster" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="CityMaster" Type="Self.CityMaster" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="StateMaster">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CityMaster">
+        <PropertyRef Name="StateMaster_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__CityTemp__Login___4CC05EF3">
+    <End Role="AdminLogin" Type="Self.AdminLogin" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="CityTemp" Type="Self.CityTemp" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AdminLogin">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CityTemp">
+        <PropertyRef Name="Login_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__CityTemp__State___4DB4832C">
+    <End Role="StateMaster" Type="Self.StateMaster" Multiplicity="0..1" />
+    <End Role="CityTemp" Type="Self.CityTemp" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="StateMaster">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CityTemp">
+        <PropertyRef Name="State_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__CmpltChec__Cente__282DF8C2">
+    <End Role="HealthCheckupCenter" Type="Self.HealthCheckupCenter" Multiplicity="0..1" />
+    <End Role="CmpltCheckUp" Type="Self.CmpltCheckUp" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="HealthCheckupCenter">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CmpltCheckUp">
+        <PropertyRef Name="Center_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__CmpltChec__Patie__29221CFB">
+    <End Role="Patient" Type="Self.Patient" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="CmpltCheckUp" Type="Self.CmpltCheckUp" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Patient">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CmpltCheckUp">
+        <PropertyRef Name="PatientId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__CmpltChec__Test___3D491139">
+    <End Role="HealthCheckUp" Type="Self.HealthCheckUp" Multiplicity="0..1" />
+    <End Role="CmpltCheckUp" Type="Self.CmpltCheckUp" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="HealthCheckUp">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CmpltCheckUp">
+        <PropertyRef Name="Test_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Doctor__AdminLog__2A164134">
+    <End Role="AdminLogin" Type="Self.AdminLogin" Multiplicity="1" />
+    <End Role="Doctor" Type="Self.Doctor" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AdminLogin">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Doctor">
+        <PropertyRef Name="AdminLogin_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Doctor__StateMas__2DE6D218">
+    <End Role="StateMaster" Type="Self.StateMaster" Multiplicity="1" />
+    <End Role="Doctor" Type="Self.Doctor" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="StateMaster">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Doctor">
+        <PropertyRef Name="StateMaster_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__DoctorCom__Login__2EDAF651">
+    <End Role="Doctor" Type="Self.Doctor" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="DoctorComplaints" Type="Self.DoctorComplaints" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Doctor">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="DoctorComplaints">
+        <PropertyRef Name="Login_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__DoctorPay__Docto__2FCF1A8A">
+    <End Role="Doctor" Type="Self.Doctor" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="DoctorPayOut" Type="Self.DoctorPayOut" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Doctor">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="DoctorPayOut">
+        <PropertyRef Name="Doctor_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__DoctorRep__Docto__30C33EC3">
+    <End Role="Doctor" Type="Self.Doctor" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="DoctorReports" Type="Self.DoctorReports" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Doctor">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="DoctorReports">
+        <PropertyRef Name="Doctor_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__DoctorRep__Patie__31B762FC">
+    <End Role="Patient" Type="Self.Patient" Multiplicity="0..1" />
+    <End Role="DoctorReports" Type="Self.DoctorReports" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Patient">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="DoctorReports">
+        <PropertyRef Name="Patient_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__DriverCom__Login__2EDAF651">
+    <End Role="Driver" Type="Self.Driver" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="DriverComplaint" Type="Self.DriverComplaint" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Driver">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="DriverComplaint">
+        <PropertyRef Name="Login_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__DriverLoc__Drive__6ADAD1BF">
+    <End Role="Driver" Type="Self.Driver" Multiplicity="0..1" />
+    <End Role="DriverLocation" Type="Self.DriverLocation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Driver">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="DriverLocation">
+        <PropertyRef Name="Driver_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__DriverLoc__Patie__7C055DC1">
+    <End Role="Patient" Type="Self.Patient" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="DriverLocation" Type="Self.DriverLocation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Patient">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="DriverLocation">
+        <PropertyRef Name="PatientId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__HealthBoo__Patie__43F60EC8">
+    <End Role="Patient" Type="Self.Patient" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="HealthBooking" Type="Self.HealthBooking" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Patient">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="HealthBooking">
+        <PropertyRef Name="PatientId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__HealthChe__Admin__3587F3E0">
+    <End Role="AdminLogin" Type="Self.AdminLogin" Multiplicity="1" />
+    <End Role="HealthCheckupCenter" Type="Self.HealthCheckupCenter" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AdminLogin">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="HealthCheckupCenter">
+        <PropertyRef Name="AdminLogin_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__HealthChe__Cente__3493CFA7">
+    <End Role="HealthCheckupCenter" Type="Self.HealthCheckupCenter" Multiplicity="1" />
+    <End Role="HealthCheckUp" Type="Self.HealthCheckUp" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="HealthCheckupCenter">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="HealthCheckUp">
+        <PropertyRef Name="Center_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__HealthChe__Cente__38C4533E">
+    <End Role="HealthCheckupCenter" Type="Self.HealthCheckupCenter" Multiplicity="0..1" />
+    <End Role="HealthCheckUpPackage" Type="Self.HealthCheckUpPackage" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="HealthCheckupCenter">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="HealthCheckUpPackage">
+        <PropertyRef Name="CenterId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__HealthChe__State__19DFD96B">
+    <End Role="StateMaster" Type="Self.StateMaster" Multiplicity="1" />
+    <End Role="HealthCheckupCenter" Type="Self.HealthCheckupCenter" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="StateMaster">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="HealthCheckupCenter">
+        <PropertyRef Name="StateMaster_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__HealthPay__Healt__3864608B">
+    <End Role="HealthCheckupCenter" Type="Self.HealthCheckupCenter" Multiplicity="0..1" />
+    <End Role="HealthPayOut" Type="Self.HealthPayOut" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="HealthCheckupCenter">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="HealthPayOut">
+        <PropertyRef Name="Health_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Hospital__AdminL__395884C4">
+    <End Role="AdminLogin" Type="Self.AdminLogin" Multiplicity="1" />
+    <End Role="Hospital" Type="Self.Hospital" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AdminLogin">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Hospital">
+        <PropertyRef Name="AdminLogin_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Hospital__CityMa__48CFD27E">
+    <End Role="CityMaster" Type="Self.CityMaster" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Hospital" Type="Self.Hospital" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CityMaster">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Hospital">
+        <PropertyRef Name="CityMaster_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Hospital__Vendor__595B4002">
+    <End Role="Vendor" Type="Self.Vendor" Multiplicity="0..1" />
+    <End Role="Hospital" Type="Self.Hospital" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Vendor">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Hospital">
+        <PropertyRef Name="Vendor_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__HospitalN__Nurse__76619304">
+    <End Role="NurseType" Type="Self.NurseType" Multiplicity="0..1" />
+    <End Role="HospitalNurse" Type="Self.HospitalNurse" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="NurseType">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="HospitalNurse">
+        <PropertyRef Name="NurseType_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__HospitalR__Hospi__7869D707">
+    <End Role="Hospital" Type="Self.Hospital" Multiplicity="0..1" />
+    <End Role="HospitalReport" Type="Self.HospitalReport" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Hospital">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="HospitalReport">
+        <PropertyRef Name="Hospital_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__HospitalR__Patie__795DFB40">
+    <End Role="Patient" Type="Self.Patient" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="HospitalReport" Type="Self.HospitalReport" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Patient">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="HospitalReport">
+        <PropertyRef Name="Patient_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__HospitalRe__Test__7A521F79">
+    <End Role="LabTest" Type="Self.LabTest" Multiplicity="0..1" />
+    <End Role="HospitalReport" Type="Self.HospitalReport" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="LabTest">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="HospitalReport">
+        <PropertyRef Name="Test" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__LabBookin__Test___48BAC3E5">
+    <End Role="BookTestLab" Type="Self.BookTestLab" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="LabBooking" Type="Self.LabBooking" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BookTestLab">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="LabBooking">
+        <PropertyRef Name="Test_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__LabBookin__TestI__515009E6">
+    <End Role="TestLab" Type="Self.TestLab" Multiplicity="0..1" />
+    <End Role="LabBooking" Type="Self.LabBooking" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TestLab">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="LabBooking">
+        <PropertyRef Name="TestId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__LabPayOut__Lab_I__3F115E1A">
+    <End Role="Lab" Type="Self.Lab" Multiplicity="0..1" />
+    <End Role="LabPayOut" Type="Self.LabPayOut" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Lab">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="LabPayOut">
+        <PropertyRef Name="Lab_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__LabReport__Lab_I__40058253">
+    <End Role="Lab" Type="Self.Lab" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="LabReport" Type="Self.LabReport" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Lab">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="LabReport">
+        <PropertyRef Name="Lab_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__LabReport__Patie__40F9A68C">
+    <End Role="Patient" Type="Self.Patient" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="LabReport" Type="Self.LabReport" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Patient">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="LabReport">
+        <PropertyRef Name="Patient_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Nurse__AdminLogi__42E1EEFE">
+    <End Role="AdminLogin" Type="Self.AdminLogin" Multiplicity="1" />
+    <End Role="Nurse" Type="Self.Nurse" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AdminLogin">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Nurse">
+        <PropertyRef Name="AdminLogin_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Nurse__CityMaste__43D61337">
+    <End Role="CityMaster" Type="Self.CityMaster" Multiplicity="1" />
+    <End Role="Nurse" Type="Self.Nurse" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CityMaster">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Nurse">
+        <PropertyRef Name="CityMaster_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Nurse__StateMast__44CA3770">
+    <End Role="StateMaster" Type="Self.StateMaster" Multiplicity="1" />
+    <End Role="Nurse" Type="Self.Nurse" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="StateMaster">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Nurse">
+        <PropertyRef Name="StateMaster_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Nurse__Vendor_Id__70FDBF69">
+    <End Role="Vendor" Type="Self.Vendor" Multiplicity="0..1" />
+    <End Role="Nurse" Type="Self.Nurse" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Vendor">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Nurse">
+        <PropertyRef Name="Vendor_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__NurseComp__Login__2D87AABC">
+    <End Role="AdminLogin" Type="Self.AdminLogin" Multiplicity="0..1" />
+    <End Role="NurseComplaint" Type="Self.NurseComplaint" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AdminLogin">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="NurseComplaint">
+        <PropertyRef Name="Login_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__NursePayo__Nurse__2EA5EC27">
+    <End Role="Nurse" Type="Self.Nurse" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="NursePayout" Type="Self.NursePayout" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Nurse">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="NursePayout">
+        <PropertyRef Name="Nurse_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__PatientAp__Docto__45BE5BA9">
+    <End Role="Doctor" Type="Self.Doctor" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="PatientAppointment" Type="Self.PatientAppointment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Doctor">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PatientAppointment">
+        <PropertyRef Name="Doctor_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__PatientAp__Hospi__1960B67E">
+    <End Role="Hospital" Type="Self.Hospital" Multiplicity="0..1" />
+    <End Role="PatientAppointment" Type="Self.PatientAppointment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Hospital">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PatientAppointment">
+        <PropertyRef Name="Hospital_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__PatientAp__Hospi__1A54DAB7">
+    <End Role="HospitalDoctor" Type="Self.HospitalDoctor" Multiplicity="0..1" />
+    <End Role="PatientAppointment" Type="Self.PatientAppointment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="HospitalDoctor">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PatientAppointment">
+        <PropertyRef Name="HospitalDoc_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__PatientAp__Hospi__7849DB76">
+    <End Role="Hospital" Type="Self.Hospital" Multiplicity="0..1" />
+    <End Role="PatientAppointment" Type="Self.PatientAppointment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Hospital">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PatientAppointment">
+        <PropertyRef Name="Hospital_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__PatientAp__Hospi__793DFFAF">
+    <End Role="HospitalDoctor" Type="Self.HospitalDoctor" Multiplicity="0..1" />
+    <End Role="PatientAppointment" Type="Self.PatientAppointment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="HospitalDoctor">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PatientAppointment">
+        <PropertyRef Name="HospitalDoc_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__PatientAp__Patie__46B27FE2">
+    <End Role="Patient" Type="Self.Patient" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="PatientAppointment" Type="Self.PatientAppointment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Patient">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PatientAppointment">
+        <PropertyRef Name="Patient_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__PatientAp__Speci__1B48FEF0">
+    <End Role="Specialist" Type="Self.Specialist" Multiplicity="0..1" />
+    <End Role="PatientAppointment" Type="Self.PatientAppointment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Specialist">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PatientAppointment">
+        <PropertyRef Name="Specialist_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__PatientAp__Speci__47A6A41B">
+    <End Role="Specialist" Type="Self.Specialist" Multiplicity="0..1" />
+    <End Role="PatientAppointment" Type="Self.PatientAppointment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Specialist">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PatientAppointment">
+        <PropertyRef Name="Specialist_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__PatientCo__Login__489AC854">
+    <End Role="AdminLogin" Type="Self.AdminLogin" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="PatientComplaints" Type="Self.PatientComplaints" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AdminLogin">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PatientComplaints">
+        <PropertyRef Name="Login_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__PatientRe__Patie__0D64F3ED">
+    <End Role="Patient" Type="Self.Patient" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="PatientRequest" Type="Self.PatientRequest" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Patient">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PatientRequest">
+        <PropertyRef Name="Patient_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__PatientRe__Vehic__0E591826">
+    <End Role="VehicleType" Type="Self.VehicleType" Multiplicity="0..1" />
+    <End Role="PatientRequest" Type="Self.PatientRequest" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="VehicleType">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PatientRequest">
+        <PropertyRef Name="VehicelType_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__RWA__AdminLogin___498EEC8D">
+    <End Role="AdminLogin" Type="Self.AdminLogin" Multiplicity="1" />
+    <End Role="RWA" Type="Self.RWA" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AdminLogin">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="RWA">
+        <PropertyRef Name="AdminLogin_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__RWA__StateMaster__4B7734FF">
+    <End Role="StateMaster" Type="Self.StateMaster" Multiplicity="1" />
+    <End Role="RWA" Type="Self.RWA" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="StateMaster">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="RWA">
+        <PropertyRef Name="StateMaster_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__RwaPayout__Rwa_I__3429BB53">
+    <End Role="RWA" Type="Self.RWA" Multiplicity="0..1" />
+    <End Role="RwaPayout" Type="Self.RwaPayout" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="RWA">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="RwaPayout">
+        <PropertyRef Name="Rwa_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__SalaryMas__Emp_I__0E04126B">
+    <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
+    <End Role="SalaryMaster" Type="Self.SalaryMaster" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Employee">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="SalaryMaster">
+        <PropertyRef Name="Emp_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Specialis__Depar__4C6B5938">
+    <End Role="Department" Type="Self.Department" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Specialist" Type="Self.Specialist" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Department">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Specialist">
+        <PropertyRef Name="Department_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__TestLab__Lab_Id__5224328E">
+    <End Role="Lab" Type="Self.Lab" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="TestLab" Type="Self.TestLab" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Lab">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="TestLab">
+        <PropertyRef Name="Lab_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__TestLab__Test_Id__51300E55">
+    <End Role="LabTest" Type="Self.LabTest" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="TestLab" Type="Self.TestLab" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="LabTest">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="TestLab">
+        <PropertyRef Name="Test_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__TravelMas__Drive__2077C861">
+    <End Role="Driver" Type="Self.Driver" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="TravelMaster" Type="Self.TravelMaster" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Driver">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="TravelMaster">
+        <PropertyRef Name="Driver_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__TravelMas__Patie__1F83A428">
+    <End Role="Patient" Type="Self.Patient" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="TravelMaster" Type="Self.TravelMaster" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Patient">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="TravelMaster">
+        <PropertyRef Name="Patient_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__TravelMas__Vehic__1E8F7FEF">
+    <End Role="VehicleType" Type="Self.VehicleType" Multiplicity="0..1" />
+    <End Role="TravelMaster" Type="Self.TravelMaster" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="VehicleType">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="TravelMaster">
+        <PropertyRef Name="VehicleType_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__TravelMas__Vehic__216BEC9A">
+    <End Role="Vehicle" Type="Self.Vehicle" Multiplicity="0..1" />
+    <End Role="TravelMaster" Type="Self.TravelMaster" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Vehicle">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="TravelMaster">
+        <PropertyRef Name="Vehicle_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__TravelRec__Drive__338A9CD5">
+    <End Role="Driver" Type="Self.Driver" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="TravelRecordMaster" Type="Self.TravelRecordMaster" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Driver">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="TravelRecordMaster">
+        <PropertyRef Name="Driver_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__TravelRec__Patie__3296789C">
+    <End Role="Patient" Type="Self.Patient" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="TravelRecordMaster" Type="Self.TravelRecordMaster" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Patient">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="TravelRecordMaster">
+        <PropertyRef Name="Patient_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__TravelRec__Vehic__347EC10E">
+    <End Role="Vehicle" Type="Self.Vehicle" Multiplicity="0..1" />
+    <End Role="TravelRecordMaster" Type="Self.TravelRecordMaster" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Vehicle">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="TravelRecordMaster">
+        <PropertyRef Name="Vehicle_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Vehicle__Vendor___6166761E">
+    <End Role="Vendor" Type="Self.Vendor" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Vehicle" Type="Self.Vehicle" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Vendor">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Vehicle">
+        <PropertyRef Name="Vendor_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__VehicleCh__Categ__0D99FE17">
+    <End Role="MainCategory" Type="Self.MainCategory" Multiplicity="0..1" />
+    <End Role="VehicleCharges" Type="Self.VehicleCharges" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MainCategory">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="VehicleCharges">
+        <PropertyRef Name="Category_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__VehicleCh__TypeI__0E8E2250">
+    <End Role="VehicleType" Type="Self.VehicleType" Multiplicity="0..1" />
+    <End Role="VehicleCharges" Type="Self.VehicleCharges" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="VehicleType">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="VehicleCharges">
+        <PropertyRef Name="TypeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__VehicleTe__Categ__60C757A0">
+    <End Role="MainCategory" Type="Self.MainCategory" Multiplicity="0..1" />
+    <End Role="VehicleTemp" Type="Self.VehicleTemp" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MainCategory">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="VehicleTemp">
+        <PropertyRef Name="Category_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__VehicleTe__Login__5090EFD7">
+    <End Role="AdminLogin" Type="Self.AdminLogin" Multiplicity="0..1" />
+    <End Role="VehicleTemp" Type="Self.VehicleTemp" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AdminLogin">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="VehicleTemp">
+        <PropertyRef Name="Login_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__VehicleTy__Categ__5FD33367">
+    <End Role="MainCategory" Type="Self.MainCategory" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="VehicleType" Type="Self.VehicleType" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MainCategory">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="VehicleType">
+        <PropertyRef Name="Category_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Vendor__AdminLog__51300E55">
+    <End Role="AdminLogin" Type="Self.AdminLogin" Multiplicity="1" />
+    <End Role="Vendor" Type="Self.Vendor" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AdminLogin">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Vendor">
+        <PropertyRef Name="AdminLogin_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__VendorPay__Vendo__6ABAD62E">
+    <End Role="Vendor" Type="Self.Vendor" Multiplicity="0..1" />
+    <End Role="VendorPayOut" Type="Self.VendorPayOut" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Vendor">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="VendorPayOut">
+        <PropertyRef Name="Vendor_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AmbulanceType">
+    <End Role="AmbulanceType" Type="Self.AmbulanceType" Multiplicity="0..1" />
+    <End Role="MainCategory" Type="Self.MainCategory" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AmbulanceType">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="MainCategory">
+        <PropertyRef Name="AmbulanceType_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DoctorChooseDepartment_DoctorChooseDepartment">
+    <End Role="DoctorChooseDepartment" Type="Self.DoctorChooseDepartment" Multiplicity="1" />
+    <End Role="DoctorChooseDepartment1" Type="Self.DoctorChooseDepartment" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="DoctorChooseDepartment">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="DoctorChooseDepartment1">
+        <PropertyRef Name="Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Hospital_StateMaster">
+    <End Role="StateMaster" Type="Self.StateMaster" Multiplicity="1" />
+    <End Role="Hospital" Type="Self.Hospital" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="StateMaster">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Hospital">
+        <PropertyRef Name="StateMaster_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Vendor_City">
+    <End Role="CityMaster" Type="Self.CityMaster" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Vendor" Type="Self.Vendor" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CityMaster">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Vendor">
+        <PropertyRef Name="City_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Vendor_State">
+    <End Role="StateMaster" Type="Self.StateMaster" Multiplicity="1" />
+    <End Role="Vendor" Type="Self.Vendor" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="StateMaster">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Vendor">
+        <PropertyRef Name="StateMaster_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Function Name="droptable" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="admin_Hospital" />
+  <Function Name="GEtAllMedicines" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="admin_Hospital" />
+  <Function Name="GetNearDriver" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="admin_Hospital">
+    <Parameter Name="DriverId" Type="int" Mode="In" />
+    <Parameter Name="KM" Type="int" Mode="In" />
+    <Parameter Name="Name" Type="varchar" Mode="In" />
+    <Parameter Name="DL" Type="varchar" Mode="In" />
+    <Parameter Name="Charge" Type="int" Mode="In" />
+    <Parameter Name="DeviceId" Type="varchar(max)" Mode="In" />
+    <Parameter Name="ToatlDistance" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_AppointmentHistory" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="admin_Hospital">
+    <Parameter Name="patientId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="AddMedicineToCart" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="patientId" Type="int" Mode="In" />
+    <Parameter Name="medicineId" Type="int" Mode="In" />
+    <Parameter Name="qty" Type="int" Mode="In" />
+  </Function>
+  <Function Name="AppointmentNurseFor24Hrs" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="patientId" Type="int" Mode="In" />
+    <Parameter Name="mobile" Type="nvarchar" Mode="In" />
+    <Parameter Name="nurseTypeId" Type="int" Mode="In" />
+    <Parameter Name="locationId" Type="int" Mode="In" />
+    <Parameter Name="serviceDate" Type="datetime" Mode="In" />
+    <Parameter Name="serviceType" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="AppointmentTestNurse" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="patientId" Type="int" Mode="In" />
+    <Parameter Name="mobile" Type="nvarchar" Mode="In" />
+    <Parameter Name="startdate" Type="datetime" Mode="In" />
+    <Parameter Name="Enddate" Type="datetime" Mode="In" />
+    <Parameter Name="requestdate" Type="datetime" Mode="In" />
+    <Parameter Name="nurseTypeId" Type="int" Mode="In" />
+    <Parameter Name="locationId" Type="int" Mode="In" />
+    <Parameter Name="serviceDate" Type="datetime" Mode="In" />
+    <Parameter Name="serviceType" Type="nvarchar" Mode="In" />
+    <Parameter Name="serviceTime" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="AppointmentWithNurse" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="patientId" Type="int" Mode="In" />
+    <Parameter Name="mobile" Type="nvarchar" Mode="In" />
+    <Parameter Name="startDate" Type="datetime" Mode="In" />
+    <Parameter Name="endDate" Type="datetime" Mode="In" />
+    <Parameter Name="nurseTypeId" Type="int" Mode="In" />
+    <Parameter Name="locationId" Type="int" Mode="In" />
+    <Parameter Name="serviceType" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="DeleteMedicineFromCart" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="cartId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="DeleteNearDriver" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="DistanceKM" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="real">
+    <Parameter Name="Lat1" Type="real" Mode="In" />
+    <Parameter Name="Lat2" Type="real" Mode="In" />
+    <Parameter Name="Long1" Type="real" Mode="In" />
+    <Parameter Name="Long2" Type="real" Mode="In" />
+  </Function>
+  <Function Name="DriverCharges" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
+  <Function Name="GetMedicineCart" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="patientId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="getMedicineInvoiceNumber" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="varchar" />
+  <Function Name="getMedicineOrderId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="varchar" />
+  <Function Name="GetNurseAppointmentList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="nurseTypeId" Type="int" Mode="In" />
+    <Parameter Name="nurseId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="GetTotalAmountOfOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="float">
+    <Parameter Name="orderId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_AddCheckUp" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Center_Id" Type="int" Mode="In" />
+    <Parameter Name="Name" Type="nvarchar" Mode="In" />
+    <Parameter Name="TestDesc" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="TestAmount" Type="float" Mode="In" />
+  </Function>
+  <Function Name="sp_getChemistOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="chemistId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_GetNearestMedicalShop" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="userLat" Type="float" Mode="In" />
+    <Parameter Name="userLng" Type="float" Mode="In" />
+  </Function>
+  <Function Name="sp_getOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="patientId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_getOrderDetail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="orderId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_PatientAppointments" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="patientId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_saveOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="patientId" Type="int" Mode="In" />
+    <Parameter Name="chemistId" Type="int" Mode="In" />
+    <Parameter Name="name" Type="nvarchar" Mode="In" />
+    <Parameter Name="mobile" Type="nvarchar" Mode="In" />
+    <Parameter Name="stateId" Type="int" Mode="In" />
+    <Parameter Name="cityId" Type="int" Mode="In" />
+    <Parameter Name="address" Type="nvarchar" Mode="In" />
+    <Parameter Name="pincode" Type="nvarchar" Mode="In" />
+    <Parameter Name="LocationId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_SearchNurse" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="locationId" Type="int" Mode="In" />
+    <Parameter Name="nurseTypeId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="spVehicleCategory" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Type" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="spVehicleList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="CategoryId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="udf_AppointmentSlots" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="doctorId" Type="int" Mode="In" />
+    <ReturnType>
+      <CollectionType>
+        <RowType>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="n" Type="bigint" />
+          <Property Name="TimeSlot" Type="varchar" MaxLength="203" />
+          <Property Name="TSStart" Type="time" Precision="7" />
+          <Property Name="TSEnd" Type="time" Precision="7" />
+        </RowType>
+      </CollectionType>
+    </ReturnType>
+  </Function>
+  <Function Name="udf_getAppointmentSlots" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="doctorId" Type="int" Mode="In" />
+    <ReturnType>
+      <CollectionType>
+        <RowType>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="TSStart" Type="time" Precision="7" />
+          <Property Name="TSEnd" Type="time" Precision="7" />
+          <Property Name="Timeslot" Type="varchar" MaxLength="203" />
+        </RowType>
+      </CollectionType>
+    </ReturnType>
+  </Function>
+  <Function Name="UpdateCartQuantity" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="patientId" Type="int" Mode="In" />
+    <Parameter Name="medicineId" Type="int" Mode="In" />
+    <Parameter Name="type" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="usp_AppintmentSlots" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="doctorId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="usp_getAppintmentSlots" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="doctorId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="usp_GetBookingList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PatientId" Type="int" Mode="In" />
+  </Function>
+  <EntityContainer Name="ModelStoreContainer">
+    <EntitySet Name="AddFranchiseDepartment" EntityType="Self.AddFranchiseDepartment" Schema="admin_Hospital" store:Type="Tables" />
+    <EntitySet Name="AmbulanceType" EntityType="Self.AmbulanceType" Schema="admin_Hospital" store:Type="Tables" />
+    <EntitySet Name="Banner" EntityType="Self.Banner" Schema="admin_Hospital" store:Type="Tables" />
+    <EntitySet Name="Bannerprofessional" EntityType="Self.Bannerprofessional" Schema="admin_Hospital" store:Type="Tables" />
+    <EntitySet Name="chemistcomplaint" EntityType="Self.chemistcomplaint" Schema="admin_Hospital" store:Type="Tables" />
+    <EntitySet Name="ChemistMedicine" EntityType="Self.ChemistMedicine" Schema="admin_Hospital" store:Type="Tables" />
+    <EntitySet Name="Discount" EntityType="Self.Discount" Schema="admin_Hospital" store:Type="Tables" />
+    <EntitySet Name="DoctorBookingMode" EntityType="Self.DoctorBookingMode" Schema="admin_Hospital" store:Type="Tables" />
+    <EntitySet Name="DoctorChooseDepartment" EntityType="Self.DoctorChooseDepartment" Schema="admin_Hospital" store:Type="Tables" />
+    <EntitySet Name="DoctorTimeSlot" EntityType="Self.DoctorTimeSlot" Schema="admin_Hospital" store:Type="Tables" />
+    <EntitySet Name="DriverComplaint" EntityType="Self.DriverComplaint" Schema="admin_Hospital" store:Type="Tables" />
+    <EntitySet Name="FraAddVehicleType" EntityType="Self.FraAddVehicleType" Schema="admin_Hospital" store:Type="Tables" />
+    <EntitySet Name="FranchiseGstMaster" EntityType="Self.FranchiseGstMaster" Schema="admin_Hospital" store:Type="Tables" />
+    <EntitySet Name="FranchiseTDSMaster" EntityType="Self.FranchiseTDSMaster" Schema="admin_Hospital" store:Type="Tables" />
+    <EntitySet Name="LabComplaint" EntityType="Self.LabComplaint" Schema="admin_Hospital" store:Type="Tables" />
+    <EntitySet Name="Media" EntityType="Self.Media" Schema="admin_Hospital" store:Type="Tables" />
+    <EntitySet Name="MediaHospital" EntityType="Self.MediaHospital" Schema="admin_Hospital" store:Type="Tables" />
+    <EntitySet Name="Medicinedeliver" EntityType="Self.Medicinedeliver" Schema="admin_Hospital" store:Type="Tables" />
+    <EntitySet Name="MedicineDeliveryCharge" EntityType="Self.MedicineDeliveryCharge" Schema="admin_Hospital" store:Type="Tables" />
+    <EntitySet Name="MedicinePrescriptionDetail" EntityType="Self.MedicinePrescriptionDetail" Schema="admin_Hospital" store:Type="Tables" />
+    <EntitySet Name="NearDriver" EntityType="Self.NearDriver" Schema="admin_Hospital" store:Type="Tables" />
+    <EntitySet Name="Nurse_Rep" EntityType="Self.Nurse_Rep" Schema="admin_Hospital" store:Type="Tables" />
+    <EntitySet Name="NurseComplaint" EntityType="Self.NurseComplaint" Schema="admin_Hospital" store:Type="Tables" />
+    <EntitySet Name="PatientSubjects" EntityType="Self.PatientSubjects" Schema="admin_Hospital" store:Type="Tables" />
+    <EntitySet Name="PenaltyAmount" EntityType="Self.PenaltyAmount" Schema="admin_Hospital" store:Type="Tables" />
+    <EntitySet Name="PFMaster" EntityType="Self.PFMaster" Schema="admin_Hospital" store:Type="Tables" />
+    <EntitySet Name="PrescriptionAppointments" EntityType="Self.PrescriptionAppointments" Schema="admin_Hospital" store:Type="Tables" />
+    <EntitySet Name="Review" EntityType="Self.Review" Schema="admin_Hospital" store:Type="Tables" />
+    <EntitySet Name="RWA_PaymentReport" EntityType="Self.RWA_PaymentReport" Schema="admin_Hospital" store:Type="Tables" />
+    <EntitySet Name="RWAGstMaster" EntityType="Self.RWAGstMaster" Schema="admin_Hospital" store:Type="Tables" />
+    <EntitySet Name="RWAPayment" EntityType="Self.RWAPayment" Schema="admin_Hospital" store:Type="Tables" />
+    <EntitySet Name="RWATDSMaster" EntityType="Self.RWATDSMaster" Schema="admin_Hospital" store:Type="Tables" />
+    <EntitySet Name="TestInLab" EntityType="Self.TestInLab" Schema="admin_Hospital" store:Type="Tables" />
+    <EntitySet Name="TimeSlot" EntityType="Self.TimeSlot" Schema="admin_Hospital" store:Type="Tables" />
+    <EntitySet Name="UserWallet" EntityType="Self.UserWallet" Schema="admin_Hospital" store:Type="Tables" />
+    <EntitySet Name="VehicleTemp" EntityType="Self.VehicleTemp" Schema="admin_Hospital" store:Type="Tables" />
+    <EntitySet Name="AdminLogin" EntityType="Self.AdminLogin" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="BankDetails" EntityType="Self.BankDetails" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="BookTestLab" EntityType="Self.BookTestLab" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CancelledAppointment" EntityType="Self.CancelledAppointment" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Charges" EntityType="Self.Charges" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CheckUpReport" EntityType="Self.CheckUpReport" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ChekcupCenterDepartment" EntityType="Self.ChekcupCenterDepartment" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Chemist" EntityType="Self.Chemist" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ChemistPayOut" EntityType="Self.ChemistPayOut" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CityMaster" EntityType="Self.CityMaster" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CityTemp" EntityType="Self.CityTemp" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CmpltCheckUp" EntityType="Self.CmpltCheckUp" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CommissionMaster" EntityType="Self.CommissionMaster" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Content" EntityType="Self.Content" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Department" EntityType="Self.Department" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="DepartmentTemp" EntityType="Self.DepartmentTemp" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Doctor" EntityType="Self.Doctor" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="DoctorClinics" EntityType="Self.DoctorClinics" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="DoctorComplaints" EntityType="Self.DoctorComplaints" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="DoctorDepartment" EntityType="Self.DoctorDepartment" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="DoctorPayOut" EntityType="Self.DoctorPayOut" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="DoctorReports" EntityType="Self.DoctorReports" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="DoctorSkill" EntityType="Self.DoctorSkill" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Driver" EntityType="Self.Driver" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="DriverLocation" EntityType="Self.DriverLocation" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="DriverPayOut" EntityType="Self.DriverPayOut" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Employee" EntityType="Self.Employee" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ExpenseReport" EntityType="Self.ExpenseReport" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Franchise_Department" EntityType="Self.Franchise_Department" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Franchise_Specialist" EntityType="Self.Franchise_Specialist" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="FranchiseComplaint" EntityType="Self.FranchiseComplaint" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Gallery" EntityType="Self.Gallery" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="GSTMaster" EntityType="Self.GSTMaster" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="HealthBooking" EntityType="Self.HealthBooking" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="HealthCheckUp" EntityType="Self.HealthCheckUp" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="HealthCheckupCenter" EntityType="Self.HealthCheckupCenter" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="HealthCheckUpPackage" EntityType="Self.HealthCheckUpPackage" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="HealthLabTest" EntityType="Self.HealthLabTest" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="HealthPackageMaster" EntityType="Self.HealthPackageMaster" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="HealthPayOut" EntityType="Self.HealthPayOut" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="HopitalFaciltiy" EntityType="Self.HopitalFaciltiy" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Hospital" EntityType="Self.Hospital" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="HospitalDepartment" EntityType="Self.HospitalDepartment" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="HospitalDoctor" EntityType="Self.HospitalDoctor" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="HospitalDoctorDepartment" EntityType="Self.HospitalDoctorDepartment" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="HospitalNurse" EntityType="Self.HospitalNurse" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="HospitalReport" EntityType="Self.HospitalReport" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Lab" EntityType="Self.Lab" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="LabBooking" EntityType="Self.LabBooking" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="LabPayOut" EntityType="Self.LabPayOut" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="LabReport" EntityType="Self.LabReport" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="LabTest" EntityType="Self.LabTest" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Location" EntityType="Self.Location" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Mail" EntityType="Self.Mail" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MainCategory" EntityType="Self.MainCategory" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Medicine" EntityType="Self.Medicine" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Medicine Pay" EntityType="Self.Medicine Pay" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MedicineCart" EntityType="Self.MedicineCart" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MedicineOrder" EntityType="Self.MedicineOrder" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MedicineOrderDetail" EntityType="Self.MedicineOrderDetail" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MedicineType" EntityType="Self.MedicineType" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Nurse" EntityType="Self.Nurse" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Nurse_Location" EntityType="Self.Nurse_Location" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="NursePayout" EntityType="Self.NursePayout" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="NurseService" EntityType="Self.NurseService" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="NurseServiceRequest" EntityType="Self.NurseServiceRequest" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="NurseType" EntityType="Self.NurseType" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PageMaster" EntityType="Self.PageMaster" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Patient" EntityType="Self.Patient" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PatientAppointment" EntityType="Self.PatientAppointment" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PatientComplaints" EntityType="Self.PatientComplaints" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PatientRequest" EntityType="Self.PatientRequest" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PaymentMaster" EntityType="Self.PaymentMaster" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PayoutMaster" EntityType="Self.PayoutMaster" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="RWA" EntityType="Self.RWA" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="RWA_Complaints" EntityType="Self.RWA_Complaints" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="RwaPayout" EntityType="Self.RwaPayout" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SalaryMaster" EntityType="Self.SalaryMaster" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Specialist" EntityType="Self.Specialist" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="StateMaster" EntityType="Self.StateMaster" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TDSMaster" EntityType="Self.TDSMaster" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TempDepartment" EntityType="Self.TempDepartment" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TestLab" EntityType="Self.TestLab" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TravelMaster" EntityType="Self.TravelMaster" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TravelRecordMaster" EntityType="Self.TravelRecordMaster" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Vehicle" EntityType="Self.Vehicle" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="VehicleCharges" EntityType="Self.VehicleCharges" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="VehicleType" EntityType="Self.VehicleType" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Vendor" EntityType="Self.Vendor" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="VendorPayOut" EntityType="Self.VendorPayOut" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="franchiseRole" EntityType="Self.franchiseRole" store:Type="Tables" store:Schema="admin_Hospital">
+      <DefiningQuery>SELECT 
+    [franchiseRole].[Id] AS [Id], 
+    [franchiseRole].[RoleName] AS [RoleName]
+    FROM [admin_Hospital].[franchiseRole] AS [franchiseRole]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="AppLog" EntityType="Self.AppLog" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [AppLog].[Date] AS [Date], 
+    [AppLog].[Thread] AS [Thread], 
+    [AppLog].[Level] AS [Level], 
+    [AppLog].[Logger] AS [Logger], 
+    [AppLog].[Message] AS [Message], 
+    [AppLog].[Exception] AS [Exception]
+    FROM [dbo].[AppLog] AS [AppLog]</DefiningQuery>
+    </EntitySet>
+    <AssociationSet Name="FK__BankDetai__Login__269AB60B" Association="Self.FK__BankDetai__Login__269AB60B">
+      <End Role="AdminLogin" EntitySet="AdminLogin" />
+      <End Role="BankDetails" EntitySet="BankDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK__BookTestL__Patie__56E8E7AB" Association="Self.FK__BookTestL__Patie__56E8E7AB">
+      <End Role="Patient" EntitySet="Patient" />
+      <End Role="BookTestLab" EntitySet="BookTestLab" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Cancelled__Cance__25C68D63" Association="Self.FK__Cancelled__Cance__25C68D63">
+      <End Role="PatientAppointment" EntitySet="PatientAppointment" />
+      <End Role="CancelledAppointment" EntitySet="CancelledAppointment" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Cancelled__Docto__1F198FD4" Association="Self.FK__Cancelled__Docto__1F198FD4">
+      <End Role="Doctor" EntitySet="Doctor" />
+      <End Role="CancelledAppointment" EntitySet="CancelledAppointment" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Cancelled__Hospi__22EA20B8" Association="Self.FK__Cancelled__Hospi__22EA20B8">
+      <End Role="HospitalDoctor" EntitySet="HospitalDoctor" />
+      <End Role="CancelledAppointment" EntitySet="CancelledAppointment" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Cancelled__Hospi__23DE44F1" Association="Self.FK__Cancelled__Hospi__23DE44F1">
+      <End Role="HospitalDoctor" EntitySet="HospitalDoctor" />
+      <End Role="CancelledAppointment" EntitySet="CancelledAppointment" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Cancelled__Patie__1E256B9B" Association="Self.FK__Cancelled__Patie__1E256B9B">
+      <End Role="Patient" EntitySet="Patient" />
+      <End Role="CancelledAppointment" EntitySet="CancelledAppointment" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Cancelled__Speci__200DB40D" Association="Self.FK__Cancelled__Speci__200DB40D">
+      <End Role="Specialist" EntitySet="Specialist" />
+      <End Role="CancelledAppointment" EntitySet="CancelledAppointment" />
+    </AssociationSet>
+    <AssociationSet Name="FK__CheckUpRe__Check__2180FB33" Association="Self.FK__CheckUpRe__Check__2180FB33">
+      <End Role="HealthCheckupCenter" EntitySet="HealthCheckupCenter" />
+      <End Role="CheckUpReport" EntitySet="CheckUpReport" />
+    </AssociationSet>
+    <AssociationSet Name="FK__CheckUpRe__Patie__22751F6C" Association="Self.FK__CheckUpRe__Patie__22751F6C">
+      <End Role="Patient" EntitySet="Patient" />
+      <End Role="CheckUpReport" EntitySet="CheckUpReport" />
+    </AssociationSet>
+    <AssociationSet Name="FK__CheckUpRe__TestI__3AC1AA49" Association="Self.FK__CheckUpRe__TestI__3AC1AA49">
+      <End Role="LabTest" EntitySet="LabTest" />
+      <End Role="CheckUpReport" EntitySet="CheckUpReport" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Chemist__AdminLo__236943A5" Association="Self.FK__Chemist__AdminLo__236943A5">
+      <End Role="AdminLogin" EntitySet="AdminLogin" />
+      <End Role="Chemist" EntitySet="Chemist" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Chemist__Vendor___58671BC9" Association="Self.FK__Chemist__Vendor___58671BC9">
+      <End Role="Vendor" EntitySet="Vendor" />
+      <End Role="Chemist" EntitySet="Chemist" />
+    </AssociationSet>
+    <AssociationSet Name="FK__ChemistPa__Chemi__2645B050" Association="Self.FK__ChemistPa__Chemi__2645B050">
+      <End Role="Chemist" EntitySet="Chemist" />
+      <End Role="ChemistPayOut" EntitySet="ChemistPayOut" />
+    </AssociationSet>
+    <AssociationSet Name="FK__CityMaste__State__2739D489" Association="Self.FK__CityMaste__State__2739D489">
+      <End Role="StateMaster" EntitySet="StateMaster" />
+      <End Role="CityMaster" EntitySet="CityMaster" />
+    </AssociationSet>
+    <AssociationSet Name="FK__CityTemp__Login___4CC05EF3" Association="Self.FK__CityTemp__Login___4CC05EF3">
+      <End Role="AdminLogin" EntitySet="AdminLogin" />
+      <End Role="CityTemp" EntitySet="CityTemp" />
+    </AssociationSet>
+    <AssociationSet Name="FK__CityTemp__State___4DB4832C" Association="Self.FK__CityTemp__State___4DB4832C">
+      <End Role="StateMaster" EntitySet="StateMaster" />
+      <End Role="CityTemp" EntitySet="CityTemp" />
+    </AssociationSet>
+    <AssociationSet Name="FK__CmpltChec__Cente__282DF8C2" Association="Self.FK__CmpltChec__Cente__282DF8C2">
+      <End Role="HealthCheckupCenter" EntitySet="HealthCheckupCenter" />
+      <End Role="CmpltCheckUp" EntitySet="CmpltCheckUp" />
+    </AssociationSet>
+    <AssociationSet Name="FK__CmpltChec__Patie__29221CFB" Association="Self.FK__CmpltChec__Patie__29221CFB">
+      <End Role="Patient" EntitySet="Patient" />
+      <End Role="CmpltCheckUp" EntitySet="CmpltCheckUp" />
+    </AssociationSet>
+    <AssociationSet Name="FK__CmpltChec__Test___3D491139" Association="Self.FK__CmpltChec__Test___3D491139">
+      <End Role="HealthCheckUp" EntitySet="HealthCheckUp" />
+      <End Role="CmpltCheckUp" EntitySet="CmpltCheckUp" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Doctor__AdminLog__2A164134" Association="Self.FK__Doctor__AdminLog__2A164134">
+      <End Role="AdminLogin" EntitySet="AdminLogin" />
+      <End Role="Doctor" EntitySet="Doctor" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Doctor__StateMas__2DE6D218" Association="Self.FK__Doctor__StateMas__2DE6D218">
+      <End Role="StateMaster" EntitySet="StateMaster" />
+      <End Role="Doctor" EntitySet="Doctor" />
+    </AssociationSet>
+    <AssociationSet Name="FK__DoctorCom__Login__2EDAF651" Association="Self.FK__DoctorCom__Login__2EDAF651">
+      <End Role="Doctor" EntitySet="Doctor" />
+      <End Role="DoctorComplaints" EntitySet="DoctorComplaints" />
+    </AssociationSet>
+    <AssociationSet Name="FK__DoctorPay__Docto__2FCF1A8A" Association="Self.FK__DoctorPay__Docto__2FCF1A8A">
+      <End Role="Doctor" EntitySet="Doctor" />
+      <End Role="DoctorPayOut" EntitySet="DoctorPayOut" />
+    </AssociationSet>
+    <AssociationSet Name="FK__DoctorRep__Docto__30C33EC3" Association="Self.FK__DoctorRep__Docto__30C33EC3">
+      <End Role="Doctor" EntitySet="Doctor" />
+      <End Role="DoctorReports" EntitySet="DoctorReports" />
+    </AssociationSet>
+    <AssociationSet Name="FK__DoctorRep__Patie__31B762FC" Association="Self.FK__DoctorRep__Patie__31B762FC">
+      <End Role="Patient" EntitySet="Patient" />
+      <End Role="DoctorReports" EntitySet="DoctorReports" />
+    </AssociationSet>
+    <AssociationSet Name="FK__DriverCom__Login__2EDAF651" Association="Self.FK__DriverCom__Login__2EDAF651">
+      <End Role="Driver" EntitySet="Driver" />
+      <End Role="DriverComplaint" EntitySet="DriverComplaint" />
+    </AssociationSet>
+    <AssociationSet Name="FK__DriverLoc__Drive__6ADAD1BF" Association="Self.FK__DriverLoc__Drive__6ADAD1BF">
+      <End Role="Driver" EntitySet="Driver" />
+      <End Role="DriverLocation" EntitySet="DriverLocation" />
+    </AssociationSet>
+    <AssociationSet Name="FK__DriverLoc__Patie__7C055DC1" Association="Self.FK__DriverLoc__Patie__7C055DC1">
+      <End Role="Patient" EntitySet="Patient" />
+      <End Role="DriverLocation" EntitySet="DriverLocation" />
+    </AssociationSet>
+    <AssociationSet Name="FK__HealthBoo__Patie__43F60EC8" Association="Self.FK__HealthBoo__Patie__43F60EC8">
+      <End Role="Patient" EntitySet="Patient" />
+      <End Role="HealthBooking" EntitySet="HealthBooking" />
+    </AssociationSet>
+    <AssociationSet Name="FK__HealthChe__Admin__3587F3E0" Association="Self.FK__HealthChe__Admin__3587F3E0">
+      <End Role="AdminLogin" EntitySet="AdminLogin" />
+      <End Role="HealthCheckupCenter" EntitySet="HealthCheckupCenter" />
+    </AssociationSet>
+    <AssociationSet Name="FK__HealthChe__Cente__3493CFA7" Association="Self.FK__HealthChe__Cente__3493CFA7">
+      <End Role="HealthCheckupCenter" EntitySet="HealthCheckupCenter" />
+      <End Role="HealthCheckUp" EntitySet="HealthCheckUp" />
+    </AssociationSet>
+    <AssociationSet Name="FK__HealthChe__Cente__38C4533E" Association="Self.FK__HealthChe__Cente__38C4533E">
+      <End Role="HealthCheckupCenter" EntitySet="HealthCheckupCenter" />
+      <End Role="HealthCheckUpPackage" EntitySet="HealthCheckUpPackage" />
+    </AssociationSet>
+    <AssociationSet Name="FK__HealthChe__State__19DFD96B" Association="Self.FK__HealthChe__State__19DFD96B">
+      <End Role="StateMaster" EntitySet="StateMaster" />
+      <End Role="HealthCheckupCenter" EntitySet="HealthCheckupCenter" />
+    </AssociationSet>
+    <AssociationSet Name="FK__HealthPay__Healt__3864608B" Association="Self.FK__HealthPay__Healt__3864608B">
+      <End Role="HealthCheckupCenter" EntitySet="HealthCheckupCenter" />
+      <End Role="HealthPayOut" EntitySet="HealthPayOut" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Hospital__AdminL__395884C4" Association="Self.FK__Hospital__AdminL__395884C4">
+      <End Role="AdminLogin" EntitySet="AdminLogin" />
+      <End Role="Hospital" EntitySet="Hospital" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Hospital__CityMa__48CFD27E" Association="Self.FK__Hospital__CityMa__48CFD27E">
+      <End Role="CityMaster" EntitySet="CityMaster" />
+      <End Role="Hospital" EntitySet="Hospital" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Hospital__Vendor__595B4002" Association="Self.FK__Hospital__Vendor__595B4002">
+      <End Role="Vendor" EntitySet="Vendor" />
+      <End Role="Hospital" EntitySet="Hospital" />
+    </AssociationSet>
+    <AssociationSet Name="FK__HospitalN__Nurse__76619304" Association="Self.FK__HospitalN__Nurse__76619304">
+      <End Role="NurseType" EntitySet="NurseType" />
+      <End Role="HospitalNurse" EntitySet="HospitalNurse" />
+    </AssociationSet>
+    <AssociationSet Name="FK__HospitalR__Hospi__7869D707" Association="Self.FK__HospitalR__Hospi__7869D707">
+      <End Role="Hospital" EntitySet="Hospital" />
+      <End Role="HospitalReport" EntitySet="HospitalReport" />
+    </AssociationSet>
+    <AssociationSet Name="FK__HospitalR__Patie__795DFB40" Association="Self.FK__HospitalR__Patie__795DFB40">
+      <End Role="Patient" EntitySet="Patient" />
+      <End Role="HospitalReport" EntitySet="HospitalReport" />
+    </AssociationSet>
+    <AssociationSet Name="FK__HospitalRe__Test__7A521F79" Association="Self.FK__HospitalRe__Test__7A521F79">
+      <End Role="LabTest" EntitySet="LabTest" />
+      <End Role="HospitalReport" EntitySet="HospitalReport" />
+    </AssociationSet>
+    <AssociationSet Name="FK__LabBookin__Test___48BAC3E5" Association="Self.FK__LabBookin__Test___48BAC3E5">
+      <End Role="BookTestLab" EntitySet="BookTestLab" />
+      <End Role="LabBooking" EntitySet="LabBooking" />
+    </AssociationSet>
+    <AssociationSet Name="FK__LabBookin__TestI__515009E6" Association="Self.FK__LabBookin__TestI__515009E6">
+      <End Role="TestLab" EntitySet="TestLab" />
+      <End Role="LabBooking" EntitySet="LabBooking" />
+    </AssociationSet>
+    <AssociationSet Name="FK__LabPayOut__Lab_I__3F115E1A" Association="Self.FK__LabPayOut__Lab_I__3F115E1A">
+      <End Role="Lab" EntitySet="Lab" />
+      <End Role="LabPayOut" EntitySet="LabPayOut" />
+    </AssociationSet>
+    <AssociationSet Name="FK__LabReport__Lab_I__40058253" Association="Self.FK__LabReport__Lab_I__40058253">
+      <End Role="Lab" EntitySet="Lab" />
+      <End Role="LabReport" EntitySet="LabReport" />
+    </AssociationSet>
+    <AssociationSet Name="FK__LabReport__Patie__40F9A68C" Association="Self.FK__LabReport__Patie__40F9A68C">
+      <End Role="Patient" EntitySet="Patient" />
+      <End Role="LabReport" EntitySet="LabReport" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Nurse__AdminLogi__42E1EEFE" Association="Self.FK__Nurse__AdminLogi__42E1EEFE">
+      <End Role="AdminLogin" EntitySet="AdminLogin" />
+      <End Role="Nurse" EntitySet="Nurse" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Nurse__CityMaste__43D61337" Association="Self.FK__Nurse__CityMaste__43D61337">
+      <End Role="CityMaster" EntitySet="CityMaster" />
+      <End Role="Nurse" EntitySet="Nurse" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Nurse__StateMast__44CA3770" Association="Self.FK__Nurse__StateMast__44CA3770">
+      <End Role="StateMaster" EntitySet="StateMaster" />
+      <End Role="Nurse" EntitySet="Nurse" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Nurse__Vendor_Id__70FDBF69" Association="Self.FK__Nurse__Vendor_Id__70FDBF69">
+      <End Role="Vendor" EntitySet="Vendor" />
+      <End Role="Nurse" EntitySet="Nurse" />
+    </AssociationSet>
+    <AssociationSet Name="FK__NurseComp__Login__2D87AABC" Association="Self.FK__NurseComp__Login__2D87AABC">
+      <End Role="AdminLogin" EntitySet="AdminLogin" />
+      <End Role="NurseComplaint" EntitySet="NurseComplaint" />
+    </AssociationSet>
+    <AssociationSet Name="FK__NursePayo__Nurse__2EA5EC27" Association="Self.FK__NursePayo__Nurse__2EA5EC27">
+      <End Role="Nurse" EntitySet="Nurse" />
+      <End Role="NursePayout" EntitySet="NursePayout" />
+    </AssociationSet>
+    <AssociationSet Name="FK__PatientAp__Docto__45BE5BA9" Association="Self.FK__PatientAp__Docto__45BE5BA9">
+      <End Role="Doctor" EntitySet="Doctor" />
+      <End Role="PatientAppointment" EntitySet="PatientAppointment" />
+    </AssociationSet>
+    <AssociationSet Name="FK__PatientAp__Hospi__1960B67E" Association="Self.FK__PatientAp__Hospi__1960B67E">
+      <End Role="Hospital" EntitySet="Hospital" />
+      <End Role="PatientAppointment" EntitySet="PatientAppointment" />
+    </AssociationSet>
+    <AssociationSet Name="FK__PatientAp__Hospi__1A54DAB7" Association="Self.FK__PatientAp__Hospi__1A54DAB7">
+      <End Role="HospitalDoctor" EntitySet="HospitalDoctor" />
+      <End Role="PatientAppointment" EntitySet="PatientAppointment" />
+    </AssociationSet>
+    <AssociationSet Name="FK__PatientAp__Hospi__7849DB76" Association="Self.FK__PatientAp__Hospi__7849DB76">
+      <End Role="Hospital" EntitySet="Hospital" />
+      <End Role="PatientAppointment" EntitySet="PatientAppointment" />
+    </AssociationSet>
+    <AssociationSet Name="FK__PatientAp__Hospi__793DFFAF" Association="Self.FK__PatientAp__Hospi__793DFFAF">
+      <End Role="HospitalDoctor" EntitySet="HospitalDoctor" />
+      <End Role="PatientAppointment" EntitySet="PatientAppointment" />
+    </AssociationSet>
+    <AssociationSet Name="FK__PatientAp__Patie__46B27FE2" Association="Self.FK__PatientAp__Patie__46B27FE2">
+      <End Role="Patient" EntitySet="Patient" />
+      <End Role="PatientAppointment" EntitySet="PatientAppointment" />
+    </AssociationSet>
+    <AssociationSet Name="FK__PatientAp__Speci__1B48FEF0" Association="Self.FK__PatientAp__Speci__1B48FEF0">
+      <End Role="Specialist" EntitySet="Specialist" />
+      <End Role="PatientAppointment" EntitySet="PatientAppointment" />
+    </AssociationSet>
+    <AssociationSet Name="FK__PatientAp__Speci__47A6A41B" Association="Self.FK__PatientAp__Speci__47A6A41B">
+      <End Role="Specialist" EntitySet="Specialist" />
+      <End Role="PatientAppointment" EntitySet="PatientAppointment" />
+    </AssociationSet>
+    <AssociationSet Name="FK__PatientCo__Login__489AC854" Association="Self.FK__PatientCo__Login__489AC854">
+      <End Role="AdminLogin" EntitySet="AdminLogin" />
+      <End Role="PatientComplaints" EntitySet="PatientComplaints" />
+    </AssociationSet>
+    <AssociationSet Name="FK__PatientRe__Patie__0D64F3ED" Association="Self.FK__PatientRe__Patie__0D64F3ED">
+      <End Role="Patient" EntitySet="Patient" />
+      <End Role="PatientRequest" EntitySet="PatientRequest" />
+    </AssociationSet>
+    <AssociationSet Name="FK__PatientRe__Vehic__0E591826" Association="Self.FK__PatientRe__Vehic__0E591826">
+      <End Role="VehicleType" EntitySet="VehicleType" />
+      <End Role="PatientRequest" EntitySet="PatientRequest" />
+    </AssociationSet>
+    <AssociationSet Name="FK__RWA__AdminLogin___498EEC8D" Association="Self.FK__RWA__AdminLogin___498EEC8D">
+      <End Role="AdminLogin" EntitySet="AdminLogin" />
+      <End Role="RWA" EntitySet="RWA" />
+    </AssociationSet>
+    <AssociationSet Name="FK__RWA__StateMaster__4B7734FF" Association="Self.FK__RWA__StateMaster__4B7734FF">
+      <End Role="StateMaster" EntitySet="StateMaster" />
+      <End Role="RWA" EntitySet="RWA" />
+    </AssociationSet>
+    <AssociationSet Name="FK__RwaPayout__Rwa_I__3429BB53" Association="Self.FK__RwaPayout__Rwa_I__3429BB53">
+      <End Role="RWA" EntitySet="RWA" />
+      <End Role="RwaPayout" EntitySet="RwaPayout" />
+    </AssociationSet>
+    <AssociationSet Name="FK__SalaryMas__Emp_I__0E04126B" Association="Self.FK__SalaryMas__Emp_I__0E04126B">
+      <End Role="Employee" EntitySet="Employee" />
+      <End Role="SalaryMaster" EntitySet="SalaryMaster" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Specialis__Depar__4C6B5938" Association="Self.FK__Specialis__Depar__4C6B5938">
+      <End Role="Department" EntitySet="Department" />
+      <End Role="Specialist" EntitySet="Specialist" />
+    </AssociationSet>
+    <AssociationSet Name="FK__TestLab__Lab_Id__5224328E" Association="Self.FK__TestLab__Lab_Id__5224328E">
+      <End Role="Lab" EntitySet="Lab" />
+      <End Role="TestLab" EntitySet="TestLab" />
+    </AssociationSet>
+    <AssociationSet Name="FK__TestLab__Test_Id__51300E55" Association="Self.FK__TestLab__Test_Id__51300E55">
+      <End Role="LabTest" EntitySet="LabTest" />
+      <End Role="TestLab" EntitySet="TestLab" />
+    </AssociationSet>
+    <AssociationSet Name="FK__TravelMas__Drive__2077C861" Association="Self.FK__TravelMas__Drive__2077C861">
+      <End Role="Driver" EntitySet="Driver" />
+      <End Role="TravelMaster" EntitySet="TravelMaster" />
+    </AssociationSet>
+    <AssociationSet Name="FK__TravelMas__Patie__1F83A428" Association="Self.FK__TravelMas__Patie__1F83A428">
+      <End Role="Patient" EntitySet="Patient" />
+      <End Role="TravelMaster" EntitySet="TravelMaster" />
+    </AssociationSet>
+    <AssociationSet Name="FK__TravelMas__Vehic__1E8F7FEF" Association="Self.FK__TravelMas__Vehic__1E8F7FEF">
+      <End Role="VehicleType" EntitySet="VehicleType" />
+      <End Role="TravelMaster" EntitySet="TravelMaster" />
+    </AssociationSet>
+    <AssociationSet Name="FK__TravelMas__Vehic__216BEC9A" Association="Self.FK__TravelMas__Vehic__216BEC9A">
+      <End Role="Vehicle" EntitySet="Vehicle" />
+      <End Role="TravelMaster" EntitySet="TravelMaster" />
+    </AssociationSet>
+    <AssociationSet Name="FK__TravelRec__Drive__338A9CD5" Association="Self.FK__TravelRec__Drive__338A9CD5">
+      <End Role="Driver" EntitySet="Driver" />
+      <End Role="TravelRecordMaster" EntitySet="TravelRecordMaster" />
+    </AssociationSet>
+    <AssociationSet Name="FK__TravelRec__Patie__3296789C" Association="Self.FK__TravelRec__Patie__3296789C">
+      <End Role="Patient" EntitySet="Patient" />
+      <End Role="TravelRecordMaster" EntitySet="TravelRecordMaster" />
+    </AssociationSet>
+    <AssociationSet Name="FK__TravelRec__Vehic__347EC10E" Association="Self.FK__TravelRec__Vehic__347EC10E">
+      <End Role="Vehicle" EntitySet="Vehicle" />
+      <End Role="TravelRecordMaster" EntitySet="TravelRecordMaster" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Vehicle__Vendor___6166761E" Association="Self.FK__Vehicle__Vendor___6166761E">
+      <End Role="Vendor" EntitySet="Vendor" />
+      <End Role="Vehicle" EntitySet="Vehicle" />
+    </AssociationSet>
+    <AssociationSet Name="FK__VehicleCh__Categ__0D99FE17" Association="Self.FK__VehicleCh__Categ__0D99FE17">
+      <End Role="MainCategory" EntitySet="MainCategory" />
+      <End Role="VehicleCharges" EntitySet="VehicleCharges" />
+    </AssociationSet>
+    <AssociationSet Name="FK__VehicleCh__TypeI__0E8E2250" Association="Self.FK__VehicleCh__TypeI__0E8E2250">
+      <End Role="VehicleType" EntitySet="VehicleType" />
+      <End Role="VehicleCharges" EntitySet="VehicleCharges" />
+    </AssociationSet>
+    <AssociationSet Name="FK__VehicleTe__Categ__60C757A0" Association="Self.FK__VehicleTe__Categ__60C757A0">
+      <End Role="MainCategory" EntitySet="MainCategory" />
+      <End Role="VehicleTemp" EntitySet="VehicleTemp" />
+    </AssociationSet>
+    <AssociationSet Name="FK__VehicleTe__Login__5090EFD7" Association="Self.FK__VehicleTe__Login__5090EFD7">
+      <End Role="AdminLogin" EntitySet="AdminLogin" />
+      <End Role="VehicleTemp" EntitySet="VehicleTemp" />
+    </AssociationSet>
+    <AssociationSet Name="FK__VehicleTy__Categ__5FD33367" Association="Self.FK__VehicleTy__Categ__5FD33367">
+      <End Role="MainCategory" EntitySet="MainCategory" />
+      <End Role="VehicleType" EntitySet="VehicleType" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Vendor__AdminLog__51300E55" Association="Self.FK__Vendor__AdminLog__51300E55">
+      <End Role="AdminLogin" EntitySet="AdminLogin" />
+      <End Role="Vendor" EntitySet="Vendor" />
+    </AssociationSet>
+    <AssociationSet Name="FK__VendorPay__Vendo__6ABAD62E" Association="Self.FK__VendorPay__Vendo__6ABAD62E">
+      <End Role="Vendor" EntitySet="Vendor" />
+      <End Role="VendorPayOut" EntitySet="VendorPayOut" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AmbulanceType" Association="Self.FK_AmbulanceType">
+      <End Role="AmbulanceType" EntitySet="AmbulanceType" />
+      <End Role="MainCategory" EntitySet="MainCategory" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DoctorChooseDepartment_DoctorChooseDepartment" Association="Self.FK_DoctorChooseDepartment_DoctorChooseDepartment">
+      <End Role="DoctorChooseDepartment" EntitySet="DoctorChooseDepartment" />
+      <End Role="DoctorChooseDepartment1" EntitySet="DoctorChooseDepartment" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Hospital_StateMaster" Association="Self.FK_Hospital_StateMaster">
+      <End Role="StateMaster" EntitySet="StateMaster" />
+      <End Role="Hospital" EntitySet="Hospital" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Vendor_City" Association="Self.FK_Vendor_City">
+      <End Role="CityMaster" EntitySet="CityMaster" />
+      <End Role="Vendor" EntitySet="Vendor" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Vendor_State" Association="Self.FK_Vendor_State">
+      <End Role="StateMaster" EntitySet="StateMaster" />
+      <End Role="Vendor" EntitySet="Vendor" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

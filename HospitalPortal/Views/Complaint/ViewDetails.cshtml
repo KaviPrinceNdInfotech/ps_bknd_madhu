@@ -1,0 +1,262 @@
+﻿@model HospitalPortal.Models.ViewModels.ComplaintVM
+@{
+    ViewBag.Title = "ViewDetails";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>ViewDetails</h2>
+@if (Model.Complaint_Ambulance == null)
+{
+
+}
+else
+{
+    <table class="table-bordered table">
+        <tr>
+            <td>Name</td>
+            <td>@Model.Complaint_Ambulance.FirstOrDefault().VehicleNumber</td>
+        </tr>
+        <tr>
+            <td>Mobile</td>
+            <td>@Model.Complaint_Ambulance.FirstOrDefault().MobileNumber</td>
+        </tr>
+        <tr>
+            <td>Subject</td>
+            <td>@Model.Complaint_Ambulance.FirstOrDefault().Others</td>
+        </tr>
+        <tr>
+            <td>Complaint</td>
+            <td>@Model.Complaint_Ambulance.FirstOrDefault().Complaints</td>
+        </tr>
+        <tr>
+            <td>Is Resolved?</td>
+            <td>
+                @if (Convert.ToInt32(@Model.Complaint_Ambulance.FirstOrDefault().IsResolved) == 0)
+                {
+
+                    <a href="/Complaint/UpdateStatus?id=@Model.Complaint_Ambulance.FirstOrDefault().Id" class="btn btn-primary">Not Taken</a>
+                }
+                else
+                {
+                    <a href="/Complaint/UpdateStatus?id=@Model.Complaint_Ambulance.FirstOrDefault().Id" class="btn btn-primary">Taken</a>
+                }
+            </td>
+        </tr>
+
+
+    </table>
+}
+@if (Model.Complaint_Doc == null)
+{
+
+}
+else
+{
+    <table class="table-bordered table">
+        <tr>
+            <td>Name</td>
+            <td>@Model.Complaint_Doc.FirstOrDefault().DoctorName</td>
+        </tr>
+        <tr>
+            <td>Mobile</td>
+            <td>@Model.Complaint_Doc.FirstOrDefault().MobileNumber</td>
+        </tr>
+        <tr>
+            <td>Subject</td>
+            <td>@Model.Complaint_Doc.FirstOrDefault().Subjects</td>
+        </tr>
+        <tr>
+            <td>Complaint</td>
+            <td>@Model.Complaint_Doc.FirstOrDefault().Complaints</td>
+        </tr>
+        <tr>
+            <td>Is Resolved?</td>
+            <td>
+                @if (Convert.ToInt32(@Model.Complaint_Doc.FirstOrDefault().IsResolved) == 0)
+                {
+
+                    <a href="/Complaint/UpdateStatus?id=@Model.Complaint_Doc.FirstOrDefault().Id" class="btn btn-primary">Not Taken</a>
+                }
+                else
+                {
+                    <a href="/Complaint/UpdateStatus?id=@Model.Complaint_Doc.FirstOrDefault().Id" class="btn btn-primary">Taken</a>
+                }
+        </td>
+    </tr>
+
+</table>
+}
+
+@if (Model.Complaint_Driver == null)
+{
+
+}
+else
+{
+    <table class="table-bordered table">
+        <tr>
+            <td>Name</td>
+            <td>@Model.Complaint_Driver.FirstOrDefault().DriverName/td>
+        </tr>
+        <tr>
+            <td>Mobile</td>
+            <td>@Model.Complaint_Driver.FirstOrDefault().MobileNumber</td>
+        </tr>
+        <tr>
+            <td>Subject</td>
+            <td>@Model.Complaint_Driver.FirstOrDefault().Subjects</td>
+        </tr>
+        <tr>
+            <td>Complaint</td>
+            <td>@Model.Complaint_Driver.FirstOrDefault().Complaints</td>
+        </tr>
+        <tr>
+            <td>Is Resolved?</td>
+            <td>
+                @if (Convert.ToInt32(@Model.Complaint_Driver.FirstOrDefault().IsResolved) == 0)
+                {
+
+                    <a href="/Complaint/UpdateStatus?id=@Model.Complaint_Driver.FirstOrDefault().Id" class="btn btn-primary">Not Taken</a>
+                }
+                else
+                {
+                    <a href="/Complaint/UpdateStatus?id=@Model.Complaint_Driver.FirstOrDefault().Id" class="btn btn-primary">Taken</a>
+                }
+            </td>
+        </tr>
+    </table>
+}
+
+
+@if (Model.Complaint_Hospital == null)
+{
+
+}
+else
+{
+    <table class="table-bordered table">
+        <tr>
+            <td>Name</td>
+            <td>@Model.Complaint_Hospital.FirstOrDefault().HospitalName</td>
+        </tr>
+        <tr>
+            <td>Mobile</td>
+            <td>@Model.Complaint_Hospital.FirstOrDefault().MobileNumber</td>
+        </tr>
+        <tr>
+            <td>Subject</td>
+            <td>@Model.Complaint_Hospital.FirstOrDefault().Subjects</td>
+        </tr>
+        <tr>
+            <td>Complaint</td>
+            <td>@Model.Complaint_Hospital.FirstOrDefault().Complaints</td>
+        </tr>
+        <tr>
+            <td>Is Resolved?</td>
+            <td>
+                @if (Convert.ToInt32(@Model.Complaint_Hospital.FirstOrDefault().IsResolved) == 0)
+                {
+
+                    <a href="/Complaint/UpdateStatus?id=@Model.Complaint_Hospital.FirstOrDefault().Id" class="btn btn-primary">Not Resolved</a>
+                }
+                else
+                {
+                    <a href="/Complaint/UpdateStatus?id=@Model.Complaint_Hospital.FirstOrDefault().Id" class="btn btn-primary">Resolved</a>
+                }
+            </td>
+        </tr>
+    </table>
+}
+
+
+@if (Model.Complaint_Patient != null && Model.Complaint_Patient.Any())
+{
+    <table class="table-bordered table">
+        @*<tr>
+            <th>Name</th>
+            <th>@Model.Complaint_Patient.FirstOrDefault().Date</th>
+        </tr>*@
+        <tr>
+            <td>Patient Name</td>
+            <td>@Model.Complaint_Patient.FirstOrDefault().PatientName</td>
+        </tr>
+        <tr>
+            <td>Mobile Number</td>
+            <td>@Model.Complaint_Patient.FirstOrDefault().MobileNumber</td>
+        </tr>
+        <tr>
+            <td>Subject</td>
+            <td>@Model.Complaint_Patient.FirstOrDefault().Subjects</td>
+        </tr>
+        <tr>
+            <td>Complaint</td>
+            <td>
+                @if (!string.IsNullOrEmpty(Model.Complaint_Patient.FirstOrDefault().Complaints))
+                {
+                    <span>@Model.Complaint_Patient.FirstOrDefault().Complaints</span>
+                }
+                else
+                {
+                    <span>NA</span>
+                }
+            </td>
+        </tr>
+        <tr>
+            <td>Is Resolved?</td>
+            <td>
+                @*@if (Model.Complaint_Patient.FirstOrDefault().IsResolved == 0)*@
+                    @if (Convert.ToInt32(@Model.Complaint_Patient.FirstOrDefault().IsResolved) == 0)
+                    {
+                        <span style="color:red">Not Taken</span>
+                    }
+                    else
+                    {
+                        <span style="color:blue">Taken</span>
+                    }
+            </td>
+        </tr>
+        <tr>
+            <td>Give a Rating</td>
+            <td>
+                <input type="number" name="Rating" id="Rating" min="1" max="5" required="required">
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <input type="button" id="Submit" value="Rate" class="btn btn-primary">
+            </td>
+        </tr>
+    </table>
+}
+else
+{
+    <p>No complaint data available.</p>
+}
+
+<script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
+
+<script>
+    $("#Submit").click(function () {
+        let Id = $("#Id").val();
+        let Rating = $("#Rating").val();
+        if (Rating > 5) {
+            alert("Kindly Enter the value less than 5.");
+            return 0;
+        }
+
+        $.ajax({
+            url: "/Complaint/UpdateStatus?Id=" + Id + "&Rating=" + Rating + "",
+            type: "get",
+            success: function (response) {
+                console.log(response);
+            },
+            error: function (error) {
+                console.log(error.responseText);
+                msg.text("");
+            }
+        });
+    })
+</script>
+
+

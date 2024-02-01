@@ -1,0 +1,111 @@
+﻿@model HospitalPortal.Models.ViewModels.BookedTests
+
+@{
+    ViewBag.Title = "TestHistory";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Test History</h2>
+@using (Html.BeginForm())
+{
+    <div class="row">
+        <div class="col-md-4">
+            Search By Test Date
+        </div>
+        <div class="col-md-3" style="margin-left: -13%;">
+            <input type="date" name="date" id="date" />
+        </div>
+        <div class="col-md-3">
+            <input type="submit" value="Filter" class="btn btn-primary" />
+        </div>
+    </div>
+}
+<div style="margin-top:3%">
+    @if (Model.TestList.Count() == 0)
+    {
+        <h2>No Records</h2>
+    }
+    else
+    {
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Patient Name</th>
+                <th>Test Name</th>
+                <th>Test Amount</th>
+                <th>Mobile No.</th>
+                <th>Address</th>
+                <th>Available Date</th>
+                <th>Available Time</th>
+                @*<th>Action</th>*@
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model.TestList)
+            {
+                <tr>
+                    <td>@item.PatientName</td>
+                    <td>@item.TestName</td>
+                    <td>&#8377; @item.TestAmount</td>
+                    <td>@item.ContactNumber</td>
+                    <td>@item.PatientAddress</td>
+                    <td>
+                        @if (item.TestDate != null)
+                    {
+                            <span>
+                                @item.TestDate.Value.ToString("dd-MMM-yyyy")
+                            </span>
+                        }
+                    </td>
+                    <td>@item.AvailableTime</td>
+                    @*<td>
+                        @if (Convert.ToInt32(item.IsTaken) == 0)
+                        {
+
+                            <a href="/Lab/UpdateTestStatus?id=@item.Id" class="btn btn-primary">Not Taken</a>
+                        }
+                        else
+                        {
+                            <a href="/Lab/UpdateTestStatus?id=@item.Id" class="btn btn-primary">Taken</a>
+                        }
+                    </td>*@
+                </tr>
+            }
+
+        </tbody>
+    </table>
+    }
+</div>
+@*<nav aria-label="Page navigation example">
+    <ul class="pagination">
+        @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+            if (i == Model.PageNumber)
+            {
+                <li class="page-item active"><a class="page-link" href="/Lab/TestHistory?pageNumber=@i">@i</a></li>
+
+            }
+            else
+            {
+                <li class="page-item"><a class="page-link" href="/Lab/TestHistory?pageNumber=@i">@i</a></li>
+
+            }
+        }
+    </ul>
+</nav>*@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

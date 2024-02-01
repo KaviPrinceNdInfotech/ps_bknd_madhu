@@ -1,0 +1,242 @@
+﻿@{
+    string role = HospitalPortal.Utility.UserIdentity.UserRole;
+}
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>PS Wellness-A Complete Health Care Service</title>
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <link rel="icon" href="~/Home/favicon.ICO" sizes="16x16">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="Book Doctor, Buy Medicine, Book Ambulance, Book Nurse, Complete Heath Checkup Center, Lab Near Me, Hospital Near Me " />
+    <meta name="author" content="">
+    <script src="~/Ljs/jquery-1.11.1.min.js"></script>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" type="text/css" href="/lib/bootstrap/css/bootstrap.css">
+
+    <link rel="stylesheet" type="text/css" href="/stylesheets/theme.css">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/premium.css">
+    <script>
+        $('.navbar-nav li a').click(function (e) {
+            debugger
+            e.preventDefault();
+            $('.navbar-nav li').removeClass('active').addClass('inactive');
+            $(this).parent('li').addClass('active');
+        })
+        $('li').click(function (e) {
+            e.preventDefault();
+        });
+    </script>
+    <style type="text/css">
+        .active {
+            background: red;
+            color: white;
+        }
+
+            .active a {
+                color: white;
+            }
+
+        #line-chart {
+            height: 300px;
+            width: 800px;
+            margin: 0px auto;
+            margin-top: 1em;
+        }
+
+        .navbar-default .navbar-brand, .navbar-default .navbar-brand:hover {
+            color: #fff;
+        }
+    </style>
+
+</head>
+<body class="theme-blue" ng-app="myApp">
+    <div class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="" href="#l"><span class="navbar-brand" style="text-transform:capitalize"> @role Section</span></a>
+        </div>
+
+        <div class="navbar-collapse collapse" style="height: 1px;">
+            <ul id="main-menu" class="nav navbar-nav navbar-right">
+                <li class="dropdown hidden-xs">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="text-transform:capitalize">
+                        <span class="glyphicon glyphicon-user padding-right-small" style="position:relative;top: 3px;"></span> @role
+                        <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/Admin/ChangePassword">Change Password</a></li>
+
+                        <li><a tabindex="-1" href="/admin/logout">Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+    <div>
+        <div class="sidebar-nav">
+            <ul class="">
+                <li class="nav-header"><a href="/Admin/Dashboard/" style="cursor:pointer"><i class="fa fa-home"></i>Payout's Home</a></li>
+                <li style="cursor:pointer" data-target=".payOut-menu" class="nav-header" data-toggle="collapse">
+                    <i class="fa fa-money"></i>Generate PayOut<i class="fa fa-collapse"></i>
+                </li>
+                <!-- SubMenus Start-->
+                <li>
+                    <ul class="payOut-menu nav nav-list collapse">
+                        <li>
+                            <a href="/Payout/Doctor" style="cursor:pointer"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Doctor</a>
+                        </li>
+                    </ul>
+                </li>
+                @*<li>
+                    <ul class="payOut-menu nav nav-list collapse">
+                        <li>
+                            <a href="/Rwa_Report/RwaPayOut" style="cursor:pointer"><span class="fa fa-history"></span> <span class="fa fa-user"></span>RWA</a>
+
+                        </li>
+                    </ul>
+                </li>*@
+                <li>
+                    <ul class="payOut-menu nav nav-list collapse">
+                        <li><a href="/Payout/Lab" style="cursor:pointer"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Lab</a>
+                    </ul>
+                </li>
+                <li>
+                    <ul class="payOut-menu nav nav-list collapse">
+                        <li><a href="/Payout/Ambulance" style="cursor:pointer"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Ambulance</a>
+                    </ul>
+                </li>
+                <li>
+                    <ul class="payOut-menu nav nav-list collapse">
+                        <li>
+                            <a href="/Payout/Chemist" style="cursor:pointer"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Chemist</a>
+                    </ul>
+                </li>
+                @*<li>
+                    <ul class="payOut-menu nav nav-list collapse">
+                        <li>
+                            <a href="/Payout/Health" style="cursor:pointer"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Complete Health Checkup</a>
+                    </ul>
+                </li>*@
+                <li>
+                    <ul class="payOut-menu nav nav-list collapse">
+                        <li>
+                            <a href="/Payout/Nurse" style="cursor:pointer"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Nurse</a>
+                    </ul>
+                </li>
+                <li>
+                    <ul class="payOut-menu nav nav-list collapse">
+                        <li>
+                            <a href="/VendorPayout/Vendor" style="cursor:pointer"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Franchise</a>
+                    </ul>
+                </li>
+
+                <li style="cursor:pointer" data-target=".payOutHistory-menu" class="nav-header" data-toggle="collapse">
+                    <i class="fa fa-money"></i>PayOut's History<i class="fa fa-collapse"></i>
+                </li>
+                <!-- SubMenus Start-->
+                <li>
+                    <ul class="payOutHistory-menu nav nav-list collapse">
+                        <li>
+                            <a href="/Payout/DoctorList" style="cursor:pointer"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Doctor</a>
+                        </li>
+                    </ul>
+                </li>
+                @*<li>
+                    <ul class="payOutHistory-menu nav nav-list collapse">
+                        <li>
+                            <a href="/Rwa_Report/RwaPayOut" style="cursor:pointer"><span class="fa fa-history"></span> <span class="fa fa-user"></span>RWA</a>
+
+                        </li>
+                    </ul>
+                </li>*@
+                <li>
+                    <ul class="payOutHistory-menu nav nav-list collapse">
+                        <li><a href="/Payout/LabList" style="cursor:pointer"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Lab</a>
+                    </ul>
+                </li>
+                @*<li>
+                    <ul class="payOutHistory-menu nav nav-list collapse">
+                        <li><a href="/Payout/AmbulanceList" style="cursor:pointer"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Ambulance</a>
+                    </ul>
+                </li>*@
+                <li>
+                    <ul class="payOutHistory-menu nav nav-list collapse">
+                        <li>
+                            <a href="/Payout/ChemistList" style="cursor:pointer"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Chemist</a>
+                    </ul>
+                </li>
+                @*<li>
+                    <ul class="payOutHistory-menu nav nav-list collapse">
+                        <li>
+                            <a href="/Payout/HealthCheckUpList" style="cursor:pointer"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Complete Health Checkup</a>
+                    </ul>
+                </li>*@
+                <li>
+                    <ul class="payOutHistory-menu nav nav-list collapse">
+                        <li>
+                            <a href="/Payout/NurseList" style="cursor:pointer"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Nurse</a>
+                    </ul>
+                </li>
+                <li>
+                    <ul class="payOutHistory-menu nav nav-list collapse">
+                        <li>
+                            <a href="/VendorPayout/VendorPayOutList" style="cursor:pointer"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Franchise</a>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="content" id="pageContainer">
+            @RenderBody()
+        </div>
+
+    @Html.Partial("~/Views/Shared/_script.cshtml")
+    <script type="text/javascript">
+
+        $(function () {
+            var match = document.cookie.match(new RegExp('color=([^;]+)'));
+            if (match) var color = match[1];
+            if (color) {
+                $('body').removeClass(function (index, css) {
+                    return (css.match(/\btheme-\S+/g) || []).join(' ')
+                })
+                $('body').addClass('theme-' + color);
+            }
+
+            $('[data-popover="true"]').popover({ html: true });
+
+        });
+    </script>
+
+
+    <script type="text/javascript">
+        $(function () {
+            var uls = $('.sidebar-nav > ul > *').clone();
+            uls.addClass('visible-xs');
+            $('#main-menu').append(uls.clone());
+        });
+    </script>
+    <script src="/lib/bootstrap/js/bootstrap.js"></script>
+    <script src="~/js/bootstrap-datepicker.js"></script>
+    <link href="~/css/datepicker.css" rel="stylesheet" />
+    <script type="text/javascript">
+        $("[rel=tooltip]").tooltip();
+        $(function () {
+            $('.demo-cancel-click').click(function () { return false; });
+        });
+    </script>
+    <script src="/Scripts/Library/jquery.validate.min.js"></script>
+    <script src="/Scripts/Library/jquery.validate.unobtrusive.min.js"></script>
+</body>
+</html>

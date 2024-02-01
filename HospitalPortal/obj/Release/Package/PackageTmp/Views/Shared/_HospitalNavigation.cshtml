@@ -1,0 +1,90 @@
+﻿@{ 
+
+    int loginId = Convert.ToInt32(User.Identity.Name);
+    int id = new HospitalPortal.Models.DomainModels.DbEntities().Hospitals.FirstOrDefault(a => a.AdminLogin_Id == loginId).Id;
+    bool CurrentStatus = new HospitalPortal.Models.DomainModels.DbEntities().Hospitals.FirstOrDefault(a => a.Id == id).IsApproved;
+    //int adminid = new HospitalPortal.Models.DomainModels.DbEntities().Doctors.FirstOrDefault(a => a.AdminLogin_Id == loginId).AdminLogin_Id;
+}
+
+<div class="sidebar-nav">
+    <ul>
+        <li class="nav-header"><a href="/Admin/Dashboard/" style="cursor:pointer"> <i class="fa fa-bars"></i> Dashboard</a></li>
+        <li class="nav-header"><a href="/Hospital/Edit?id=@id" style="cursor:pointer"><i class="fa fa-pencil"></i> Manage Profile</a></li>
+@if (CurrentStatus == false) { }
+else
+{
+        <li class="nav-header"><a href="/Hospital/AddDepartment?hospitalId=@id" style="cursor:pointer"><i class="fa fa-plus"></i> Add Department</a></li>
+        <li class="nav-header">
+            <a href="/Bank/UpdateBank?id=@id" style="cursor:pointer">
+                <i class="fa fa-pencil"></i> Update Bank Details
+            </a>
+        </li>
+        <li class="nav-header"><a href="/AddTest/All/" style="cursor:pointer"><i class="fa fa-image"></i>  Add Test</a></li>
+
+        <li class="nav-header">
+            <a href="/RoleUpdate/Department?id=@loginId" style="cursor:pointer"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Add Specialist &amp; Department</a>
+        </li>
+        <li class="nav-header">
+            <a href="/RoleUpdate/ViewMore?id=@loginId" style="cursor:pointer"><span class="fa fa-list"></span> <span class="fa fa-user"></span>View Specialist &amp; Department Status</a>
+        </li>
+        <li class="nav-header">
+            <a href="/Hospital/RemoveDept?hospitalId=@id" style="cursor:pointer">
+                <i class="fa fa-plus"></i> View Departments
+            </a>
+        </li>
+
+        <li class="nav-header">
+            <a href="/Hospital/AddFacilty?hospitalId=@id" style="cursor:pointer">
+                <i class="fa fa-plus"></i> Add Facilty
+            </a>
+        </li>
+
+        <li class="nav-header">
+            <a href="/Hospital/Facilities?hospitalId=@id" style="cursor:pointer">
+                <i class="fa fa-plus"></i> View Facilities
+            </a>
+        </li>
+        <li class="nav-header">
+            <a href="/Hospital/AddDoctor?hospitalId=@id" style="cursor:pointer">
+                <i class="fa fa-plus"></i> Add Doctor
+            </a>
+        </li>
+        <li class="nav-header">
+            <a href="/DoctorRegistration/Add?hospitalId=@id" style="cursor:pointer">
+                <i class="fa fa-plus"></i> View Doctors
+            </a>
+        </li>
+        <li class="nav-header">
+            <a href="/Nurse/Add?hospitalId=@id" style="cursor:pointer">
+                <i class="fa fa-plus"></i> Add Nurses
+            </a>
+        </li>
+
+        <li class="nav-header">
+            <a href="/Hospital/HospitalReport?id=@id" style="cursor:pointer">
+                <i class="fa fa-plus"></i> Upload Report
+            </a>
+        </li>
+        <li class="nav-header">
+            <a href="/Hospital/ViewUploadReports?id=@id" style="cursor:pointer">
+                <i class="fa fa-plus"></i> View Upload Report
+            </a>
+        </li>
+        <li class="nav-header">
+            <a href="/Common/LabReport" style="cursor:pointer">
+                <i class="fa fa-history"></i> View Lab Reports
+            </a>
+        </li>
+        <li class="nav-header">
+            <a href="/Common/HealthReport" style="cursor:pointer">
+                <i class="fa fa-history"></i> View Health Reports
+            </a>
+        </li>
+        <li class="nav-header">
+            <a href="/Common/DoctorReports" style="cursor:pointer">
+                <i class="fa fa-history"></i> View Doctor Reports
+            </a>
+        </li>
+}
+    </ul>
+</div>

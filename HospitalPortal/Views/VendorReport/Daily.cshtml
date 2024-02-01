@@ -1,0 +1,113 @@
+﻿@model HospitalPortal.Models.ViewModels.ReportDetails
+@{
+    ViewBag.Title = "Daily";
+}
+
+<h2>Daily</h2>
+
+<link href="/css/bootstrap.min.css" rel="stylesheet" />
+
+
+@using (Html.BeginForm())
+{
+    <div class="row">
+        <div class="col-md-4">
+            @Html.TextBoxFor(a => a.JoiningDate, new { @class = "datepicker form-control", required = "required" })
+        </div>
+        <div class="col-md-4">
+            <input type="button" id="test" value="Search" class="btn btn-primary" />
+        </div>
+    </div>
+
+
+}
+@if (Model.doctorList == null)
+{
+    if (TempData["msg"] != null)
+    {
+        <h2 style="color:blueviolet">
+            @TempData["msg"]
+        </h2>
+    }
+}
+else
+{
+    <table id="tables" class="table table-responsive">
+        <thead>
+            <tr>
+                <th>
+                    Vendor Name
+                </th>
+                <th>
+                    Company Name
+                </th>
+                <th>
+                    Added Doctors!!
+                </th>
+                <th>
+                    Total Amount
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Vendors)
+            {
+                <tr>
+                    <td>
+                        @item.VendorName
+                    </td>
+                    <td>
+                        @item.CompanyName
+                    </td>
+                    @{ 
+
+                    }
+                    <td>
+                        @item.Counts
+                    </td>
+                    @{ 
+                        double amt = item.Counts * ViewBag.Payment;
+                    }
+                    <td>
+                       @amt
+                    </td>
+                </tr>
+            }
+            <tr>
+                <td><h3>Total</h3></td>
+                <td>
+                    @if (ViewBag.Total != null)
+                {
+                    <h3 style="color:red"> ₹ @ViewBag.Total</h3>
+                }
+            </td>
+        </tr>
+    </tbody>
+</table>
+}
+<script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
+<link href="~/css/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
+<script>
+    $(".datepicker").datepicker().datepicker('setdate', 'today');
+
+    $("#test").click(function () {
+        debugger
+
+        var date = $("#JoiningDate").val();
+        $.ajax({
+            url: "/VendorReport/Daily?date="+ date +"",
+            type: "get",
+            success: function (response) {
+                console.log(response);
+                $("#prevAtt").html(response);
+            },
+            error: function (error) {
+                console.log(error.responseText);
+
+            }
+        });
+
+    });
+</script>
+

@@ -1,0 +1,136 @@
+﻿
+@{
+    ViewBag.Title = "Vendortds";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<h2>TDS History</h2>
+
+<div class="row">
+    <div class="col-md-4">
+        <select id="tp" class="form-control" required="required">
+            <option value="Daily">
+                Select Any
+            </option>
+            <option value="Doctor">
+                Doctor
+            </option>
+            <option value="Vehicle">
+                Vehicle
+            </option>
+            <option value="Nurse">
+                Nurse
+            </option>
+            <option value="Lab">
+                Lab
+            </option>
+            <option value="HealthUp">
+                Health Check Up
+            </option>
+            <option value="Chemist">
+                Chemist
+            </option>
+        </select>
+    </div>
+    <div class="col-md-4">
+        <input type="button" value="Check" id="btnCheck" class="btn btn-primary" />
+    </div>
+</div>
+<div id="prevAtt" style="margin-top:5%;">
+
+</div>
+
+<script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
+<script>
+    $("#btnCheck").click(function () {
+        debugger
+        var term = $("#tp").val();
+        if (term == "Doctor") {
+            $.ajax({
+                url: "/TDSReport/DoctorTDS?term=" + term,
+                type: "get",
+                success: function (response) {
+                    console.log(response);
+                    $("#prevAtt").html(response);
+                },
+                error: function (error) {
+                    console.log(error.responseText);
+                    msg.text("");
+                }
+            });
+        }
+
+        if (term == "Vehicle") {
+            $.ajax({
+                url: "/TDSReport/Vehicletds?term=" + term,
+                type: "get",
+                success: function (response) {
+                    console.log(response);
+                    $("#prevAtt").html(response);
+                },
+                error: function (error) {
+                    console.log(error.responseText);
+                    msg.text("");
+                }
+            });
+        }
+
+        if (term == "HealthUp") {
+            $.ajax({
+                url: "/TDSReport/HealthCheckupVendor?term=" + term,
+                type: "get",
+                success: function (response) {
+                    console.log(response);
+                    $("#prevAtt").html(response);
+                },
+                error: function (error) {
+                    console.log(error.responseText);
+                    msg.text("");
+                }
+            });
+        }
+        if (term == "Chemist") {
+            $.ajax({
+                url: "/TDSReport/ChemistPayment?term=" + term,
+                type: "get",
+                success: function (response) {
+                    console.log(response);
+                    $("#prevAtt").html(response);
+                },
+                error: function (error) {
+                    console.log(error.responseText);
+                    msg.text("");
+                }
+            });
+        }
+        if (term == "Lab") {
+            $.ajax({
+                url: "/TDSReport/LabVendor?term=" + term,
+                type: "get",
+                success: function (response) {
+                    console.log(response);
+                    $("#prevAtt").html(response);
+                },
+                error: function (error) {
+                    console.log(error.responseText);
+                    msg.text("");
+                }
+            });
+        }
+
+        if (term == "Nurse") {
+            $.ajax({
+                url: "/TDSReport/NurseVendor?term=" + term,
+                type: "get",
+                success: function (response) {
+                    console.log(response);
+                    $("#prevAtt").html(response);
+                },
+                error: function (error) {
+                    console.log(error.responseText);
+                    msg.text("");
+                }
+            });
+        }
+    });
+</script>
+

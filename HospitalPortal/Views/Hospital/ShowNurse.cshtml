@@ -1,0 +1,34 @@
+﻿@model HospitalPortal.Models.ViewModels.NurseListVM
+@{
+    ViewBag.Title = "ShowNurse";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Show Nurse</h2>
+
+@if(Model.NurseList.Count() <= 0)
+{
+
+}
+else
+{
+    <table class="table table-bordered">
+        <tr>
+            <th>Nurse Name</th>
+            <th>Nurse Type</th>
+            <th>Action</th>
+        </tr>
+        <tbody>
+            @foreach(var item in Model.NurseList)
+            {
+                <tr>
+                    <td>@item.NurseName</td>
+                    <td>@item.NurseTypeName</td>
+                    <td><a href="DeleteNurse?id=@item.Id">Delete</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+

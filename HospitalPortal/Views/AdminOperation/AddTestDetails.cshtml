@@ -1,0 +1,107 @@
+﻿@model HospitalPortal.Models.ViewModels.AddTestByLabDTO
+@{
+    ViewBag.Title = "AddTestDetails";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    string role = HospitalPortal.Utility.UserIdentity.UserRole;
+}
+
+<h2 style="text-align:center">Add Tests</h2>
+
+<style>
+    #mainContainer {
+        margin-left:5%;
+    }
+</style>
+
+
+@using (Html.BeginForm())
+{
+    <div style="margin-bottom:3%">
+        <a href="/AdminOperation/ShowTest?LabId=@Model.Lab_Id" class="btn btn-primary">Show All</a>
+    </div>
+    <div id="mainContainer">
+        <div class="row">
+            <div class="col-md-6">
+            </div>
+            <div class="col-md-6">
+                @if (TempData["msg"] != null)
+                {
+                    <span class="alert alert-success">
+                        @TempData["msg"]
+                    </span>
+                }
+            </div>
+        </div>
+        <br/><br/>
+      
+        @Html.HiddenFor(a => a.Lab_Id)
+        @Html.HiddenFor(a => a.Id)
+        <div class="row">
+            @if (role == "admin")
+            {
+                <div class="row form-group">
+                    <div class="col-md-3">Select Any Category</div>
+                    <div class="col-md-3">
+                        @Html.DropDownListFor(a => a.Test_Id, Model.Tests, "Select", new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-md-3">
+                        Test Name
+                    </div>
+                    <div class="col-md-3">
+                        @Html.TextBoxFor(a => a.TestDesc, new { @class = "form-control" })
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="row form-group">
+                    <div class="col-md-3">Select Any Category</div>
+                    <div class="col-md-3">
+                        @Html.DropDownListFor(a => a.Test_Id, Model.Tests, "Select", new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-md-3">Select Any Test</div>
+                    <div class="col-md-3">
+                        @if (Model.TestNameList != null)
+                        {
+                            @Html.DropDownListFor(a => a.TestNameId, Model.TestNameList, "Select", new { @class = "form-control" })
+                            <span style="color:red">If Test Not Available. Please(✓)</span>
+                            @Html.CheckBoxFor(a => a.IsTestAvailable)
+                            <div class="form-group" id="TestNamesdiv" style="display:none;">
+                                Enter Test Name *:
+                                @Html.TextBoxFor(a => a.TestDesc, new { @class = "form-control" })
+                            </div>
+                        }
+
+                    </div>
+                </div>
+            }
+            <div class="row form-group">
+                <div class="col-md-3">
+                    Test Amount
+                </div>
+                <div class="col-md-3">
+                    @Html.TextBoxFor(a => a.TestAmount, new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+
+       
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-3">
+                <input type="submit" class="btn btn-primary" value="Submit" />
+            </div>
+        </div>
+    </div>
+}
+
+<script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
+<script>
+    $("#IsTestAvailable").click(function () {
+        $("#TestNamesdiv").toggle();
+    });
+</script>

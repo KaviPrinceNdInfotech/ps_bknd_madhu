@@ -1,0 +1,33 @@
+﻿@model HospitalPortal.Models.ViewModels.BannerAddDTO
+
+@{
+    ViewBag.Title = "AddBanner";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+
+@using (Html.BeginForm("AddBanner", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+<div style="width:50%;margin:auto">
+    <h4>Banner</h4>
+    @*----------------------Dropdown data bind---------------------------------------*@
+    <div class="form-group">
+        <label>Select Banner</label>
+        @Html.DropDownListFor(model => model.pro_id, ViewBag.Bannerprofessional as IEnumerable<SelectListItem>, "--SelectBanner--", new { @class = "form-control" })
+    </div>
+
+    @*---------------------image upload--------------------------------------*@
+    <div class="form-group">
+        Image *
+        @Html.TextBoxFor(a => a.ImageFile, new { type = "file", @class = "form-control", required = "required" })
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Submit" class="btn btn-info" />
+        <a class="btn btn-info" href="/Admin/BannerList">Show All</a>
+    </div>
+</div>
+}
+
+

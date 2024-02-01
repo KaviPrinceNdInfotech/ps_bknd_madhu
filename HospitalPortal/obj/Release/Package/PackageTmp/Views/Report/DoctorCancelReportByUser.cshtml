@@ -1,0 +1,65 @@
+﻿@model HospitalPortal.Models.ViewModels.cancelReport
+@{
+    ViewBag.Title = "DoctorCancelReportByUser";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+<style>
+    #mainContainer {
+        width: 100%;
+        margin-left: 1%;
+        margin-top: 1%;
+    }
+</style>
+<div id="mainContainer">
+
+    <div class="row">
+        <div class="col-md-12">
+            <h3>Doctor Cancel Report</h3><hr />
+        </div>
+    </div>
+
+
+    @using (Html.BeginForm())
+    {
+        <div id="doublescroll">
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr style="background-color:gainsboro">
+
+                                <th>Doctor Id</th>
+                                <th>Doctor Name</th>
+                                <th>Mobile Number</th>
+                                <th>Locatoion</th>
+                                <th>Fee</th>
+                                <th>Specialist Name</th>
+                                <th>Payment Date</th>
+                                <th>Slot Time</th>
+                                <th>Appointment Date</th>
+                                <th>Cancel By(Patient Name)</th>
+
+                        </thead>
+                        @foreach (var item in Model.CancelDoctor)
+                        {
+                            <tr style="background-color:oldlace">
+                                <td>@item.DoctorId</td>
+                                <td>@item.DoctorName</td>
+                                <td>@item.MobileNumber</td>
+                                <td>@item.Location</td>
+                                <td>@item.TotalFee</td>
+                                <td>@item.SpecialistName</td>
+                                <td>@item.PaymentDate</td>
+                                <td>@item.SlotTime</td>
+                                <td>@item.AppointmentDate</td>
+                                <td>@item.PatientName</td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+</div>

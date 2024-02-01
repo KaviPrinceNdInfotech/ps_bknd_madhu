@@ -1,0 +1,36 @@
+﻿
+@model HospitalPortal.Models.DomainModels.Nurse
+@{
+    ViewBag.Title = "EverifyDocs";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<section>
+    <div class="container">
+        @using (Html.BeginForm("EverifyDocs", "Nurse", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.HiddenFor(model => model.Id)
+            <div class="row pt-5 pl-5">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.FileName, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10" style="margin-left: 1px;">
+                                @Html.TextBox("postedFile", "", new { @class = "form-control", type = "file", required = "required" })
+                                @Html.ValidationMessageFor(model => model.FileName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-5">
+                            <input type="submit" value="Upload Pdf" class="btn btn-block btn-primary" />
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        }
+    </div>
+</section>
+

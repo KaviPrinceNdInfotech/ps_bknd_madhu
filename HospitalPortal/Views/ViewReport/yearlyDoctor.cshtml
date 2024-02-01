@@ -1,0 +1,80 @@
+﻿@model HospitalPortal.Models.ViewModels.ReportDetails
+@{
+    ViewBag.Title = "ViewReport";
+}
+
+@using (Html.BeginForm())
+{
+    <div class="row">
+        <div class="col-md-4">
+          <input type="text" id="year" class="form-control" placeholder="Enter Any Year" />
+        </div>
+        <div class="col-md-4">
+            <input type="button" id="test" value="Search" class="btn btn-primary" />
+        </div>
+    </div>
+}
+@if (Model.doctorList.Count() <= 0)
+{
+    if (TempData["msg"] != null)
+    {
+        <h2 style="color:blueviolet">
+            @TempData["msg"]
+        </h2>
+    }
+}
+else
+{
+<table id="tables" class="table table-responsive">
+    <thead>
+        <tr>
+            <th>
+                Year
+            </th>
+            <th>
+                Amount
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.doctorList)
+        {
+            <tr>
+                <td>
+                    @item.Year
+                </td>
+                <td>
+                    @item.Amount
+                </td>
+            </tr>
+        }
+        <tr>
+            <td><h3>Total</h3></td>
+            <td>
+                @if (ViewBag.Total != null)
+                {
+                    <h3 style="color:red"> ₹ @ViewBag.Total</h3>
+                }
+            </td>
+        </tr>
+    </tbody>
+</table>
+}
+<script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
+<script>
+    $("#test").click(function () {
+        debugger
+        var year = $("#year").val();
+        $.ajax({
+            url: "/ViewReport/yearlyDoctor?year=" + year + "",
+            type: "get",
+            success: function (response) {
+                $("#prevAtt").html(response);
+            },
+            error: function (error) {
+
+            }
+
+        });
+    });
+</script>

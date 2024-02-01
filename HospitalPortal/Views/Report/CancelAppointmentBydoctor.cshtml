@@ -1,0 +1,72 @@
+﻿
+@model HospitalPortal.Models.ViewModels.cancelReport
+@{
+    ViewBag.Title = "CancelAppointmentBydoctor";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style>
+    #mainContainer {
+        width: 100%;
+        margin-left: 1%;
+        margin-top: 1%;
+    }
+</style>
+<div id="mainContainer">
+
+    <div class="row">
+        <div class="col-md-12">
+            <h3>Cancel Report</h3><hr />
+        </div>
+    </div>
+
+
+    @using (Html.BeginForm())
+    {
+        <div id="doublescroll">
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr style="background-color:gainsboro">
+
+                                <th>Pateint Id</th>
+                                <th>Pateint Name</th>
+                                <th>Mobile Number</th>
+                                <th>Locatoion</th>
+                                <th>Fee</th>
+                                <th>Slot Time</th>
+                                <th>Specialist Name</th>
+                                @*<th>Payment Date</th>*@
+                                <th>Appointment Date</th>
+                                <th>User Wallet Amount</th>
+                                <th>DoctorPenality Amount</th>
+                                <th>Cancel Date</th>
+                                <th>Cancel By(Doctor Name)</th>
+
+                        </thead>
+                        @foreach (var item in Model.CancelDoctor)
+                        {
+                            <tr style="background-color:oldlace">
+                                <td>@item.PatientRegNo</td>
+                                <td>@item.PatientName</td>
+                                <td>@item.MobileNumber</td>
+                                <td>@item.Location</td>
+                                <td>@item.TotalFee</td>
+                                @*<td>@item.PaymentDate</td>*@
+                                <td>@item.SlotTime</td>
+                                <td>@item.SpecialistName</td>
+                                <td>@item.AppointmentDate</td>
+                                <td>@item.UserWalletAmount</td>
+                                <td>@item.Amount</td>
+                                <td>@item.CancelDate</td>
+                                <td>@item.DoctorName</td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+

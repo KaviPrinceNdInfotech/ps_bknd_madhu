@@ -1,0 +1,81 @@
+﻿@model HospitalPortal.Models.ViewModels.ChemistCommissionReport
+@{
+    ViewBag.Title = "ChemistDetails";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Chemist Details</h2>
+
+<link href="/Styles/bootstrap.min.css" rel="stylesheet" />
+<h2>Details of <span style="color:red">@Model.ChemistName</span></h2>
+
+@using (Html.BeginForm())
+{
+    <div class="row">
+        <div class="col-md-3">
+            <input type="hidden" name="ChemistId" id="ChemistId" value="@Model.ChemistId" />
+            @Html.TextBoxFor(a=> a.OrderDate, new {@class= "datepicker form - control", required = "required" })
+        </div>
+        <div class="col-md-3">
+            <input type="submit" value="Click" />
+        </div>
+    </div>
+}
+
+
+
+@if (Model.chemistDetails == null)
+{
+    <h3>No Records</h3>
+}
+else
+{
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>OrderId</th>
+            <th>Name</th>
+            <th>Amount</th>
+            <th>
+                Commission Amount(in %)
+            </th>
+            <th>
+                Commission Amount
+            </th>
+            <th>
+                Payable Amount
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.chemistDetails)
+        {
+            <tr>
+                <td>@item.OrderId</td>
+                <td>@item.ChemistName</td>
+                <td>@item.Amount</td>
+                <td>@ViewBag.Commission</td>
+                @{
+                    double amt = (Math.Round(item.Amount * ViewBag.Commission) / 100);
+                    double Value = item.Amount - amt;
+                }
+                <td>
+                    @amt
+                </td>
+                <td>
+                    @Value
+                </td>
+            </tr>
+                    }
+        
+    </tbody>
+</table>
+                    }
+
+<script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
+<link href="~/css/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
+<script>
+    $(".datepicker").datepicker({});
+</script>
+

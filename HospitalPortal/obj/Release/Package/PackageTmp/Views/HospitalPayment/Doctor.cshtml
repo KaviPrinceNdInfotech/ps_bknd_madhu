@@ -1,0 +1,38 @@
+﻿@model HospitalPortal.Models.ViewModels.ReportDTO
+@{
+    ViewBag.Title = "DoctorReport";
+    Layout = null;
+}
+
+<h2>Doctor List</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>
+                Doctor Name
+            </th>
+            <th>
+                Action
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.DoctorReport)
+        {
+            <tr>
+                <td>@item.DoctorName</td>
+                <td><a href="/HospitalPayment/ViewDoctorDetails?DoctorId=@item.Doctor_Id" class="btn btn-primary">View Details</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
+@*<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>*@
+<script src="https://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css">
+
+<script type="text/javascript">
+        $('#table_id').DataTable();
+</script>
+

@@ -1,0 +1,53 @@
+﻿@model HospitalPortal.Models.ViewModels.VendorAddedVehicleVM
+
+@{
+    ViewBag.Title = "All";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Added Vehicle List</h2>
+
+
+@if (Model.AddedVehicleList == null)
+{
+    @TempData["msg"]
+}
+else
+{
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>
+                Category Name
+            </th>
+            <th>
+                Vehicle Name
+            </th>
+            <th>
+                Status
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+      
+        @foreach (var v in Model.AddedVehicleList)
+        {
+            <tr>
+                <td>@v.CategoryName</td>
+                <td>@v.VehicleTypeName</td>
+                <td>
+                    @if (v.IsApproved == true)
+                    {
+                        <span style="color:forestgreen">Approved By Admin</span>
+                    }
+                    else
+                    {
+                        <span style="color:red">Yet to be Approved</span>
+                    }
+                </td>
+            </tr>
+        }
+      
+    </tbody>
+</table>
+}

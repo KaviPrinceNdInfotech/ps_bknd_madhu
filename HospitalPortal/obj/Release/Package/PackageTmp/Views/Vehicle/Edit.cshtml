@@ -1,0 +1,263 @@
+﻿@model HospitalPortal.Models.RequestModel.VehicleEditDto
+@{
+    if (User.Identity.IsAuthenticated)
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_SignUp.cshtml";
+    }
+}
+<style>
+    .formBox {
+        border: 1px solid #848484;
+        margin-left: auto;
+        padding: 1%;
+    }
+
+    #row1 {
+        margin-bottom: 1%;
+    }
+</style>
+<div class="row">
+    <div class="col-md-6">
+        <h3>Edit Vehicle</h3>
+    </div>
+</div>
+@using (Html.BeginForm("Edit", "Vehicle", FormMethod.Post, new { encType = "multipart/form-data" }))
+{
+    @Html.HiddenFor(a => a.Id)
+    @Html.HiddenFor(a => a.IsDeleted)
+    @Html.HiddenFor(a => a.AsPerKM)
+    @Html.HiddenFor(a => a.BasePrice)
+    @Html.HiddenFor(a => a.Cat_Id)
+    @Html.HiddenFor(a => a.FitnessCerficateImage)
+    @Html.HiddenFor(a => a.IfExceeds100)
+    @Html.HiddenFor(a => a.InsuranceImage)
+    @Html.HiddenFor(a => a.IsApproved)
+    @Html.HiddenFor(a => a.PollutionImage)
+    @Html.HiddenFor(a => a.RC_Image)
+    //@Html.HiddenFor(a => a.Validity)
+    @Html.HiddenFor(a => a.VehicleType_Id)
+    @Html.HiddenFor(a => a.Vendor_Id)
+    @Html.HiddenFor(a => a.Driver_Id)
+    @Html.HiddenFor(a => a.RegistrationDate)
+    @Html.Partial("~/Views/Shared/_DisplayMessage.cshtml")
+    <div class="row">
+        <div class="col-md-4">
+            <h3>Basic Detail</h3>
+        </div>
+    </div>
+    <div class="row formBox">
+        <div class="row" id="row1">
+            <div class="col-md-3"> Vehicle Name </div>
+            <div class="col-md-3">
+                @Html.TextBoxFor(a => a.VehicleName, new { @class = "form-control" })
+            </div>
+            <span style="color:red">@Html.ValidationMessageFor(a => a.VehicleName)</span>
+            <div class="col-md-3">Vehicle Number </div>
+            <div class="col-md-3">@Html.TextBoxFor(a => a.VehicleNumber, new { @class = "form-control" }) </div>
+            <span style="color:red">@Html.ValidationMessageFor(a => a.VehicleNumber)</span>
+        </div>
+
+        @*<div class="row" id="row1">
+                <div class="col-md-3">Vehicle Category</div>
+                <div class="col-md-3">
+                    @Html.DropDownListFor(a => a.Cat_Id, Model.CategoryList, "Select", new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.Cat_Id)
+                    </span>
+                </div>
+                <div class="col-md-3"> Vehicle Type </div>
+                <div class="col-md-3">
+                 @Html.DropDownListFor(a => a.VehicleType_Id,
+                            Enumerable.Empty<SelectListItem>()
+                            , "Select", new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.VehicleType_Id)
+                    </span>
+                </div>
+            </div>*@
+
+        <div class="row" id="row1">
+            <div class="col-md-3">Driver Charges </div>
+            <div class="col-md-3">
+                @Html.TextBoxFor(a => a.DriverCharges, new { @class = "form-control" })
+                <span class="red">
+                    @Html.ValidationMessageFor(a => a.DriverCharges)
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <h3>Bank Detail</h3>
+        </div>
+    </div>
+    <div class="row formBox">
+        <div class="row" id="row1">
+            <div class="col-md-3">  Account Number * </div>
+            <div class="col-md-3">
+                @Html.TextBoxFor(a => a.AccountNo, new { @class = "form-control", type = "password" })
+                <span class="red">
+                    @Html.ValidationMessageFor(a => a.AccountNo)
+                </span>
+            </div>
+            <div class="col-md-3">Bank Name </div>
+            <div class="col-md-3">@Html.TextBoxFor(a => a.BranchName, new { @class = "form-control" }) </div>
+            <span style="color:red">@Html.ValidationMessageFor(a => a.BranchName)</span>
+        </div>
+
+        <div class="row" id="row1">
+            <div class="col-md-3">Branch Address</div>
+            <div class="col-md-3">@Html.TextBoxFor(a => a.BranchAddress, new { @class = "form-control" }) </div>
+            <span style="color:red">@Html.ValidationMessageFor(a => a.BranchAddress)</span>
+            <div class="col-md-3"> Account's Holder Name </div>
+            <div class="col-md-3">@Html.TextBoxFor(a => a.HolderName, new { @class = "form-control" }) </div>
+            <span style="color:red">@Html.ValidationMessageFor(a => a.HolderName)</span>
+        </div>
+
+        <div class="row" id="row1">
+            <div class="col-md-3">IFSC Code </div>
+            <div class="col-md-3">
+                @Html.TextBoxFor(a => a.IFSCCode, new { @class = "form-control" })
+                <span class="red">
+                    @Html.ValidationMessageFor(a => a.IFSCCode)
+                </span>
+            </div>
+        </div>
+    </div>
+    @*<div class="row">
+        <div class="col-md-4">
+            <h3>File Detail</h3>
+        </div>
+    </div>*@
+    @*<div class="row formBox">
+        <div class="row" id="row1">
+            <div class="col-md-3"> Registration Certificate file </div>
+            <div class="col-md-1">
+                @{ Html.EnableClientValidation(false); }
+                @if (!string.IsNullOrEmpty(Model.RC_Image))
+                {
+                    <img src="/Images/@Model.RC_Image" class="thumb" style="width:80px; height:80px" />
+                }
+            </div>
+            <div class="col-md-3">
+                @Html.TextBoxFor(a => a.RC_ImageFile, new { type = "file" })
+            </div>
+            <span style="color:red">@Html.ValidationMessageFor(a => a.RC_ImageFile)</span>
+            @{ Html.EnableClientValidation(true); }
+
+            <div class="col-md-3"> Registration Certificate No </div>
+            <div class="col-md-2">@Html.TextBoxFor(a => a.RC_No, new { @class = "form-control" }) </div>
+            <span style="color:red">@Html.ValidationMessageFor(a => a.RC_No)</span>
+        </div>
+
+        <div class="row" id="row1">
+            <div class="col-md-3">  Fitness Certificate file. </div>
+            <div class="col-md-1">
+                @{Html.EnableClientValidation(false);}
+                @if (!string.IsNullOrEmpty(Model.FitnessCerficateImage))
+                {
+                    <img src="/Images/@Model.FitnessCerficateImage" style="width:80px; height:80px" />
+                }
+            </div>
+            <div class="col-md-3">
+                @Html.TextBoxFor(a => a.FitnessCertificateImageFile, new { type = "file" })
+            </div>
+            <span style="color:red">@Html.ValidationMessageFor(a => a.FitnessCertificateImageFile)</span>
+            @{ Html.EnableClientValidation(true); }
+            <div class="col-md-3"> Fitness Certificate Validity </div>
+            <div class="col-md-2">
+                @Html.TextBoxFor(a => a.FitnessCertificateValidity, new { @class ="form-control Previousdp"})
+                <span class="red">
+                    @Html.ValidationMessageFor(a => a.FitnessCertificateValidity)
+                </span>
+            </div>
+        </div>
+
+        <div class="row" id="row1">
+            <div class="col-md-3">Insurance file </div>
+            <div class="col-md-1">
+                @{Html.EnableClientValidation(false);}
+                @if (!string.IsNullOrEmpty(Model.InsuranceImage))
+                {
+                    <img src="/Images/@Model.InsuranceImage" style="width:80px; height:80px" />
+                }
+            </div>
+            <div class="col-md-3">
+                @Html.TextBoxFor(a => a.InsurranceImageFile, new { type = "file" })
+            </div>
+            <span style="color:red">@Html.ValidationMessageFor(a => a.InsurranceImageFile)</span>
+            @{ Html.EnableClientValidation(true); }
+            <div class="col-md-3"> Insurrance Valid Upto </div>
+            <div class="col-md-2">
+                @Html.TextBoxFor(a => a.InsurranceDate, new { @class = "form-control Previousdp" })
+                <span class="red">
+                    @Html.ValidationMessageFor(a => a.InsurranceDate)
+                </span>
+            </div>
+        </div>
+
+        <div class="row" id="row1">
+            <div class="col-md-3">Pollution file </div>
+            <div class="col-md-1">
+                @{Html.EnableClientValidation(false);}
+                @if (!string.IsNullOrEmpty(Model.PollutionImage))
+                {
+                    <img src="/Images/@Model.PollutionImage" style="width:80px; height:80px" />
+                }
+            </div>
+            <div class="col-md-3">
+                @Html.TextBoxFor(a => a.PollutionImageFile, new { type = "file" })
+                <span style="color:red">@Html.ValidationMessageFor(a => a.PollutionImageFile)</span>
+            </div>
+            @{ Html.EnableClientValidation(true); }
+            <div class="col-md-3"> Pollution Valid Upto </div>
+            <div class="col-md-2">
+                @Html.TextBoxFor(a => a.PollutionDate, new { @class = "form-control Previousdp" })
+                <span class="red">
+                    @Html.ValidationMessageFor(a => a.PollutionDate)
+                </span>
+            </div>
+        </div>
+
+    </div>*@
+    <div class="form-group" style="margin-top:5%;">
+        <input type="submit" value="Update Record" class="btn btn-info" />
+    </div>
+}
+
+@if (!User.Identity.IsAuthenticated)
+{
+    <link rel="stylesheet" type="text/css" href="/lib/bootstrap/css/bootstrap.css">
+    @Html.Partial("~/Views/Shared/_script.cshtml")
+}
+<script src="/Scripts/Library/jquery-1.7.1.min.js"></script>
+<script src="~/Scripts/jquery-ui-1.8.20.min.js"></script>
+<link href="~/css/jquery-ui.min.css" rel="stylesheet" />
+<script src="~/js/FranchiseAutoComplete.js"></script>
+<script>
+
+    $("#Cat_Id").change(function () {
+        debugger
+        var catId = $(this).val();
+        var city = $("#VehicleType_Id");
+        city.empty();
+        city.append("<option value=''>Select</option>");
+        $.ajax({
+            url: '/Common/GetTypeUsingCategory?catId=' + catId,
+            type: 'get',
+            success: function (response) {
+                $.each(response, function (key, val) {
+                    city.append("<option value='" + val.Id + "'>" + val.VehicleTypeName + "</option>");
+                });
+            },
+            error: function (error) {
+                console.log(error.responseText);
+            }
+        });
+    });
+</script>

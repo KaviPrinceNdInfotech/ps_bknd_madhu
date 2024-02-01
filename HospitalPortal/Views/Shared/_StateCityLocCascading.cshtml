@@ -1,0 +1,42 @@
+﻿<script>
+    $("#StateMaster_Id").change(function () {
+        var stateId = $(this).val();
+        var city = $("#CityMaster_Id");
+        city.empty();
+        city.append("<option value=''>Select</option>");
+        $.ajax({
+            url: '/Common/GetCitiesByState?stateId='+stateId,
+            type: 'get',
+            success: function (response) {
+                $.each(response, function (key,val) {
+                    city.append("<option value='"+val.Id+"'>"+val.CityName+"</option>");
+                });
+            },
+            error: function (error) {
+                console.log(error.responseText);
+            }
+        });
+    });
+
+    $("#CityMaster_Id").change(function () {
+        debugger
+        let cityId = $(this).val();
+        if (cityId.length < 1)
+            return;
+        let location = $("#Location_Id");
+        location.empty();
+        location.append("<option value=''>Select</option>");
+        $.ajax({
+            url: '/Common/GetLocationByCity?cityId=' + cityId,
+            type: 'get',
+            success: function (response) {
+                $.each(response, function (key, val) {
+                    location.append("<option value='" + val.Id + "'>" + val.LocationName + "</option>");
+                });
+            },
+            error: function (error) {
+                console.log(error.responseText);
+            }
+        });
+    });
+</script>

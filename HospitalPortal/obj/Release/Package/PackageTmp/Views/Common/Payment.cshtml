@@ -1,0 +1,109 @@
+﻿@model HospitalPortal.Models.ViewModels.PaymentMasterDTO
+
+@{
+    ViewBag.Title = "Payment";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Commission for Franchise</h2>
+
+<div style="margin:auto; width:90%">
+    @using (Html.BeginForm("AddPayment", "Common", FormMethod.Post))
+    {
+        <div class="row" style="margin-bottom:3%">
+            <div class="col-md-3">
+                <select name="Department" id="Department" class="form-control">
+                    <option value="">
+                        Select Any
+                    </option>
+                   
+                    <option value="Franchise">
+                       Franchise
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select name="Name" id="Name" class="form-control">
+                    <option value="">
+                        Select Any
+                    </option>
+                    <option value="Doctor">
+                        Doctor
+                    </option>
+                    <option value="Driver">
+                        Driver
+                    </option>
+                    <option value="Vehicle">
+                        Vehicle
+                    </option>
+                    <option value="HealthCheckup">
+                        HealthCheckup
+                    </option>
+                    <option value="Lab">
+                        Lab
+                    </option>
+                    <option value="Nurse">
+                        Nurse
+                    </option>
+                    <option value="RWA">
+                        RWA
+                    </option>
+                    <option value="Patient">
+                        Patient
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <input type="text" name="Amount" id="Amount" placeholder="Enter the Commission" class="form-control" />
+            </div>
+            <div class="col-md-3">
+                <input type="submit" value="Submit" class="btn btn-default" />
+            </div>
+        </div>
+        if (TempData["msg"] != null)
+        {
+            <h4>@TempData["msg"]</h4>
+        }
+
+    }
+
+    @if (Model.paymentList.Count() <= 0)
+    {
+        <h2>No Records</h2>
+    }
+    else
+    {
+        <table class="table table-bordered">
+            <tr>
+                <th>
+                    Department
+                </th>
+                <th>
+                    Role
+                </th>
+                <th>
+                    Amount (in %)
+                </th>
+                <th>
+                    Action
+                </th>
+            </tr>
+            <tbody>
+                @foreach (var item in Model.paymentList)
+                {
+                    <tr>
+                        <td>@item.Department</td>
+                        <td>@item.Name</td>
+                        <td>@item.Amount  % </td>
+                        <td>
+                            <a href="/Common/UpdatePayment?Id=@item.Id" class="btn btn-danger" onclick="return confirm('Are You Sure to Delete?')"><i class="fa fa-trash-o"></i></a>
+                            @*@Html.ActionLink("Delete", "UpdatePayment", new { Id = item.Id },
+    new { onclick = "return confirm('Are sure wants to delete?');", @class = "btn btn-danger" })*@
+                            <a href="/Common/EditFrachiseCommission?Id=@item.Id" class="btn btn-primary" onclick="return confirm('Are You Sure to Edit?')"><i class="fa fa-edit"></i></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
