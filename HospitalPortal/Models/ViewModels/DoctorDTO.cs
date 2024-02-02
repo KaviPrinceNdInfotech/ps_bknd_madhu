@@ -221,6 +221,7 @@ namespace HospitalPortal.Models.ViewModels
         public Nullable<double> TotalFee { get; set; }
         public Nullable<System.DateTime> AppointmentDate { get; set; }
         public string  SlotTime { get; set; }
+        public string DeviceId { get; set; }
         
 
 
@@ -365,6 +366,7 @@ namespace HospitalPortal.Models.ViewModels
         public string DepartmentName { get; set; }
 
         public int? Rating { get; set; } 
+     
     }
 
     public class RWA_Registration

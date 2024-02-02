@@ -264,10 +264,10 @@ join Location l on nl.Location_Id=l.Id
             var NurseHistory = ent.Database.SqlQuery<PAYMENTHISTORY>(query).ToList();
             return Ok(new { NurseHistory });
         }
-        //dropdown
+        
         [HttpGet]
         [Route("api/NurseAPI/Patientlist")]
-        public IHttpActionResult Patientlist(int ID)
+        public IHttpActionResult Patientlist(int ID) //dropdown
         {
             var rm = new Patient();
             
@@ -301,22 +301,18 @@ join Location l on nl.Location_Id=l.Id
         }
 
         [HttpGet]
-        public IHttpActionResult NurseDetails(int id)
+        public IHttpActionResult NurseDetails(int id) 
         {
-            var model = new Nurse();
-            //string query = @"select Nurse.id,Nurse.NurseName,Nurse.Fee,Nurse.About,Nurse.Experience,Nt.NurseTypeName from Nurse left join NurseType as Nt on  Nurse.NurseType_Id = Nt.id where Nurse.id=" + id + "";
-            string query= @"select Nurse.id,Nurse.NurseName,Nurse.Fee,Nurse.About,Nurse.Experience,Nt.NurseTypeName ,Avg(Re.rating1 + Re.rating2 + Re.rating3 + Re.rating4 + Re.rating5)As rating from Nurse
-                          left join Review as Re on Nurse.Id = Re.pro_Id
-                          left join NurseType as Nt on Nurse.NurseType_Id = Nt.id where Nurse.id ='" + id + "'group by Nurse.id,Nurse.NurseName,Nurse.Fee,Nurse.About,Nurse.Experience,Nt.NurseTypeName";
+            
+            string query= @"select Nurse.id,Nurse.NurseName,Nurse.Fee,Nurse.About,Nurse.Experience,Nt.NurseTypeName,Avg(Re.rating1 + Re.rating2 + Re.rating3 + Re.rating4 + Re.rating5)As rating from Nurse
+left join Review as Re on Nurse.Id = Re.pro_Id
+left join NurseType as Nt on Nurse.NurseType_Id = Nt.id
+where Nurse.id ='"+ id + "' group by Nurse.id,Nurse.NurseName,Nurse.Fee,Nurse.About,Nurse.Experience,Nt.NurseTypeName";
             var data = ent.Database.SqlQuery<NurseDetail>(query).FirstOrDefault();
             return Ok(data);
         }
 
-
-        // //New API For Get NurseUpdateprofile  By Anchal Shukla on 20/4/2023
-
         [HttpGet]
-
         [Route("api/NurseAPI/GetNurseProfile")]
         
         public IHttpActionResult GetNurseProfile(int Id)
@@ -359,8 +355,7 @@ join Location l on nl.Location_Id=l.Id
             return Ok(rm);
         }
 
-        //=================NURSE UPLOAD REPORT==============//
-
+         
         [System.Web.Http.HttpPost]
         [System.Web.Http.Route("api/NurseAPI/Nurse_UploadReport")]
         public IHttpActionResult Nurse_UploadReport(Nurse_uploadreport model)
@@ -405,8 +400,7 @@ join Location l on nl.Location_Id=l.Id
             return Ok(rm);
 
         }
-
-        //============NurseViewReport=============//
+         
 
         [HttpGet]
         [Route("api/NurseAPI/Nurse_ViewReport")]
@@ -417,8 +411,7 @@ join Location l on nl.Location_Id=l.Id
             return Ok(new { NurseViewReport });
         }
 
-        //===============NURSE ABOUT============//
-
+         
         [System.Web.Http.HttpGet]
         [System.Web.Http.Route("api/NurseAPI/Nurse_About")]
 
@@ -429,7 +422,7 @@ join Location l on nl.Location_Id=l.Id
             return Ok(NurseAbout);
         }
 
-        //===========NurseViewReportFile=======//
+      
         [HttpGet]
         [Route("api/NurseAPI/Nurse_ViewReport_File")]
         public IHttpActionResult Nurse_ViewReport_File(int Id)

@@ -15,7 +15,6 @@ using static HospitalPortal.Models.ViewModels.ChemistDTO;
 
 namespace HospitalPortal.Controllers
 {
-
     public class LabApiController : ApiController
     {
         ILog log = LogManager.GetLogger(typeof(LabApiController));
@@ -255,7 +254,7 @@ where L.CityMaster_Id=" + model.CityMaster_Id + " and StateMaster_Id = " + model
         public IHttpActionResult LabAptmt(int Lab_Id, int Bookid)
         {
             double gst = ent.Database.SqlQuery<double>(@"select Amount from GSTMaster where IsDeleted=0 and Name='Lab'").FirstOrDefault();
-            string query = $"select BTL.Id,l.LabName,l.LabTypeName,l.year,LT.TestAmount as Fee,{gst} as GST,LT.TestAmount + LT.TestAmount *{gst}/100 as TotalFee,convert(date,BTL.TestDate)as TestDate,Ts.SlotTime from Lab as l left join BookTestLab as BTL on BTL.Lab_Id=l.Id left join TimeSlot as Ts on Ts.Slotid=BTL.Slotid left join LabTest as LT on LT.Id=BTL.Test_Id where l.IsDeleted=0 and BTL.Lab_Id=" + Lab_Id + " and BTL.Id=" + Bookid + "";
+            string query = $"select BTL.Id,l.LabName,l.LabTypeName,l.year,LT.TestAmount as Fee,{gst} as GST,LT.TestAmount + LT.TestAmount *{gst}/100 as TotalFee,convert(date,BTL.TestDate)as TestDate,Ts.SlotTime,al.DeviceId from Lab as l left join BookTestLab as BTL on BTL.Lab_Id=l.Id left join TimeSlot as Ts on Ts.Slotid=BTL.Slotid left join LabTest as LT on LT.Id=BTL.Test_Id left join AdminLogin as al on al.Id=l.AdminLogin_Id where l.IsDeleted=0 and BTL.Lab_Id=" + Lab_Id + " and BTL.Id=" + Bookid + "";
             var data = ent.Database.SqlQuery<LabDet>(query).FirstOrDefault();
             return Ok(data);
 

@@ -34,6 +34,7 @@ namespace HospitalPortal.Models.APIModels
         public Nullable<double> TotalFee { get; set; }
         public Nullable<System.DateTime> TestDate { get; set; }
         public string SlotTime { get; set; }
+        public string DeviceId { get; set; }
 
     }
 

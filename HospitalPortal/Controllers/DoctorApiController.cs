@@ -711,19 +711,15 @@ d in ent.Departments on dep.Department_Id equals d.Id
         }
 
 
-        //==========doctor Details api [15/03/2023]=========[anchal shukla]=======================================================
+         
         [System.Web.Http.HttpGet, System.Web.Mvc.Route("api/DoctorApi/DoctorDetails")]
-        public IHttpActionResult DoctorDetails(int id)
-        {
-            var model = new Doctor();
-
-            //string query = @"select Doctor.Id,Doctor.DoctorName,Doctor.Disease,Doctor.EndTime,Doctor.StartTime,Doctor.Location,Doctor.JoiningDate ,Doctor.LicenceImage, Doctor.About,(select Avg(rating1 + rating2 + rating3 + rating4 + rating5) 
-            //               from Review where Review.pro_Id=Doctor.Id)As rating from Doctor Inner join Review as Re on Doctor.Id = Re.pro_Id where Doctor.Id =" + id + " group by Doctor.Id,Doctor.DoctorName,Doctor.Disease,Doctor.EndTime,Doctor.StartTime,Doctor.Location,Doctor.JoiningDate ,Doctor.LicenceImage,Doctor.About";
-            string query = @"select D.Id, D.DoctorName, D.Experience, D.Fee,D.About,de.DepartmentName,(select avg(rating1 + rating2 + rating3 + rating4 + rating5) from Review where Review.pro_Id=D.Id) As Rating  
+        public IHttpActionResult DoctorDetails(int id) //Checkout api
+        { 
+            string query = @"select D.Id, D.DoctorName, D.Experience, D.Fee,D.About,de.DepartmentName,(select avg(rating1 + rating2 + rating3 + rating4 + rating5) from Review where Review.pro_Id=D.Id) As Rating
  FROM Doctor D
  left join Review as Re on  D.Id = Re.pro_Id
  left join Department as de on de.Id=D.Department_Id
- where D.Id =" + id +"group by D.Id, D.DoctorName, D.Experience, D.Fee,D.About,de.DepartmentName";
+ where D.Id ="+ id + " group by D.Id, D.DoctorName, D.Experience, D.Fee,D.About,de.DepartmentName";
 
             var data = ent.Database.SqlQuery<DoctorDetail>(query).FirstOrDefault();
             return Ok(data);
@@ -902,7 +898,7 @@ inner join Patient as P on P.Id=PA.Patient_Id where D.Id=" + Id + " and PA.IsCan
         {
             var model = new Doctor();
             double gst = ent.Database.SqlQuery<double>(@"select Amount from GSTMaster where IsDeleted=0 and Name='Doctor'").FirstOrDefault();
-            string query = $"select  PA.Id,Doctor.DoctorName,Doctor.Fee,{gst} as GST,Doctor.Fee + Doctor.Fee *{gst}/100 as TotalFee,Doctor.Experience,CONCAT(CONVERT(NVARCHAR, TS.StartTime, 8), ' To ', CONVERT(NVARCHAR, TS.EndTime, 8)) AS SlotTime,(SELECT SpecialistName FROM Specialist WHERE Id=Doctor.Specialist_Id) AS SpecialistName,PA.AppointmentDate from Doctor left join PatientAppointment as PA on  Doctor.id = PA.Doctor_Id  Left join DoctorTimeSlot as Ts on  TS.Id=PA.Slot_id where Doctor.id=" + Doctor_Id + " and PA.Id=" + PA_Id + " and PA.IsCancelled=0";
+            string query = $"select  PA.Id,Doctor.DoctorName,Doctor.Fee,{gst} as GST,Doctor.Fee + Doctor.Fee *{gst}/100 as TotalFee,Doctor.Experience,CONCAT(CONVERT(NVARCHAR, TS.StartTime, 8), ' To ', CONVERT(NVARCHAR, TS.EndTime, 8)) AS SlotTime,(SELECT SpecialistName FROM Specialist WHERE Id=Doctor.Specialist_Id) AS SpecialistName,PA.AppointmentDate,al.DeviceId from Doctor left join PatientAppointment as PA on  Doctor.id = PA.Doctor_Id  Left join DoctorTimeSlot as Ts on  TS.Id=PA.Slot_id join AdminLogin as al on al.Id=Doctor.AdminLogin_Id  where Doctor.id=" + Doctor_Id + " and PA.Id=" + PA_Id + " and PA.IsCancelled=0";
 
             var data = ent.Database.SqlQuery<DoctorAptmt>(query).FirstOrDefault();
             return Ok(data);

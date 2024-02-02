@@ -350,13 +350,13 @@ where ns.Patient_Id="+patientId+ " and ns.ServiceStatus='Approved' order by ns.I
         }
 
 
-        [Route("api/NurseServices/NurseAptmt")]
+        [Route("api/NurseServices/NurseAptmt")]//checkout
         [HttpGet]
         public IHttpActionResult NurseAptmt(int Nurse_Id, int NurseBookingId)
         {
             var model = new Nurse();
             double gst = ent.Database.SqlQuery<double>(@"select Amount from GSTMaster where IsDeleted=0 and Name='Nurse'").FirstOrDefault();
-            string query = $"select Ns.id,Nurse.NurseName,Nt.NurseTypeName,Nurse.Experience,Nurse.Fee,DATEDIFF(day, ns.StartDate, ns.EndDate)  as TotalNumberofdays,{gst} as GST,Nurse.Fee * DATEDIFF(day, ns.StartDate, ns.EndDate)  as TotalFee,Nurse.Fee * DATEDIFF(day, ns.StartDate, ns.EndDate) + (Nurse.Fee *{gst}/100) as TotalFeeWithGST,Ns.serviceDate,Ts.SlotTime from Nurse left join NurseType as Nt on  Nurse.NurseType_Id = Nt.id  left join NurseService as Ns on Ns.Nurse_Id=Nurse.Id left join TimeSlot as Ts on Ts.Slotid=Ns.Slotid where Nurse.IsDeleted=0 and Ns.Nurse_Id=" + Nurse_Id + " and Ns.id =" + NurseBookingId + "";
+            string query = $"select Ns.id,Nurse.NurseName,Nt.NurseTypeName,Nurse.Experience,Nurse.Fee,DATEDIFF(day, ns.StartDate, ns.EndDate)  as TotalNumberofdays,{gst} as GST,Nurse.Fee * DATEDIFF(day, ns.StartDate, ns.EndDate)  as TotalFee,Nurse.Fee * DATEDIFF(day, ns.StartDate, ns.EndDate) + (Nurse.Fee *{gst}/100) as TotalFeeWithGST,Ns.serviceDate,Ts.SlotTime,al.DeviceId from Nurse left join NurseType as Nt on  Nurse.NurseType_Id = Nt.id  left join NurseService as Ns on Ns.Nurse_Id=Nurse.Id left join TimeSlot as Ts on Ts.Slotid=Ns.Slotid join AdminLogin as al on al.Id=Nurse.AdminLogin_Id where Nurse.IsDeleted=0 and Ns.Nurse_Id=" + Nurse_Id + " and Ns.id =" + NurseBookingId + "";
             //string query = $"select Ns.id,Nurse.NurseName,Nt.NurseTypeName,Nurse.Experience,Nurse.Fee,{gst} as GST,Nurse.Fee * DATEDIFF(day, ns.StartDate, ns.EndDate) + (Nurse.Fee *{gst}/100) as TotalFee,Ns.serviceDate,Ts.SlotTime from Nurse left join NurseType as Nt on  Nurse.NurseType_Id = Nt.id  left join NurseService as Ns on Ns.Nurse_Id=Nurse.Id left join TimeSlot as Ts on Ts.Slotid=Ns.Slotid where Nurse.IsDeleted=0 and Ns.Nurse_Id=" + Nurse_Id + " and Ns.id =" + NurseBookingId + "";
             var data = ent.Database.SqlQuery<NurseAptmt>(query).FirstOrDefault();
             return Ok(data);
