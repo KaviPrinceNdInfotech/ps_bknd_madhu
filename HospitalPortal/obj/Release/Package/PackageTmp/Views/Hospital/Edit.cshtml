@@ -21,7 +21,7 @@
                 <h3>Update Hospital Profile</h3>
             </div>
         </div>
-
+        <a href="/Hospital/All" class="btn btn-info">Back</a>
         @Html.HiddenFor(a => a.Id)
         @Html.HiddenFor(a => a.IsDeleted)
         @Html.HiddenFor(a => a.AdminLogin_Id)
@@ -91,8 +91,8 @@
                 <div class="form-group">
                     @{ Html.EnableClientValidation(false);}
                     City  @Html.DropDownListFor(a => a.CityMaster_Id,
- Model.Cities
-  , "Select", new { @class = "form-control" })
+Model.Cities
+, "Select", new { @class = "form-control" })
                     <span class="red">
                         @Html.ValidationMessageFor(a => a.StateMaster_Id)
                     </span>
@@ -109,8 +109,8 @@
                 <div class="form-group">
                     @{ Html.EnableClientValidation(false);}
                     Location  @Html.DropDownListFor(a => a.Location_Id,
-                        Model.Locations
-                        , "Select", new { @class = "form-control" })
+              Model.Locations
+              , "Select", new { @class = "form-control" })
                     <span class="red">
                         @Html.ValidationMessageFor(a => a.Location_Id)
                     </span>
@@ -137,10 +137,10 @@
                 </div>
                 <div class="form-group">
                     @{Html.EnableClientValidation(false);}
-                    Registration Certificate * 
-                    @if(!string.IsNullOrEmpty(Model.AuthorizationLetterImage))
+                    Registration Certificate *
+                    @if (!string.IsNullOrEmpty(Model.AuthorizationLetterImage))
                     {
-                        <img src="/Images/@Model.AuthorizationLetterImage" class="thumb"/>
+                        <img src="/Images/@Model.AuthorizationLetterImage" class="thumb" />
                     }
                     @Html.TextBoxFor(a => a.AuthorizationImageFile, new { @class = "form-control", type = "file" })
                     <span class="red">
@@ -153,7 +153,7 @@
 
 
                 <div class="form-group">
-                    <input type="submit" value="Save" class="btn btn-info" />
+                    <input type="submit" value="Update" class="btn btn-info" />
                 </div>
             </div>
         </div>

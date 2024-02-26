@@ -74,7 +74,6 @@ Lab.LabName, Lab.PhoneNumber, Lab.MobileNumber, LabTest.TestAmount,
         [HttpGet]
         public IHttpActionResult LabDetails(int id)
         {
-            var model = new Lab();
             string query = @"select L.id,L.LabName,L.about,L.LabTypeName,L.year,L.Location,L.fee,L.WorkingDay,
 (select AVG(Rating1 + Rating2 + Rating3 + Rating4 + Rating5) from Review where Review.pro_Id=L.Id)as Rating 
  from Lab as L left join Review as R on R.pro_Id=L.Id 

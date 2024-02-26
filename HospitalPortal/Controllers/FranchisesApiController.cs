@@ -611,7 +611,12 @@ Inner join VendorPayOut as VP on VP.Vendor_Id=V.Id";
 
         public IHttpActionResult Fra_vehicleCat_dropdown()
         {
-            string qry = @"select * from MainCategory where IsDeleted = 0 order by CategoryName";
+            //string qry = @"select * from MainCategory where IsDeleted = 0 order by CategoryName";
+            string qry = @"SELECT Id, 
+       CONCAT('[', Type, '] ', CategoryName) AS CategoryName 
+FROM MainCategory 
+WHERE IsDeleted = 0 
+ORDER BY CategoryName;";
             var VehicleCatDropdown = ent.Database.SqlQuery<Vehiclecat>(qry).ToList();
             return Ok(new { VehicleCatDropdown });
         }
@@ -815,14 +820,7 @@ Inner join VendorPayOut as VP on VP.Vendor_Id=V.Id";
             {
                 try
                 {
-                    //if (!ModelState.IsValid)
-                    //{
-                    //    var message = string.Join(" | ", ModelState.Values.SelectMany(a => a.Errors).Select(a => a.ErrorMessage));
-                    //    rm.Message = message;
-                    //    rm.Status = 0;
-                    //    return Ok(rm);
-                    //}
-
+                    
                     if (ent.Doctors.Any(a => a.DoctorName == model.DoctorName && a.MobileNumber == model.MobileNumber))
                     {
                         var data = ent.Doctors.Where(a => a.DoctorName == model.DoctorName && a.MobileNumber == model.MobileNumber).FirstOrDefault();

@@ -87,7 +87,7 @@
                         <td>@item.Name</td>
                         <td>@item.Amount % </td>
                         <td>
-                            <a href="/Common/EditGST?Id=@item.Id" class="btn btn-primary" onclick="return confirm('Are You Sure to Edit?')">Edit</a>
+                            <a href="/Common/EditGST?Id=@item.Id" class="btn btn-primary" onclick="return confirm('Are You Sure wants to Edit?')">Edit</a>
                             @*<a href="/Common/DeleteTDS?Id=@item.Id" class="btn btn-danger">Delete</a>*@
                             @Html.ActionLink("Delete", "DeleteGST", new { Id = @item.Id }, new { onclick = "return confirm('Are sure wants to delete?');", @class = "btn btn-danger" })
                         </td>

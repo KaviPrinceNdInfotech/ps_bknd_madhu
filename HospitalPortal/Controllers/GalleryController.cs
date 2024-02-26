@@ -13,11 +13,19 @@ namespace HospitalPortal.Controllers
     public class GalleryController : Controller
     {
         DbEntities ent = new DbEntities();
+
+        private int GetVendorId()
+        {
+            int loginId = Convert.ToInt32(User.Identity.Name);
+            int FranchiseId = ent.Database.SqlQuery<int>("select Id from Vendor where AdminLogin_Id=" + loginId).FirstOrDefault();
+            return FranchiseId;
+        }
+
         [HttpGet]
-        public ActionResult Gallery()
+        public ActionResult Gallery(int? id)
         {
             var model = new GallertDTO();
-            string q = @"select * from Gallery where IsDeleted=0 order by Id desc";
+            string q = @"select * from Gallery where IsDeleted=0 and Franchise_Id="+ id + " order by Id desc";
             var data = ent.Database.SqlQuery<GalleryList>(q).ToList();
             if(data.Count() == 0)
             {
@@ -40,12 +48,13 @@ namespace HospitalPortal.Controllers
             model.Images = Img;
             var domain = new Gallery();
             domain.ImageName = model.ImageName;
+            domain.Franchise_Id = GetVendorId();
             domain.Images = model.Images;
             domain.IsDeleted = false;
             ent.Galleries.Add(domain);
             ent.SaveChanges();
             TempData["msg"] = "Successfully Inserted";
-            return RedirectToAction("Gallery");
+            return RedirectToAction("Gallery", new {id= GetVendorId() });
         }
 
         public ActionResult Delete(int id)
@@ -61,7 +70,7 @@ namespace HospitalPortal.Controllers
                 string msg = ex.ToString();
                 TempData["msg"] = "Server Error!";
             }
-            return RedirectToAction("Gallery");
+            return RedirectToAction("Gallery", new {id=id});
         }
     }
 }

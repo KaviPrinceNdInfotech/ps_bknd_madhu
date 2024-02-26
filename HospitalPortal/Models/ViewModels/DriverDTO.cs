@@ -1,9 +1,12 @@
 ﻿using HospitalPortal.Models.CommonClasses;
 using HospitalPortal.Models.Validation;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 
@@ -23,6 +26,7 @@ namespace HospitalPortal.Models.ViewModels
         public bool IsDeleted { get; set; }
         [Required]
         public string DriverName { get; set; }
+        public string Paidamount { get; set; }
         [Required]
         [MobileNumberValidation]
         [RegularExpression("^[0-9]*$", ErrorMessage = "Mobile Number must be numeric")]
@@ -45,8 +49,9 @@ namespace HospitalPortal.Models.ViewModels
         [Required]
         public string DlNumber { get; set; }
         public string PAN { get; set; }
+        public Nullable<System.DateTime> DlValidity { get; set; }
         //[Required]
-       // public System.DateTime DlValidity { get; set; }
+        // public System.DateTime DlValidity { get; set; }
         [Required]
         //[DataType(DataType.Password)]
         //[StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 8)]
@@ -71,11 +76,11 @@ namespace HospitalPortal.Models.ViewModels
         //[Required(ErrorMessage = "PAN No. Can't Be Empty")]
         //public string PAN { get; set; }
         //[Required(ErrorMessage = "Aadhar Number Can't Be Empty")]
-       // public string AadharNumber { get; set; }
-        //public string AadharImage { get; set; }
-        //public HttpPostedFileBase AadharImageFile { get; set; }
-        //public string AadharImage2 { get; set; }
-        //public HttpPostedFileBase AadharImageFile2 { get; set; }
+        public string AadharNumber { get; set; }
+        public string AadharImage { get; set; }
+        public HttpPostedFileBase AadharImageFile { get; set; }
+        public string AadharImage2 { get; set; }
+        public HttpPostedFileBase AadharImageFile2 { get; set; }
         public Nullable<int> Vendor_Id { get; set; }
         public string PanImage { get; set; }
         public HttpPostedFileBase PanImageFile { get; set; }
@@ -223,11 +228,44 @@ namespace HospitalPortal.Models.ViewModels
         public string CityName { get; set; }
         public string Location { get; set; }
         public string PinCode { get; set; }
-        //public string PaidAmount { get; set; }
-       
-        //public string Status { get; set; }
-     
 
+        public double end_Lat { get; set; }
+        public double end_Long { get; set; }
+        public double start_Lat { get; set; }
+        public double start_Long { get; set; }
+        //CODE FOR LAT LONG TO LOCATION 
+        public string PickUpLoaction
+        {
+            get { return getlocation(start_Lat.ToString(), start_Long.ToString()); }
+        }
+        public string DropLocation
+        {
+            get { return getlocation(end_Lat.ToString(), end_Long.ToString()); }
+        }
+         
+        private string getlocation(string latitude, string longitude)
+        {
+
+            string url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + latitude + "," + longitude + "&key=AIzaSyBrbWFXlOYpaq51wteSyFS2UjdMPOWBlQw";
+
+            // Make the HTTP request.
+            WebRequest request = WebRequest.Create(url);
+            request.Method = "GET";
+            request.Timeout = 10000;
+
+            // Get the response.
+            WebResponse response = request.GetResponse();
+            string responseText = new StreamReader(response.GetResponseStream()).ReadToEnd();
+
+            // Parse the response JSON.
+            var json = JsonConvert.DeserializeObject<dynamic>(responseText);
+
+            // Get the location from the JSON.
+            var location = json.results[0].formatted_address;
+            return location;
+        }
+
+        //END CODE FOR LAT LONG TO LOCATION 
     }
 
     public class payhistory
@@ -240,6 +278,43 @@ namespace HospitalPortal.Models.ViewModels
         public Nullable<decimal> Amount { get; set; }
         public Nullable<System.DateTime> PaymentDate { get; set; }
         public string IsPay { get; set; }
+        public double end_Lat { get; set; }
+        public double end_Long { get; set; }
+        public double start_Lat { get; set; }
+        public double start_Long { get; set; }
+        //CODE FOR LAT LONG TO LOCATION 
+        public string PickUpLoaction
+        {
+            get { return getlocation(start_Lat.ToString(), start_Long.ToString()); }
+        }
+        public string DropLocation
+        {
+            get { return getlocation(end_Lat.ToString(), end_Long.ToString()); }
+        }
+
+        private string getlocation(string latitude, string longitude)
+        {
+
+            string url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + latitude + "," + longitude + "&key=AIzaSyBrbWFXlOYpaq51wteSyFS2UjdMPOWBlQw";
+
+            // Make the HTTP request.
+            WebRequest request = WebRequest.Create(url);
+            request.Method = "GET";
+            request.Timeout = 10000;
+
+            // Get the response.
+            WebResponse response = request.GetResponse();
+            string responseText = new StreamReader(response.GetResponseStream()).ReadToEnd();
+
+            // Parse the response JSON.
+            var json = JsonConvert.DeserializeObject<dynamic>(responseText);
+
+            // Get the location from the JSON.
+            var location = json.results[0].formatted_address;
+            return location;
+        }
+
+        //END CODE FOR LAT LONG TO LOCATION 
     }
     public class payouthistory
     {

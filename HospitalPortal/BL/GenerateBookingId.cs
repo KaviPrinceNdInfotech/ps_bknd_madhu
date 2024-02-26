@@ -81,7 +81,7 @@ namespace HospitalPortal.BL
                 }
                 else
                 {
-                    return "DR0001";
+                    return "PS000";
                 }
             }
         }

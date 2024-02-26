@@ -54,7 +54,9 @@ namespace HospitalPortal.Controllers
                     model.PayHistory = data1;
                     foreach (var item in data1)
                     {
-                        var razorcomm = item.Amount * (2.36 / 100);
+                        //var razorcomm = item.Amount * (2/ 100);
+                        var razorcomm = (item.Amount * 2) / 100;
+                        //var razorcomm = item.Amount * (2.36 / 100);
                         // var razorcommafter = razorcomm * 2.36 / 100;
                         var totalrazorcomm = razorcomm;
                         item.Amountwithrazorpaycomm = item.Amount + totalrazorcomm;
@@ -79,7 +81,7 @@ namespace HospitalPortal.Controllers
                 model.PayHistory = data;
                 foreach (var item in data)
                 {
-                    var razorcomm = item.Amount * (2.36 / 100);
+                    var razorcomm = (item.Amount * 2 )/100;
                     // var razorcommafter = razorcomm * 2.36 / 100;
                     var totalrazorcomm = razorcomm;
                     item.Amountwithrazorpaycomm = item.Amount + totalrazorcomm;

@@ -38,6 +38,7 @@ namespace HospitalPortal.Models.RequestModel
         public string PollutionImage { get; set; }
         public string FitnessCerficateImage { get; set; }
         public string VehicleTypeName { get; set; }
+        public string VehicleOwnerName { get; set; }
         
         public string VehicleImg { get; set; }
         public HttpPostedFileBase VehicleImgFile { get; set; }

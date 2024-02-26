@@ -21,10 +21,10 @@
                   @Html.ActionLink("Show All", "All", null, new { @class="btn btn-info"})
                </div>
             </div>*@
-
+        <a href="/Driver/All" class="btn btn-info">Back</a>
         <div class="row">
             <div class="col-md-6">
-                <h3>Register Driver</h3>
+                <h3>Upadate Driver Detail</h3>
             </div>
         </div>
         @Html.HiddenFor(a => a.IsCheckedTermsCondition)
@@ -32,14 +32,14 @@
         @Html.HiddenFor(a => a.IsDeleted)
         @Html.HiddenFor(a => a.IsApproved)
         @Html.HiddenFor(a => a.AdminLogin_Id)
-        @Html.HiddenFor(a => a.MobileNumber)
-        @*@Html.HiddenFor(a => a.AadharImage)
-        @Html.HiddenFor(a => a.AadharImage2)*@
+        @Html.HiddenFor(a => a.MobileNumber) 
         @Html.HiddenFor(a => a.DlImage)
         @Html.HiddenFor(a => a.DlImage1)
         @Html.HiddenFor(a => a.DlImage2)
         @Html.HiddenFor(a => a.DlImage3)
         @Html.HiddenFor(a => a.DriverImage)
+        @Html.HiddenFor(a => a.AadharImage)
+        @Html.HiddenFor(a => a.AadharImage2)
         @Html.HiddenFor(a => a.Password)
         @Html.HiddenFor(a => a.VerificationDoc)
         @Html.HiddenFor(a => a.DriverId)
@@ -55,52 +55,32 @@
                     </span>
                 </div>
                 @{Html.EnableClientValidation(false);}
-                <div class="form-group">
-                    Vehicle Images
-                    @if (!string.IsNullOrEmpty(Model.DlImage2))
-                {
-                        <img src="/Images/@Model.DlImage2" class="thumb" />
-                    }
-
-                    @*<fieldset style="margin-top:3%; margin-bottom:3%;">
-                        <legend><b>Vehicle Images: </b></legend>
-                        <div class="form-group">
-                            Vehicle Image 1: @Html.TextBoxFor(a => a.DlFile2, new { @class = "form-control", type = "file" })
-                        </div>
-                        <div class="form-group">
-                            Vehicle Image 2 : @Html.TextBoxFor(a => a.DlFile3, new { @class = "form-control", type = "file" })
-                        </div>
-                    </fieldset>*@
-                </div>
-                @*<div class="form-group">
-                        Mobile Number * @Html.TextBoxFor(a => a.MobileNumber, new { @class = "form-control" })
-                        <span class="red">
-                            @Html.ValidationMessageFor(a => a.MobileNumber)
-                        </span>
-                    </div>*@
-
-
+           
+                 
                 <div class="form-group">
                     Email Id  @Html.TextBoxFor(a => a.EmailId, new { @class = "form-control" })
                     <span class="red">
                         @Html.ValidationMessageFor(a => a.EmailId)
                     </span>
                 </div>
-
-                @*<div class="form-group">
-                        Password * @Html.PasswordFor(a => a.Password, new { @class = "form-control" })
-                        <span class="red">
-                            @Html.ValidationMessageFor(a => a.Password)
-                        </span>
-                    </div>
-
-                    <div class="form-group">
-                        Confirm Your Password * @Html.PasswordFor(a => a.ConfirmPassword, new { @class = "form-control" })
-                        <span class="red">
-                            @Html.ValidationMessageFor(a => a.ConfirmPassword)
-                        </span>
-                    </div>*@
-
+                <div class="form-group">
+                    Mobile No.  @Html.TextBoxFor(a => a.MobileNumber, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.MobileNumber)
+                    </span>
+                </div>
+                <div class="form-group">
+                    Charge  @Html.TextBoxFor(a => a.Paidamount, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.Paidamount)
+                    </span>
+                </div>
+                <div class="form-group">
+                    Vehicle * @Html.DropDownListFor(a => a.VehicleType_Id, Model.VehicleList, "Select", new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.VehicleType_Id)
+                    </span>
+                </div>
                 <div class="form-group">
                     State * @Html.DropDownListFor(a => a.StateMaster_Id, Model.States, "Select", new { @class = "form-control" })
                     <span class="red">
@@ -109,16 +89,13 @@
                 </div>
 
                 <div class="form-group">
-                    City * @Html.DropDownListFor(a => a.CityMaster_Id,
-Model.Cities
-, "Select", new { @class = "form-control" })
+                    City * @Html.DropDownListFor(a => a.CityMaster_Id, Model.Cities, "Select", new { @class = "form-control" })
                     <span class="red">
                         @Html.ValidationMessageFor(a => a.CityMaster_Id)
                     </span>
-                </div>
-
+                </div> 
                 <div class="form-group">
-                    Address * @Html.TextAreaFor(a => a.Location, new { @class = "form-control" })
+                    Location * @Html.TextAreaFor(a => a.Location, new { @class = "form-control" })
                     <span class="red">
                         @Html.ValidationMessageFor(a => a.Location)
                     </span>
@@ -128,22 +105,7 @@ Model.Cities
                     <span class="red">
                         @Html.ValidationMessageFor(a => a.PinCode)
                     </span>
-                </div>
-                @{Html.EnableClientValidation(false);}
-                <div class="form-group">
-
-                    Your Photo *
-                    @if (!string.IsNullOrEmpty(Model.DriverImage))
-                    {
-                        <img src="/Images/@Model.DriverImage" class="thumb" />
-                    }
-                    @*@Html.TextBoxFor(a => a.DriverImageFile, new { @class = "form-control", type = "file" })
-                    <span class="red">
-                        @Html.ValidationMessageFor(a => a.DriverImageFile)
-                    </span>*@
-                </div>
-
-                @{Html.EnableClientValidation(false);}
+                </div> 
                 <div class="form-group">
                     DL Image *
                     @if (!string.IsNullOrEmpty(Model.DlImage))
@@ -167,113 +129,52 @@ Model.Cities
                             </span>
                         </div>
                     </fieldset>
-                </div>
-                @*@{Html.EnableClientValidation(true);}*@
+                </div> 
                 <div class="form-group">
                     DL Number * @Html.TextBoxFor(a => a.DlNumber, new { @class = "form-control" })
                     <span class="red">
                         @Html.ValidationMessageFor(a => a.DlNumber)
                     </span>
                 </div>
+                <div class="form-group">
+                    Pan Number * @Html.TextBoxFor(a => a.PAN, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.PAN)
+                    </span>
+                </div>
 
-                @*<div class="form-group">
+                <div class="form-group">
                     DL Valid Upto * @Html.TextBoxFor(a => a.DlValidity, new { @class = "form-control dp" })
                     <span class="red">
                         @Html.ValidationMessageFor(a => a.DlValidity)
                     </span>
-                </div>*@
-
-                @*<div class="form-group">
-                    PAN Number  @Html.TextBoxFor(a => a.PAN, new { @class = "form-control" })
-                    <span class="red">
-                        @Html.ValidationMessageFor(a => a.PAN)
-                    </span>
-                </div>*@
-
-                @*<div class="form-group">
-                    Aadhar Number  @Html.TextBoxFor(a => a.AadharNumber, new { @class = "form-control" })
-                    <span class="red">
-                        @Html.ValidationMessageFor(a => a.AadharNumber)
-                    </span>
-                </div>*@
-
-                @{Html.EnableClientValidation(false);}
-
-
+                </div> 
                 <div class="form-group">
-                    @*Aadhar Image
-                    @if (string.IsNullOrEmpty(Model.PanImage))
-                    {
-                        <a href="/Images/@Model.AadharImage">
-                            <img src="/Images/@Model.AadharImage" class="thumb" />
-                        </a>
-                        <a href="/Images/@Model.AadharImage2">
-                            <img src="/Images/@Model.AadharImage2" class="thumb" />
-                        </a>
-                    }*@
-                    @*@if (string.IsNullOrEmpty(Model.AadharImage) && string.IsNullOrEmpty(Model.AadharImage2))
-                    {
-                        <a href="/Images/@Model.PanImage">
-                            <img src="/Images/@Model.PanImage" class="thumb" />
-                        </a>
-                    }*@
-                    @*<div class="form-group">
-                        Kindaly Check
-                        <input type="radio" name="image1" value="Aadhar" id="Image1">Aadhar Image
-                        <input type="radio" name="image1" value="Pan" id="Image2">Pan Image
-                    </div>*@
-                    <div class="form-group" id="AadharimageDiv" style="display:none">
-                        @*<div class="form-group">
+                    <div class="form-group" id="AadharimageDiv">
+                        <div class="form-group">
                             Aadhar Image 1*  @Html.TextBoxFor(a => a.AadharImageFile, new { @class = "form-control", type = "file" })
                             <span class="red">
                                 @Html.ValidationMessageFor(a => a.AadharImageFile)
                             </span>
-                        </div>*@
-                        @*<div class="form-group">
+                        </div>
+                        <div class="form-group">
                             Aadhar Image 2*  @Html.TextBoxFor(a => a.AadharImageFile2, new { @class = "form-control", type = "file" })
                             <span class="red">
-                                @Html.ValidationMessageFor(a => a.AadharImageFile)
+                                @Html.ValidationMessageFor(a => a.AadharImageFile2)
                             </span>
-                        </div>*@
-                    </div>
-
-                    <div class="form-group" id="PanimageDiv" style="display:none">
-                        @*<div class="form-group">
-                            Pan Image*  @Html.TextBoxFor(a => a.AadharImageFile, new { @class = "form-control", type = "file" })
-                            <span class="red">
-                                @Html.ValidationMessageFor(a => a.AadharImageFile)
-                            </span>
-                        </div>*@
-
-                    </div>
-                    @{
-                        Html.EnableClientValidation(true);
-                    }
-
-
-                    @*<div class="form-group">
-                        Has Police Verification
-                        @Html.CheckBoxFor(a => a.IsVerifiedByPolice)
-                    </div>*@
-
-
-                    @*<div class="form-group" id="verificationDiv" style="display:@display">
-                        Police verification doc.
-                        @Html.TextBoxFor(a => a.VerificationImage, new { type = "file" })
-                        <a href="/Images/@Model.VerificationDoc">
-                            <img class="thumb" src="/Images/@Model.VerificationDoc" />
-                        </a>
-                    </div>*@
-
+                        </div>
+                    </div> 
+                  
                     <div class="form-group">
-                        <input type="submit" value="Save" class="btn btn-info" />
+                        <input type="submit" value="Update" class="btn btn-info" />
                     </div>
                 </div>
             </div>
         </div>
 
     </div>
-                        }
+ 
+}
 
 <script src="/Scripts/Library/jquery-1.7.1.min.js"></script>
 <script>
@@ -319,3 +220,4 @@ Model.Cities
 {
     <script src="~/Scripts/EditAlert.js"></script>
 }
+ 

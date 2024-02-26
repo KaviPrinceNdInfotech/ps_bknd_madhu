@@ -95,6 +95,8 @@ namespace HospitalPortal.Models
         public int Id { get; set; }
         public string PatientName { get; set; }
         public string Image1 { get; set; }
+        public string SlotTime { get; set; }
+        public DateTime UploadDate { get; set; }
     }
 
     public class DoctorViewReportFile

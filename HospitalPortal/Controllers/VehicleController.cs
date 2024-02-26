@@ -388,7 +388,8 @@ where v.IsDeleted=0 order by v.Id desc";
         {
             //Using AutoSearch get Vehicle Number from passing model 
             model.VehicleList = new SelectList(repos.GetVehicleTypes(), "Id", "VehicleTypeName");
-            string Q = @"select * from driver where VehicleType_Id is null and IsDeleted = 0";
+            //string Q = @"select * from driver where VehicleType_Id is null and IsDeleted = 0";
+            string Q = @"select * from driver where VehicleType_Id=0 or VehicleType_Id is null and IsDeleted = 0";
             var data = ent.Database.SqlQuery<VehicleLists>(Q).ToList();
             model.VehicleLists = data;
             return View(model);

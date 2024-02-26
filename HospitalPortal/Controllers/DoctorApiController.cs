@@ -586,9 +586,7 @@ where d.Id=" + DoctorId + " and d.IsDeleted=0";
             model.response = data;
             return Ok(model);
         }
-
-
-
+         
         [System.Web.Http.HttpGet]
 
         public IHttpActionResult PatientReports(int? DoctorId = 0, int? PatientId = 0)
@@ -1000,7 +998,11 @@ inner join Patient as P on P.Id=PA.Patient_Id where D.Id=" + Id + " and PA.IsCan
         [System.Web.Http.Route("api/DoctorApi/Doctor_ViewReport")]
         public IHttpActionResult Doctor_ViewReport(int Id)
         {
-            string qry = @"select DR.Id,P.PatientName,DR.Image1 from Patient as P left join DoctorReports as DR on DR.Patient_Id=P.Id where DR.Doctor_Id="+ Id +" order by Dr.Id Desc";
+            //string qry = @"select DR.Id,P.PatientName,DR.Image1 from Patient as P left join DoctorReports as DR on DR.Patient_Id=P.Id where DR.Doctor_Id="+ Id +" order by Dr.Id Desc";
+            string qry = @"select distinct DR.Id,P.PatientName,DR.Image1,DR.UploadDate,CONCAT(CONVERT(NVARCHAR, TS.StartTime, 8),' To ', CONVERT(NVARCHAR, TS.EndTime, 8)) AS SlotTime from Patient as P 
+left join DoctorReports as DR on DR.Patient_Id=P.Id 
+join PatientAppointment as pa on pa.Doctor_Id=DR.Doctor_Id
+join DoctorTimeSlot TS on TS.Id=pa.Slot_id where DR.Doctor_Id=" + Id +" order by Dr.Id Desc";
             var DoctorViewReport = ent.Database.SqlQuery<DoctorViewReport>(qry).ToList();
             return Ok(new { DoctorViewReport });
         }
@@ -1037,7 +1039,7 @@ inner join Patient as P on P.Id=PA.Patient_Id where D.Id=" + Id + " and PA.IsCan
         [System.Web.Http.HttpGet, System.Web.Http.Route("api/DoctorApi/DoctorPatientList")]
         public IHttpActionResult DoctorPatientList(int Id)
         {
-            var qry = @"select p.Id,p.PatientName from Patient as p 
+            var qry = @"select distinct p.Id,p.PatientName from Patient as p 
 left join PatientAppointment as PA on PA.Patient_Id=p.id
 where PA.Doctor_Id=" + Id + "";
             var PatientName = ent.Database.SqlQuery<Labrepo>(qry).ToList();
@@ -1249,9 +1251,9 @@ where PA.Doctor_Id=" + Id + "";
                 };
 
                 EmailOperations.SendEmainewpdf(drmail);
-                Message.SendSmsUserIdPass("gdfsg");
+                Message.SendSmsUserIdPass("Medicine Prescription");
                 rm.Status = 1;
-                rm.Message = "Detail Add Successfully!!!";
+                rm.Message = "Prescription Add Successfully!!!";
                 return Ok(rm);
             }
             catch (Exception ex)

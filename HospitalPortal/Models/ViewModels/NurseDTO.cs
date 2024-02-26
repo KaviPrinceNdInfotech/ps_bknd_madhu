@@ -62,7 +62,7 @@ namespace HospitalPortal.Models.ViewModels
         //public string AadharNumber { get; set; }
     
         //public string AadharImage { get; set; }
-       // public string PanImage { get; set; }
+        public string PanImage { get; set; }
         //public string AadharImage2 { get; set; }
         [Required(ErrorMessage = "Fee Required")]
 
