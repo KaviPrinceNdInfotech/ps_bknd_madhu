@@ -344,9 +344,8 @@ namespace HospitalPortal.Controllers
         [System.Web.Http.HttpGet]
         [System.Web.Http.Route("api/DriverApi/BookingHistory")]
         public IHttpActionResult BookingHistory(int DriverId)
-        {
-            var rm = new Driver();
-            string query = @"select P.Id,P.PatientName,P.MobileNumber,sm.StateName,cm.CityName,P.PinCode,P.Location from DriverLocation as DL left join Patient as P on Dl.PatientId=P.Id left join citymaster as cm with(nolock) on cm.id=P.CityMaster_Id left join statemaster as sm with(nolock) on sm.id=P.StateMaster_Id left join Driver as D on D.Id=DL.Driver_Id where D.Id=" + DriverId + " and DL.IsPay='Y'";
+        { 
+            string query = @"select P.Id,P.PatientName,P.MobileNumber,sm.StateName,cm.CityName,P.PinCode,P.Location,DL.start_Lat,DL.start_Long,DL.end_Long,DL.end_Lat from DriverLocation as DL left join Patient as P on Dl.PatientId=P.Id left join citymaster as cm with(nolock) on cm.id=P.CityMaster_Id left join statemaster as sm with(nolock) on sm.id=P.StateMaster_Id left join Driver as D on D.Id=DL.Driver_Id where D.Id=" + DriverId + " and DL.IsPay='Y'";
             var BookingHistory = ent.Database.SqlQuery<BookingOrderHistory>(query).ToList();
             return Ok(new { BookingHistory });
 
@@ -357,7 +356,7 @@ namespace HospitalPortal.Controllers
         public IHttpActionResult PaymentHistory(int Id)
         {
             var rm = new Driver();
-            string query = @"select P.Id,P.PatientName,P.MobileNumber,P.Location,DL.Id as PaymentId,DL.Amount,DL.PaymentDate,DL.IsPay from DriverLocation as DL left join Patient as P on Dl.PatientId=P.Id left join Driver as D on D.Id=DL.Driver_Id where D.Id=" + Id + " and DL.IsPay='Y'";
+            string query = @"select P.Id,P.PatientName,P.MobileNumber,P.Location,DL.Id as PaymentId,DL.Amount,DL.PaymentDate,DL.IsPay,DL.start_Lat,DL.start_Long,DL.end_Long,DL.end_Lat from DriverLocation as DL left join Patient as P on Dl.PatientId=P.Id left join Driver as D on D.Id=DL.Driver_Id where D.Id=" + Id + " and DL.IsPay='Y'";
             var Data = ent.Database.SqlQuery<payhistory>(query).ToList();
             return Ok(Data);
 

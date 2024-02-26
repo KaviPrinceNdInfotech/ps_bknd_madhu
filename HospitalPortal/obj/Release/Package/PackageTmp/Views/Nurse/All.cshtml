@@ -61,6 +61,7 @@
                          <th>Email</th>
                          <th>Address</th>
                          <th>Certificate</th>
+                         <th>Pan</th>
                          @*<th>PAN</th>*@
                          @*<th>Aadhar</th>*@
                          <th>Approval</th>
@@ -97,14 +98,13 @@
                                        <img src="/Images/@item.CertificateImage" style="width:100px;height:80px" />
                                    </a>
                                </td>
-                               @*<td>@item.PAN
-                                   @if (string.IsNullOrEmpty(item.AadharImage) && string.IsNullOrEmpty(item.AadharImage2))
-                {
+                               <td>@item.PAN
+                                    
                                        <a href="/Images/@item.PanImage">
                                            <img src="/Images/@item.PanImage" class="thumb" />
-                                       </a>
-                                   }
-                               </td>*@
+                                       </a>                                    
+                               </td>
+
                                @*<td>@item.AadharNumber
                                    @if (string.IsNullOrEmpty(item.PanImage))
                 {

@@ -78,25 +78,7 @@ namespace HospitalPortal.Controllers
                     };
                     ent.AdminLogins.Add(admin);
                     ent.SaveChanges();
-
-
-                    // Drive Picture Section 
-                    //if (model.DriverImageFile == null)
-                    //{
-                    //    TempData["msg"] = "Driver Picture can not be null";
-                    //    model.States = new SelectList(repos.GetAllStates(), "Id", "StateName");
-                    //    tran.Rollback();
-                    //    return View(model);
-                    //}
-                    //var driverImg = FileOperation.UploadImage(model.DriverImageFile, "Images");
-                    //if (driverImg == "not allowed")
-                    //{
-                    //    TempData["msg"] = "Only png,jpg,jpeg files are allowed as Driver Picture.";
-                    //    model.States = new SelectList(repos.GetAllStates(), "Id", "StateName");
-                    //    tran.Rollback();
-                    //    return View(model);
-                    //}
-                    //model.DriverImage = driverImg;
+                     
 
                     //DL image upload section
                     if (model.DlFile == null)
@@ -116,7 +98,7 @@ namespace HospitalPortal.Controllers
                             tran.Rollback();
                             return View(model);
                         }
-                        model.DlImage = dlImg;
+                        model.DlImage1 = dlImg;
                     }
 
                     if (model.DlFile1 == null)
@@ -136,64 +118,9 @@ namespace HospitalPortal.Controllers
                             tran.Rollback();
                             return View(model);
                         }
-                        model.DlImage1 = dlImg1;
+                        model.DlImage2 = dlImg1;
                     }
-                    //Vehicle Image Upload
-                    //if (model.DlFile2 != null)
-                    //{
-                    //    var VehicleImg = FileOperation.UploadImage(model.DlFile2, "Images");
-                    //    if (VehicleImg == "not allowed")
-                    //    {
-                    //        TempData["msg"] = "Only png,jpg,jpeg files are allowed as DL Image.";
-                    //        model.States = new SelectList(repos.GetAllStates(), "Id", "StateName");
-                    //        tran.Rollback();
-                    //        return View(model);
-                    //    }
-                    //    model.DlImage2 = VehicleImg;
-                    //}
-
-                    //if (model.DlFile3 != null)
-                    //{
-                    //    var VehicleImg1 = FileOperation.UploadImage(model.DlFile3, "Images");
-                    //    if (VehicleImg1 == "not allowed")
-                    //    {
-                    //        TempData["msg"] = "Only png,jpg,jpeg files are allowed as DL Image.";
-                    //        model.States = new SelectList(repos.GetAllStates(), "Id", "StateName");
-                    //        tran.Rollback();
-                    //        return View(model);
-                    //    }
-                    //    model.DlImage3 = VehicleImg1;
-                    //}
-
-                    // aadhar image upload
-
-                    //if (model.AadharImageFile != null)
-                    //{
-                    //    var aadharImg = FileOperation.UploadImage(model.AadharImageFile, "Images");
-                    //    if (aadharImg == "not allowed")
-                    //    {
-                    //        TempData["msg"] = "Only png,jpg,jpeg files are allowed as Aadhar card document";
-                    //        model.States = new SelectList(repos.GetAllStates(), "Id", "StateName");
-                    //        tran.Rollback();
-                    //        return View(model);
-                    //    }
-                    //    model.AadharImage = aadharImg;
-                    //}
-
-
-                    //if (model.AadharImageFile2 != null)
-                    //{
-                    //    var aadharImg2 = FileOperation.UploadImage(model.AadharImageFile2, "Images");
-                    //    if (aadharImg2 == "not allowed")
-                    //    {
-                    //        TempData["msg"] = "Only png,jpg,jpeg files are allowed as Aadhar card document";
-                    //        model.States = new SelectList(repos.GetAllStates(), "Id", "StateName");
-                    //        tran.Rollback();
-                    //        return View(model);
-                    //    }
-                    //    model.AadharImage2 = aadharImg2;
-                    //}
-
+                     
                     //Pan Doc Upload
                     if (model.PanImageFile != null)
                     {
@@ -240,12 +167,7 @@ namespace HospitalPortal.Controllers
                     domainModel.JoiningDate = DateTime.Now;                   
                     ent.Drivers.Add(domainModel);
                     ent.SaveChanges();
-                    //string msg = "Welcome to PSWELLNESS. Your UserID :" + domainModel.EmailId + "(" + domainModel.DriverId + "), Password : " + admin.Password + ".";
-                    //Message.SendSms(domainModel.MobileNumber, msg);
-
-                    //string msg1 = "Welcome to PSWELLNESS. Your User Name :  " + admin.Username + "(" + admin.UserID + "), Password : " + admin.Password + ".";
-
-                    //Utilities.EmailOperations.SendEmail1(model.EmailId, "Ps Wellness", msg1, true);
+                     
                     string msg = @"<!DOCTYPE html>
 <html>
 <head>
@@ -321,19 +243,7 @@ namespace HospitalPortal.Controllers
                 {
                     if (!ModelState.IsValid)
                         return View(model);
-                    // Drive Picture Section 
-                    //if (model.DriverImageFile != null)
-                    //{
-                    //    var driverImg = FileOperation.UploadImage(model.DriverImageFile, "Images");
-                    //    if (driverImg == "not allowed")
-                    //    {
-                    //        TempData["msg"] = "Only png,jpg,jpeg files are allowed as Driver Picture.";
-                    //        tran.Rollback();
-                    //        return View(model);
-                    //    }
-                    //    model.DriverImage = driverImg;
-                    //}
-                    //DL image upload section
+                  
                     if (model.DlFile != null)
                     {
                         var dlImg = FileOperation.UploadImage(model.DlFile, "Images");
@@ -344,22 +254,44 @@ namespace HospitalPortal.Controllers
                             tran.Rollback();
                             return View(model);
                         }
-                        model.DlImage = dlImg;
+                        model.DlImage1 = dlImg;
                     }
-                    // aadhar image upload
+                    if (model.DlFile1 != null)
+                    {
+                        var dlImg = FileOperation.UploadImage(model.DlFile1, "Images");
+                        if (dlImg == "not allowed")
+                        {
 
-                    //if (model.AadharImageFile != null)
-                    //{
-                    //    var aadharImg = FileOperation.UploadImage(model.AadharImageFile, "Images");
-                    //    if (aadharImg == "not allowed")
-                    //    {
-                    //        TempData["msg"] = "Only png,jpg,jpeg files are allowed as Aadhar card document";
-                    //        model.States = new SelectList(repos.GetAllStates(), "Id", "StateName");
-                    //        tran.Rollback();
-                    //        return View(model);
-                    //    }
-                    //    model.AadharImage = aadharImg;
-                    //}
+                            TempData["msg"] = "Only png,jpg,jpeg files are allowed as DL Image.";
+                            tran.Rollback();
+                            return View(model);
+                        }
+                        model.DlImage2 = dlImg;
+                    }
+                    if (model.AadharImageFile != null)
+                    {
+                        var adImg = FileOperation.UploadImage(model.AadharImageFile, "Images");
+                        if (adImg == "not allowed")
+                        {
+
+                            TempData["msg"] = "Only png,jpg,jpeg files are allowed as DL Image.";
+                            tran.Rollback();
+                            return View(model);
+                        }
+                        model.AadharImage = adImg;
+                    }
+                    if (model.AadharImageFile2 != null)
+                    {
+                        var adImg2 = FileOperation.UploadImage(model.AadharImageFile2, "Images");
+                        if (adImg2 == "not allowed")
+                        {
+
+                            TempData["msg"] = "Only png,jpg,jpeg files are allowed as DL Image.";
+                            tran.Rollback();
+                            return View(model);
+                        }
+                        model.AadharImage2 = adImg2;
+                    }
 
                     //Pan Doc
                     if (model.PanImageFile != null)
@@ -423,6 +355,7 @@ d.DlImage1,
 d.DlImage2,
 d.DlImage3,
 d.DlNumber,
+d.Paidamount,
 d.DlValidity, d.PAN, d.AadharNumber, d.AadharImage, 
 d.AadharImage2,
 d.PanImage,

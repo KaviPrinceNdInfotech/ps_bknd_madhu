@@ -38,24 +38,14 @@ namespace HospitalPortal.Controllers
             return Ok();
         }
 
-        [System.Web.Http.HttpPost]
+        [HttpPost]
         public IHttpActionResult PatientRegistration(PatientDTO model)
         {
             var rm = new ReturnMessage();
             using (var tran = ent.Database.BeginTransaction())
             {
                 try
-                {
-                    //                    if (!ModelState.IsValid)
-                    //                    {
-                    //                        var message = string.Join(" | ",
-                    //ModelState.Values
-                    //.SelectMany(a => a.Errors)
-                    //.Select(a => a.ErrorMessage));
-                    //                        rm.Message = message;
-                    //                        rm.Status = 0;
-                    //                        return Ok(rm);
-                    //                    }
+                { 
                     if (ent.AdminLogins.Any(a => a.Username == model.EmailId))
                     {
                         rm.Message = "This Email-Id has already exists.";
@@ -150,7 +140,7 @@ namespace HospitalPortal.Controllers
                     tran.Commit();
                     string msg1 = "Welcome to PSWELLNESS. Your User Name :  " + admin.Username + "(" + domainModel.PatientRegNo + "), Password : " + admin.Password + ".";
                     Message.SendSms(domainModel.MobileNumber, msg1);
-                    rm.Message = "Thanks for joining us.Please wait for approval to login";
+                    rm.Message = "Thanks for joining us.Please check your mail for the crediantials.";
                     rm.Status = 1;
                     return Ok(rm);
                 }
@@ -161,67 +151,9 @@ namespace HospitalPortal.Controllers
                     return InternalServerError(ex);
                 }
             }
-        }
+        } 
 
-
-        //public IHttpActionResult DoctorSignUp(DoctorRegistrationRequest model)
-        //    {
-        //        var rm = new ReturnMessage();
-        //        using (var tran = ent.Database.BeginTransaction())
-        //        {
-        //            try
-        //            {
-        //                if (!ModelState.IsValid)
-        //                {
-        //                    var message = string.Join(" | ",ModelState.Values.SelectMany(a => a.Errors).Select(a => a.ErrorMessage));
-        //                    rm.Message = message;
-        //                    rm.Status = 0;
-        //                    return Ok(rm);
-        //                }
-        //                if (ent.AdminLogins.Any(a => a.Username == model.EmailId))
-        //                {
-        //                    rm.Status = 0;
-        //                    rm.Message = "This email id has already exists.";
-        //                    return Ok(rm);
-        //                }
-
-        //                if (ent.AdminLogins.Any(a => a.PhoneNumber == model.MobileNumber))
-        //                {
-        //                    rm.Status = 0;
-        //                    rm.Message = "This Mobile Number has already exists.";
-        //                    return Ok(rm);
-        //                }
-        //                var admin = new AdminLogin
-        //                {
-        //                    Username = model.EmailId,
-        //                    PhoneNumber = model.MobileNumber,
-        //                    Password = model.Password,
-        //                    Role = "doctor"
-        //                };
-        //                ent.AdminLogins.Add(admin);
-        //                ent.SaveChanges();
-
-        //                var domainModel = Mapper.Map<Doctor>(model);
-        //                domainModel.AdminLogin_Id = admin.Id;
-        //                ent.Doctors.Add(domainModel);
-        //                ent.SaveChanges();
-        //                tran.Commit();
-        //                rm.Status = 1;
-        //                rm.Message = "You have registered successfully.Please wait for approval to login.";
-        //                return Ok(rm);
-        //            }
-        //           catch(Exception ex)
-        //            {
-        //                log.Error(ex.Message);
-        //                tran.Rollback();
-        //                return InternalServerError(ex);
-        //            }
-        //        }
-        //     }
-
-
-
-        [System.Web.Http.HttpPost, Route("api/SignupApi/DoctorRegistration")]
+        [HttpPost, Route("api/SignupApi/DoctorRegistration")]
         public IHttpActionResult DoctorRegistration(DoctorRegistrationRequest model)
         {
             var rm = new ReturnMessage();
@@ -947,7 +879,11 @@ ModelState.Values
             {
                 case "driver":
                     var driver = ent.Drivers.FirstOrDefault(a => a.AdminLogin_Id == login.Id && !a.IsDeleted);
-                    
+                    if (!driver.IsApproved)
+                        goto Inactive;
+                    if (driver.IsDeleted)
+                        goto Delete;
+
                     var vehicle = ent.Vehicles.Any(a => a.Driver_Id == driver.Id);
                     if (vehicle == false)
                     {
@@ -980,27 +916,7 @@ ModelState.Values
                                           d.IsApproved,
                                           d.AdminLogin_Id,
                                           d.Password,
-                                          d.DriverId 
-                                          //v.VehicleNumber,
-                                          //vt.VehicleTypeName,
-                                          //v.VehicleType_Id,
-                                          //v.DriverCharges,
-                                          //vt.under5KM,
-                                          //vt.under6_10KM,
-                                          //vt.under11_20KM,
-                                          //vt.under21_40KM,
-                                          //vt.under41_60KM,
-                                          //vt.under61_80KM,
-                                          //vt.under81_100KM,
-                                          //vt.under100_150KM,
-                                          //vt.under151_200KM,
-                                          //vt.under201_250KM,
-                                          //vt.under251_300KM,
-                                          //vt.under301_350KM,
-                                          //vt.under351_400KM,
-                                          //vt.under401_450KM,
-                                          //vt.under451_500KM,
-                                          //vt.Above500KM
+                                          d.DriverId  
                                       }).FirstOrDefault();
                     if (driverData != null)
                     {
@@ -1018,7 +934,11 @@ ModelState.Values
                     return Ok(obj);
                 case "nurse":
                     var nurse = ent.Nurses.FirstOrDefault(a => a.AdminLogin_Id == login.Id && !a.IsDeleted);
-                    
+                    if (!nurse.IsApproved)
+                        goto Inactive;
+                    if (nurse.IsDeleted)
+                        goto Delete;
+
                     var nurseData = (from d in ent.Nurses
                                      join s in ent.StateMasters on d.StateMaster_Id equals s.Id
                                      join c in ent.CityMasters on d.CityMaster_Id equals c.Id
@@ -1056,7 +976,11 @@ ModelState.Values
 
                 case "RWA":
                     var RWA = ent.RWAs.FirstOrDefault(a => a.AdminLogin_Id == login.Id && !a.IsDeleted);
-                  
+                    if (!RWA.IsApproved)
+                        goto Inactive;
+                    if (RWA.IsDeleted)
+                        goto Delete;
+
                     var RWAData = (from d in ent.RWAs
                                    join s in ent.StateMasters on d.StateMaster_Id equals s.Id
                                    join c in ent.CityMasters on d.CityMaster_Id equals c.Id
@@ -1098,7 +1022,10 @@ ModelState.Values
                 case "chemist":
                     var chemist = ent.Chemists.FirstOrDefault(a => a.AdminLogin_Id == login.Id && !a.IsDeleted);
 
-
+                    if (!chemist.IsApproved)
+                        goto Inactive;
+                    if (chemist.IsDeleted)
+                        goto Delete;
 
 
                     var chemistData = (from d in ent.Chemists
@@ -1139,9 +1066,10 @@ ModelState.Values
 
                 case "Franchise":
                     var Franchise = ent.Vendors.FirstOrDefault(a => a.AdminLogin_Id == login.Id && !a.IsDeleted);
-                    
-
-
+                    if (!Franchise.IsApproved)
+                        goto Inactive;
+                    if (Franchise.IsDeleted)
+                        goto Delete;
 
                     var FranchiseData = (from d in ent.Vendors
                                          join s in ent.StateMasters on d.StateMaster_Id equals s.Id
@@ -1181,7 +1109,11 @@ ModelState.Values
 
                 case "lab":
                     var lab = ent.Labs.FirstOrDefault(a => a.AdminLogin_Id == login.Id && !a.IsDeleted);
-                    
+                    if (!lab.IsApproved)
+                        goto Inactive;
+                    if (lab.IsDeleted)
+                        goto Delete;
+
                     var labData = (from d in ent.Labs
                                    join s in ent.StateMasters on d.StateMaster_Id equals s.Id
                                    join c in ent.CityMasters on d.CityMaster_Id equals c.Id 
@@ -1218,8 +1150,8 @@ ModelState.Values
 
                 case "doctor":
                     var doctor = ent.Doctors.FirstOrDefault(a => a.AdminLogin_Id == login.Id);
-                    //if (!doctor.IsApproved)
-                    //    goto Inactive;
+                    if (!doctor.IsApproved)
+                        goto Inactive;
                     if (doctor.IsDeleted)
                         goto Delete;
                     var doctorData = (from d in ent.Doctors
@@ -1255,20 +1187,7 @@ ModelState.Values
                                           EndTime = d.EndTime,
                                           PinCode = d.PinCode,
                                           DoctorId = d.DoctorId
-                                      }).FirstOrDefault();
-                    //var ds = (from dep in ent.DoctorDepartments
-                    //          join
-                    //          d in ent.Departments on dep.Department_Id equals d.Id
-                    //          join s in ent.Specialists on dep.Specialist_Id equals s.Id
-                    //          where dep.Doctor_Id == doctor.Id
-                    //          select new DepartmentSpecialist
-                    //          {
-                    //              Id = dep.Id,
-                    //              DepartmentName = d.DepartmentName,
-                    //              SpecialistName = s.SpecialistName
-                    //          }
-                    //          ).ToList();
-                    //doctorData.DepartmentAndSpecialization = ds;
+                                      }).FirstOrDefault(); 
 
                     var skills = ent.DoctorSkills.Where(a => a.Doctor_Id == doctorData.Id).ToList().Select(a => a.SkillName);
                     foreach (var d in skills)
@@ -1290,8 +1209,8 @@ ModelState.Values
 
                 case "hospital":
                     var hospital = ent.Hospitals.FirstOrDefault(a => a.AdminLogin_Id == login.Id && !a.IsDeleted);
-                    //if (!hospital.IsApproved)
-                    //    goto Inactive;
+                    if (!hospital.IsApproved)
+                        goto Inactive;
                     var hospitalData = (from d in ent.Hospitals
                                         join s in ent.StateMasters on d.StateMaster_Id equals s.Id
                                         join c in ent.CityMasters on d.CityMaster_Id equals c.Id
@@ -2043,7 +1962,7 @@ ModelState.Values
                     domainModel.GSTNumber = model.GSTNumber;
                     domainModel.PanNumber = model.PanNumber;
                     domainModel.AadharOrPANNumber = model.AadharOrPANNumber;
-                    //domainModel.AadharOrPANImage = model.AadharOrPANImage;
+                    domainModel.PanImage = model.AadharOrPANImage;
                     domainModel.AdminLogin_Id = admin.Id;
                     domainModel.UniqueId = bk.GenerateVenderId();
                     admin.UserID = domainModel.UniqueId;
@@ -2140,9 +2059,7 @@ ModelState.Values
             }
             return Ok(rm);
         }
-
-    }
-    
+    }    
 }
 
         

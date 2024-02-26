@@ -58,7 +58,7 @@
                          <th>Address</th>
                          <th>GST</th>
                          <th>PAN</th>
-                         <th>Aadhar Details</th>
+                         @*<th>Aadhar Details</th>*@
                          <th>Approval</th>
                          <th>Action</th>
                      </tr>
@@ -74,7 +74,7 @@
                                <td>@item.EmailId</td>
                                <td>@item.Location , @item.CityName, @item.StateName</td>
                                <td>@item.GSTNumber</td>
-                               <td>
+                               @*<td>
                                    @item.PanNumber<br />
                                @if (string.IsNullOrEmpty(item.AadharOrPANImage) && string.IsNullOrEmpty(item.AadharOrPANImage2))
                                {
@@ -86,17 +86,17 @@
                                {
                                    <text>No Images</text>
                                }
-                           </td>
+                           </td>*@
                            <td>
-                              @item.AadharOrPANNumber
-                               @if (string.IsNullOrEmpty(item.PanImage))
+                              @item.PanNumber
+                               @if (!string.IsNullOrEmpty(item.PanImage))
                                {
-                                   <a href="/Images/@item.AadharOrPANImage">
-                                       <img src="/Images/@item.AadharOrPANImage" style="width:100px; height:80px;" />
+                                   <a href="/Images/@item.PanImage">
+                                       <img src="/Images/@item.PanImage" style="width:100px; height:80px;" />
                                    </a>
-                                           <a href="/Images/@item.AadharOrPANImage2">
+                                           @*<a href="/Images/@item.AadharOrPANImage2">
                                                <img src="/Images/@item.AadharOrPANImage2" style="width:100px; height:80px;" />
-                                           </a>
+                                           </a>*@
                                }
                                else
                                {

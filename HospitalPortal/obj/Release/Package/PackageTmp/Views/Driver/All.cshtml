@@ -43,7 +43,7 @@
         <div class="col-md-12">
             <div class="row" style="text-align:center">
                 <ul class="pagination">
-                    @for (int i = 1; i <= Model.FirstOrDefault().NumberOfPages; i++)
+                    @*@for (int i = 1; i <= Model.FirstOrDefault().NumberOfPages; i++)
                     {
                         if (Model.FirstOrDefault().Page == i)
                         {
@@ -53,7 +53,7 @@
                         {
                             <li><a href="/Driver/All?page=@i">@i</a></li>
                         }
-                    }
+                    }*@
 
                 </ul>
             </div>
@@ -70,19 +70,14 @@
                     
                     <th>Driver Id</th>
                     <th>Name</th>
-                    <th>Franchise/Id</th>
-                    <th>Vehicle Image</th>
+                    <th>Franchise/Id</th> 
                     <th>MobileNo</th>
                     <th>Email</th>
                     <th>Address</th>
+                    <th>Charge</th>
                     <th>Pic</th>
                     <th>DL / No</th>
-                    @*<th>DL No</th>*@
-                    @*<th>DL Valid Upto</th>*@
-                    @*<th>PAN</th>
-                    <th>Aadhar</th>*@
-                    @*<th>Vehicle Type</th>*@
-                    @*<th>Police Verific.</th>*@
+                    <th>Aadhar / No</th> 
                     @if (role == "admin")
                     {
                         <th>Approval</th>
@@ -108,48 +103,36 @@
                             }
                             else
                             {
-                                ;
+
                                 @item.VendorName <span>/ @item.UniqueId</span>
                             }
                         </td>
-                        <td>
-                            @if (item.DlImage2 != null && item.DlImage3 != null)
-                            {
-                                <a href="/Images/@item.DlImage2">
-                                    <img src="/Images/@item.DlImage2" style="width:100px;height:80px" />
-                                </a>
-                                <br />
-                                <a href="/Images/@item.DlImage2">
-                                    <img src="/Images/@item.DlImage3" style="width:100px;height:80px" />
-                                </a>
-                            }
-                            else
-                            {
-                                <span>No Images</span>
-                            }
-                        </td>
-
+                       
 
                         <td>@item.MobileNumber</td>
                         <td>@item.EmailId</td>
                         <td>@item.Location , @item.CityName, @item.StateName</td>
+                        <td>@item.Paidamount</td>
                         <td>
-                            @item.DlNumber/
-                            <a href="/Images/@item.DlImage">
-                                <img src="/Images/@item.DlImage" style="width:100px;height:80px" />
+                            <a href="/Images/@item.DriverImage">
+                                <img src="/Images/@item.DriverImage" style="width:100px;height:80px" />
                             </a>
-
-                            @*<a href="/Images/@item.DriverImage">
-            <img src="/Images/@item.DriverImage" style="width:100px;height:80px" />
-            </a></td>*@
                         <td>
                             @item.DlNumber/
-                            @*<a href="/Images/@item.DlImage">
-                <img src="/Images/@item.DlImage" style="width:100px;height:80px" />
-            </a>*@
-                            <br />
                             <a href="/Images/@item.DlImage1">
                                 <img src="/Images/@item.DlImage1" style="width:100px;height:80px" />
+                            </a>
+                            <a href="/Images/@item.DlImage2">
+                                <img src="/Images/@item.DlImage2" style="width:100px;height:80px" />
+                            </a>
+                        </td>
+                        <td>
+                            @item.AadharNumber/
+                            <a href="/Images/@item.AadharImage">
+                                <img src="/Images/@item.AadharImage" style="width:100px;height:80px" />
+                            </a>
+                            <a href="/Images/@item.AadharImage2">
+                                <img src="/Images/@item.AadharImage2" style="width:100px;height:80px" />
                             </a>
                         </td>
                         @*<td>@item.DlValidity.ToString("dd-MMM-yyyy")</td>*@
@@ -198,33 +181,33 @@
                         @if (role == "admin")
                         {
                             @*<td>
-                                @if (item.IsApproved)
-                                {
-                                    @Html.ActionLink("Dispproved", "UpdateStatus", new { id = item.Id, IsApproved = false }, new { @class = "btn btn-danger" })
-                                }
-                                else
-                                {
-                                    @Html.ActionLink("Approved", "UpdateStatus", new { id = item.Id, IsApproved = true }, new { @class = "btn btn-success" })
-                                }
-                            </td>*@
-                            <td>
                 @if (item.IsApproved)
                 {
-                    <a href="/Driver/UpdateStatus?id=@item.Id" class="btn btn-success">Approved</a>
-                    @*@Html.ActionLink("Approved", "UpdateStatus", new { id = item.Id }, new { @class = "btn btn-success" })*@
+                    @Html.ActionLink("Dispproved", "UpdateStatus", new { id = item.Id, IsApproved = false }, new { @class = "btn btn-danger" })
                 }
                 else
                 {
-                            <a href="/Driver/UpdateStatus?id=@item.Id" class="btn btn-danger">Not Approve</a>
+                    @Html.ActionLink("Approved", "UpdateStatus", new { id = item.Id, IsApproved = true }, new { @class = "btn btn-success" })
                 }
-            </td>
-                    <td>
-                        @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { onclick = "return confirm('Are sure wants to Edit?');", @class = "btn btn-info" })
-                        <br />
-                        @*<a href="/Driver/Delete?id=@item.Id" class="btn btn-danger"><i class="fa fa-trash-o"></i></a>*@
-                        @Html.ActionLink("Delete", "Delete", new { id = item.Id },
-new { onclick = "return confirm('Are sure wants to delete?');", @class = "btn btn-danger" })
-                    </td>
+            </td>*@
+                            <td>
+                                @if (item.IsApproved)
+                                {
+                                    <a href="/Driver/UpdateStatus?id=@item.Id" class="btn btn-success">Approved</a>
+                                    @*@Html.ActionLink("Approved", "UpdateStatus", new { id = item.Id }, new { @class = "btn btn-success" })*@
+                                }
+                                else
+                                {
+                                    <a href="/Driver/UpdateStatus?id=@item.Id" class="btn btn-danger">Not Approve</a>
+                                }
+                            </td>
+                            <td>
+                                @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { onclick = "return confirm('Are sure wants to Edit?');", @class = "btn btn-info" })
+                                <br />
+                                @*<a href="/Driver/Delete?id=@item.Id" class="btn btn-danger"><i class="fa fa-trash-o"></i></a>*@
+                                @Html.ActionLink("Delete", "Delete", new { id = item.Id },
+        new { onclick = "return confirm('Are sure wants to delete?');", @class = "btn btn-danger" })
+                            </td>
                         }
                     </tr>
                 }

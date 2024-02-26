@@ -938,7 +938,8 @@ where dc.DoctorId=" + GetDoctorId();
             return RedirectToAction("PatientPerticuler");
         }
 
-        public string Sendemailpdf()  //Prescription pdf
+        //Prescription pdf
+        public string Sendemailpdf()  
         {
 
             var lastrecordId = ent.MedicinePrescriptionDetails.OrderByDescending(a => a.Id).Select(a => a.Id).FirstOrDefault();
@@ -958,7 +959,7 @@ WHERE mpd.Id = " + lastrecordId + " order by mpd.EntryDate desc";
                 EmailAddress = prescription.EmailId,
                 Message = "Medicine Prescription",
                 Subject = "Prescription Pdf.",
-                //id = id
+                 
             };
 
             EmailOperations.SendEmainewpdf(ef);
@@ -968,18 +969,18 @@ WHERE mpd.Id = " + lastrecordId + " order by mpd.EntryDate desc";
                 EmailAddress = prescription.DoctorEmailId,
                 Message = "Medicine Prescription",
                 Subject = "Prescription Pdf.",
-                //id = id
+                
             };
 
             EmailOperations.SendEmainewpdf(drmail);
-            Message.SendSmsUserIdPass("gdfsg");
+            Message.SendSmsUserIdPass("Medicine Prescription");
             return "Email sent successfully";
         }
         public ActionResult MedicinePdf()
         {
             var lastrecordId =ent.MedicinePrescriptionDetails.OrderByDescending (a=>a.Id).Select (a=>a.Id).FirstOrDefault();
             // Execute the SQL query to retrieve prescription data based on the provided ID
-            string query = @"SELECT DISTINCT mpd.Id,mpd.EntryDate, d.Id, d.doctorId, d.DoctorName, pa.AppointmentDate, p.PatientRegNo, p.PatientName, p.EmailId, p.MobileNumber, p.Gender,p.DOB,
+            string query = @"SELECT DISTINCT mpd.Id,mpd.EntryDate, d.Id, d.doctorId, d.DoctorName,d.SignaturePic, pa.AppointmentDate, p.PatientRegNo, p.PatientName, p.EmailId, p.MobileNumber, p.Gender,p.DOB,
 mpd.*
 FROM PatientAppointment AS pa
 JOIN Doctor AS d ON d.Id = pa.Doctor_Id 
@@ -1437,8 +1438,8 @@ WHERE RowNum = 1 and Doctor_Id='" + id + "' ORDER BY Id DESC";
 mpd.*
 FROM PatientAppointment AS pa
 JOIN Doctor AS d ON d.Id = pa.Doctor_Id 
-JOIN PrescriptionAppointments ppa ON ppa.Doctor_Id = d.Id
-JOIN MedicinePrescriptionDetail mpd ON mpd.Doctor_Id = D.Id
+LEFT JOIN PrescriptionAppointments ppa ON ppa.Doctor_Id = d.Id
+LEFT JOIN MedicinePrescriptionDetail mpd ON mpd.Doctor_Id = D.Id
 JOIN Patient AS p ON p.Id = mpd.Patient_Id
 WHERE mpd.Id = " + Id + " order by mpd.EntryDate desc";
 
@@ -1446,7 +1447,7 @@ WHERE mpd.Id = " + Id + " order by mpd.EntryDate desc";
 
             if (prescription == null)
             {
-                return HttpNotFound();
+                TempData["msg"] = "Record not found.";
             }
 
             using (var memoryStream = new MemoryStream())

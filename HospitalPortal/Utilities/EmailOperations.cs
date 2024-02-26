@@ -117,8 +117,9 @@ namespace HospitalPortal.Utilities
                 message.Body = emailef.Message;
                 System.Net.Mail.Attachment attachment;
                 // attachment = new System.Net.Mail.Attachment("http://localhost:55405/DoctorRegistration/MedicinePdf");
-                //string fileUrl = $"http://localhost:55405/DoctorRegistration/MedicinePdf?id={emailef.id}";
-                string fileUrl = "http://test.pswellness.in/DoctorRegistration/MedicinePdf";
+                //string fileUrl = $"http://localhost:55405/DoctorRegistration/MedicinePdf";
+                //string fileUrl = "http://test.pswellness.in/DoctorRegistration/MedicinePdf";
+                string fileUrl = "http://pswellness.in/DoctorRegistration/MedicinePdf";
 
                 // Download the file from the URL.
                 using (HttpClient client1 = new HttpClient())

@@ -142,7 +142,7 @@ namespace HospitalPortal.Controllers
             if (!ModelState.IsValid)
                 return View(model);
             try
-            {
+            {  
                 var data = Mapper.Map<Patient>(model);
                 ent.Entry<Patient>(data).State = System.Data.Entity.EntityState.Modified;
                 ent.SaveChanges();

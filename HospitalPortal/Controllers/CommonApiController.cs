@@ -112,10 +112,7 @@ namespace HospitalPortal.Controllers
             obj.Location = Mapper.Map<IEnumerable<LocationDTO>>(ent.Locations.Where(a => a.IsDeleted == false).OrderBy(a => a.LocationName).ToList());
             return Ok(obj);
         }
-        /// <summary>
-        ///==================== complain api=====================================//////
-        /// </summary>
-        /// <returns></returns>
+        
         [HttpGet]
         public IHttpActionResult GetComplaint()
         {

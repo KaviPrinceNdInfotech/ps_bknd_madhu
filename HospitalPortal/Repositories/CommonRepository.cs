@@ -30,7 +30,7 @@ namespace HospitalPortal.Repositories
 
         public IEnumerable<VehicleType> GetVehicleType()
         {
-            var data = ent.VehicleTypes.Where(a => !a.IsDeleted).OrderBy(a=> new {a.VehicleTypeName });
+            var data = ent.VehicleTypes.Where(a => a.IsDeleted==false).OrderBy(a=> new {a.VehicleTypeName });
             return data;
         }
 
@@ -43,7 +43,7 @@ namespace HospitalPortal.Repositories
 
         public IEnumerable<CityMaster> GetCitiesByState(int? stateId)
         {
-            var data = ent.CityMasters.Where(a => a.StateMaster_Id == stateId && !a.IsDeleted==false).OrderBy(a=> new { a.CityName}).ToList();
+            var data = ent.CityMasters.Where(a => a.StateMaster_Id == stateId && a.IsDeleted==false).OrderBy(a=> new { a.CityName}).ToList();
             return data;
         }
 
