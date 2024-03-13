@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using DocumentFormat.OpenXml.Office2010.Excel;
 using HospitalPortal.BL;
 using HospitalPortal.Models;
