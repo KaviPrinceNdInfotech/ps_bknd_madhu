@@ -21,6 +21,5 @@ namespace HospitalPortal.Models.DomainModels
         public Nullable<System.DateTime> UploadDate { get; set; }
     
         public virtual Patient Patient { get; set; }
-        public virtual Doctor Doctor { get; set; }
     }
 }

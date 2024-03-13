@@ -60,6 +60,7 @@ namespace HospitalPortal.Models.APIModels
 
         public string NurseName { get; set; }
         public string MobileNumber { get; set; }
+        public string EmailId { get; set; }
         public string ClinicName { get; set; }
 
         public int StateMaster_Id { get; set; }

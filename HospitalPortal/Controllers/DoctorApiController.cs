@@ -25,8 +25,9 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Hosting;
 using System.Web.Http;
-using System.Web.Mvc;
+using static HospitalPortal.Controllers.TestApiController;
 using static HospitalPortal.Utilities.EmailOperations;
+using PatientRecord = HospitalPortal.Models.APIModels.PatientRecord;
 
 namespace HospitalPortal.Controllers
 {
@@ -42,17 +43,16 @@ namespace HospitalPortal.Controllers
         [System.Web.Http.HttpPost]
         public IHttpActionResult UpdateProfile(DoctorUpdationRequest model)
         {
-
             try
             {
                 var data = ent.Doctors.Where(a => a.Id == model.Id).FirstOrDefault();
                 data.DoctorName = model.DoctorName;
                 data.MobileNumber = model.MobileNumber;
+                data.EmailId = model.EmailId;
                 data.StateMaster_Id = model.StateMaster_Id;
                 data.CityMaster_Id = model.CityMaster_Id;
                 data.Location = model.Location;
                 data.ClinicName = model.ClinicName;
-                data.Fee = model.Fee;
                 data.PinCode = model.PinCode;               
                 ent.SaveChanges();
                 rm.Status = 1;
@@ -66,23 +66,7 @@ namespace HospitalPortal.Controllers
             }
             return Ok(rm);
         }
-
-
-        //[System.Web.Http.HttpGet]
-        //[System.Web.Mvc.Route("api/DoctorApi/GETDoctorProfile")]
-        //public IHttpActionResult GETDoctorProfile(int ID)
-        //{
-        //    var rm = new Doctor();
-        //    string query = @"select CityMaster.id,s.StateName,CityMaster.CityName from CityMaster
-        //               left join stateMaster as s on  CityMaster.StateMaster_Id = s.Id where s.Id =" + ID + "";
-        //    var data = ent.Database.SqlQuery<profile>(query).ToList();
-        //    return Ok(data);
-        //}
-
-
-
-
-        //==========GetDoctorSkills===========05\03\2023====[Anchal Shukla]================================
+         
         public IHttpActionResult GetDoctorSkills(int doctorId)
         {
             dynamic obj = new ExpandoObject();
@@ -92,8 +76,7 @@ namespace HospitalPortal.Controllers
         }
 
         public IHttpActionResult AddSkill(DoctorSkillsDTO model)
-        {
-            var rm = new ReturnMessage();
+        { 
             try
             {
                 if (!ModelState.IsValid)
@@ -121,10 +104,9 @@ ModelState.Values
             return Ok(rm);
         }
 
-        [System.Web.Http.HttpPost]
+        [HttpPost]
         public IHttpActionResult RemoveSkill(int id)
-        {
-            var rm = new ReturnMessage();
+        { 
             try
             {
                 var data = ent.DoctorSkills.Find(id);
@@ -143,7 +125,7 @@ ModelState.Values
         }
 
 
-        [System.Web.Http.HttpGet]
+        [HttpGet]
         public IHttpActionResult ShowAppointmentbyDoctor(int id, DateTime? date = null)
         {
             var model = new Appointment();
@@ -171,7 +153,7 @@ ModelState.Values
             return Ok(model);
         }
         //============================appoinment history patient list api=======[30-03-2023]=========================================//
-        [System.Web.Http.HttpGet]
+        [HttpGet]
         public IHttpActionResult DoctorPatientList(int id, string term = null)
         {
             var mdoel = new PatientListVM();
@@ -191,8 +173,8 @@ ModelState.Values
             return Ok(mdoel);
         }
 
-        [System.Web.Http.HttpGet]
-        [System.Web.Mvc.Route("api/DoctorApi/paymentHistory")]
+        [HttpGet]
+        [Route("api/DoctorApi/paymentHistory")]
         public IHttpActionResult paymentHistory(int Id, DateTime? Date = null)
         {
             var model = new PaymentHistroyForDosctor();
@@ -221,74 +203,12 @@ ModelState.Values
             return Ok(model);
         }
 
-
-        //[System.Web.Http.HttpGet]
-        //public IHttpActionResult paymentHistory(int Id, DateTime? Date = null)
-        //{
-        //    var model = new PaymentHistroyForDosctor();
-        //    string q = @"select Convert(date,AppointmentDate) as AppointmentDate, Sum(Amount) as Amount from PatientAppointment where  Doctor_Id ='" + Id + "' and IsPaid=1 group by AppointmentDate, Amount order by AppointmentDate desc";
-        //    var data = ent.Database.SqlQuery<ListPayment>(q).ToList();
-        //    model.PaymentHistory = data;
-        //    if (Date != null)
-        //    {
-        //        string q1 = @"select Convert(date,AppointmentDate) as AppointmentDate, Sum(Amount) as Amount from PatientAppointment where AppointmentDate=" + Date + " and A Doctor_Id ='" + Id + "' and IsPaid=1 group by AppointmentDate, Amount order by AppointmentDate desc";
-        //        var data1 = ent.Database.SqlQuery<ListPayment>(q1).ToList();
-        //        if (data1.Count() == 0)
-        //        {
-        //            rm.Message = "No Records Present";
-        //            rm.Status = 0;
-        //            return Ok(rm);
-        //        }
-        //        model.PaymentHistory = data1;
-        //        return Ok(model);
-        //    }
-        //    if (data.Count() == 0)
-        //    {
-        //        rm.Message = "No Records Present";
-        //        rm.Status = 0;
-        //        return Ok(rm);
-        //    }
-        //    return Ok(model);
-        //}
-
-        //[System.Web.Http.HttpGet]
-        //[System.Web.Http.Route("api/DoctorApi/paymentHistory")]
-        //public IHttpActionResult paymentHistory(int Id, DateTime? Date = null)
-        //{
-        //    var model = new PaymentHistroyForDosctor();
-        //    IList<ListPayment> payment = null;
-        //    string q = @"select Convert(date,AppointmentDate) as AppointmentDate, Sum(Amount) as Amount from PatientAppointment where AppointmentDate between DateAdd(DD,-7,GETDATE() ) and GETDATE()  and Doctor_Id ='" + Id + "' and IsPaid=1 group by AppointmentDate, Amount order by AppointmentDate desc";
-        //    var data = ent.Database.SqlQuery<ListPayment>(q).ToList();
-        //    model.PaymentHistory = data;
-        //    payment = model.PaymentHistory;
-        //    if (Date != null)
-        //    {
-        //        DateTime dateCriteria = Date.Value.AddDays(-7);
-        //        string Tarikh = dateCriteria.ToString("dd/MM/yyyy");
-        //        string q1 = @"select Convert(date,AppointmentDate) as AppointmentDate, Sum(Amount) as Amount from PatientAppointment where AppointmentDate between '" + dateCriteria + "' and '" + Date + "' and Doctor_Id ='" + Id + "' and IsPaid=1 group by AppointmentDate, Amount order by AppointmentDate desc";
-        //        var data1 = ent.Database.SqlQuery<ListPayment>(q1).ToList();
-        //        model.PaymentHistory = data1;
-        //        payment = model.PaymentHistory;
-        //        if (payment.Count() == 0)
-        //        {
-        //            return NotFound();
-        //        }
-        //        return Ok(payment);
-
-        //    }
-        //    if (payment.Count() == 0)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return Ok(payment);
-        //}
-
-        [System.Web.Http.HttpPost]
+        [HttpPost]
         public IHttpActionResult UploadReports(UplaodReportBase model)
         {
             dynamic obj = new ExpandoObject();
             var httpContext = HttpContext.Current;
-            var rm = new ReturnMessage();
+            
             string[] allowedExtensions = { ".jpg", ".jpeg", ".png" };
             var data = new DoctorReport();
             using (var tran = ent.Database.BeginTransaction())
@@ -344,34 +264,8 @@ ModelState.Values
             }
         }
 
-        //public HttpResponseMessage upload()
-        //{
-        //        var model = new DoctorReport();
-        //        var response = new HttpResponseMessage(HttpStatusCode.OK);
-        //        var httpRequest = HttpContext.Current.Request;
-        //        if(httpRequest.Files.Count > 0)
-        //        {
-        //            var files = new List<string>();
-        //            foreach(string file in httpRequest.Files)
-        //            {
-        //                var postedFile = httpRequest.Files[file];
-        //                var Patient_Id = HttpContext.Current.Request.Params["Patient_Id"];
-        //                var Doctor_Id = HttpContext.Current.Request.Params["Doctor_Id"];
-        //                var filePath = HttpContext.Current.Server.MapPath("~/Doc_Report/" + postedFile.FileName);
-        //                postedFile.SaveAs(filePath);
-        //                files.Add(filePath);
-        //                model.Doctor_Id = Convert.ToInt32(Doctor_Id);
-        //                model.Patient_Id = Convert.ToInt32(Patient_Id);
-        //                model.Image1 = filePath;
-        //                ent.DoctorReports.Add(model);
-        //                ent.SaveChanges();
-        //        }
-        //        }
-        //        return response;
-        //}
-
-        //Search Pateint Name by Doctor
-        [System.Web.Http.HttpGet]
+        
+        [HttpGet]
         public IHttpActionResult SearchPatient(string term)
         {
             try
@@ -395,7 +289,7 @@ ModelState.Values
             }
         }
 
-        [System.Web.Http.HttpGet]
+        [HttpGet]
         public IHttpActionResult SearchPatientbyDocId(string term, int Doc_Id)
         {
             try
@@ -450,8 +344,8 @@ ModelState.Values
         }
 
 
-        [System.Web.Mvc.HttpPost]
-        [System.Web.Http.Route("api/DoctorApi/PatientList")]
+        [HttpPost]
+        [Route("api/DoctorApi/PatientList")]
         public IHttpActionResult PatientList(PatientReportMasterVM model)
         {
             ModelState.Clear();
@@ -495,8 +389,8 @@ where patient.PatientRegNo='" + model.PatientRegNo + "' group by p.Patient_Id, p
             return Ok(model);
         }
 
-        [System.Web.Http.HttpPost]
-        [System.Web.Http.Route("api/DoctorApi/SearchByPatientRegNo")]
+        [HttpPost]
+        [Route("api/DoctorApi/SearchByPatientRegNo")]
         public IHttpActionResult SearchByPatientRegNo(PatientReportMasterVM model)
         {
             //var q = @"select Count(p.Patient_Id) as PatientCount,p.Patient_Id as PatientId, patient.PatientName, patient.PatientRegNo, d.DoctorName, d.Id as DoctorId  from dbo.PatientAppointment p  JOIN patient on patient.Id = P.Patient_Id  join Doctor d on d.Id = p.Doctor_Id  join DoctorReports dr on dr.Doctor_id = d.Id where dr.Doctor_Id=" + DoctorId + " group by p.Patient_Id, patient.PatientName, d.DoctorName, d.Id,patient.PatientRegNo";
@@ -533,44 +427,26 @@ where patient.PatientRegNo='" + model.PatientRegNo + "' group by p.Patient_Id, p
         }
 
 
-        [System.Web.Http.HttpGet]
-        [System.Web.Http.Route("api/DoctorApi/DoctorProfile")]
+        [HttpGet]
+        [Route("api/DoctorApi/DoctorProfile")]
         public IHttpActionResult DoctorProfile(int DoctorId)
         {
-            var model = new DoctorProfile();
-            string q = @"select *,{ fn concat(CONVERT(varchar(15),CAST(StartTime AS TIME),100),{fn concat ('-', CONVERT(varchar(15),CAST(EndTime AS TIME),100))})} AS AvailableTime
+            string q = @"select d.*,sm.StateName,cm.CityName,dm.*,sp.*,{ fn concat(CONVERT(varchar(15),CAST(StartTime AS TIME),100),{fn concat ('-', CONVERT(varchar(15),CAST(EndTime AS TIME),100))})} AS AvailableTime
 from Doctor d
 left join StateMaster sm on sm.Id =  d.StateMaster_Id
 left join CityMaster cm on cm.Id =  d.CityMaster_Id
 left join Department dm on dm.Id = d.Department_Id
 left join Specialist sp on sp.Id = d.Specialist_Id
 where d.Id=" + DoctorId + " and d.IsDeleted=0";
-            var data = ent.Database.SqlQuery<DoctorProfile>(q).ToList();
-            if (data.Count() == 0)
-            {
-                rm.Message = "No Record";
-                rm.Status = 0;
-                return Ok(rm);
-            }
-            else
-            {
-                model.Id = data.FirstOrDefault().Id;
-                model.DoctorName = data.FirstOrDefault().DoctorName;
-                model.StateName = data.FirstOrDefault().StateName;
-                model.CityName = data.FirstOrDefault().CityName;
-                model.ClinicName = data.FirstOrDefault().ClinicName;
-                model.DepartmentName = data.FirstOrDefault().DepartmentName;
-                model.EmailId = data.FirstOrDefault().EmailId;
-                model.Location = data.FirstOrDefault().Location;
-                model.MobileNumber = data.FirstOrDefault().MobileNumber;
-                model.AvailableTime = data.FirstOrDefault().AvailableTime;
-                return Ok(model);
-            }
+            var data = ent.Database.SqlQuery<DoctorProfile>(q).FirstOrDefault();
+           
+            return Ok(data);
+             
         }
 
 
-        [System.Web.Http.HttpGet]
-        [System.Web.Http.Route("api/DoctorApi/ViewPatientList")] //Appoitment History
+        [HttpGet]
+        [Route("api/DoctorApi/ViewPatientList")] //Appoitment History
         public IHttpActionResult ViewPatientList(int DoctorId)
         {
             var model = new PatientLists();
@@ -587,7 +463,7 @@ where d.Id=" + DoctorId + " and d.IsDeleted=0";
             return Ok(model);
         }
          
-        [System.Web.Http.HttpGet]
+        [HttpGet]
 
         public IHttpActionResult PatientReports(int? DoctorId = 0, int? PatientId = 0)
         {
@@ -629,7 +505,7 @@ where d.Id=" + DoctorId + " and d.IsDeleted=0";
             return Ok(model);
         }
 
-        [System.Web.Mvc.HttpGet]
+        [HttpGet]
         public IHttpActionResult GetDoctorDepartmentAndSpecialization(int doctorId)
         {
             var ds = (from dep in ent.DoctorDepartments
@@ -649,10 +525,9 @@ d in ent.Departments on dep.Department_Id equals d.Id
             return Ok(obj);
         }
 
-        [System.Web.Http.HttpGet]
+        [HttpGet]
         public IHttpActionResult DeleteDoctorAndSpecialization(int doctorAndSpecializationId)
-        {
-            var rm = new ReturnMessage();
+        { 
             try
             {
                 var data = ent.DoctorDepartments.Find(doctorAndSpecializationId);
@@ -676,7 +551,7 @@ d in ent.Departments on dep.Department_Id equals d.Id
         }
         
 
-        [System.Web.Http.HttpGet, System.Web.Mvc.Route("api/DoctorApi/getDoctorList")]
+        [HttpGet, Route("api/DoctorApi/getDoctorList")]
        
         public IHttpActionResult getDoctorList(int cityid)
         {
@@ -708,9 +583,7 @@ d in ent.Departments on dep.Department_Id equals d.Id
             }
         }
 
-
-         
-        [System.Web.Http.HttpGet, System.Web.Mvc.Route("api/DoctorApi/DoctorDetails")]
+        [HttpGet, Route("api/DoctorApi/DoctorDetails")]
         public IHttpActionResult DoctorDetails(int id) //Checkout api
         { 
             string query = @"select D.Id, D.DoctorName, D.Experience, D.Fee,D.About,de.DepartmentName,(select avg(rating1 + rating2 + rating3 + rating4 + rating5) from Review where Review.pro_Id=D.Id) As Rating
@@ -723,15 +596,11 @@ d in ent.Departments on dep.Department_Id equals d.Id
             return Ok(data);
         }
 
-
-        //==============================26-03-2023======================(done)==============//////////
-
-        [System.Web.Mvc.HttpGet]
-        [System.Web.Http.Route("api/DoctorApi/GetAppointmentDetail")]
+        [HttpGet]
+        [Route("api/DoctorApi/GetAppointmentDetail")]//GetPhysicalAppointmentDetail
 
         public IHttpActionResult GetAppointmentDetail(int Id)
         {
-
             var rm = new Doctor();
             string query = @"select PA.Id,P.PatientName,P.MobileNumber,P.Location,CONCAT(CONVERT(NVARCHAR, TS.StartTime, 8), ' To ', CONVERT(NVARCHAR, TS.EndTime, 8)) AS SlotTime,PA.Appointmentdate,AL.DeviceId from Doctor as D inner join PatientAppointment as PA on PA.Doctor_Id=D.Id inner join DoctorTimeSlot as TS on TS.Id=PA.Slot_id inner join Patient as P on P.Id=PA.Patient_Id inner join AdminLogin as AL on AL.Id=P.AdminLogin_Id where D.Id=" + Id + " and PA.IsCancelled=0 and PA.BookingMode_Id=1 and PA.AppointmentIsDone=0 order by PA.Id desc";
             var AppointmentDetail = ent.Database.SqlQuery<AppointmentDetailDoctorDTO>(query).ToList();
@@ -740,8 +609,8 @@ d in ent.Departments on dep.Department_Id equals d.Id
 
         }
 
-        [System.Web.Mvc.HttpGet]
-        [System.Web.Http.Route("api/DoctorApi/GetVirtualAppointmentDetail")]
+        [HttpGet]
+        [Route("api/DoctorApi/GetVirtualAppointmentDetail")]
 
         public IHttpActionResult GetVirtualAppointmentDetail(int Id)
         {
@@ -755,8 +624,8 @@ d in ent.Departments on dep.Department_Id equals d.Id
         }
 
 
-        [System.Web.Http.HttpGet]
-        [System.Web.Mvc.Route("api/DoctorApi/DoctorpaymentHistory")]
+        [HttpGet]
+        [Route("api/DoctorApi/DoctorpaymentHistory")]
         public IHttpActionResult DoctorpaymentHistory(int Id)
         {
             var rm = new Patient(); 
@@ -767,9 +636,24 @@ inner join Patient as P on P.Id=PA.Patient_Id where D.Id=" + Id + " and PA.IsCan
 
             return Ok(new { PaymentHistory });
         }
+        [HttpGet]
+        [Route("api/DoctorApi/DoctorBookingHistory")]
+        public IHttpActionResult DoctorBookingHistory(int DoctorId)
+        { 
+            string query = @"select PA.Id,P.PatientRegNo,P.PatientName,P.MobileNumber,p.EmailId,P.Location,cm.CityName,sm.StateName,
+PA.Appointmentdate from Doctor as D 
+inner join PatientAppointment as PA on PA.Doctor_Id=D.Id 
+inner join Patient as P on P.Id=PA.Patient_Id
+join StateMaster as sm on sm.Id=P.StateMaster_Id
+join CityMaster as cm on cm.Id=P.CityMaster_Id
+where D.Id="+ DoctorId + " and PA.IsCancelled=0 order by PA.Id desc";
+            var BookingHistory = ent.Database.SqlQuery<Doctorbooking>(query).ToList();
 
-        [System.Web.Http.HttpGet]
-        [System.Web.Http.Route("api/DoctorApi/DoctorChooseDep")]
+            return Ok(new { BookingHistory });
+        }
+
+        [HttpGet]
+        [Route("api/DoctorApi/DoctorChooseDep")]
         public IHttpActionResult DoctorChooseDep(int StateMaster_Id, int CityMaster_Id, int Department_Id, int Specialist_Id)
         {
             var rm = new returnMessage();
@@ -793,8 +677,8 @@ inner join Patient as P on P.Id=PA.Patient_Id where D.Id=" + Id + " and PA.IsCan
         }
 
       
-        [System.Web.Http.HttpPost]
-        [System.Web.Http.Route("api/DoctorApi/DoctorChoose")]
+        [HttpPost]
+        [Route("api/DoctorApi/DoctorChoose")]
         public IHttpActionResult DoctorChoose(DModel Model)
         {
                 var model1 = new choosedoc();
@@ -816,8 +700,8 @@ inner join Patient as P on P.Id=PA.Patient_Id where D.Id=" + Id + " and PA.IsCan
 
 
 
-        [System.Web.Http.Route("api/DoctorApi/DoctorBooknow")]
-        [System.Web.Http.HttpPost]
+        [Route("api/DoctorApi/DoctorBooknow")]
+        [HttpPost]
         public IHttpActionResult DoctorBooknow(doctorBooknow model)
         {
             try
@@ -860,7 +744,6 @@ inner join Patient as P on P.Id=PA.Patient_Id where D.Id=" + Id + " and PA.IsCan
                 }
                 else
                 {
-
                     numericPart = 1;
                 }
 
@@ -890,22 +773,32 @@ inner join Patient as P on P.Id=PA.Patient_Id where D.Id=" + Id + " and PA.IsCan
         }
 
 
-        [System.Web.Http.Route("api/DoctorApi/DoctorApt")]
-        [System.Web.Http.HttpGet]
+        [Route("api/DoctorApi/DoctorApt")]
+        [HttpGet]
         public IHttpActionResult DoctorApt(int Doctor_Id,int PA_Id)
         {
             var model = new Doctor();
             double gst = ent.Database.SqlQuery<double>(@"select Amount from GSTMaster where IsDeleted=0 and Name='Doctor'").FirstOrDefault();
-            string query = $"select  PA.Id,Doctor.DoctorName,Doctor.Fee,{gst} as GST,Doctor.Fee + Doctor.Fee *{gst}/100 as TotalFee,Doctor.Experience,CONCAT(CONVERT(NVARCHAR, TS.StartTime, 8), ' To ', CONVERT(NVARCHAR, TS.EndTime, 8)) AS SlotTime,(SELECT SpecialistName FROM Specialist WHERE Id=Doctor.Specialist_Id) AS SpecialistName,PA.AppointmentDate,al.DeviceId from Doctor left join PatientAppointment as PA on  Doctor.id = PA.Doctor_Id  Left join DoctorTimeSlot as Ts on  TS.Id=PA.Slot_id join AdminLogin as al on al.Id=Doctor.AdminLogin_Id  where Doctor.id=" + Doctor_Id + " and PA.Id=" + PA_Id + " and PA.IsCancelled=0";
 
-            var data = ent.Database.SqlQuery<DoctorAptmt>(query).FirstOrDefault();
-            return Ok(data);
-
+            var getmode=ent.PatientAppointments.Where(a=>a.Id==PA_Id).FirstOrDefault();
+            if(getmode.BookingMode_Id==1)
+            {
+                //string query = $"select PA.Id,Doctor.DoctorName,Doctor.Fee,{gst} as GST,Doctor.Fee + Doctor.Fee *{gst}/100 as TotalFee,Doctor.Experience,CONCAT(CONVERT(NVARCHAR, TS.StartTime, 8), ' To ', CONVERT(NVARCHAR, TS.EndTime, 8)) AS SlotTime,(SELECT SpecialistName FROM Specialist WHERE Id=Doctor.Specialist_Id) AS SpecialistName,PA.AppointmentDate,al.DeviceId from Doctor left join PatientAppointment as PA on  Doctor.id = PA.Doctor_Id  Left join DoctorTimeSlot as Ts on  TS.Id=PA.Slot_id join AdminLogin as al on al.Id=Doctor.AdminLogin_Id  where Doctor.id=" + Doctor_Id + " and PA.Id=" + PA_Id + " and PA.IsCancelled=0";
+                string query = $"select PA.Id,Doctor.DoctorName,Doctor.Fee,{gst} as GST,Doctor.Fee + Doctor.Fee *{gst}/100 as TotalFee,Doctor.Experience,Ts.Duration AS SlotTime,(SELECT SpecialistName FROM Specialist WHERE Id=Doctor.Specialist_Id) AS SpecialistName,PA.AppointmentDate,al.DeviceId from Doctor left join PatientAppointment as PA on  Doctor.id = PA.Doctor_Id  Left join DurationTime as Ts on  TS.Id=PA.Slot_id join AdminLogin as al on al.Id=Doctor.AdminLogin_Id  where Doctor.id=" + Doctor_Id + " and PA.Id=" + PA_Id + " and PA.IsCancelled=0";
+                var data = ent.Database.SqlQuery<DoctorAptmt>(query).FirstOrDefault();
+                return Ok(data);
+            }
+            else
+            {
+                string query = $"select PA.Id,Doctor.DoctorName,Doctor.VirtualFee as Fee,{gst} as GST,Doctor.VirtualFee + Doctor.VirtualFee *{gst}/100 as TotalFee,Doctor.Experience,Ts.Duration AS SlotTime,(SELECT SpecialistName FROM Specialist WHERE Id=Doctor.Specialist_Id) AS SpecialistName,PA.AppointmentDate,al.DeviceId from Doctor left join PatientAppointment as PA on  Doctor.id = PA.Doctor_Id  Left join DurationTime as Ts on  TS.Id=PA.Slot_id join AdminLogin as al on al.Id=Doctor.AdminLogin_Id  where Doctor.id=" + Doctor_Id + " and PA.Id=" + PA_Id + " and PA.IsCancelled=0";
+                var data = ent.Database.SqlQuery<DoctorAptmt>(query).FirstOrDefault();
+                return Ok(data);
+            } 
         }
 
 
-        [System.Web.Http.Route("api/DoctorApi/DoctorPayNow")]
-        [System.Web.Http.HttpPost]
+        [Route("api/DoctorApi/DoctorPayNow")]
+        [HttpPost]
         public IHttpActionResult DoctorPayNow(DoctorPayNow model)
         {
             try
@@ -946,8 +839,8 @@ inner join Patient as P on P.Id=PA.Patient_Id where D.Id=" + Id + " and PA.IsCan
 
         //===============Doctor Upload Report================//
 
-        [System.Web.Http.HttpPost]
-        [System.Web.Http.Route("api/DoctorApi/Doctor_UploadReport")]
+        [HttpPost]
+        [Route("api/DoctorApi/Doctor_UploadReport")]
         public IHttpActionResult Doctor_UploadReport(Doctorupload_report model)
         {
             string[] allowedExtensions = { ".jpg", ".jpeg", ".png" };
@@ -994,15 +887,26 @@ inner join Patient as P on P.Id=PA.Patient_Id where D.Id=" + Id + " and PA.IsCan
 
 
         //======================DoctorViewReport==========================//
-        [System.Web.Http.HttpGet]
-        [System.Web.Http.Route("api/DoctorApi/Doctor_ViewReport")]
+        [HttpGet]
+        [Route("api/DoctorApi/Doctor_ViewReport")]
         public IHttpActionResult Doctor_ViewReport(int Id)
         {
             //string qry = @"select DR.Id,P.PatientName,DR.Image1 from Patient as P left join DoctorReports as DR on DR.Patient_Id=P.Id where DR.Doctor_Id="+ Id +" order by Dr.Id Desc";
-            string qry = @"select distinct DR.Id,P.PatientName,DR.Image1,DR.UploadDate,CONCAT(CONVERT(NVARCHAR, TS.StartTime, 8),' To ', CONVERT(NVARCHAR, TS.EndTime, 8)) AS SlotTime from Patient as P 
-left join DoctorReports as DR on DR.Patient_Id=P.Id 
-join PatientAppointment as pa on pa.Doctor_Id=DR.Doctor_Id
-join DoctorTimeSlot TS on TS.Id=pa.Slot_id where DR.Doctor_Id=" + Id +" order by Dr.Id Desc";
+            string qry = @"WITH RankedResults AS (
+    SELECT
+        DR.Id,
+        P.PatientName,
+        DR.Image1,
+        DR.UploadDate,
+        CONCAT(CONVERT(NVARCHAR, TS.StartTime, 8), ' To ', CONVERT(NVARCHAR, TS.EndTime, 8)) AS SlotTime,
+        ROW_NUMBER() OVER (PARTITION BY DR.Id ORDER BY DR.Id DESC) AS RowNum
+    FROM
+        Patient AS P
+        JOIN DoctorReports AS DR ON DR.Patient_Id = P.Id
+        JOIN PatientAppointment AS PA ON PA.Doctor_Id = DR.Doctor_Id
+        JOIN DoctorTimeSlot TS ON TS.Id = PA.Slot_id
+    WHERE
+        DR.Doctor_Id = "+ Id + ") SELECT Id,PatientName,Image1,UploadDate,SlotTime FROM RankedResults WHERE RowNum = 1;";
             var DoctorViewReport = ent.Database.SqlQuery<DoctorViewReport>(qry).ToList();
             return Ok(new { DoctorViewReport });
         }
@@ -1010,8 +914,8 @@ join DoctorTimeSlot TS on TS.Id=pa.Slot_id where DR.Doctor_Id=" + Id +" order by
 
         //===================DoctorViewReportFile======================//
 
-        [System.Web.Http.HttpGet]
-        [System.Web.Http.Route("api/DoctorApi/Doctor_ViewReport_File")]
+        [HttpGet]
+        [Route("api/DoctorApi/Doctor_ViewReport_File")]
         public IHttpActionResult Doctor_ViewReport_File(int Id)
         {
             var data = new LabReport();
@@ -1024,8 +928,8 @@ join DoctorTimeSlot TS on TS.Id=pa.Slot_id where DR.Doctor_Id=" + Id +" order by
 
         //====================Doctor About================//
 
-        [System.Web.Http.HttpGet]
-        [System.Web.Http.Route("api/DoctorApi/DoctorAbout")]
+        [HttpGet]
+        [Route("api/DoctorApi/DoctorAbout")]
 
         public IHttpActionResult DoctorAbout(int Id)
         {
@@ -1036,7 +940,7 @@ join DoctorTimeSlot TS on TS.Id=pa.Slot_id where DR.Doctor_Id=" + Id +" order by
 
         //===============DOCTOR UPLOAD REPORT==PATIENTNAME DROPDOWN========//
 
-        [System.Web.Http.HttpGet, System.Web.Http.Route("api/DoctorApi/DoctorPatientList")]
+        [HttpGet, Route("api/DoctorApi/DoctorPatientList")]
         public IHttpActionResult DoctorPatientList(int Id)
         {
             var qry = @"select distinct p.Id,p.PatientName from Patient as p 
@@ -1046,47 +950,10 @@ where PA.Doctor_Id=" + Id + "";
 
             return Ok(new { PatientName });
         }
+         
 
-        //======================ADD DOCTOR BANK DETAILS==============//
-
-        [System.Web.Http.Route("api/DoctorApi/Doctor_AddBankDetail")]
-        [System.Web.Http.HttpPost]
-        public IHttpActionResult Doctor_AddBankDetail(BankDetail model)
-        {
-            try
-            {
-                var AddBnkDet = ent.BankDetails.Where(a => a.Login_Id == model.Login_Id).FirstOrDefault();
-                if (AddBnkDet == null)
-                {
-                    var data = new BankDetail()
-                    {
-                        Login_Id = model.Login_Id,
-                        AccountNo = model.AccountNo,
-                        IFSCCode = model.IFSCCode,
-                        BranchName = model.BranchName,
-                        BranchAddress = model.BranchAddress,
-                        HolderName = model.HolderName,
-                        MobileNumber = model.MobileNumber,
-                        isverified = true,
-                    };
-                    ent.BankDetails.Add(data);
-                    ent.SaveChanges();
-                    return Ok(new { Message = "Bank Detail Add SuccessFully!!!" });
-                }
-                else
-                {
-                    return BadRequest("Already Exist!!!");
-                }
-            }
-            catch (Exception ex)
-            {
-                return Ok("Internal server error");
-            }
-           
-        }
-
-        [System.Web.Http.Route("api/DoctorApi/BookingMode")]
-        [System.Web.Http.HttpGet]
+        [Route("api/DoctorApi/BookingMode")]
+        [HttpGet]
 
         public IHttpActionResult BookingMode()
         {
@@ -1094,12 +961,11 @@ where PA.Doctor_Id=" + Id + "";
             var BookingMode = ent.Database.SqlQuery<BookingMode>(qry).ToList();
             return Ok(new { BookingMode });
         }
-        [System.Web.Http.Route("api/DoctorApi/Doctor_TimeSlot")]
-        [System.Web.Http.HttpGet]
+        [Route("api/DoctorApi/Doctor_TimeSlot")]
+        [HttpGet]
 
         public IHttpActionResult Doctor_TimeSlot()
-        {
-            //string qry = @"select * from DoctorTimeSlot";
+        { 
             string qry = @"SELECT Id,CONCAT(CONVERT(NVARCHAR, StartTime, 8), ' To ', CONVERT(NVARCHAR, EndTime, 8)) AS SlotTime FROM DoctorTimeSlot";
             var TimeSlot = ent.Database.SqlQuery<Doctorslot>(qry).ToList();
             return Ok(new { TimeSlot });
@@ -1107,7 +973,7 @@ where PA.Doctor_Id=" + Id + "";
 
         // doctor invoice 
 
-        [System.Web.Http.HttpGet, System.Web.Http.Route("api/DoctorApi/DoctorInvoice/{Invoice}")]
+        [HttpGet, Route("api/DoctorApi/DoctorInvoice/{Invoice}")]
         public IHttpActionResult DoctorInvoice(string Invoice)
         {
             try
@@ -1179,8 +1045,8 @@ where PA.Doctor_Id=" + Id + "";
 
         }
 
-        [System.Web.Http.HttpPost]
-        [System.Web.Http.Route("api/DoctorApi/AddMedicinePrescription")]
+        [HttpPost]
+        [Route("api/DoctorApi/AddMedicinePrescription")]
 
         public IHttpActionResult AddMedicinePrescription(MedicinePrescriptionDetail model)
         {
@@ -1263,7 +1129,7 @@ where PA.Doctor_Id=" + Id + "";
         }
 
 
-        [System.Web.Http.HttpPost, System.Web.Http.Route("api/DoctorApi/AppointmentDone")]
+        [HttpPost,Route("api/DoctorApi/AppointmentDone")]
 
         public IHttpActionResult AppointmentDone(DoctorAptmt model)
         {
@@ -1296,6 +1162,83 @@ where PA.Doctor_Id=" + Id + "";
            
         }
 
+        [HttpGet, Route("api/DoctorApi/DaysDropdown")]
+        public IHttpActionResult DaysDropdown()
+        {
+            string qry = @"select * from DayNames";
+            var days = ent.Database.SqlQuery<Days>(qry).ToList();
+            return Ok(new { days });
+        }
+
+        [HttpGet, Route("api/DoctorApi/DurationDropdown")]
+        public IHttpActionResult DurationDropdown()
+        {
+            string qry = @"select Id as DurationId,Duration as DurationTime from DurationTime";
+            var DurationSlot = ent.Database.SqlQuery<Durations>(qry).ToList();
+            return Ok(new { DurationSlot });
+        }
+
+        [HttpGet, Route("api/DoctorApi/FranchiseDropdown")]
+        public IHttpActionResult FranchiseDropdown()
+        {
+            string qry = @"SELECT Id, 
+       CONCAT('[', UniqueId, ']  ', CompanyName) AS CompanyName 
+FROM Vendor 
+WHERE IsDeleted = 0 order by Id desc";
+            var Vendor = ent.Database.SqlQuery<vendors>(qry).ToList();
+            var vendor = new vendors
+            {
+                Id = 0,
+                CompanyName="None"
+            };
+            Vendor.Insert(0, vendor);
+            return Ok(new { Vendor });
+        }
+
+        [HttpGet, Route("api/DoctorApi/SlotDropdown")]
+        public IHttpActionResult SlotDropdown(int DoctorId)
+        {
+            string qry = @"select dt.Id,dt.Duration,d.StartTime,EndTime from DurationTime as dt
+join Doctor as d on d.SlotTime =dt.Id where d.id="+ DoctorId + "";
+            string qry2 = @"select dt.Id,dt.Duration,d.StartTime2,EndTime2 from DurationTime as dt
+join Doctor as d on d.SlotTime2 =dt.Id where d.id="+ DoctorId + "";
+            var Slot = ent.Database.SqlQuery<DoctorDuration>(qry).FirstOrDefault();
+            var Slot2 = ent.Database.SqlQuery<DoctorDuration>(qry2).FirstOrDefault();
+           var slotdd= GenerateTimeSlots(Slot.StartTime,Slot.EndTime,Convert.ToInt32(Slot.Duration));
+           var slotdd2= GenerateTimeSlots(Slot2.StartTime2,Slot2.EndTime2,Convert.ToInt32(Slot2.Duration));
+             slotdd.AddRange(slotdd2);
+            var data = new { Id = Slot.Id,slotdd };
+
+            return Ok(new { data }) ;
+        }
+
+        static List<string> GenerateTimeSlots(TimeSpan? startTime, TimeSpan? endTime, int durationMinutes)
+        {
+            // Check if start time or end time is null
+            if (!startTime.HasValue || !endTime.HasValue)
+            {
+                throw new ArgumentException("Start time and end time must be provided.");
+            }
+
+            // Initialize a list to store time slots
+            List<string> timeSlots = new List<string>();
+
+            // Initialize current time to start time
+            TimeSpan? currentTime = startTime;
+
+            // Iterate until current time exceeds or equals end time
+            while (currentTime < endTime)
+            {
+                var oldtime = currentTime;
+                // Add current time to the list
+                //timeSlots.Add(currentTime.Value.ToString("HH:mm:ss\\.fff"));
+
+                // Move to the next time slot
+                currentTime = currentTime.Value.Add(new TimeSpan(0, durationMinutes, 0));
+                timeSlots.Add($"{oldtime}");
+            }
+            return timeSlots;
+        }
 
     }
 }

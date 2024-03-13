@@ -24,6 +24,7 @@ using System.Security.RightsManagement;
 using System.Web.Mvc;
 using static HospitalPortal.Utilities.EmailOperations;
 using System.Windows.Interop;
+using System.Data.SqlClient;
 
 namespace HospitalPortal.Controllers
 {
@@ -56,11 +57,17 @@ namespace HospitalPortal.Controllers
             model.JoiningDate = DateTime.Now;
             model.States = new SelectList(repos.GetAllStates(), "Id", "StateName");
             model.DepartmentList = new SelectList(ent.Departments.ToList(), "Id", "DepartmentName");
+
+            model.Vendor_Id = vendorId;
+            model.VendorList = new SelectList(ent.Vendors.Where(a => a.IsDeleted == false && a.IsApproved == true).ToList(), "Id", "CompanyName");
+
+            model.DayList = new SelectList(ent.DayNames.ToList(), "Id", "Name");
+            model.DurationTimeList = new SelectList(ent.DurationTimes.ToList(), "Id", "Duration");
             return View(model);
         }
        
-        [System.Web.Mvc.HttpPost]
-        [System.Web.Mvc.AllowAnonymous]
+        [HttpPost]
+        [AllowAnonymous]
         public ActionResult Add(DoctorDTO model)
         {
             model.States = new SelectList(repos.GetAllStates(), "Id", "StateName");
@@ -130,7 +137,17 @@ namespace HospitalPortal.Controllers
                         ent.SaveChanges();
                         model.CityMaster_Id = cityMaster.Id;
                     }
+
                     var domainModel = Mapper.Map<Doctor>(model);
+                    if (model.Vendor_Id == 0)
+                    {
+                        domainModel.Vendor_Id = null;
+                    }
+                    else
+                    {
+                        domainModel.Vendor_Id = model.Vendor_Id;
+                    }
+
                     domainModel.AdminLogin_Id = admin.Id;
                     domainModel.SlotTime = Convert.ToInt32(model.SlotTiming);
                     domainModel.SlotTime2 = Convert.ToInt32(model.SlotTiming2);
@@ -143,6 +160,10 @@ namespace HospitalPortal.Controllers
                     domainModel.RegistrationNumber = domainModel.RegistrationNumber;
                     domainModel.SignaturePic = model.SignaturePic;
                     domainModel.PAN = domainModel.PAN;
+                    domainModel.Day_Id = domainModel.Day_Id;
+                    domainModel.Fee = domainModel.Fee;
+                    domainModel.VirtualFee = domainModel.VirtualFee;
+                    domainModel.IsBankUpdateApproved = false;
                     ent.Doctors.Add(domainModel);
                     ent.SaveChanges();
                     //string msg = "Welcome to PSWELLNESS. Your User Name :  " + admin.Username + "(" + admin.UserID + "), Password : " + admin.Password + ".";
@@ -189,8 +210,7 @@ namespace HospitalPortal.Controllers
             return RedirectToAction("Add", new { vendorId = model.Vendor_Id });
         }
 
-
-        [System.Web.Mvc.HttpPost]
+        [HttpPost]
         public JsonResult AddDepartmentSpecialization(DoctorDepartment DepartmentData)
         {
             DoctorDepartment DocDept = new DoctorDepartment
@@ -218,7 +238,6 @@ namespace HospitalPortal.Controllers
             return RedirectToAction("UpdateDepartment", new { Id= GetDoctorId()});
         }
         
-
         public ActionResult Edit(int id)
         {
             var data = ent.Doctors.Find(id);
@@ -227,6 +246,8 @@ namespace HospitalPortal.Controllers
             model.Cities = new SelectList(repos.GetCitiesByState(model.StateMaster_Id), "Id", "CityName", model.CityMaster_Id);
             model.DepartmentList = new SelectList(ent.Departments.ToList(), "Id", "DepartmentName", model.Department_Id);
             model.SpecialistList = new SelectList(ent.Specialists.Where(a => a.Department_Id == model.Department_Id).ToList(), "Id", "SpecialistName", model.Specialist_Id);
+            model.DayList = new SelectList(ent.DayNames.ToList(), "Id", "Name");
+            model.DurationTimeList = new SelectList(ent.DurationTimes.ToList(), "Id", "Duration");
             return View(model);
         }
 
@@ -234,48 +255,48 @@ namespace HospitalPortal.Controllers
         public ActionResult Edit(DoctorDTO model)
         {
             try
-            {
-                ModelState.Remove("ConfirmPassword");
-                ModelState.Remove("MobileNumber");
-                ModelState.Remove("EmailId");
-                ModelState.Remove("Password");
-                ModelState.Remove("AadharImageFile");
-                ModelState.Remove("LicenceImageFile");
-                ModelState.Remove("Department_Id");
-                ModelState.Remove("PinCode");
-                ModelState.Remove("IsCheckedTermsCondition");
-                if (!ModelState.IsValid)
-                    return View(model);
-
-                model.States = new SelectList(repos.GetAllStates(), "Id", "StateName", model.StateMaster_Id);
-                model.Cities = new SelectList(repos.GetCitiesByState(model.StateMaster_Id), "Id", "CityName", model.CityMaster_Id);
-                model.DepartmentList = new SelectList(ent.Departments.ToList(), "Id", "DepartmentName", model.Department_Id);
-                model.SpecialistList = new SelectList(ent.Specialists.Where(a => a.Department_Id == model.Department_Id).ToList(), "Id", "SpecialistName", model.Specialist_Id);
-                // aadhar doc upload
-                //if (model.AadharImageFile != null)
-                //{
-                //    var aadharImg = FileOperation.UploadImage(model.AadharImageFile, "Images");
-                //    if (aadharImg == "not allowed")
-                //    {
-                //        TempData["msg"] = "Only png,jpg,jpeg files are allowed as Aadhar/PAN card document";
-                //        return View(model);
-                //    }
-                //    model.AadharImage = aadharImg;
-                //}
+            {                 
+                var existingDoctor = ent.Doctors.Find(model.Id); // Assuming 'Id' is the primary key
+                if (existingDoctor == null)
+                {
+                    TempData["msg"] = "Doctor not found";
+                    return RedirectToAction("Edit", new { id = model.Id });
+                }
                 // Licence upload
                 if (model.LicenceImageFile != null)
                 {
                     var licenceImg = FileOperation.UploadImage(model.LicenceImageFile, "Images");
                     if (licenceImg == "not allowed")
                     {
-                        TempData["msg"] = "Only png,jpg,jpeg files are allowed as Licence document";
+                        TempData["msg"] = "Only png, jpg, jpeg, pdf files are allowed as Licence document";
+                       
                         return View(model);
                     }
                     model.LicenceImage = licenceImg;
                 }
-                var domainModel = Mapper.Map<Doctor>(model);
-                domainModel.SlotTime = Convert.ToInt32(model.SlotTiming);
-                ent.Entry(domainModel).State = System.Data.Entity.EntityState.Modified;
+                // Update the existing entity with values from the model
+                existingDoctor.DoctorName = model.DoctorName;
+                existingDoctor.ClinicName = model.ClinicName;
+                existingDoctor.Department_Id = (int)model.Department_Id;
+                existingDoctor.Specialist_Id = (int)model.Specialist_Id;
+                existingDoctor.PhoneNumber = model.PhoneNumber;
+                existingDoctor.EmailId = model.EmailId;
+                existingDoctor.StateMaster_Id = model.StateMaster_Id;
+                existingDoctor.CityMaster_Id = model.CityMaster_Id;
+                existingDoctor.Location = model.Location;
+                existingDoctor.LicenceImage = model.LicenceImage;
+                existingDoctor.LicenceNumber = model.LicenceNumber;
+                existingDoctor.LicenseValidity = model.LicenseValidity;
+                existingDoctor.Day_Id = model.Day_Id;
+                existingDoctor.Fee = model.Fee;
+                existingDoctor.VirtualFee = model.VirtualFee;
+                existingDoctor.StartTime = model.StartTime;
+                existingDoctor.EndTime = model.EndTime;
+                existingDoctor.StartTime2 = model.StartTime2;
+                existingDoctor.EndTime2 = model.EndTime2;
+                existingDoctor.SlotTime = Convert.ToInt32(model.SlotTime);
+                existingDoctor.SlotTime2 = Convert.ToInt32(model.SlotTime2);
+
                 ent.SaveChanges();
                 TempData["msg"] = "ok";
             }
@@ -285,8 +306,8 @@ namespace HospitalPortal.Controllers
                 TempData["msg"] = "Server Error";
             }
             return RedirectToAction("Edit", new { id = model.Id });
-
         }
+
 
         public ActionResult All(int? vendorId, string term = null, int? page = 0)
         {
@@ -298,7 +319,6 @@ namespace HospitalPortal.Controllers
             if (term != null)
             {
                 data = data.Where(a =>a.DoctorId.Contains(term)).ToList();
-              
             }
             if (data.Count() == 0)
             {
@@ -323,12 +343,60 @@ namespace HospitalPortal.Controllers
             ent.Database.ExecuteSqlCommand(q);
             string mobile = ent.Database.SqlQuery<string>("select MobileNumber from Doctor where Id=" + id).FirstOrDefault();
             string Email = ent.Database.SqlQuery<string>(@"select EmailId from Doctor where Id="+ id).FirstOrDefault();
+            string username = ent.Database.SqlQuery<string>(@"select DoctorId from Doctor where Id="+ id).FirstOrDefault();
             string Name = ent.Database.SqlQuery<string>(@"select DoctorName from Doctor where Id=" + id).FirstOrDefault();
-            var msg = "Dear " + Name + ", Now you Can Login With Your Registered EmailId " + Email + " and Pasword";
+            // Assuming you have access to the DbContext instance named 'ent'
+            var query = "SELECT IsApproved FROM Doctor WHERE Id = @Id";
+            var parameters = new SqlParameter("@Id", id);
+            bool isApproved = ent.Database.SqlQuery<bool>(query, parameters).FirstOrDefault();
+
+            var msg = "Dear " + Name + ", Now you Can Login With Your Username " + username + " and Pasword";
             Message.SendSms(mobile, msg);
+             
+            if(isApproved == true)
+            {
+                EmailEF ef = new EmailEF()
+                {
+                    EmailAddress = Email,
+                    Message = msg,
+                    Subject = "PS Wellness Approval Status."
+                };
+                EmailOperations.SendEmainew(ef);
+            }
+           
+
             return RedirectToAction("All");
         }
 
+        public ActionResult UpdateBankUpdateStatus(int id)
+        {
+            string q = @"update Doctor set IsBankUpdateApproved = case when IsBankUpdateApproved=1 then 0 else 1 end where id=" + id;
+            ent.Database.ExecuteSqlCommand(q);
+
+            string mobile = ent.Database.SqlQuery<string>("select MobileNumber from Doctor where Id=" + id).FirstOrDefault();
+            string Email = ent.Database.SqlQuery<string>(@"select EmailId from Doctor where Id=" + id).FirstOrDefault();
+            string Name = ent.Database.SqlQuery<string>(@"select DoctorName from Doctor where Id=" + id).FirstOrDefault();
+            //var msg = "Dear " + Name + ", Now you Can Upadate your bank details.";
+            //Message.SendSms(mobile, msg);
+            var query = "SELECT IsBankUpdateApproved FROM Doctor WHERE Id = @Id";
+            var parameters = new SqlParameter("@Id", id);
+            bool isApproved = ent.Database.SqlQuery<bool>(query, parameters).FirstOrDefault();
+
+            var mailmsg = "Dear " + Name + ", Now you Can Update your bank details.";
+             
+            if (isApproved == true)
+            {
+                EmailEF ef = new EmailEF()
+                {
+                    EmailAddress = Email,
+                    Message = mailmsg,
+                    Subject = "PS Wellness Approval Status."
+                };
+                EmailOperations.SendEmainew(ef);
+                
+            }
+            return RedirectToAction("All");
+        }
         public ActionResult Delete(int id)
         {
             var data = ent.Doctors.Find(id);
@@ -400,7 +468,6 @@ namespace HospitalPortal.Controllers
             return View(model);
         }
 
-
         [System.Web.Mvc.HttpPost]
         public ActionResult UpdateDepartment(DoctorDepartment DepartmentData)
         {
@@ -446,7 +513,6 @@ namespace HospitalPortal.Controllers
             return View(model);
         }
 
-
         public ActionResult DoctorPatientList(int? id, string term, int? pageNumber)
         {
             var mdoel = new PatientDTO();
@@ -467,7 +533,6 @@ namespace HospitalPortal.Controllers
             return View(mdoel);
         }
 
-
         public ActionResult ViewReports(int id)
         {
             var model = new ViewDoctorReports();
@@ -485,7 +550,6 @@ namespace HospitalPortal.Controllers
             model.test = data;
             return View(model);
         }
-
 
         public ActionResult PaymentHistory(int id, DateTime? date = null)
         {
@@ -521,7 +585,6 @@ namespace HospitalPortal.Controllers
             }
             return View(payment);
         }
-
 
         public ActionResult ViewPayoutHistory(int id, DateTime? PaymentDate)
         {
@@ -671,7 +734,6 @@ namespace HospitalPortal.Controllers
 
         }
 
-
         [System.Web.Mvc.HttpGet]
         public ActionResult RegisterClinic()
         {
@@ -713,7 +775,6 @@ namespace HospitalPortal.Controllers
             }
             return RedirectToAction("RegisterClinic");
         }
-
         public ActionResult ViewClinics()
         {
             var model = new AddClinicDTO();
@@ -726,7 +787,6 @@ where dc.DoctorId=" + GetDoctorId();
             model.Clinic = data;
             return View(model);
         }
-        
 
         [System.Web.Mvc.HttpGet]
         public ActionResult EditClinic(int id)
@@ -739,7 +799,6 @@ where dc.DoctorId=" + GetDoctorId();
             model.Cities = new SelectList(repos.GetCitiesByState(model.StateMaster_Id), "Id", "CityName", model.CityMaster_Id);
             return View(model);
         }
-
 
         [System.Web.Mvc.HttpPost]
         public ActionResult EditClinic(EditClinicDTO model)
@@ -864,7 +923,6 @@ where dc.DoctorId=" + GetDoctorId();
 
         }
 
-
         [HttpPost]
         public ActionResult PatientPerticuler(MedicinePrescriptionDTO model)
         {
@@ -926,6 +984,39 @@ where dc.DoctorId=" + GetDoctorId();
                 ent.SaveChanges();
                 TempData["msg"] = "ok";
 
+                var lastrecordId = ent.MedicinePrescriptionDetails.OrderByDescending(a => a.Id).Select(a => a.Id).FirstOrDefault();
+                string query = @"SELECT DISTINCT mpd.Id,mpd.EntryDate, d.Id,d.EmailId as DoctorEmailId,d.doctorId,d.RegistrationNumber, d.DoctorName, pa.AppointmentDate, p.PatientRegNo, p.PatientName, p.EmailId, p.MobileNumber, p.Gender,p.DOB,
+mpd.*
+FROM PatientAppointment AS pa
+JOIN Doctor AS d ON d.Id = pa.Doctor_Id 
+JOIN PrescriptionAppointments ppa ON ppa.Doctor_Id = d.Id
+JOIN MedicinePrescriptionDetail mpd ON mpd.Doctor_Id = D.Id
+JOIN Patient AS p ON p.Id = mpd.Patient_Id
+WHERE mpd.Id = " + lastrecordId + " order by mpd.EntryDate desc";
+
+                var prescription = ent.Database.SqlQuery<PrescriptionPdfModel>(query).FirstOrDefault();
+
+                EmailEF ef = new EmailEF()
+                {
+                    EmailAddress = prescription.EmailId,
+                    Message = "Medicine Prescription",
+                    Subject = "Prescription Pdf.",
+
+                };
+
+                EmailOperations.SendEmainewpdf(ef);
+
+                EmailEF drmail = new EmailEF()
+                {
+                    EmailAddress = prescription.DoctorEmailId,
+                    Message = "Medicine Prescription",
+                    Subject = "Prescription Pdf.",
+
+                };
+
+                EmailOperations.SendEmainewpdf(drmail);
+                Message.SendSmsUserIdPass("Medicine Prescription");
+
             }
             //catch (Exception ex)
             catch (DbEntityValidationException ex)
@@ -943,7 +1034,7 @@ where dc.DoctorId=" + GetDoctorId();
         {
 
             var lastrecordId = ent.MedicinePrescriptionDetails.OrderByDescending(a => a.Id).Select(a => a.Id).FirstOrDefault();
-            string query = @"SELECT DISTINCT mpd.Id,mpd.EntryDate, d.Id, d.doctorId, d.DoctorName, pa.AppointmentDate, p.PatientRegNo, p.PatientName, p.EmailId, p.MobileNumber, p.Gender,p.DOB,
+            string query = @"SELECT DISTINCT mpd.Id,mpd.EntryDate, d.Id, d.doctorId,d.EmailId as DoctorEmailId,d.RegistrationNumber, d.DoctorName, pa.AppointmentDate, p.PatientRegNo, p.PatientName, p.EmailId, p.MobileNumber, p.Gender,p.DOB,
 mpd.*
 FROM PatientAppointment AS pa
 JOIN Doctor AS d ON d.Id = pa.Doctor_Id 
@@ -1342,11 +1433,7 @@ WHERE mpd.Id = " + lastrecordId + " order by mpd.EntryDate desc";
                     doctorInfoTable.AddCell(subtable);
                     doctorInfoTable.AddCell(signatureCell);
 
-                    document.Add(doctorInfoTable);
-
-
-
-
+                    document.Add(doctorInfoTable); 
 
                     // Add the disclaimer content
                     var disclaimerText = "Disclaimer: The objective of this medical advice is to provide users of such services with information for a better understanding of their health and medical condition. This information and advice are not intended to be a substitute for professional physical meeting, examination, medical advice, diagnosis, or treatment. It should not be treated as a physical medical consultation and cannot be used for any medico-legal purpose. The decision to follow the medical advice is at the sole discretion of the user, and the advising doctor cannot be held responsible for providing such medical advice.";

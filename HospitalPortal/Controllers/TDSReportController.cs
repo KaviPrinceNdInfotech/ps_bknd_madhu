@@ -30,11 +30,12 @@ namespace HospitalPortal.Controllers
             {
                 DateTime dateCriteria = AppointmentDate.Value.AddDays(-7);
                 string date = dateCriteria.ToString("dd/MM/yyyy");
-                var qry1 = @"select A.Doctor_Id, D.DoctorName, SUM(A.TotalFee) As Amount from dbo.PatientAppointment A join Doctor D on D.Id = A.Doctor_Id  where A.IsPaid=1 and A.AppointmentDate between '" + dateCriteria + "' and '" + AppointmentDate + "' GROUP BY A.TotalFee, D.DoctorName, A.Doctor_Id";
+                var qry1 = @"select A.Doctor_Id, D.DoctorName, SUM(A.TotalFee) As Amount from dbo.PatientAppointment A join Doctor D on D.Id = A.Doctor_Id  where A.IsPaid=1 and Convert(varchar,A.AppointmentDate,23) between '" + dateCriteria + "' and '" + AppointmentDate + "' GROUP BY A.TotalFee, D.DoctorName, A.Doctor_Id";
                 var data1 = ent.Database.SqlQuery<DoctorCommissionReport>(qry1).ToList();
                 if (data1.Count() == 0)
                 {
                     TempData["msg"] = "Your Selected Date Doesn't Contain any Information.";
+                    return View(model);
                 }
                 else
                 {
@@ -328,8 +329,7 @@ where A.IsPaid=1 and A.OrderDate between DATEADD(DAY, -7, GETDATE()) AND GETDATE
             model.chemistDetails = data;
             return View(model);
         }
-
-
+         
         public ActionResult Hospital()
         {
             TempData["Msg"] = "Under Maintenance";
@@ -338,7 +338,7 @@ where A.IsPaid=1 and A.OrderDate between DATEADD(DAY, -7, GETDATE()) AND GETDATE
 
         public ActionResult Driver(int? pageNumber, DateTime? RequestDate, string name = null)
         {
-            double commision = ent.Database.SqlQuery<double>(@"select Amount from TDSMaster where IsDeleted=0 and Name='Vehicle'").FirstOrDefault();
+            double commision = ent.Database.SqlQuery<double>(@"select Amount from TDSMaster where IsDeleted=0 and Name='Ambulance'").FirstOrDefault();
             var model = new AmbulanceList();
             if (RequestDate != null)
             {
@@ -346,11 +346,11 @@ where A.IsPaid=1 and A.OrderDate between DATEADD(DAY, -7, GETDATE()) AND GETDATE
                 string date = dateCriteria.ToString("dd/MM/yyyy");
                 var qry1 = @"select v.VehicleNumber, IsNull(v.VehicleName,'NA') as VehicleName, 
 v.Id as VehicleId, d.DriverName, Sum(trm.Amount) as Amount
-from TravelRecordMaster trm 
+from DriverLocation trm 
 join Driver d on d.Id = trm.Driver_Id
-join Vehicle v on v.Id = trm.Vehicle_Id
-join Patient p on p.Id = trm.Patient_Id
-where trm.IsDriveCompleted = 1 and trm.RequestDate between '" + dateCriteria + "' and '" + RequestDate + "' group by v.VehicleNumber, v.VehicleName, v.Id,d.DriverName";
+join Vehicle v on v.VehicleType_Id = trm.VehicleType_Id
+join Patient p on p.Id = trm.PatientId
+where trm.IsPay = 'Y' and trm.EntryDate between '" + dateCriteria + "' and '" + RequestDate + "' group by v.VehicleNumber, v.VehicleName, v.Id,d.DriverName";
                 var data1 = ent.Database.SqlQuery<AmbulanceReport>(qry1).ToList();
                 if (data1.Count() == 0)
                 {
@@ -374,7 +374,13 @@ where trm.IsDriveCompleted = 1 and trm.RequestDate between '" + dateCriteria + "
                     return View(model);
                 }
             }
-            var doctor = @"select v.VehicleNumber, IsNull(v.VehicleName,'NA') as VehicleName, v.Id as VehicleId, d.DriverName, Sum(trm.Amount) as Amount from TravelRecordMaster trm join Driver d on d.Id = trm.Driver_Id join Vehicle v on v.Id = trm.Vehicle_Id join Patient p on p.Id = trm.Patient_Id where trm.IsDriveCompleted = 1 and trm.RequestDate between DateAdd(DD,-7,GETDATE() ) and GETDATE() group by v.VehicleNumber, v.VehicleName, v.Id,d.DriverName";
+            var doctor = @"select v.VehicleNumber, IsNull(v.VehicleName,'NA') as VehicleName, 
+v.Id as VehicleId, d.DriverName, Sum(trm.Amount) as Amount
+from DriverLocation trm 
+join Driver d on d.Id = trm.Driver_Id
+join Vehicle v on v.VehicleType_Id = trm.VehicleType_Id
+join Patient p on p.Id = trm.PatientId
+where trm.IsPay = 'Y' and trm.EntryDate between DateAdd(DD,-7,GETDATE() ) and GETDATE() group by v.VehicleNumber, v.VehicleName, v.Id,d.DriverName";
             var data = ent.Database.SqlQuery<AmbulanceReport>(doctor).ToList();
             if (data.Count() == 0)
             {
@@ -400,13 +406,13 @@ where trm.IsDriveCompleted = 1 and trm.RequestDate between '" + dateCriteria + "
         {
             var model = new VendorPaymentDTO();
             double tds = ent.Database.SqlQuery<double>(@"select Amount from TDSMaster p where p.Name='Doctor'").FirstOrDefault();
-            string q = @"select v.CompanyName, v.VendorName, SUM(A.TotalFee)  As Counts from dbo.PatientAppointment A join Doctor D on D.Id = A.Doctor_Id join Vendor v on v.Id = D.Vendor_Id where A.IsPaid=1 and A.AppointmentDate BETWEEN DATEADD(DAY, -7, GETDATE()) AND GETDATE() group by D.DoctorName, A.Doctor_Id, v.VendorName,v.CompanyName";
+            string q = @"select v.Id,v.CompanyName, v.VendorName, SUM(A.TotalFee)  As Counts from dbo.PatientAppointment A join Doctor D on D.Id = A.Doctor_Id join Vendor v on v.Id = D.Vendor_Id where A.IsPaid=1 and A.AppointmentDate BETWEEN DATEADD(DAY, -7, GETDATE()) AND GETDATE() group by D.DoctorName, A.Doctor_Id,v.Id, v.VendorName,v.CompanyName";
             var data = ent.Database.SqlQuery<VendorList>(q).ToList();
             if (date != null)
             {
                 DateTime dateCriteria = date.Value.AddDays(-7);
                 string dDate = dateCriteria.ToString("dd/MM/yyyy");
-                var qry1 = @"select v.CompanyName, v.VendorName, SUM(A.Amount)  As Counts from dbo.PatientAppointment A join Doctor D on D.Id = A.Doctor_Id join Vendor v on v.Id = D.Vendor_Id where A.IsPaid=1 and A.AppointmentDate BETWEEN '" + dateCriteria+"' AND '"+date+"' group by D.DoctorName, A.Doctor_Id";
+                var qry1 = @"select v.Id,v.CompanyName, v.VendorName, SUM(A.Amount)  As Counts from dbo.PatientAppointment A join Doctor D on D.Id = A.Doctor_Id join Vendor v on v.Id = D.Vendor_Id where A.IsPaid=1 and A.AppointmentDate BETWEEN '" + dateCriteria+"' AND '"+date+ "' group by D.DoctorName, A.Doctor_Id,v.Id";
                 var data1 = ent.Database.SqlQuery<VendorList>(qry1).ToList();
                 if (data1.Count() == 0)
                 {
@@ -415,7 +421,7 @@ where trm.IsDriveCompleted = 1 and trm.RequestDate between '" + dateCriteria + "
                 }
                 else
                 {
-                    ViewBag.Payment = tds;
+                    ViewBag.tds = tds;
                     model.Vendorses = data1;
                     return View(model);
                 }
@@ -425,7 +431,7 @@ where trm.IsDriveCompleted = 1 and trm.RequestDate between '" + dateCriteria + "
                 TempData["msg"] = "No Result";
                 return View(model);
             }
-            ViewBag.Payment = tds;
+            ViewBag.tds = tds;
             model.Vendorses = data;
             return View(model);
         }
@@ -472,7 +478,10 @@ where trm.IsDriveCompleted = 1 and trm.RequestDate between '" + dateCriteria + "
         {
             var model = new VendorPaymentDTO();
             double tds = ent.Database.SqlQuery<double>(@"select Amount from TDSMaster p where IsDeleted=0 and p.Name='Vehicle'").FirstOrDefault();
-            string q = @"select Sum(trm.Amount) as Amount,ve.Id, ve.VendorName, ve.CompanyName from Vehicle v join Vendor ve on ve.Id = v.Vendor_Id join TravelRecordMaster trm on trm.Vehicle_Id = v.Id where trm.IsDriveCompleted = 1 and trm.RequestDate between DateAdd(DD,-7,GETDATE() ) and GETDATE() group by  ve.VendorName, ve.CompanyName,ve.Id";
+            string q = @"select Sum(trm.Amount) as Amount,ve.Id, ve.VendorName, ve.CompanyName from Vehicle v 
+join Vendor ve on ve.Id = v.Vendor_Id 
+join DriverLocation trm on trm.VehicleType_Id = v.VehicleType_Id 
+where trm.IsPay = 'Y' and trm.EntryDate	 between DateAdd(DD,-7,GETDATE() ) and GETDATE() group by  ve.VendorName, ve.CompanyName,ve.Id";
             var data = ent.Database.SqlQuery<VendorList>(q).ToList();
             if (date != null)
             {
@@ -487,7 +496,7 @@ where trm.IsDriveCompleted = 1 and trm.RequestDate between '" + dateCriteria + "
                 }
                 else
                 {
-                    ViewBag.Payment = tds;
+                    ViewBag.tds = tds;
                     model.Vendorses = data1;
                     return View(model);
                 }
@@ -498,7 +507,7 @@ where trm.IsDriveCompleted = 1 and trm.RequestDate between '" + dateCriteria + "
                 TempData["msg"] = "No Result";
                 return View(model);
             }
-            ViewBag.Payment = tds;
+            ViewBag.tds = tds;
             model.Vendorses = data;
             return View(model);
         }

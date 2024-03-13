@@ -42,6 +42,7 @@ namespace HospitalPortal.Models.DomainModels
         public string CertificateNo { get; set; }
         public string About { get; set; }
         public string PAN { get; set; }
+        public Nullable<bool> IsBankUpdateApproved { get; set; }
     
         public virtual AdminLogin AdminLogin { get; set; }
         public virtual CityMaster CityMaster { get; set; }

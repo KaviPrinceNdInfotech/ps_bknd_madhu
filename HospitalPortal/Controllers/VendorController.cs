@@ -7,6 +7,7 @@ using HospitalPortal.Utilities;
 using log4net;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -288,7 +289,35 @@ where v.IsDeleted=0 order by v.Id desc";
             Message.SendSms(mobile, msg);
             return RedirectToAction("All");
         }
+        public ActionResult UpdateBankUpdateStatus(int id)
+        {
+            string q = @"update Vendor set IsBankUpdateApproved = case when IsBankUpdateApproved=1 then 0 else 1 end where id=" + id;
+            ent.Database.ExecuteSqlCommand(q);
 
+            string mobile = ent.Database.SqlQuery<string>("select MobileNumber from Vendor where Id=" + id).FirstOrDefault();
+            string Email = ent.Database.SqlQuery<string>(@"select EmailId from Vendor where Id=" + id).FirstOrDefault();
+            string Name = ent.Database.SqlQuery<string>(@"select VendorName from Vendor where Id=" + id).FirstOrDefault();
+            //var msg = "Dear " + Name + ", Now you Can Upadate your bank details.";
+            //Message.SendSms(mobile, msg);
+            var query = "SELECT IsBankUpdateApproved FROM Vendor WHERE Id = @Id";
+            var parameters = new SqlParameter("@Id", id);
+            bool isApproved = ent.Database.SqlQuery<bool>(query, parameters).FirstOrDefault();
+
+            var mailmsg = "Dear " + Name + ", Now you Can Update your bank details.";
+
+            if (isApproved == true)
+            {
+                EmailEF ef = new EmailEF()
+                {
+                    EmailAddress = Email,
+                    Message = mailmsg,
+                    Subject = "PS Wellness Approval Status."
+                };
+                EmailOperations.SendEmainew(ef);
+
+            }
+            return RedirectToAction("All");
+        }
         public ActionResult Delete(int id)
         {
             var data = ent.Vendors.Find(id);
@@ -374,7 +403,7 @@ where v.IsDeleted=0 order by v.Id desc";
             int Id = GetVendorId();
             var model = new ReportDetails();
             double payment = ent.Database.SqlQuery<double>(@"select Commission from CommissionMaster where IsDeleted=0 and Name='" + term + "'").FirstOrDefault();
-            var qry = @"select Sum(pa.Amount) as Counts, v.VendorName as Name, v.CompanyName as Name1 from Doctor d join Vendor v on d.Vendor_Id = v.Id join dbo.PatientAppointment pa on pa.Doctor_Id = d.Id  where v.Id = "+Id+" and pa.AppointmentDate =  GETDATE() and pa.IsPaid=1 group by v.VendorName, v.CompanyName";
+            var qry = @"select Sum(pa.TotalFee) as Counts, v.VendorName as Name, v.CompanyName as Name1 from Doctor d join Vendor v on d.Vendor_Id = v.Id join dbo.PatientAppointment pa on pa.Doctor_Id = d.Id  where v.Id = " + Id+" and pa.AppointmentDate =  GETDATE() and pa.IsPaid=1 group by v.VendorName, v.CompanyName";
             var data = ent.Database.SqlQuery<Vendorses>(qry).ToList();
             if (date == null)
             {
@@ -391,7 +420,7 @@ where v.IsDeleted=0 order by v.Id desc";
             else
             {
                 string dt = date.Value.ToString("MM/dd/yyyy");
-                var qry1 = @"select Sum(pa.Amount) as Counts, v.VendorName as Name, v.CompanyName as Name1 from Doctor d join Vendor v on d.Vendor_Id = v.Id join dbo.PatientAppointment pa on pa.Doctor_Id = d.Id  where  v.Id = " + Id + " and Convert(Date,pa.AppointmentDate)  =  '" + dt + "'  and pa.IsPaid=1 group by v.VendorName, v.CompanyName";
+                var qry1 = @"select Sum(pa.TotalFee) as Counts, v.VendorName as Name, v.CompanyName as Name1 from Doctor d join Vendor v on d.Vendor_Id = v.Id join dbo.PatientAppointment pa on pa.Doctor_Id = d.Id  where  v.Id = " + Id + " and Convert(Date,pa.AppointmentDate)  =  '" + dt + "'  and pa.IsPaid=1 group by v.VendorName, v.CompanyName";
                 var data1 = ent.Database.SqlQuery<Vendorses>(qry1).ToList();
                 if (data1.Count() == 0)
                 {
@@ -413,7 +442,7 @@ where v.IsDeleted=0 order by v.Id desc";
             int Id = GetVendorId();
             var model = new ReportDetails();
             double payment = ent.Database.SqlQuery<double>(@"select Commission from CommissionMaster where IsDeleted=0 and Name='" + term + "'").FirstOrDefault();
-            var qry = @"select Sum(pa.Amount) as Counts, v.VendorName as Name, v.CompanyName as Name1 from Doctor d join Vendor v on d.Vendor_Id = v.Id join dbo.PatientAppointment pa on pa.Doctor_Id = d.Id  where  v.Id = " + Id + " and pa.AppointmentDate  between DATEADD(day,-7,GETDATE()) and GetDate()  and pa.IsPaid=1 group by v.VendorName, v.CompanyName";
+            var qry = @"select Sum(pa.TotalFee) as Counts, v.VendorName as Name, v.CompanyName as Name1 from Doctor d join Vendor v on d.Vendor_Id = v.Id join dbo.PatientAppointment pa on pa.Doctor_Id = d.Id  where  v.Id = " + Id + " and pa.AppointmentDate  between DATEADD(day,-7,GETDATE()) and GetDate()  and pa.IsPaid=1 group by v.VendorName, v.CompanyName";
             var data = ent.Database.SqlQuery<Vendorses>(qry).ToList();
             if (date == null)
             {
@@ -432,7 +461,7 @@ where v.IsDeleted=0 order by v.Id desc";
             {
                 DateTime dateCriteria = date.Value.AddDays(-7);
                 string Tarikh = dateCriteria.ToString("dd/MM/yyyy");
-                var qry1 = @"select Sum(pa.Amount) as Counts, v.VendorName as Name, v.CompanyName as Name1 from Doctor d join Vendor v on d.Vendor_Id = v.Id join dbo.PatientAppointment pa on pa.Doctor_Id = d.Id  where  v.Id = " + Id + " and pa.AppointmentDate between '" + dateCriteria + "' and '" + Tarikh + "'  and pa.IsPaid=1 group by v.VendorName, v.CompanyName";
+                var qry1 = @"select Sum(pa.TotalFee) as Counts, v.VendorName as Name, v.CompanyName as Name1 from Doctor d join Vendor v on d.Vendor_Id = v.Id join dbo.PatientAppointment pa on pa.Doctor_Id = d.Id  where  v.Id = " + Id + " and pa.AppointmentDate between '" + dateCriteria + "' and '" + Tarikh + "'  and pa.IsPaid=1 group by v.VendorName, v.CompanyName";
                 var data1 = ent.Database.SqlQuery<Vendorses>(qry1).ToList();
                 if (data1.Count() == 0)
                 {
@@ -454,7 +483,7 @@ where v.IsDeleted=0 order by v.Id desc";
             int Id = GetVendorId();
             var model = new ReportDetails();
             double payment = ent.Database.SqlQuery<double>(@"select Commission from CommissionMaster where IsDeleted=0 and Name='" + term + "'").FirstOrDefault();
-            var qry = @"select Sum(pa.Amount) as Counts, v.VendorName as Name, v.Id, v.CompanyName as Name1 from Doctor d join Vendor v on d.Vendor_Id = v.Id join dbo.PatientAppointment pa on pa.Doctor_Id = d.Id  where v.Id = " + Id + " and Month(pa.AppointmentDate) = Month(GetDate()) and pa.IsPaid=1 group by v.VendorName,v.CompanyName, v.Id";
+            var qry = @"select Sum(pa.TotalFee) as Counts, v.VendorName as Name, v.Id, v.CompanyName as Name1 from Doctor d join Vendor v on d.Vendor_Id = v.Id join dbo.PatientAppointment pa on pa.Doctor_Id = d.Id  where v.Id = " + Id + " and Month(pa.AppointmentDate) = Month(GetDate()) and pa.IsPaid=1 group by v.VendorName,v.CompanyName, v.Id";
             var data = ent.Database.SqlQuery<Vendorses>(qry).ToList();
             if (sdate == null && edate == null)
             {
@@ -471,7 +500,7 @@ where v.IsDeleted=0 order by v.Id desc";
             }
             else
             {
-                var qry1 = @"select Sum(pa.Amount) as Counts, v.VendorName as Name, v.Id, v.CompanyName as Name1 from Doctor d join Vendor v on d.Vendor_Id = v.Id join dbo.PatientAppointment pa on pa.Doctor_Id = d.Id  where v.Id = " + Id + " and Convert(Date,pa.AppointmentDate) between '" + sdate + "' and '" + edate + "' and pa.IsPaid=1 group by v.VendorName,v.CompanyName, v.Id";
+                var qry1 = @"select Sum(pa.TotalFee) as Counts, v.VendorName as Name, v.Id, v.CompanyName as Name1 from Doctor d join Vendor v on d.Vendor_Id = v.Id join dbo.PatientAppointment pa on pa.Doctor_Id = d.Id  where v.Id = " + Id + " and Convert(Date,pa.AppointmentDate) between '" + sdate + "' and '" + edate + "' and pa.IsPaid=1 group by v.VendorName,v.CompanyName, v.Id";
                 var data1 = ent.Database.SqlQuery<Vendorses>(qry1).ToList();
                 if (data1.Count() == 0)
                 {
@@ -493,7 +522,7 @@ where v.IsDeleted=0 order by v.Id desc";
             int Id = GetVendorId();
             var model = new ReportDetails();
             double payment = ent.Database.SqlQuery<double>(@"select Commission from CommissionMaster where IsDeleted=0 and Name='" + term + "'").FirstOrDefault();
-            var qry = @"select Sum(pa.Amount) as Counts, v.VendorName as Name, d.Id, v.CompanyName as Name1 from Doctor d join Vendor v on d.Vendor_Id = v.Id join dbo.PatientAppointment pa on pa.Doctor_Id = d.Id  where v.Id = " + Id + " and Year(pa.AppointmentDate) = Year(GetDate()) and pa.IsPaid=1 group by v.VendorName,v.CompanyName, d.Id";
+            var qry = @"select Sum(pa.TotalFee) as Counts, v.VendorName as Name, d.Id, v.CompanyName as Name1 from Doctor d join Vendor v on d.Vendor_Id = v.Id join dbo.PatientAppointment pa on pa.Doctor_Id = d.Id  where v.Id = " + Id + " and Year(pa.AppointmentDate) = Year(GetDate()) and pa.IsPaid=1 group by v.VendorName,v.CompanyName, d.Id";
             var data = ent.Database.SqlQuery<Vendorses>(qry).ToList();
             if (!year.HasValue)
             {
@@ -510,7 +539,7 @@ where v.IsDeleted=0 order by v.Id desc";
             }
             else
             {
-                var qry1 = @"select Sum(pa.Amount) as Counts, v.VendorName as Name, v.CompanyName as Name1 from Doctor d join Vendor v on d.Vendor_Id = v.Id join dbo.PatientAppointment pa on pa.Doctor_Id = d.Id  where v.Id = " + Id + " and Year(pa.AppointmentDate) = '" + year + "' and pa.IsPaid=1 group by v.VendorName, v.CompanyName";
+                var qry1 = @"select Sum(pa.TotalFee) as Counts, v.VendorName as Name, v.CompanyName as Name1 from Doctor d join Vendor v on d.Vendor_Id = v.Id join dbo.PatientAppointment pa on pa.Doctor_Id = d.Id  where v.Id = " + Id + " and Year(pa.AppointmentDate) = '" + year + "' and pa.IsPaid=1 group by v.VendorName, v.CompanyName";
                 var data1 = ent.Database.SqlQuery<Vendorses>(qry1).ToList();
                 if (data1.Count() == 0)
                 {
@@ -1606,7 +1635,7 @@ where v.Id = " + Id + " and Year(cc.TestDate) = '" + year + "' and hb.IsPaid=1 g
             int id = GetVendorId();
             var model = new VendorPaymentDTO();
             double payment = ent.Database.SqlQuery<double>(@"select Amount from PaymentMaster p where p.Department='Vendor' and Name='Doctor'").FirstOrDefault();
-            string q = @"select Sum(pa.Amount) as Counts, v.VendorName, v.CompanyName from Doctor d join Vendor v on d.Vendor_Id = v.Id join dbo.PatientAppointment pa on pa.Doctor_Id = d.Id  where  v.Id = " + id + " and pa.AppointmentDate  between DATEADD(day,-7,GETDATE()) and GetDate()  and pa.IsPaid=1 group by v.VendorName, v.CompanyName";
+            string q = @"select Sum(pa.TotalFee) as Counts, v.VendorName, v.CompanyName from Doctor d join Vendor v on d.Vendor_Id = v.Id join dbo.PatientAppointment pa on pa.Doctor_Id = d.Id  where  v.Id = " + id + " and pa.AppointmentDate  between DATEADD(day,-7,GETDATE()) and GetDate()  and pa.IsPaid=1 group by v.VendorName, v.CompanyName";
             var data = ent.Database.SqlQuery<VendorList>(q).ToList();
             if (data.Count() == 0)
             {
@@ -1747,43 +1776,97 @@ where v.Id=" + id + "  group by v.VendorName,v.CompanyName, d.DoctorName,c.CityN
             return View(model);
         }
 
+        //public ActionResult DoctorTDS(DateTime? date)
+        //{
+        //    int id = GetVendorId();
+        //    var model = new VendorPaymentDTO();
+        //    double tds = ent.Database.SqlQuery<double>(@"select Amount from TDSMaster p where IsDeleted=0 and p.Name='Doctor'").FirstOrDefault();
+        //    string q = @"select A.Doctor_Id, D.DoctorName, SUM(A.TotalFee)  As Amount from dbo.PatientAppointment A join Doctor D on D.Id = A.Doctor_Id join Vendor v on v.Id = D.Vendor_Id where A.IsPaid=1 and A.AppointmentDate BETWEEN DATEADD(DAY, -7, GETDATE()) AND GETDATE() and v.Id=" + id+"  group by D.DoctorName, A.Doctor_Id";
+        //    var data = ent.Database.SqlQuery<VendorsDoctors>(q).ToList();
+        //    if (date != null)
+        //    {
+        //        DateTime dateCriteria = date.Value.AddDays(-7);
+        //        string dDate = dateCriteria.ToString("dd/MM/yyyy");
+        //        var qry1 = @"select A.Doctor_Id, D.DoctorName, SUM(A.TotalFee)  As Amount from dbo.PatientAppointment A join Doctor D on D.Id = A.Doctor_Id join Vendor v on v.Id = D.Vendor_Id where A.IsPaid=1 and v.Id=" + id + " and A.AppointmentDate BETWEEN '" + dateCriteria+"' AND '"+date+"' group by D.DoctorName, A.Doctor_Id";
+        //        var data1 = ent.Database.SqlQuery<VendorsDoctors>(qry1).ToList();
+        //        if (data1.Count() == 0)
+        //        {
+        //            TempData["msg"] = "Your Selected Date Doesn't Contain Data.";
+        //            return View(model);
+        //        }
+        //        else
+        //        {
+        //            ViewBag.Payment = tds;
+        //            model.VendorDoctor = data1;
+        //            return View(model);
+        //        }
+        //    }
+        //    if (data.Count() == 0)
+        //    {
+        //        TempData["msg"] = "No Result";
+        //        ViewBag.Payment = 0;
+        //        ViewBag.Amount = 0;
+        //        return View(model);
+        //    }
+        //    ViewBag.Payment = tds;
+        //    ViewBag.Amount = data.Sum(a => a.Amount);
+        //    model.VendorDoctor = data;
+        //    return View(model);
+        //}
+
         public ActionResult DoctorTDS(DateTime? date)
         {
             int id = GetVendorId();
             var model = new VendorPaymentDTO();
-            double tds = ent.Database.SqlQuery<double>(@"select Amount from TDSMaster p where IsDeleted=0 and p.Name='Doctor'").FirstOrDefault();
-            string q = @"select A.Doctor_Id, D.DoctorName, SUM(A.Amount)  As Amount from dbo.PatientAppointment A join Doctor D on D.Id = A.Doctor_Id join Vendor v on v.Id = D.Vendor_Id where A.IsPaid=1 and A.AppointmentDate BETWEEN DATEADD(DAY, -7, GETDATE()) AND GETDATE() and v.Id="+id+"  group by D.DoctorName, A.Doctor_Id";
-            var data = ent.Database.SqlQuery<VendorsDoctors>(q).ToList();
+
+            double tds = ent.Database.SqlQuery<double>(@"SELECT Amount FROM TDSMaster p WHERE IsDeleted = 0 AND p.Name = 'Doctor'").FirstOrDefault();
+
+            string baseQuery = @"SELECT A.Doctor_Id, D.DoctorName, SUM(A.TotalFee) AS Amount 
+                         FROM dbo.PatientAppointment A 
+                         JOIN Doctor D ON D.Id = A.Doctor_Id 
+                         JOIN Vendor V ON V.Id = D.Vendor_Id 
+                         WHERE A.IsPaid = 1 AND V.Id = @id";
+
+            // Modify the base query to include date criteria if provided
             if (date != null)
             {
                 DateTime dateCriteria = date.Value.AddDays(-7);
-                string dDate = dateCriteria.ToString("dd/MM/yyyy");
-                var qry1 = @"select A.Doctor_Id, D.DoctorName, SUM(A.Amount)  As Amount from dbo.PatientAppointment A join Doctor D on D.Id = A.Doctor_Id join Vendor v on v.Id = D.Vendor_Id where A.IsPaid=1 and v.Id=" + id + " and A.AppointmentDate BETWEEN '" + dateCriteria+"' AND '"+date+"' group by D.DoctorName, A.Doctor_Id";
-                var data1 = ent.Database.SqlQuery<VendorsDoctors>(qry1).ToList();
-                if (data1.Count() == 0)
-                {
-                    TempData["msg"] = "Your Selected Date Doesn't Contain Data.";
-                    return View(model);
-                }
-                else
-                {
-                    ViewBag.Payment = tds;
-                    model.VendorDoctor = data1;
-                    return View(model);
-                }
+                baseQuery += " AND A.AppointmentDate BETWEEN @startDate AND @endDate";
             }
-            if (data.Count() == 0)
+
+            baseQuery += " GROUP BY D.DoctorName, A.Doctor_Id";
+
+            // Execute the query with parameters
+            var parameters = new List<SqlParameter>
+    {
+        new SqlParameter("@id", id)
+    };
+
+            if (date != null)
             {
-                TempData["msg"] = "No Result";
+                DateTime dateCriteria = date.Value.AddDays(-7);
+                DateTime endDate = date.Value;
+
+                parameters.Add(new SqlParameter("@startDate", dateCriteria));
+                parameters.Add(new SqlParameter("@endDate", endDate));
+            }
+
+            var data = ent.Database.SqlQuery<VendorsDoctors>(baseQuery, parameters.ToArray()).ToList();
+
+            if (data.Count == 0)
+            {
+                TempData["msg"] = date != null ? "Your Selected Date Doesn't Contain Data." : "No Result";
                 ViewBag.Payment = 0;
                 ViewBag.Amount = 0;
                 return View(model);
             }
+
             ViewBag.Payment = tds;
             ViewBag.Amount = data.Sum(a => a.Amount);
             model.VendorDoctor = data;
             return View(model);
         }
+
         public ActionResult Vendortds()
         {
             return View();

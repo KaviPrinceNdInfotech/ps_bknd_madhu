@@ -24,7 +24,7 @@
                 <h3>Specialists</h3>
             </div>
         </div>
-        @using (Html.BeginForm("All", "Specialist", FormMethod.Get))
+        @*@using (Html.BeginForm("All", "Specialist", FormMethod.Get))
         {
             <div class="row">
                 <div class="col-md-6">
@@ -37,11 +37,11 @@
                     <a href="/Specialist/All" class="btn btn-primary">Show All</a>
                 </div>
             </div>
-        }
+        }*@
 
         <div class="row">
             <div class="col-md-12">
-               <table class="table table-bordered">
+               <table id="myTable" class="table table-bordered">
                  <thead>
                      <tr>
                          <th>Specialist</th>

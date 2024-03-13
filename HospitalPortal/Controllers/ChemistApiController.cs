@@ -71,7 +71,7 @@ namespace HospitalPortal.Controllers
         public IHttpActionResult chemistprofiledetail(int id)
         {
             var data = new Chemist();
-            string qry = @"select ch.ChemistName,ch.EmailId,ch.MobileNumber,ch.location,sm.StateName,cm.cityname,ch.PinCode from chemist as ch with(nolock)
+            string qry = @"select ch.Id,ch.ChemistName,ch.EmailId,ch.MobileNumber,ch.location,sm.StateName,cm.cityname,ch.PinCode,ch.StateMaster_Id,ch.CityMaster_Id from chemist as ch with(nolock)
 left join citymaster as cm with(nolock) on cm.id=ch.CityMaster_Id
 left join statemaster as sm with(nolock) on sm.id=ch.stateMaster_Id where ch.id=" + id + "";
             var data1 = ent.Database.SqlQuery<chemistpro_detail>(qry).FirstOrDefault();
@@ -126,14 +126,8 @@ ModelState.Values
                 else
                 {
                     data.ChemistName = model.ChemistName;
-                }
+                } 
 
-                //if (model.LicenceImage == null)
-                //{
-                //    rm.Message = "Licence Image File Picture can not be null";
-
-                //    return Ok(rm);
-                //}
                 if (model.LicenceImageBase64 != null)
                 {
                     var img = FileOperation.UploadFileWithBase64("Images", model.LicenceImage, model.LicenceImageBase64, allowedExtensions);
@@ -150,8 +144,9 @@ ModelState.Values
                     data.CityMaster_Id = model.CityMaster_Id;
                     data.Location = model.Location;
                     data.GSTNumber = model.GSTNumber;
+                    data.EmailId = model.EmailId;
                     data.LicenceNumber = model.LicenceNumber;
-                    data.LicenceImage = model.LicenceImage;
+                    //data.LicenceImage = model.LicenceImage;
                     ent.SaveChanges();
                     rm.Status = 1;
                     rm.Message = " Chemist profile updated Successfully .";

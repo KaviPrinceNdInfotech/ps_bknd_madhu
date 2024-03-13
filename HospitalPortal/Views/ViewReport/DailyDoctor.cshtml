@@ -5,19 +5,7 @@
 <link href="/css/bootstrap.min.css" rel="stylesheet" />
 
 
-@using (Html.BeginForm())
-{
-    <div class="row">
-        <div class="col-md-4">
-@Html.TextBoxFor(a => a.AppointmentDate, new { @class = "datepicker form-control", required = "required" })
-        </div>
-        <div class="col-md-4">
-            <input type="button" id="test" value="Search" class="btn btn-primary" />
-        </div>
-    </div>
-
-
-}
+ 
  @if (Model.doctorList == null)
  {
      if (TempData["msg"] != null)

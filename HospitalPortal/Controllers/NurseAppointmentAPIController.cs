@@ -29,6 +29,7 @@ ns.RequestDate as rDate,
 Convert(nvarchar(100), ns.StartDate, 103) + '-' + Convert(nvarchar(100), ns.EndDate, 103) as ServiceTiming,
 Datediff(day,ns.StartDate,ns.EndDate) as TotalDays,
 IsNull(ns.TotalFee,0) as Fee,
+IsNull(ns.Location,0) as Location,
 IsNull(ns.TotalFee,0) as TotalFee,AL.DeviceId
  from NurseService ns
  join Patient p on ns.Patient_Id = p.Id

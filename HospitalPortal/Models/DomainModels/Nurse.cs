@@ -59,6 +59,7 @@ namespace HospitalPortal.Models.DomainModels
         public string about { get; set; }
         public string ClinicName { get; set; }
         public Nullable<int> Location_id { get; set; }
+        public Nullable<bool> IsBankUpdateApproved { get; set; }
     
         public virtual AdminLogin AdminLogin { get; set; }
         public virtual CityMaster CityMaster { get; set; }

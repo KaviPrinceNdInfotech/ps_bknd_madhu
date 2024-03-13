@@ -51,6 +51,7 @@ namespace HospitalPortal.Models.DomainModels
         public string ConfirmPassword { get; set; }
         public string LicenceImage { get; set; }
         public string About { get; set; }
+        public Nullable<bool> IsBankUpdateApproved { get; set; }
     
         public virtual AdminLogin AdminLogin { get; set; }
         public virtual Vendor Vendor { get; set; }

@@ -26,10 +26,12 @@ namespace HospitalPortal.Models.ViewModels
         public int Id { get; set; }
         public string VendorName { get; set; }
         public string UniqueId { get; set; }
+        public string DoctorId { get; set; }
         public double? Amount { get; set; }
         public decimal Amountwithrazorpaycomm { get; set; }
         public decimal? AmountForVehicle { get; set; }
         public string CompanyName { get; set; }
+        public double Counts { get; set; }
       
     }
 

@@ -116,9 +116,10 @@ namespace HospitalPortal.Models.APIModels
 
    public class LabUpdate
     {
-        public int id { get; set; }
+        public int Id { get; set; }
         public string LabName { get; set; }
         public string MobileNumber { get; set; }
+        public string EmailId { get; set; }
         public int StateMaster_Id { get; set; }
         public int CityMaster_Id { get; set; }
         public string Location { get; set; }
@@ -147,6 +148,8 @@ namespace HospitalPortal.Models.APIModels
         public string PinCode { get; set; }
 
         public string Location { get; set; }
+        public int StateMaster_Id { get; set; }
+        public int CityMaster_Id { get; set; }
     }
 
 

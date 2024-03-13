@@ -306,20 +306,18 @@ namespace HospitalPortal.Controllers
 
                 data.DriverName = model.DriverName;
                 data.MobileNumber = model.MobileNumber;
-                data.VehicleName = model.VehicleName;
+                data.EmailId = model.EmailId;
                 data.StateMaster_Id = model.StateMaster_Id;
                 data.CityMaster_Id = model.CityMaster_Id;
                 data.Location = model.Location;
-                data.DlNumber = model.DlNumber;
-                data.DlImage = model.DlImage;
-                //var d = ent.BankDetails.Where(a => a.Login_Id == model.adminLogin_id).FirstOrDefault();
-                //d.AccountNo = model.AccountNo;
-                //d.BranchName = model.BranchName;
-                //d.IFSCCode = model.IFSCCode;
+                data.PinCode = model.PinCode;
+                //data.DlNumber = model.DlNumber;
+                //data.DlImage = model.DlImage;
+
 
                 ent.SaveChanges();
                 rm.Status = 1;
-                rm.Message = " driver profile Successfully updated.";
+                rm.Message = "Driver profile Successfully updated.";
             }
             catch (Exception ex)
             {
@@ -404,9 +402,8 @@ namespace HospitalPortal.Controllers
 
         [HttpGet]
         public IHttpActionResult GetDriverProfile(int Id)
-        {
-            var rm = new Driver();
-            string query = @"select D.Id,D.DriverName,D.EmailId,D.MobileNumber,SM.StateName,CM.CityName,D.PinCode,D.Location from Driver as D left join StateMaster as SM with(nolock) on SM.Id=D.StateMaster_Id left join CityMaster as CM with(nolock) on CM.Id=D.CityMaster_Id where D.Id= " + Id + "";
+        { 
+            string query = @"select D.Id,D.DriverName,D.EmailId,D.MobileNumber,SM.StateName,CM.CityName,D.PinCode,D.Location,D.StateMaster_Id,D.CityMaster_Id from Driver as D left join StateMaster as SM with(nolock) on SM.Id=D.StateMaster_Id left join CityMaster as CM with(nolock) on CM.Id=D.CityMaster_Id where D.Id= " + Id + "";
             var data = ent.Database.SqlQuery<GetDriverProfile>(query).FirstOrDefault();
             return Ok(data);
         }
@@ -798,9 +795,7 @@ WHERE D.[Status] = 0 and D.RejectedStatus=0").ToList();
 
             return Ok(new { driverDetails });
         }
-
-
-
+         
         //public double CalculateHaversineDistance(double userLat, double userLong, double driverLat, double driverLong)
         //{
         //    double earthRadius = 6371; // Earth's radius in kilometers

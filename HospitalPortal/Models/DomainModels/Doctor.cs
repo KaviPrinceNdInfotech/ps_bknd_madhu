@@ -18,10 +18,6 @@ namespace HospitalPortal.Models.DomainModels
         public Doctor()
         {
             this.CancelledAppointments = new HashSet<CancelledAppointment>();
-            this.DoctorComplaints = new HashSet<DoctorComplaint>();
-            this.DoctorPayOuts = new HashSet<DoctorPayOut>();
-            this.DoctorReports = new HashSet<DoctorReport>();
-            this.PatientAppointments = new HashSet<PatientAppointment>();
         }
     
         public int Id { get; set; }
@@ -67,18 +63,11 @@ namespace HospitalPortal.Models.DomainModels
         public string Qualification { get; set; }
         public string RegistrationNumber { get; set; }
         public string SignaturePic { get; set; }
+        public Nullable<double> VirtualFee { get; set; }
+        public Nullable<int> Day_Id { get; set; }
+        public Nullable<bool> IsBankUpdateApproved { get; set; }
     
-        public virtual AdminLogin AdminLogin { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CancelledAppointment> CancelledAppointments { get; set; }
-        public virtual StateMaster StateMaster { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DoctorComplaint> DoctorComplaints { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DoctorPayOut> DoctorPayOuts { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DoctorReport> DoctorReports { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PatientAppointment> PatientAppointments { get; set; }
     }
 }

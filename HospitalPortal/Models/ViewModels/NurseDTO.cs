@@ -23,6 +23,7 @@ namespace HospitalPortal.Models.ViewModels
         public int Id { get; set; }
         public bool IsDeleted { get; set; }
         public bool IsApproved { get; set; }
+        public bool IsBankUpdateApproved { get; set; }
         [Required (ErrorMessage ="Nurse Name Required")]
         public string NurseName { get; set; }
         [Required]
@@ -47,9 +48,9 @@ namespace HospitalPortal.Models.ViewModels
         [System.ComponentModel.DataAnnotations.Compare("Password")]
         public string ConfirmPassword { get; set; }
         [Required(ErrorMessage = "State Required")]
-        public int? StateMaster_Id { get; set; }
+        public int StateMaster_Id { get; set; }
        
-        public int? CityMaster_Id { get; set; }
+        public int CityMaster_Id { get; set; }
         [Required(ErrorMessage = "Address Required")]
 
         public string Location { get; set; }
@@ -68,11 +69,11 @@ namespace HospitalPortal.Models.ViewModels
 
         public double Fee { get; set; }
         //public HttpPostedFileBase VerificationImage { get; set; }
-       // public HttpPostedFileBase PanImageFile { get; set; }
+        public HttpPostedFileBase PanImageFile { get; set; }
         //public HttpPostedFileBase AadharImageFile { get; set; }
         //public HttpPostedFileBase AadharImageFile2 { get; set; }
         public HttpPostedFileBase CertificateFile { get; set; }
-        [Required(ErrorMessage ="This field is required")]
+        
         public int? NurseType_Id { get; set; }
         public SelectList NurseTypes { get; set; }
         public int? Vendor_Id { get; set; }
@@ -129,6 +130,7 @@ namespace HospitalPortal.Models.ViewModels
         public string MobileNumber { get; set; }
         public string PanImage { get; set; }
         public string PAN { get; set; }
+        public string about { get; set; }
         public string PanBase64Image { get; set; }
         public string NurseImage { get; set; }
         public string NurseImageBase64Image { get; set; }
@@ -148,6 +150,7 @@ namespace HospitalPortal.Models.ViewModels
         //public bool IsVerifiedByPolice { get; set; }
 
         public string CertificateImage { get; set; } 
+        public int Vendor_Id { get; set; }
         public int Location_id { get; set; }
     }
 

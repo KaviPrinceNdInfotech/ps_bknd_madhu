@@ -23,6 +23,7 @@
     <link rel="stylesheet" type="text/css" href="/lib/bootstrap/css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="/stylesheets/theme.css">
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <link rel="stylesheet" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
     <style>
         .dropdown:hover .dropdown-menu {
             display: block;
@@ -152,85 +153,87 @@
     </script>
     <script src="~/js/bootstrap.min.js"></script>
     <link href="~/css/bootstrap.min.css" rel="stylesheet" />
-    
+
     <link href="http://cdn.rawgit.com/davidstutz/bootstrap-multiselect/master/dist/css/bootstrap-multiselect.css"
           rel="stylesheet" type="text/css" />
     <script src="http://cdn.rawgit.com/davidstutz/bootstrap-multiselect/master/dist/js/bootstrap-multiselect.js"
             type="text/javascript"></script>
-    @*<script src="~/js/jquery-2.1.4.min.js"></script>*@
-    @*<script src="/Scripts/Library/jquery-ui-1.8.20.min.js"></script>*@
     <link href="/css/jquery-ui.min.css" rel="stylesheet" />
     <script src="/lib/bootstrap/js/bootstrap.js"></script>
     <script src="~/js/bootstrap-datepicker.js"></script>
     <link href="~/css/datepicker.css" rel="stylesheet" />
     <script src="/Scripts/Library/jquery.validate.min.js"></script>
     <script src="/Scripts/Library/jquery.validate.unobtrusive.min.js"></script>
-
+    <script src="/js/jquery-1.11.1.min.js"></script>
+    <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script>
+        $('#myTable').DataTable();
+    </script>
 
     <script type="text/javascript">
-    $(function () {
-        $('#EmpList').multiselect({
-            //includeSelectAllOption: true
-        });
-
-        $('#btnSelected').click(function () {
-            var selected = $("#EmpList option:selected");
-            var message = "";
-            selected.each(function () {
-                message = $(this).val();
-                $.get('/Test/GetRecord?Id=' + message)
-      .success(function (response) {
-          let grandTotal = 0;
-          let CurrentAmt = 0;
-          let Remaining = parseInt($("#grandTotal").val());
-          if (Remaining == 0) {
-              CurrentAmt = grandTotal + response;
-          }
-          else {
-              CurrentAmt = Remaining + response;
-          }
-          $("#grandTotal").val(CurrentAmt);
-          $("#GrandTotal").val(CurrentAmt);
-         })
+        $(function () {
+            $('#EmpList').multiselect({
+                //includeSelectAllOption: true
             });
-            $('#btnSelected').prop('disabled', true);
-        });
 
-        $("#Discount").on("keyup", calculate);
-
-        function calculate() {
-            debugger
-            var charge = $(this).val();
-            if (!charge)
-                charge = 0;
-            var newGrandT = parseFloat($("#grandTotal").val());
-            var sum = 0;
-            $("#Discount").each(function () {
-                newGrandT -= parseFloat(charge);
+            $('#btnSelected').click(function () {
+                var selected = $("#EmpList option:selected");
+                var message = "";
+                selected.each(function () {
+                    message = $(this).val();
+                    $.get('/Test/GetRecord?Id=' + message)
+                        .success(function (response) {
+                            let grandTotal = 0;
+                            let CurrentAmt = 0;
+                            let Remaining = parseInt($("#grandTotal").val());
+                            if (Remaining == 0) {
+                                CurrentAmt = grandTotal + response;
+                            }
+                            else {
+                                CurrentAmt = Remaining + response;
+                            }
+                            $("#grandTotal").val(CurrentAmt);
+                            $("#GrandTotal").val(CurrentAmt);
+                        })
+                });
+                $('#btnSelected').prop('disabled', true);
             });
-            var txtGrandTotal = $("#GrandTotal");
-            txtGrandTotal.val(newGrandT.toFixed(0));
-        }
 
-        $("#Gst").change(function () {
-            debugger
-            var discount = $(this).val();
-            if (!discount)
-                discount = 0;
-            var gst = ["5", "12", "18", "28"];
-            if ($.inArray(discount, gst) >= 0) {
-                var discountInPercent = parseInt(discount);
-                let gt = parseInt($("#GrandTotal").val());
-                var discountValue = gt * discountInPercent / 100;
-                var newGt = gt + discountValue;
+            $("#Discount").on("keyup", calculate);
+
+            function calculate() {
+                debugger
+                var charge = $(this).val();
+                if (!charge)
+                    charge = 0;
+                var newGrandT = parseFloat($("#grandTotal").val());
+                var sum = 0;
+                $("#Discount").each(function () {
+                    newGrandT -= parseFloat(charge);
+                });
                 var txtGrandTotal = $("#GrandTotal");
-                txtGrandTotal.val(newGt.toFixed(0));
+                txtGrandTotal.val(newGrandT.toFixed(0));
             }
-            else {
-                alert("Kindly, Enter Valid GST Tax Rate.");
-            }
+
+            $("#Gst").change(function () {
+                debugger
+                var discount = $(this).val();
+                if (!discount)
+                    discount = 0;
+                var gst = ["5", "12", "18", "28"];
+                if ($.inArray(discount, gst) >= 0) {
+                    var discountInPercent = parseInt(discount);
+                    let gt = parseInt($("#GrandTotal").val());
+                    var discountValue = gt * discountInPercent / 100;
+                    var newGt = gt + discountValue;
+                    var txtGrandTotal = $("#GrandTotal");
+                    txtGrandTotal.val(newGt.toFixed(0));
+                }
+                else {
+                    alert("Kindly, Enter Valid GST Tax Rate.");
+                }
+            });
         });
-    });
     </script>
 </body>
 </html>

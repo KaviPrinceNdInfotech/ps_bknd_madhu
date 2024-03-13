@@ -44,6 +44,7 @@ namespace HospitalPortal.Models.ViewModels
         [Required]
         public string ConfirmPassword { get; set; }
         public bool IsApproved { get; set; }
+        public bool IsBankUpdateApproved { get; set; }
         public int AdminLogin_Id { get; set; }
         [Required(ErrorMessage = "Vendor Name Required")]
         public string VendorName { get; set; }
@@ -104,6 +105,7 @@ namespace HospitalPortal.Models.ViewModels
         public int Id { get; set; }
         public string VendorName { get; set; }
         public string MobileNumber { get; set; }
+        public string EmailId { get; set; }
         public int StateMaster_Id { get; set; }
         public int City_Id { get; set; }
         public string Location { get; set; }
@@ -147,6 +149,7 @@ namespace HospitalPortal.Models.ViewModels
 
     public class Fra_ProDetail
     {
+        public int Id { get; set; }
         public string VendorName { get; set; }
         public string MobileNumber { get; set; }
         public string EmailId { get; set; }
@@ -157,6 +160,9 @@ namespace HospitalPortal.Models.ViewModels
         public string GSTNumber { get; set; }
         public string AadharOrPANImage { get; set; }
         public string AadharOrPANNumber { get; set; }
+        public string PinCode { get; set; }
+        public int? City_ID { get; set; }
+        public int? StateMaster_Id { get; set; }
     }
 
     public class Fra_payout_his
@@ -455,6 +461,9 @@ namespace HospitalPortal.Models.ViewModels
         public string RegistrationNumber { get; set; }
         public string SignaturePic { get; set; }
         public string SignaturePicBase64 { get; set; }
+        public string About { get; set; }
+        public int Day_Id { get; set; }
+        public int VirtualFee { get; set; }
     }
 
     public class fra_LabReg
@@ -794,7 +803,9 @@ namespace HospitalPortal.Models.ViewModels
     {
         public int Id { get; set; }
         public string CompanyName { get; set; }
+        public string VendorName { get; set; }
         public string MobileNumber { get; set; }
+        public string EmailId { get; set; }
         public int StateMaster_Id { get; set; }
         public int City_Id { get; set; }
         public string Location { get; set; }

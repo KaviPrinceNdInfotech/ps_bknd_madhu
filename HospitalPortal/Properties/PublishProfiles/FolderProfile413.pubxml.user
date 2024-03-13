@@ -5,7 +5,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 <Project>
   <PropertyGroup>
     <_PublishTargetUrl>D:\Madhu\Publish\ps</_PublishTargetUrl>
-    <History>True|2024-02-24T10:28:19.3935797Z;True|2024-02-24T15:57:46.6605043+05:30;True|2024-02-23T18:12:32.6989610+05:30;True|2024-02-23T17:57:36.4665081+05:30;True|2024-02-23T17:21:41.1637520+05:30;True|2024-02-23T16:34:12.5419266+05:30;True|2024-02-23T14:55:19.9911808+05:30;True|2024-02-23T12:10:05.1864633+05:30;True|2024-02-23T10:27:20.4727248+05:30;True|2024-02-22T16:36:28.3516258+05:30;True|2024-02-22T16:08:53.4449380+05:30;True|2024-02-22T14:31:13.5373588+05:30;True|2024-02-22T13:17:52.0000471+05:30;True|2024-02-22T13:04:59.6272486+05:30;True|2024-02-22T12:54:32.7079997+05:30;True|2024-02-21T15:48:11.6145403+05:30;True|2024-02-21T10:34:07.5128672+05:30;True|2024-02-20T15:39:44.4288100+05:30;True|2024-02-15T13:19:36.4224793+05:30;True|2024-02-02T10:45:06.6852012+05:30;True|2024-02-01T16:43:57.0928871+05:30;</History>
+    <History>True|2024-03-12T08:17:53.6370922Z;True|2024-03-11T18:24:43.2643370+05:30;True|2024-03-11T13:36:55.6223361+05:30;True|2024-03-11T13:00:45.6880373+05:30;True|2024-03-09T17:53:51.3888230+05:30;True|2024-03-09T16:22:47.2246691+05:30;True|2024-03-09T14:27:01.6467609+05:30;True|2024-03-08T16:13:02.6832251+05:30;True|2024-03-08T15:46:34.9149782+05:30;True|2024-03-08T12:25:59.2680579+05:30;True|2024-03-07T14:13:48.6005179+05:30;True|2024-03-06T10:14:51.2620815+05:30;True|2024-03-05T12:14:51.5810819+05:30;True|2024-03-05T11:45:46.4375730+05:30;True|2024-03-04T17:35:06.4011739+05:30;True|2024-03-04T17:06:34.9206660+05:30;True|2024-03-04T16:57:54.9632044+05:30;True|2024-03-02T17:18:34.0063559+05:30;True|2024-03-02T16:11:32.7417977+05:30;True|2024-03-02T15:05:40.2552655+05:30;True|2024-03-01T12:58:36.8155615+05:30;True|2024-03-01T12:31:56.7115361+05:30;True|2024-02-29T15:44:38.7892939+05:30;True|2024-02-29T13:23:50.5079524+05:30;True|2024-02-29T10:09:01.7950027+05:30;True|2024-02-28T17:52:46.4294225+05:30;True|2024-02-28T15:36:22.5668111+05:30;False|2024-02-28T10:27:06.4416288+05:30;True|2024-02-27T18:53:55.7955317+05:30;True|2024-02-27T14:28:35.5917687+05:30;True|2024-02-27T13:06:48.6786616+05:30;True|2024-02-27T09:49:50.1549805+05:30;True|2024-02-24T15:58:19.3935797+05:30;True|2024-02-24T15:57:46.6605043+05:30;True|2024-02-23T18:12:32.6989610+05:30;True|2024-02-23T17:57:36.4665081+05:30;True|2024-02-23T17:21:41.1637520+05:30;True|2024-02-23T16:34:12.5419266+05:30;True|2024-02-23T14:55:19.9911808+05:30;True|2024-02-23T12:10:05.1864633+05:30;True|2024-02-23T10:27:20.4727248+05:30;True|2024-02-22T16:36:28.3516258+05:30;True|2024-02-22T16:08:53.4449380+05:30;True|2024-02-22T14:31:13.5373588+05:30;True|2024-02-22T13:17:52.0000471+05:30;True|2024-02-22T13:04:59.6272486+05:30;True|2024-02-22T12:54:32.7079997+05:30;True|2024-02-21T15:48:11.6145403+05:30;True|2024-02-21T10:34:07.5128672+05:30;True|2024-02-20T15:39:44.4288100+05:30;True|2024-02-15T13:19:36.4224793+05:30;True|2024-02-02T10:45:06.6852012+05:30;True|2024-02-01T16:43:57.0928871+05:30;</History>
     <LastFailureDetails />
   </PropertyGroup>
   <ItemGroup>
@@ -130,10 +130,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/01/2024 12:08:53</publishTime>
     </File>
     <File Include="bin/HospitalPortal.dll">
-      <publishTime>02/24/2024 15:58:15</publishTime>
+      <publishTime>03/12/2024 18:26:37</publishTime>
     </File>
     <File Include="bin/HospitalPortal.pdb">
-      <publishTime>02/24/2024 15:58:15</publishTime>
+      <publishTime>03/12/2024 18:26:37</publishTime>
     </File>
     <File Include="bin/Irony.dll">
       <publishTime>02/01/2024 12:08:52</publishTime>
@@ -1780,7 +1780,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/01/2024 12:08:49</publishTime>
     </File>
     <File Include="Models/DomainModels/Model1.edmx.diagram">
-      <publishTime>02/01/2024 12:08:49</publishTime>
+      <publishTime>03/11/2024 12:46:01</publishTime>
     </File>
     <File Include="Models/ViewModels/Handler1.ashx">
       <publishTime>02/01/2024 12:08:49</publishTime>
@@ -1897,7 +1897,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/01/2024 12:08:49</publishTime>
     </File>
     <File Include="Scripts/VendorPayout.js">
-      <publishTime>02/01/2024 12:08:49</publishTime>
+      <publishTime>03/05/2024 18:01:07</publishTime>
     </File>
     <File Include="Scripts/ViewReport.js">
       <publishTime>02/01/2024 12:08:49</publishTime>
@@ -1966,7 +1966,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/01/2024 12:08:49</publishTime>
     </File>
     <File Include="Views/AddTest/All.cshtml">
-      <publishTime>02/01/2024 12:08:49</publishTime>
+      <publishTime>03/02/2024 10:41:11</publishTime>
     </File>
     <File Include="Views/AddTest/Edit.cshtml">
       <publishTime>02/01/2024 12:08:49</publishTime>
@@ -1987,7 +1987,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/01/2024 12:08:49</publishTime>
     </File>
     <File Include="Views/Admin/Dashboard.cshtml">
-      <publishTime>02/01/2024 12:08:49</publishTime>
+      <publishTime>02/26/2024 13:02:16</publishTime>
     </File>
     <File Include="Views/Admin/DiscountCreate.cshtml">
       <publishTime>02/01/2024 12:08:49</publishTime>
@@ -2008,7 +2008,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/01/2024 12:08:49</publishTime>
     </File>
     <File Include="Views/Admin/ShareToVendor.cshtml">
-      <publishTime>02/01/2024 12:08:49</publishTime>
+      <publishTime>03/04/2024 16:02:11</publishTime>
     </File>
     <File Include="Views/Admin/TransactionLogin.cshtml">
       <publishTime>02/01/2024 12:08:49</publishTime>
@@ -2017,7 +2017,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/01/2024 12:08:49</publishTime>
     </File>
     <File Include="Views/AdminOperation/AddTestCartegory.cshtml">
-      <publishTime>02/01/2024 12:08:49</publishTime>
+      <publishTime>03/01/2024 11:31:09</publishTime>
     </File>
     <File Include="Views/AdminOperation/AddTestDetails.cshtml">
       <publishTime>02/01/2024 12:08:49</publishTime>
@@ -2065,13 +2065,13 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/01/2024 12:08:49</publishTime>
     </File>
     <File Include="Views/AmbulancePayment/ViewDetails.cshtml">
-      <publishTime>02/01/2024 12:08:49</publishTime>
+      <publishTime>02/29/2024 12:26:09</publishTime>
     </File>
     <File Include="Views/AmbulanceReport/Ambulance.cshtml">
-      <publishTime>02/01/2024 12:08:49</publishTime>
+      <publishTime>02/29/2024 12:35:54</publishTime>
     </File>
     <File Include="Views/AmbulanceReport/Daily.cshtml">
-      <publishTime>02/01/2024 12:08:49</publishTime>
+      <publishTime>03/01/2024 12:06:24</publishTime>
     </File>
     <File Include="Views/AmbulanceReport/DailyRecord.cshtml">
       <publishTime>02/01/2024 12:08:49</publishTime>
@@ -2089,19 +2089,19 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/01/2024 12:08:49</publishTime>
     </File>
     <File Include="Views/AmbulanceReport/WeeklyReport.cshtml">
-      <publishTime>02/01/2024 12:08:49</publishTime>
+      <publishTime>03/01/2024 12:11:15</publishTime>
     </File>
     <File Include="Views/AmbulanceReport/Yearly.cshtml">
       <publishTime>02/01/2024 12:08:49</publishTime>
     </File>
     <File Include="Views/AmbulanceReport/YearlyRecord.cshtml">
-      <publishTime>02/01/2024 12:08:49</publishTime>
+      <publishTime>03/01/2024 12:18:18</publishTime>
     </File>
     <File Include="Views/Bank/UpdateBank.cshtml">
       <publishTime>02/01/2024 12:08:49</publishTime>
     </File>
     <File Include="Views/Category/Add.cshtml">
-      <publishTime>02/01/2024 12:08:49</publishTime>
+      <publishTime>03/01/2024 11:35:19</publishTime>
     </File>
     <File Include="Views/Category/Edit.cshtml">
       <publishTime>02/01/2024 12:08:49</publishTime>
@@ -2122,22 +2122,22 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/01/2024 12:08:49</publishTime>
     </File>
     <File Include="Views/Charges/VehicleList.cshtml">
-      <publishTime>02/01/2024 12:08:49</publishTime>
+      <publishTime>03/01/2024 11:40:21</publishTime>
     </File>
     <File Include="Views/Charges/ViewDoctorSlot.cshtml">
       <publishTime>02/01/2024 12:08:49</publishTime>
     </File>
     <File Include="Views/Chemist/Add.cshtml">
-      <publishTime>02/01/2024 12:08:49</publishTime>
+      <publishTime>03/02/2024 15:03:18</publishTime>
     </File>
     <File Include="Views/Chemist/AddChemistMedicine.cshtml">
       <publishTime>02/01/2024 12:08:49</publishTime>
     </File>
     <File Include="Views/Chemist/All.cshtml">
-      <publishTime>02/01/2024 12:08:49</publishTime>
+      <publishTime>03/04/2024 17:33:00</publishTime>
     </File>
     <File Include="Views/Chemist/Edit.cshtml">
-      <publishTime>02/21/2024 18:35:42</publishTime>
+      <publishTime>03/02/2024 14:32:35</publishTime>
     </File>
     <File Include="Views/Chemist/MedicineList.cshtml">
       <publishTime>02/01/2024 12:08:49</publishTime>
@@ -2155,7 +2155,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/01/2024 12:08:49</publishTime>
     </File>
     <File Include="Views/City/All.cshtml">
-      <publishTime>02/01/2024 12:08:49</publishTime>
+      <publishTime>03/01/2024 11:25:48</publishTime>
     </File>
     <File Include="Views/City/Edit.cshtml">
       <publishTime>02/01/2024 12:08:49</publishTime>
@@ -2167,10 +2167,13 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/01/2024 12:08:49</publishTime>
     </File>
     <File Include="Views/CommisionReport/Doctor.cshtml">
-      <publishTime>02/01/2024 12:08:49</publishTime>
+      <publishTime>03/12/2024 15:57:14</publishTime>
+    </File>
+    <File Include="Views/CommisionReport/DoctorDetails.cshtml">
+      <publishTime>03/12/2024 15:25:56</publishTime>
     </File>
     <File Include="Views/CommisionReport/Driver.cshtml">
-      <publishTime>02/01/2024 12:08:49</publishTime>
+      <publishTime>02/29/2024 12:56:34</publishTime>
     </File>
     <File Include="Views/CommisionReport/Health.cshtml">
       <publishTime>02/01/2024 12:08:49</publishTime>
@@ -2185,10 +2188,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/01/2024 12:08:49</publishTime>
     </File>
     <File Include="Views/CommisionReport/Nurse.cshtml">
-      <publishTime>02/01/2024 12:08:49</publishTime>
+      <publishTime>03/12/2024 12:09:18</publishTime>
     </File>
     <File Include="Views/CommisionReport/NurseDetails.cshtml">
-      <publishTime>02/01/2024 12:08:49</publishTime>
+      <publishTime>03/12/2024 11:46:57</publishTime>
     </File>
     <File Include="Views/Commission/CommissionReport.cshtml">
       <publishTime>02/01/2024 12:08:49</publishTime>
@@ -2208,8 +2211,11 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     <File Include="Views/Commission/Vehicle.cshtml">
       <publishTime>02/01/2024 12:08:49</publishTime>
     </File>
+    <File Include="Views/Common/AddDoctorDurationTime.cshtml">
+      <publishTime>03/01/2024 11:42:07</publishTime>
+    </File>
     <File Include="Views/Common/AmbulaneBankDetails.cshtml">
-      <publishTime>02/01/2024 12:08:49</publishTime>
+      <publishTime>02/29/2024 11:23:08</publishTime>
     </File>
     <File Include="Views/Common/BankDetails.cshtml">
       <publishTime>02/01/2024 12:08:49</publishTime>
@@ -2371,7 +2377,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/01/2024 12:08:49</publishTime>
     </File>
     <File Include="Views/Department/All.cshtml">
-      <publishTime>02/01/2024 12:08:49</publishTime>
+      <publishTime>03/01/2024 11:28:11</publishTime>
     </File>
     <File Include="Views/Department/Edit.cshtml">
       <publishTime>02/01/2024 12:08:49</publishTime>
@@ -2380,16 +2386,16 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/01/2024 12:08:49</publishTime>
     </File>
     <File Include="Views/DoctorRegistration/Add.cshtml">
-      <publishTime>02/01/2024 12:08:49</publishTime>
+      <publishTime>03/02/2024 15:41:03</publishTime>
     </File>
     <File Include="Views/DoctorRegistration/All.cshtml">
-      <publishTime>02/01/2024 12:08:49</publishTime>
+      <publishTime>03/05/2024 11:21:28</publishTime>
     </File>
     <File Include="Views/DoctorRegistration/DoctorPatientList.cshtml">
       <publishTime>02/01/2024 12:08:49</publishTime>
     </File>
     <File Include="Views/DoctorRegistration/Edit.cshtml">
-      <publishTime>02/24/2024 14:48:03</publishTime>
+      <publishTime>03/01/2024 17:54:40</publishTime>
     </File>
     <File Include="Views/DoctorRegistration/EditClinic.cshtml">
       <publishTime>02/01/2024 12:08:49</publishTime>
@@ -2401,13 +2407,13 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/01/2024 12:08:49</publishTime>
     </File>
     <File Include="Views/DoctorRegistration/PatientPerticuler.cshtml">
-      <publishTime>02/01/2024 12:08:49</publishTime>
+      <publishTime>03/12/2024 14:55:51</publishTime>
     </File>
     <File Include="Views/DoctorRegistration/PaymentHistory.cshtml">
       <publishTime>02/01/2024 12:08:49</publishTime>
     </File>
     <File Include="Views/DoctorRegistration/Prescription.cshtml">
-      <publishTime>02/01/2024 12:08:49</publishTime>
+      <publishTime>03/12/2024 13:41:21</publishTime>
     </File>
     <File Include="Views/DoctorRegistration/PrescriptionPdf.cshtml">
       <publishTime>02/01/2024 12:08:49</publishTime>
@@ -2443,13 +2449,13 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/01/2024 12:08:49</publishTime>
     </File>
     <File Include="Views/Driver/Add.cshtml">
-      <publishTime>02/01/2024 12:08:49</publishTime>
+      <publishTime>03/02/2024 15:32:04</publishTime>
     </File>
     <File Include="Views/Driver/All.cshtml">
-      <publishTime>02/24/2024 15:17:52</publishTime>
+      <publishTime>03/04/2024 17:33:12</publishTime>
     </File>
     <File Include="Views/Driver/Edit.cshtml">
-      <publishTime>02/21/2024 17:39:49</publishTime>
+      <publishTime>03/02/2024 14:42:13</publishTime>
     </File>
     <File Include="Views/Driver/TravelHistory.cshtml">
       <publishTime>02/01/2024 12:08:49</publishTime>
@@ -2476,7 +2482,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/01/2024 12:08:49</publishTime>
     </File>
     <File Include="Views/Gallery/Gallery.cshtml">
-      <publishTime>02/01/2024 12:08:49</publishTime>
+      <publishTime>02/27/2024 15:25:22</publishTime>
     </File>
     <File Include="Views/HealthPackage/AddPackage.cshtml">
       <publishTime>02/01/2024 12:08:49</publishTime>
@@ -2491,7 +2497,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/01/2024 12:08:49</publishTime>
     </File>
     <File Include="Views/Home/About.cshtml">
-      <publishTime>02/23/2024 10:13:21</publishTime>
+      <publishTime>03/04/2024 15:28:38</publishTime>
     </File>
     <File Include="Views/Home/Home.cshtml">
       <publishTime>02/23/2024 10:12:16</publishTime>
@@ -2593,16 +2599,16 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/01/2024 12:08:49</publishTime>
     </File>
     <File Include="Views/Lab/Add.cshtml">
-      <publishTime>02/01/2024 12:08:49</publishTime>
+      <publishTime>03/04/2024 16:43:27</publishTime>
     </File>
     <File Include="Views/Lab/AddTestDetails.cshtml">
       <publishTime>02/01/2024 12:08:49</publishTime>
     </File>
     <File Include="Views/Lab/All.cshtml">
-      <publishTime>02/01/2024 12:08:49</publishTime>
+      <publishTime>03/05/2024 11:21:37</publishTime>
     </File>
     <File Include="Views/Lab/Edit.cshtml">
-      <publishTime>02/01/2024 12:08:49</publishTime>
+      <publishTime>03/04/2024 17:15:45</publishTime>
     </File>
     <File Include="Views/Lab/EditTest.cshtml">
       <publishTime>02/01/2024 12:08:49</publishTime>
@@ -2635,7 +2641,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/01/2024 12:08:49</publishTime>
     </File>
     <File Include="Views/Location/All.cshtml">
-      <publishTime>02/01/2024 12:08:49</publishTime>
+      <publishTime>03/01/2024 11:27:19</publishTime>
     </File>
     <File Include="Views/Location/Edit.cshtml">
       <publishTime>02/01/2024 12:08:49</publishTime>
@@ -2644,10 +2650,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/01/2024 12:08:50</publishTime>
     </File>
     <File Include="Views/Nurse/Add.cshtml">
-      <publishTime>02/01/2024 12:08:50</publishTime>
+      <publishTime>03/02/2024 15:35:47</publishTime>
     </File>
     <File Include="Views/Nurse/All.cshtml">
-      <publishTime>02/22/2024 15:48:48</publishTime>
+      <publishTime>03/04/2024 15:41:40</publishTime>
     </File>
     <File Include="Views/Nurse/AppointmentRequest.cshtml">
       <publishTime>02/01/2024 12:08:50</publishTime>
@@ -2656,7 +2662,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/01/2024 12:08:50</publishTime>
     </File>
     <File Include="Views/Nurse/Edit.cshtml">
-      <publishTime>02/21/2024 18:34:33</publishTime>
+      <publishTime>03/02/2024 14:33:33</publishTime>
     </File>
     <File Include="Views/Nurse/EverifyDocs.cshtml">
       <publishTime>02/01/2024 12:08:50</publishTime>
@@ -2686,7 +2692,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/01/2024 12:08:50</publishTime>
     </File>
     <File Include="Views/Patient/PatientList.cshtml">
-      <publishTime>02/21/2024 18:20:26</publishTime>
+      <publishTime>03/04/2024 16:07:30</publishTime>
     </File>
     <File Include="Views/Patient/TestHistory.cshtml">
       <publishTime>02/01/2024 12:08:50</publishTime>
@@ -2704,22 +2710,22 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/01/2024 12:08:50</publishTime>
     </File>
     <File Include="Views/Payout/Ambulance.cshtml">
-      <publishTime>02/01/2024 12:08:50</publishTime>
+      <publishTime>02/29/2024 13:13:39</publishTime>
     </File>
     <File Include="Views/Payout/AmbulanceList.cshtml">
       <publishTime>02/01/2024 12:08:50</publishTime>
     </File>
     <File Include="Views/Payout/Chemist.cshtml">
-      <publishTime>02/01/2024 12:08:50</publishTime>
+      <publishTime>02/29/2024 13:15:02</publishTime>
     </File>
     <File Include="Views/Payout/ChemistList.cshtml">
       <publishTime>02/01/2024 12:08:50</publishTime>
     </File>
     <File Include="Views/Payout/Doctor.cshtml">
-      <publishTime>02/23/2024 15:49:45</publishTime>
+      <publishTime>03/12/2024 11:39:14</publishTime>
     </File>
     <File Include="Views/Payout/DoctorList.cshtml">
-      <publishTime>02/01/2024 12:08:50</publishTime>
+      <publishTime>03/12/2024 15:32:52</publishTime>
     </File>
     <File Include="Views/Payout/Health.cshtml">
       <publishTime>02/01/2024 12:08:50</publishTime>
@@ -2728,7 +2734,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/01/2024 12:08:50</publishTime>
     </File>
     <File Include="Views/Payout/Lab.cshtml">
-      <publishTime>02/01/2024 12:08:50</publishTime>
+      <publishTime>02/29/2024 13:14:46</publishTime>
     </File>
     <File Include="Views/Payout/LabList.cshtml">
       <publishTime>02/01/2024 12:08:50</publishTime>
@@ -2737,7 +2743,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/01/2024 12:08:50</publishTime>
     </File>
     <File Include="Views/Payout/NurseDetails.cshtml">
-      <publishTime>02/01/2024 12:08:50</publishTime>
+      <publishTime>02/29/2024 13:15:25</publishTime>
     </File>
     <File Include="Views/Payout/NurseList.cshtml">
       <publishTime>02/01/2024 12:08:50</publishTime>
@@ -2770,7 +2776,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/01/2024 12:08:50</publishTime>
     </File>
     <File Include="Views/Report/CancelAppointmentByNurse.cshtml">
-      <publishTime>02/01/2024 12:08:50</publishTime>
+      <publishTime>03/09/2024 11:13:58</publishTime>
     </File>
     <File Include="Views/Report/CancelBookingDriver.cshtml">
       <publishTime>02/01/2024 12:08:50</publishTime>
@@ -2797,7 +2803,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/01/2024 12:08:50</publishTime>
     </File>
     <File Include="Views/Report/DriverDetails.cshtml">
-      <publishTime>02/01/2024 12:08:50</publishTime>
+      <publishTime>03/01/2024 10:32:53</publishTime>
     </File>
     <File Include="Views/Report/HealthCheckUp.cshtml">
       <publishTime>02/01/2024 12:08:50</publishTime>
@@ -2845,7 +2851,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/01/2024 12:08:50</publishTime>
     </File>
     <File Include="Views/Report/ViewDoctorAppointment.cshtml">
-      <publishTime>02/01/2024 12:08:50</publishTime>
+      <publishTime>02/29/2024 11:52:50</publishTime>
     </File>
     <File Include="Views/Report/ViewDoctorDetails.cshtml">
       <publishTime>02/02/2024 13:29:37</publishTime>
@@ -2884,10 +2890,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/01/2024 12:08:50</publishTime>
     </File>
     <File Include="Views/Rwa/All.cshtml">
-      <publishTime>02/01/2024 12:08:50</publishTime>
+      <publishTime>03/07/2024 10:54:33</publishTime>
     </File>
     <File Include="Views/Rwa/Edit.cshtml">
-      <publishTime>02/21/2024 18:37:03</publishTime>
+      <publishTime>03/04/2024 11:54:24</publishTime>
     </File>
     <File Include="Views/Rwa/PaymentReport.cshtml">
       <publishTime>02/01/2024 12:08:50</publishTime>
@@ -2896,7 +2902,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/01/2024 12:08:50</publishTime>
     </File>
     <File Include="Views/Rwa_Report/Daily.cshtml">
-      <publishTime>02/01/2024 12:08:50</publishTime>
+      <publishTime>03/01/2024 12:04:23</publishTime>
     </File>
     <File Include="Views/Rwa_Report/Monthly.cshtml">
       <publishTime>02/01/2024 12:08:50</publishTime>
@@ -2917,7 +2923,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/01/2024 12:08:50</publishTime>
     </File>
     <File Include="Views/Rwa_Report/ViewReport.cshtml">
-      <publishTime>02/01/2024 12:08:50</publishTime>
+      <publishTime>03/01/2024 12:05:21</publishTime>
     </File>
     <File Include="Views/Rwa_Report/Weekly.cshtml">
       <publishTime>02/01/2024 12:08:50</publishTime>
@@ -2929,7 +2935,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/01/2024 12:08:50</publishTime>
     </File>
     <File Include="Views/SalaryMaster/ViewHistory.cshtml">
-      <publishTime>02/01/2024 12:08:50</publishTime>
+      <publishTime>03/02/2024 10:27:37</publishTime>
     </File>
     <File Include="Views/ScanReports/Doctor.cshtml">
       <publishTime>02/01/2024 12:08:50</publishTime>
@@ -2959,7 +2965,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/01/2024 12:08:50</publishTime>
     </File>
     <File Include="Views/Shared/_AdminLayout.cshtml">
-      <publishTime>02/22/2024 15:11:48</publishTime>
+      <publishTime>03/05/2024 17:38:40</publishTime>
     </File>
     <File Include="Views/Shared/_ChemistNavigation.cshtml">
       <publishTime>02/01/2024 12:08:50</publishTime>
@@ -2989,13 +2995,13 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/01/2024 12:08:50</publishTime>
     </File>
     <File Include="Views/Shared/_Home.cshtml">
-      <publishTime>02/01/2024 12:08:50</publishTime>
+      <publishTime>03/04/2024 15:05:06</publishTime>
     </File>
     <File Include="Views/Shared/_HospitalNavigation.cshtml">
       <publishTime>02/01/2024 12:08:50</publishTime>
     </File>
     <File Include="Views/Shared/_LabNavigation.cshtml">
-      <publishTime>02/01/2024 12:08:50</publishTime>
+      <publishTime>02/26/2024 10:43:24</publishTime>
     </File>
     <File Include="Views/Shared/_Layout.cshtml">
       <publishTime>02/01/2024 12:08:50</publishTime>
@@ -3004,7 +3010,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/01/2024 12:08:50</publishTime>
     </File>
     <File Include="Views/Shared/_Navigation.cshtml">
-      <publishTime>02/01/2024 12:08:50</publishTime>
+      <publishTime>02/29/2024 12:14:48</publishTime>
     </File>
     <File Include="Views/Shared/_NurseNavigation.cshtml">
       <publishTime>02/01/2024 12:08:50</publishTime>
@@ -3037,13 +3043,13 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/01/2024 12:08:50</publishTime>
     </File>
     <File Include="Views/Shared/_VendorNavigation.cshtml">
-      <publishTime>02/01/2024 12:08:50</publishTime>
+      <publishTime>02/26/2024 11:13:11</publishTime>
     </File>
     <File Include="Views/Specialist/Add.cshtml">
       <publishTime>02/01/2024 12:08:50</publishTime>
     </File>
     <File Include="Views/Specialist/All.cshtml">
-      <publishTime>02/01/2024 12:08:50</publishTime>
+      <publishTime>03/01/2024 11:29:45</publishTime>
     </File>
     <File Include="Views/Specialist/Edit.cshtml">
       <publishTime>02/01/2024 12:08:50</publishTime>
@@ -3052,7 +3058,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/21/2024 13:58:47</publishTime>
     </File>
     <File Include="Views/State/All.cshtml">
-      <publishTime>02/01/2024 12:08:50</publishTime>
+      <publishTime>03/01/2024 11:25:10</publishTime>
     </File>
     <File Include="Views/State/Edit.cshtml">
       <publishTime>02/01/2024 12:08:50</publishTime>
@@ -3061,16 +3067,16 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/01/2024 12:08:50</publishTime>
     </File>
     <File Include="Views/TDSReport/Doctor.cshtml">
-      <publishTime>02/01/2024 12:08:50</publishTime>
+      <publishTime>03/12/2024 16:29:37</publishTime>
     </File>
     <File Include="Views/TDSReport/DoctorTDS.cshtml">
-      <publishTime>02/01/2024 12:08:50</publishTime>
+      <publishTime>03/02/2024 10:53:35</publishTime>
     </File>
     <File Include="Views/TDSReport/DoctortdsList.cshtml">
       <publishTime>02/01/2024 12:08:50</publishTime>
     </File>
     <File Include="Views/TDSReport/Driver.cshtml">
-      <publishTime>02/01/2024 12:08:50</publishTime>
+      <publishTime>02/29/2024 13:00:40</publishTime>
     </File>
     <File Include="Views/TDSReport/Drivertds.cshtml">
       <publishTime>02/01/2024 12:08:50</publishTime>
@@ -3094,10 +3100,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/01/2024 12:08:50</publishTime>
     </File>
     <File Include="Views/TDSReport/TDS.cshtml">
-      <publishTime>02/01/2024 12:08:50</publishTime>
+      <publishTime>03/12/2024 16:29:10</publishTime>
     </File>
     <File Include="Views/TDSReport/Vehicletds.cshtml">
-      <publishTime>02/01/2024 12:08:50</publishTime>
+      <publishTime>03/02/2024 11:12:51</publishTime>
     </File>
     <File Include="Views/TDSReport/VehicletdsList.cshtml">
       <publishTime>02/01/2024 12:08:50</publishTime>
@@ -3124,10 +3130,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/01/2024 12:08:50</publishTime>
     </File>
     <File Include="Views/Vehicle/Add.cshtml">
-      <publishTime>02/23/2024 16:29:31</publishTime>
+      <publishTime>03/02/2024 18:14:44</publishTime>
     </File>
     <File Include="Views/Vehicle/All.cshtml">
-      <publishTime>02/23/2024 16:06:23</publishTime>
+      <publishTime>03/04/2024 16:04:01</publishTime>
     </File>
     <File Include="Views/Vehicle/Edit.cshtml">
       <publishTime>02/23/2024 16:09:47</publishTime>
@@ -3136,7 +3142,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/01/2024 12:08:50</publishTime>
     </File>
     <File Include="Views/Vehicle/UpdateVehicle.cshtml">
-      <publishTime>02/24/2024 14:59:08</publishTime>
+      <publishTime>03/02/2024 10:08:03</publishTime>
     </File>
     <File Include="Views/Vehicle/UpdateVehicles.cshtml">
       <publishTime>02/24/2024 15:55:32</publishTime>
@@ -3148,7 +3154,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/01/2024 12:08:50</publishTime>
     </File>
     <File Include="Views/VehicleType/All.cshtml">
-      <publishTime>02/01/2024 12:08:50</publishTime>
+      <publishTime>03/01/2024 11:38:48</publishTime>
     </File>
     <File Include="Views/VehicleType/Edit.cshtml">
       <publishTime>02/01/2024 12:08:50</publishTime>
@@ -3160,7 +3166,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/01/2024 12:08:50</publishTime>
     </File>
     <File Include="Views/Vendor/All.cshtml">
-      <publishTime>02/23/2024 16:30:16</publishTime>
+      <publishTime>03/05/2024 11:36:00</publishTime>
     </File>
     <File Include="Views/Vendor/Chemist.cshtml">
       <publishTime>02/01/2024 12:08:50</publishTime>
@@ -3175,7 +3181,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/01/2024 12:08:50</publishTime>
     </File>
     <File Include="Views/Vendor/DailyDoc.cshtml">
-      <publishTime>02/01/2024 12:08:50</publishTime>
+      <publishTime>02/26/2024 12:34:04</publishTime>
     </File>
     <File Include="Views/Vendor/DailyDri.cshtml">
       <publishTime>02/01/2024 12:08:50</publishTime>
@@ -3199,10 +3205,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/01/2024 12:08:50</publishTime>
     </File>
     <File Include="Views/Vendor/DoctorPayment.cshtml">
-      <publishTime>02/01/2024 12:08:50</publishTime>
+      <publishTime>02/26/2024 12:44:21</publishTime>
     </File>
     <File Include="Views/Vendor/DoctorTDS.cshtml">
-      <publishTime>02/01/2024 12:08:50</publishTime>
+      <publishTime>03/04/2024 11:23:17</publishTime>
     </File>
     <File Include="Views/Vendor/Driver.cshtml">
       <publishTime>02/01/2024 12:08:50</publishTime>
@@ -3217,7 +3223,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/01/2024 12:08:50</publishTime>
     </File>
     <File Include="Views/Vendor/Edit.cshtml">
-      <publishTime>02/21/2024 18:31:16</publishTime>
+      <publishTime>03/11/2024 12:39:23</publishTime>
     </File>
     <File Include="Views/Vendor/HealthCheckUp.cshtml">
       <publishTime>02/01/2024 12:08:50</publishTime>
@@ -3292,7 +3298,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/01/2024 12:08:50</publishTime>
     </File>
     <File Include="Views/Vendor/WeeklyDoc.cshtml">
-      <publishTime>02/01/2024 12:08:50</publishTime>
+      <publishTime>02/26/2024 12:34:28</publishTime>
     </File>
     <File Include="Views/Vendor/WeeklyDri.cshtml">
       <publishTime>02/01/2024 12:08:50</publishTime>
@@ -3313,7 +3319,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/01/2024 12:08:50</publishTime>
     </File>
     <File Include="Views/Vendor/YearlyDoc.cshtml">
-      <publishTime>02/01/2024 12:08:50</publishTime>
+      <publishTime>02/26/2024 12:34:50</publishTime>
     </File>
     <File Include="Views/Vendor/YearlyDri.cshtml">
       <publishTime>02/01/2024 12:08:50</publishTime>
@@ -3334,7 +3340,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/01/2024 12:08:50</publishTime>
     </File>
     <File Include="Views/VendorCommission/Doctor.cshtml">
-      <publishTime>02/01/2024 12:08:50</publishTime>
+      <publishTime>03/12/2024 11:45:43</publishTime>
     </File>
     <File Include="Views/VendorCommission/Driver.cshtml">
       <publishTime>02/01/2024 12:08:50</publishTime>
@@ -3352,13 +3358,13 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/01/2024 12:08:50</publishTime>
     </File>
     <File Include="Views/VendorCommission/Vendor.cshtml">
-      <publishTime>02/01/2024 12:08:50</publishTime>
+      <publishTime>03/12/2024 10:48:22</publishTime>
     </File>
     <File Include="Views/VendorPayout/Chemist.cshtml">
       <publishTime>02/01/2024 12:08:50</publishTime>
     </File>
     <File Include="Views/VendorPayout/Doctor.cshtml">
-      <publishTime>02/01/2024 12:08:50</publishTime>
+      <publishTime>03/11/2024 17:47:01</publishTime>
     </File>
     <File Include="Views/VendorPayout/Driver.cshtml">
       <publishTime>02/01/2024 12:08:50</publishTime>
@@ -3376,7 +3382,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/01/2024 12:08:50</publishTime>
     </File>
     <File Include="Views/VendorPayout/Vendor.cshtml">
-      <publishTime>02/01/2024 12:08:50</publishTime>
+      <publishTime>03/05/2024 18:25:40</publishTime>
     </File>
     <File Include="Views/VendorPayout/VendorPayoutHistory.cshtml">
       <publishTime>02/01/2024 12:08:50</publishTime>
@@ -3502,31 +3508,31 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/01/2024 12:08:50</publishTime>
     </File>
     <File Include="Views/ViewReport/DailyDoctor.cshtml">
-      <publishTime>02/01/2024 12:08:50</publishTime>
+      <publishTime>03/01/2024 12:01:38</publishTime>
     </File>
     <File Include="Views/ViewReport/DailyHealth.cshtml">
       <publishTime>02/01/2024 12:08:50</publishTime>
     </File>
     <File Include="Views/ViewReport/DailyLab.cshtml">
-      <publishTime>02/01/2024 12:08:50</publishTime>
+      <publishTime>03/01/2024 12:25:48</publishTime>
     </File>
     <File Include="Views/ViewReport/DailyNurse.cshtml">
       <publishTime>02/01/2024 12:08:50</publishTime>
     </File>
     <File Include="Views/ViewReport/Doctor.cshtml">
-      <publishTime>02/01/2024 12:08:50</publishTime>
+      <publishTime>03/01/2024 12:00:36</publishTime>
     </File>
     <File Include="Views/ViewReport/Health.cshtml">
       <publishTime>02/01/2024 12:08:50</publishTime>
     </File>
     <File Include="Views/ViewReport/Lab.cshtml">
-      <publishTime>02/01/2024 12:08:50</publishTime>
+      <publishTime>03/01/2024 12:20:07</publishTime>
     </File>
     <File Include="Views/ViewReport/MonthlyChe.cshtml">
       <publishTime>02/01/2024 12:08:50</publishTime>
     </File>
     <File Include="Views/ViewReport/MonthlyDoctor.cshtml">
-      <publishTime>02/01/2024 12:08:50</publishTime>
+      <publishTime>03/12/2024 17:50:14</publishTime>
     </File>
     <File Include="Views/ViewReport/MonthlyHealth.cshtml">
       <publishTime>02/01/2024 12:08:50</publishTime>
@@ -3547,7 +3553,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/01/2024 12:08:50</publishTime>
     </File>
     <File Include="Views/ViewReport/WeeklyDoctor.cshtml">
-      <publishTime>02/01/2024 12:08:50</publishTime>
+      <publishTime>03/12/2024 18:22:49</publishTime>
     </File>
     <File Include="Views/ViewReport/WeeklyHealth.cshtml">
       <publishTime>02/01/2024 12:08:50</publishTime>

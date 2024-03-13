@@ -125,9 +125,7 @@ namespace HospitalPortal.Controllers
     <p>Thank you for choosing PS Wellness. We look forward to assisting you on your wellness journey.</p>
 </body>
 </html>";
-
-                    // string msg1 = "Welcome to PS Wellness. Your signup is complete. To finalize your registration please proceed to log in using the credentials you provided during the signup process. Your User Id: " + admin.UserID + ", Password: " + admin.Password + ".";
-
+                     
                     EmailEF ef = new EmailEF()
                     {
                         EmailAddress = model.EmailId,
@@ -214,67 +212,7 @@ namespace HospitalPortal.Controllers
                     };
                     ent.AdminLogins.Add(admin);
                     ent.SaveChanges();
-                    //Add City Additional CityName
-                    //if (model.CityName != null)
-                    //{
-                    //    var city = new CityTemp
-                    //    {
-                    //        CityName = model.CityName,
-                    //        Login_Id = admin.Id,
-                    //        IsApproved = false,
-                    //        State_Id = model.StateMaster_Id
-                    //    };
-                    //    ent.CityTemps.Add(city);
-                    //    ent.SaveChanges();
-                    //    model.CityMaster_Id = city.Id;
-                    //}
-                    // aadhar doc upload
-
-                    //if (model.AadharBase64 != null)
-                    //{
-                    //    var aadharImg = FileOperation.UploadFileWithBase64("Images", model.AadharImageName, model.AadharBase64, allowedExtensions);
-
-                    //    if (aadharImg == "not allowed")
-                    //    {
-                    //        rm.Status = 0;
-                    //        rm.Message = "Only png,jpg,jpeg files are allowed as Licence document";
-                    //        tran.Rollback();
-                    //        return Ok(rm);
-                    //    }
-                    //    model.AadharImage = aadharImg;
-                    //}
-
-                    // aadhar doc 2 upload
-                    //if (model.AadharBase641 != null)
-                    //{
-                    //    var aadharImg2 = FileOperation.UploadFileWithBase64("Images", model.AadharImageName1, model.AadharBase641, allowedExtensions);
-
-                    //    if (aadharImg2 == "not allowed")
-                    //    {
-                    //        rm.Status = 0;
-                    //        rm.Message = "Only png,jpg,jpeg files are allowed as Licence document";
-                    //        tran.Rollback();
-                    //        return Ok(rm);
-                    //    }
-                    //    model.AadharImage2 = aadharImg2;
-                    //}
-                    //Pan Image File
-                    //if (model.PanBase641 != null)
-                    //{
-                    //    var PanImage = FileOperation.UploadFileWithBase64("Images", model.PanImageName, model.PanBase641, allowedExtensions);
-
-                    //    if (PanImage == "not allowed")
-                    //    {
-                    //        rm.Status = 0;
-                    //        rm.Message = "Only png,jpg,jpeg files are allowed as Licence document";
-                    //        tran.Rollback();
-                    //        return Ok(rm);
-                    //    }
-                    //    model.PanImage = PanImage;
-                    //}
-
-
-
+                     
                     // Licence upload
                     var licenceImg = FileOperation.UploadFileWithBase64("Images", model.LicenceImage, model.LicenceBase64, allowedExtensions);
                     if (licenceImg == "not allowed")
@@ -285,6 +223,17 @@ namespace HospitalPortal.Controllers
                         return Ok(rm);
                     }
                     model.LicenceImage = licenceImg;
+
+                    // Pan upload
+                    var PanImg = FileOperation.UploadFileWithBase64("Images", model.PanImage, model.PanImageBase64, allowedExtensions);
+                    if (PanImg == "not allowed")
+                    {
+                        rm.Status = 0;
+                        rm.Message = "Only png,jpg,jpeg files are allowed as Pan document";
+                        tran.Rollback();
+                        return Ok(rm);
+                    }
+                    model.PanImage = PanImg;
 
                     // Signature upload
                     var SignatureImg = FileOperation.UploadFileWithBase64("Images", model.SignaturePic, model.SignaturePicBase64, allowedExtensions);
@@ -300,10 +249,7 @@ namespace HospitalPortal.Controllers
                     var domainModel = Mapper.Map<Doctor>(model);
                     domainModel.AdminLogin_Id = admin.Id;
                     domainModel.SlotTime = Convert.ToInt32(model.SlotTiming);
-                    //if (model.CityName != null)
-                    //{
-                    //    domainModel.CityMaster_Id = model.CityMaster_Id;
-                    //}
+                    domainModel.SlotTime2 = Convert.ToInt32(model.SlotTiming2);
                     domainModel.EndTime = model.EndTime;
                     domainModel.StartTime = model.StartTime;
                     domainModel.DoctorId = UniqeIdDoc;
@@ -313,10 +259,15 @@ namespace HospitalPortal.Controllers
                     domainModel.RegistrationNumber = model.RegistrationNumber;
                     domainModel.Qualification = model.Qualification; 
                     domainModel.JoiningDate = DateTime.Now;
+                    domainModel.Day_Id = model.Day_Id;
+                    domainModel.VirtualFee = model.VirtualFee;
+                    domainModel.LicenseValidity = model.LicenseValidity;
+                    domainModel.About = model.About;
+                    domainModel.Vendor_Id = model.Vendor_Id;
+                    domainModel.IsBankUpdateApproved = false;
                     ent.Doctors.Add(domainModel);
                     ent.SaveChanges();
-                    // save doctor department
-
+                 
                     var dept = new DoctorDepartment
                     {
                         Doctor_Id = domainModel.Id,
@@ -368,15 +319,10 @@ namespace HospitalPortal.Controllers
                     Message.SendSms(domainModel.MobileNumber, msg1);
                     tran.Commit();
                     rm.Status = 1;
-                    rm.Message = "You have registered successfully.Please wait for approval to login.";
+                    rm.Message = "Welcome to PS Wellness. Sign up process completed. Approval pending.";
                     return Ok(rm);
                 }
-                //catch (Exception ex)
-                //{
-                //    log.Error(ex.Message);
-                //    tran.Rollback();
-                //    return InternalServerError(ex);
-                //}
+                 
                 catch (Exception ex)
                 {
                     if (ex.Message == "Invalid length for a Base-64 char array or string.")
@@ -402,16 +348,7 @@ namespace HospitalPortal.Controllers
             {
                 try
                 {
-                    if (!ModelState.IsValid)
-                    {
-                        var message = string.Join(" | ",
-ModelState.Values
-.SelectMany(a => a.Errors)
-.Select(a => a.ErrorMessage));
-                        rm.Message = message;
-                        rm.Status = 0;
-                        return Ok(rm);
-                    }
+                     
 
                     if (ent.AdminLogins.Any(a => a.Username == model.EmailId))
                     {
@@ -526,6 +463,7 @@ ModelState.Values
                     domainModel.DriverId = UniuqId;
                     domainModel.PAN = model.PAN;
                     admin.UserID = domainModel.DriverId;
+                    domainModel.IsBankUpdateApproved = false;
                     ent.Drivers.Add(domainModel);
                     ent.SaveChanges();
                     rm.Status = 1;
@@ -559,7 +497,7 @@ ModelState.Values
 
                     string msg1 = "Welcome to PSWELLNESS. Your User Name :  " + admin.Username + "(" + domainModel.DriverId + "), Password : " + admin.Password + ".";
                     Message.SendSms(domainModel.MobileNumber, msg1);
-                    rm.Message = "You have registered successfully.Please wait for approval to login";
+                    rm.Message = "Welcome to PS Wellness. Sign up process completed. Approval pending.";
                     tran.Commit();
                     return Ok(rm);
                 }
@@ -698,16 +636,7 @@ ModelState.Values
             {
                 try
                 {
-                    //if (!ModelState.IsValid)
-                    //{
-                    //    var message = string.Join(" | ",
-                    //    ModelState.Values
-                    //    .SelectMany(a => a.Errors)
-                    //    .Select(a => a.ErrorMessage));
-                    //    rm.Message = message;
-                    //    rm.Status = 0;
-                    //    return Ok(rm);
-                    //}
+                     
                     if (ent.AdminLogins.Any(a => a.Username == model.EmailId))
                     {
                         rm.Message = "This EmailId has already exists.";
@@ -744,21 +673,7 @@ ModelState.Values
                     ent.AdminLogins.Add(admin);
                     ent.SaveChanges();
 
-                    //Add City Additional CityName
-                    //if (model.CityName != null)
-                    //{
-                    //    var city = new CityTemp
-                    //    {
-                    //        CityName = model.CityName,
-                    //        Login_Id = admin.Id,
-                    //        IsApproved = false,
-                    //        State_Id = model.StateMaster_Id
-                    //    };
-                    //    ent.CityTemps.Add(city);
-                    //    ent.SaveChanges();
-                    //    model.CityMaster_Id = city.Id;
-                    //}
-
+                     
 
                     // CertificateFile Picture Section 
                     var cetificateImg = FileOperation.UploadFileWithBase64("Images", model.CertificateImage, model.CertificateBase64Image, allowedExtensions);
@@ -803,12 +718,14 @@ ModelState.Values
                         domainModel.NurseType_Id = model.NurseType_Id;
                         domainModel.Fee = model.Fee;
                         domainModel.Location_id = model.Location_id;
+                        domainModel.Vendor_Id = model.Vendor_Id;
                         domainModel.PAN = model.PAN;
+                        domainModel.about = model.about;
                         domainModel.experience = model.experience;
                         domainModel.JoiningDate = DateTime.Now;
                         domainModel.AdminLogin_Id = admin.Id;
                         domainModel.NurseId = HUniquId;
-                        // domainModel.NurseId = bk.GenerateNurseId();
+                        domainModel.IsBankUpdateApproved = false; 
 
                     };
 
@@ -832,8 +749,7 @@ ModelState.Values
 </body>
 </html>";
 
-                    // string msg1 = "Welcome to PS Wellness. Your signup is complete. To finalize your registration please proceed to log in using the credentials you provided during the signup process. Your User Id: " + admin.UserID + ", Password: " + admin.Password + ".";
-
+                   
                     EmailEF ef = new EmailEF()
                     {
                         EmailAddress = model.EmailId,
@@ -843,7 +759,7 @@ ModelState.Values
 
                     EmailOperations.SendEmainew(ef);
 
-                    rm.Message = "You have registered successfully.Please wait for approval to login.";
+                    rm.Message = "Welcome to PS Wellness. Sign up process completed. Approval pending.";
                     rm.Status = 1;
                     string msg1 = "Welcome to PSWELLNESS. Your User Name :  " + admin.Username + "(" + domainModel.NurseId + "), Password : " + admin.Password + ".";
                     Message.SendSms(domainModel.MobileNumber, msg1);
@@ -1297,8 +1213,7 @@ ModelState.Values
                 return Ok(obj);
             }
         }
-        //forget password--
-
+    
         [HttpPost]
 
         public IHttpActionResult ChangePassword(ChangePasswordModel model)
@@ -1374,28 +1289,12 @@ ModelState.Values
         //Update bank api========================================================= /////////////////////////////////////
         [HttpPost]
         public IHttpActionResult UpdateBank(UpdateBankDetails model)
-        {
-            if (!ModelState.IsValid)
-            {
-                var message = string.Join(" | ",
-ModelState.Values
-.SelectMany(a => a.Errors)
-.Select(a => a.ErrorMessage));
-                rm.Message = message;
-                rm.Status = 0;
-                return Ok(rm);
-            }
-            //string[] allowedExtensions = { ".jpg", ".png", ".jpeg" };
+        { 
+            
             var data = ent.BankDetails.Where(a => a.Login_Id == model.Login_Id).ToList();
-            //var verf = FileOperation.UploadFileWithBase64("Images", model.ChequeImageName, model.ChequeImageBase64Image, allowedExtensions);
-            //if (verf == "not allowed")
-            //{
-            //    rm.Message = "Only png,jpg,jpeg files are allowed as verification doc.";
-            //    return Ok(rm);
-            //}
-            //model.ChequeImage = verf;
+            
             var domain = Mapper.Map<BankDetail>(model);
-            //domain.CancelCheque = model.ChequeImage;
+           
             if (data.Count() == 0)
             {
                 domain.isverified = true;
@@ -1559,7 +1458,7 @@ ModelState.Values
                         domainModel.AdminLogin_Id = admin.Id;
                         domainModel.AuthorityName = model.AuthorityName;
                         domainModel.PhoneNumber = model.PhoneNumber;
-                        domainModel.MobileNumber = model.PhoneNumber;
+                        domainModel.MobileNumber = model.MobileNumber;
                         domainModel.EmailId = model.EmailId;
                         domainModel.Password = model.Password;
                         domainModel.CertificateNo = model.CertificateNo;
@@ -1571,6 +1470,7 @@ ModelState.Values
                         domainModel.JoiningDate = DateTime.Now;
                         domainModel.Pincode = model.Pincode;
                         domainModel.PAN = model.PAN;
+                        domainModel.IsBankUpdateApproved = false; 
                         domainModel.RWAId = bk.GenerateRWA_Id();
                         admin.UserID = domainModel.RWAId;
                     };
@@ -1610,7 +1510,7 @@ ModelState.Values
                     rm.Status = 1;
                     string msg1 = "Welcome to PSWELLNESS. Your User Name :  " + admin.Username + "(" + domainModel.Id + "), Password : " + admin.Password + ".";
                     Message.SendSms(domainModel.PhoneNumber, msg1);
-                    rm.Message = "You have registered successfully.Please wait for approval to login.";
+                    rm.Message = "Welcome to PS Wellness. Sign up process completed. Approval pending.";
                     return Ok(rm);
                 }
                 catch (Exception ex)
@@ -1664,29 +1564,21 @@ ModelState.Values
                 };
                 ent.AdminLogins.Add(admin);
                 ent.SaveChanges();
-                //licence Picture Section
-                //if (model.LicenceImage == null)
-                //{
-                //    rm.Message = "licence Image File Picture can not be null";
-                //    tran.Rollback();
-                //    return Ok(rm);
-                //}
+                 
                 var img = FileOperation.UploadFileWithBase64("Images", model.LicenceImage, model.LicenceImagebase64, allowedExtensions);
                 if (img == "not allowed")
                 {
                     rm.Message = "Only png,jpg,jpeg files are allowed.";
-                    //tran.Rollback();
+                     
                     return Ok(rm);
                 }
                 model.LicenceImage = img;
-                // PanImg doc upload
-                //if (model.PanImage != null)
-                //{
+                
                 var PanImg = FileOperation.UploadFileWithBase64("Images", model.PanImage, model.PanImagebase64, allowedExtensions);
                 if (PanImg == "not allowed")
                 {
                     rm.Message = "Only png,jpg,jpeg files are allowed as Aadhar card document";
-                    // tran.Rollback();
+                     
                     return Ok(rm);
                 }
                 model.PanImage = PanImg;
@@ -1706,8 +1598,7 @@ ModelState.Values
                     domainModel.LicenceNumber = model.LicenceNumber;
                     domainModel.LicenceImage = model.LicenceImage;
                     domainModel.PanImage = model.PanImage;
-                    domainModel.PAN = model.PAN;
-                    //domainModel.year = model.year;
+                    domainModel.PAN = model.PAN; 
                     domainModel.StartTime = model.StartTime;
                     domainModel.EndTime = model.EndTime;
                     domainModel.GSTNumber = model.GSTNumber;
@@ -1715,6 +1606,8 @@ ModelState.Values
                     domainModel.PinCode = model.PinCode;
                     domainModel.JoiningDate = DateTime.Now;
                     domainModel.AdminLogin_Id = admin.Id;
+                    domainModel.IsBankUpdateApproved = false;
+                    domainModel.Vendor_Id = model.Vendor_Id;
                     domainModel.lABId = bk.GenerateLabId();
 
                     admin.UserID = domainModel.lABId;
@@ -1738,8 +1631,7 @@ ModelState.Values
 </body>
 </html>";
 
-               // string msg1 = "Welcome to PS Wellness. Your signup is complete. To finalize your registration please proceed to log in using the credentials you provided during the signup process. Your User Id: " + admin.UserID + ", Password: " + admin.Password + ".";
-
+               
                 EmailEF ef = new EmailEF()
                 {
                     EmailAddress = model.EmailId,
@@ -1751,20 +1643,17 @@ ModelState.Values
 
                 string msg1 = "Welcome to PSWELLNESS. Your User Name :  " + domainModel.EmailId + "(" + domainModel.lABId + "), Password : " + admin.Password + ".";
                 Message.SendSms(domainModel.MobileNumber, msg1);
-                rm.Message = "You have registered successfully.Please wait for approval to login.";
-                rm.Status = 0;
+                rm.Message = "Welcome to PS Wellness. Sign up process completed. Approval pending.";
+                rm.Status = 1;
                 return Ok(rm);
 
             }
 
             catch (Exception ex)
             {
-                log.Error(ex.Message);
-                //tran.Rollback();
+                log.Error(ex.Message); 
                 return InternalServerError(ex);
-            }
-
-            // }
+            } 
 
         }
        
@@ -1834,12 +1723,13 @@ ModelState.Values
                     domainModel.Location = model.Location;
                     domainModel.StateMaster_Id = model.StateMaster_Id;
                     domainModel.CityMaster_Id = model.CityMaster_Id;
+                    domainModel.Vendor_Id = model.Vendor_Id;
                     domainModel.LicenceNumber = model.LicenceNumber;
                     domainModel.PAN = model.PAN;
                     domainModel.Certificateimg = model.Certificateimg;
                     domainModel.LicenseValidity = model.LicenseValidity;
                     domainModel.PinCode = model.PinCode;
-
+                    domainModel.IsBankUpdateApproved = false;
                     domainModel.AdminLogin_Id = admin.Id;
                     domainModel.ChemistId = bk.GenerateChemistId();
 
@@ -1877,7 +1767,7 @@ ModelState.Values
 
                 string msg1 = "Welcome to PSWELLNESS. Your User Name :  " + domainModel.EmailId + "(" + domainModel.ChemistId + "), Password : " + admin.Password + ".";
                 Message.SendSms(domainModel.MobileNumber, msg1);
-                rm.Message = "You have registered successfully.Please wait for approval to login.";
+                rm.Message = "Welcome to PS Wellness. Sign up process completed. Approval pending.";
                 rm.Status = 1;
                 return Ok(rm);
 
@@ -1930,14 +1820,7 @@ ModelState.Values
                         tran.Rollback();
                         return Ok(rm);
                     }
-                    //var img = FileOperation.UploadFileWithBase64("Images", model.AadharOrPANImage, model.AadharOrPANImagebase64, allowedExtensions);
-                    //if (img == "not allowed")
-                    //{
-                    //    rm.Message = "Only png,jpg,jpeg,pdf files are allowed.";
-                    //    tran.Rollback();
-                    //    return Ok(rm);
-                    //}
-                    //model.AadharOrPANImage = img;
+                     
 
                     var img = FileOperation.UploadFileWithBase64("Images", model.AadharOrPANImage, model.AadharOrPANImagebase64, allowedExtensions);
                     if (img == "not allowed")
@@ -1964,10 +1847,10 @@ ModelState.Values
                     domainModel.AadharOrPANNumber = model.AadharOrPANNumber;
                     domainModel.PanImage = model.AadharOrPANImage;
                     domainModel.AdminLogin_Id = admin.Id;
+                    domainModel.IsBankUpdateApproved = false;
                     domainModel.UniqueId = bk.GenerateVenderId();
                     admin.UserID = domainModel.UniqueId;
-                    //domainModel.IsCheckedTermsCondition = model.IsCheckedTermsCondition;
-
+                     
                     ent.Vendors.Add(domainModel);
                     ent.SaveChanges();
                     // string msg = "Welcome to PSWELLNESS. Your User Name :  " + domainModel.EmailId + "(" + domainModel.UniqueId + ") , Password : " + admin.Password + ".";
@@ -1999,7 +1882,7 @@ ModelState.Values
                     EmailOperations.SendEmainew(ef); 
                     tran.Commit();
                     rm.Status = 1;
-                    rm.Message = "You have registered successfully.Please wait for approval to login.";
+                    rm.Message = "Welcome to PS Wellness. Sign up process completed. Approval pending.";
                     return Ok(rm);
                 }
                 catch (Exception ex)

@@ -1,5 +1,6 @@
 ﻿using HospitalPortal.Models.DomainModels;
 using HospitalPortal.Models.ViewModels;
+using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,17 +20,68 @@ namespace HospitalPortal.Controllers
             return View();
         }
 
+        public void DownloadDoctorExcel(int? Id)
+        {
+            double commision = ent.Database.SqlQuery<double>(@"select Commission from CommissionMaster where IsDeleted=0 and Name='Doctor'").FirstOrDefault();
+            
+            string query = @"SELECT D.DoctorId,A.Doctor_Id,D.DoctorName,SUM(A.TotalFee) AS Amount FROM dbo.PatientAppointment A
+JOIN Doctor D ON D.Id = A.Doctor_Id WHERE  A.IsPaid = 1  AND A.AppointmentDate BETWEEN DATEADD(DAY, -7, GETDATE()) AND GETDATE()
+GROUP BY  D.DoctorId, A.Doctor_Id,D.DoctorName;";
 
-        //Doctor Commission Report
+            var DoctorCommissionReport = ent.Database.SqlQuery<DoctorCommissionReport>(query).ToList();
+            ExcelPackage Ep = new ExcelPackage();
+            ExcelWorksheet Sheet = Ep.Workbook.Worksheets.Add("Report");
+
+            Sheet.Cells["A1"].Value = "Doctor Id";
+            Sheet.Cells["B1"].Value = "Doctor Name";
+            Sheet.Cells["C1"].Value = "Commission in %";
+            Sheet.Cells["D1"].Value = "Commission Amount"; 
+            Sheet.Cells["E1"].Value = "Amount"; 
+            Sheet.Cells["F1"].Value = "Payable amount"; 
+            int row = 2;
+            double totalAmount = 0.0; // Initialize a variable to store the total MonthSalary
+            double totalPayableAmount = 0.0; // Initialize a variable to store the total MonthSalary
+
+            foreach (var item in DoctorCommissionReport)
+            {
+                double commissionamt = (item.Amount*commision) / 100;
+                double payableamt = item.Amount - commissionamt;
+
+                Sheet.Cells[string.Format("A{0}", row)].Value = item.DoctorId;
+                Sheet.Cells[string.Format("B{0}", row)].Value = item.DoctorName; 
+                Sheet.Cells[string.Format("C{0}", row)].Value = commision;
+                Sheet.Cells[string.Format("D{0}", row)].Value = commissionamt;
+                Sheet.Cells[string.Format("E{0}", row)].Value = item.Amount; 
+                Sheet.Cells[string.Format("F{0}", row)].Value = payableamt; 
+                totalAmount += item.Amount; // Add the current MonthSalary to the total
+                totalPayableAmount += payableamt; // Add the current MonthSalary to the total
+                row++;
+            }
+
+            // Create a cell to display the total MonthSalary
+            Sheet.Cells[string.Format("D{0}", row)].Value = "Total Amount";
+            Sheet.Cells[string.Format("E{0}", row)].Value = totalAmount;
+            Sheet.Cells[string.Format("F{0}", row)].Value = totalPayableAmount;
+
+            Sheet.Cells["A:AZ"].AutoFitColumns();
+            Response.Clear();
+            Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            Response.AddHeader("content-disposition", "attachment; filename=Report.xlsx"); // Use a semicolon (;) instead of a colon (:)
+            Response.BinaryWrite(Ep.GetAsByteArray());
+            Response.End();
+        }
         public ActionResult Doctor(string term, int? pageNumber, DateTime? AppointmentDate, string name = null)
         {
-            double commision = ent.Database.SqlQuery<double>(@"select Commission from CommissionMaster where IsDeleted=0 and Name='" + term+"'").FirstOrDefault();
+            double commision = ent.Database.SqlQuery<double>(@"select Commission from CommissionMaster where IsDeleted=0 and Name='" + term + "'").FirstOrDefault();
             var model = new ReportDTO();
             if (AppointmentDate != null)
             {
                 DateTime dateCriteria = AppointmentDate.Value.AddDays(-7);
                 string date = dateCriteria.ToString("dd/MM/yyyy");
-                var qry1 = @"select A.Doctor_Id, D.DoctorName, SUM(A.TotalFee) As Amount from dbo.PatientAppointment A join Doctor D on D.Id = A.Doctor_Id  where A.IsPaid=1 and A.AppointmentDate between '" + dateCriteria + "' and '" + AppointmentDate + "' GROUP BY A.TotalFee, D.DoctorName, A.Doctor_Id";
+                //var qry1 = @"select A.Doctor_Id, D.DoctorName, SUM(A.TotalFee) As Amount from dbo.PatientAppointment A join Doctor D on D.Id = A.Doctor_Id  where A.IsPaid=1 and A.AppointmentDate between '" + dateCriteria + "' and '" + AppointmentDate + "' GROUP BY A.TotalFee, D.DoctorName, A.Doctor_Id";
+                var qry1 = @"SELECT D.DoctorId,A.Doctor_Id,D.DoctorName,SUM(A.TotalFee) AS Amount FROM dbo.PatientAppointment A
+JOIN Doctor D ON D.Id = A.Doctor_Id
+WHERE A.IsPaid = 1 AND CONVERT(VARCHAR, A.AppointmentDate, 103) BETWEEN '" + dateCriteria + "' AND '" + AppointmentDate + "' GROUP BY  D.DoctorId, A.Doctor_Id,D.DoctorName;";
                 var data1 = ent.Database.SqlQuery<DoctorCommissionReport>(qry1).ToList();
                 if (data1.Count() == 0)
                 {
@@ -45,17 +97,19 @@ namespace HospitalPortal.Controllers
                     model.TotalPages = (int)noOfPages;
                     model.PageNumber = (int)pageNumber;
                     data1 = data1.OrderBy(a => a.Doctor_Id).Skip(pageSize * ((int)pageNumber - 1)).Take(pageSize).ToList();
-                    if(name!= null)
+                    if (name != null)
                     {
-                        data1 = data1.Where(a => a.DoctorName.ToLower().Contains(term)).ToList();
+                        data1 = data1.Where(a => a.DoctorName.ToLower().Contains(name.ToLower())).ToList();
                     }
                     model.DoctorCommisionReport = data1;
                     return View(model);
                 }
             }
-            var doctor = @"select A.Doctor_Id, D.DoctorName, SUM(A.TotalFee)  As Amount from dbo.PatientAppointment A join Doctor D on D.Id = A.Doctor_Id where A.IsPaid=1 and A.AppointmentDate BETWEEN DATEADD(DAY, -7, GETDATE()) AND GETDATE() group by A.TotalFee, D.DoctorName, A.Doctor_Id";
+            var doctor = @"SELECT D.DoctorId,A.Doctor_Id,D.DoctorName,SUM(A.TotalFee) AS Amount FROM dbo.PatientAppointment A
+JOIN Doctor D ON D.Id = A.Doctor_Id WHERE  A.IsPaid = 1  AND A.AppointmentDate BETWEEN DATEADD(DAY, -7, GETDATE()) AND GETDATE()
+GROUP BY  D.DoctorId, A.Doctor_Id,D.DoctorName;";
             var data = ent.Database.SqlQuery<DoctorCommissionReport>(doctor).ToList();
-            if(data.Count() == 0)
+            if (data.Count() == 0)
             {
                 TempData["msg"] = "No Record Of Current Week";
                 return View(model);
@@ -70,11 +124,61 @@ namespace HospitalPortal.Controllers
                 model.TotalPages = (int)noOfPages;
                 model.PageNumber = (int)pageNumber;
                 data = data.OrderBy(a => a.Doctor_Id).Skip(pageSize * ((int)pageNumber - 1)).Take(pageSize).ToList();
+                if (name != null)
+                {
+                    data = data.Where(a => a.DoctorName.ToLower().Contains(name.ToLower())).ToList();
+                }
                 model.DoctorCommisionReport = data;
                 return View(model);
             }
-         
+
         }
+        public ActionResult DoctorDetails(int? DoctorId, DateTime? AppointmentDate)
+        {
+            double commision = ent.Database.SqlQuery<double>(@"select Commission from CommissionMaster where IsDeleted=0 and Name='Nurse'").FirstOrDefault();
+            var model = new ReportDTO();
+            if (AppointmentDate != null)
+            {
+                DateTime dateCriteria = AppointmentDate.Value.AddDays(-7);
+                string date = dateCriteria.ToString("dd/MM/yyyy");
+                var qry1 = @"select a.Doctor_Id, a.Id, a.IsPaid, case when a.PaymentDate is null then 'N/A' else Convert(nvarchar(100),a.PaymentDate,103) end as PaymentDate, case when a.AppointmentDate is null then 'N/A' else Convert(nvarchar(100),a.AppointmentDate,103) end as Appointment,IsNull(d.DoctorName,'N/A') as DoctorName,
+IsNull(d.MobileNumber,'N/A') as MobileNumber, 
+a.TotalFee as Amount from PatientAppointment A join Doctor D on D.Id = A.Doctor_Id where  a.Doctor_Id = " + DoctorId + " and a.IsPaid=1 and CONVERT(VARCHAR, a.AppointmentDate, 103) between '" + dateCriteria + "' and '" + AppointmentDate + "' order by a.Id desc";
+                var data1 = ent.Database.SqlQuery<DoctorCommissionReport>(qry1).ToList();
+                if (data1.Count() == 0)
+                {
+                    TempData["msg"] = "Your Selected Date Doesn't Contain any Information.";
+                    model.DoctorCommisionReport = data1;
+                    return View(model);
+
+                }
+                else
+                {
+                    ViewBag.Commission = commision;
+                    model.DoctorName = data1.FirstOrDefault().DoctorName;
+                    model.Doctor_Id = data1.FirstOrDefault().Doctor_Id;
+                    model.DoctorCommisionReport = data1;
+                    return View(model);
+                }
+            }
+            string q = @" select a.Doctor_Id, a.Id, a.IsPaid, case when a.PaymentDate is null then 'N/A' else Convert(nvarchar(100),a.PaymentDate,103) end as PaymentDate, case when a.AppointmentDate is null then 'N/A' else Convert(nvarchar(100),a.AppointmentDate,103) end as Appointment,IsNull(d.DoctorName,'N/A') as DoctorName,
+IsNull(d.MobileNumber,'N/A') as MobileNumber, 
+a.TotalFee as Amount from PatientAppointment A join Doctor D on D.Id = A.Doctor_Id where d.id=" + DoctorId + " and a.IsPaid=1";
+            var data = ent.Database.SqlQuery<DoctorCommissionReport>(q).ToList();
+            if (data.Count() == 0)
+            {
+                TempData["msg"] = "Something Went Wrong";
+            }
+            else
+            {
+                ViewBag.Commission = commision;
+                model.DoctorName = data.FirstOrDefault().DoctorName;
+                model.Doctor_Id = data.FirstOrDefault().Doctor_Id;
+                model.DoctorCommisionReport = data;
+            }
+            return View(model);
+        }
+
 
         //Lab Commission Report
         public ActionResult Lab(string term, int? pageNumber, DateTime? TestDate, string name = null)
@@ -185,11 +289,14 @@ IsNull(ns.PerDayAmount,0) as Fee,
 ns.TotalFee
  from NurseService ns 
 left join Nurse n on ns.Nurse_Id=n.Id
-where ns.Nurse_Id = " + NurseId+" and ns.IsPaid=1 and ns.ServiceAcceptanceDate between '"+dateCriteria+"' and '"+ServiceAcceptanceDate+"' order by ns.Id desc";
+where ns.Nurse_Id = " + NurseId+ " and ns.IsPaid=1 and CONVERT(VARCHAR, ns.ServiceAcceptanceDate, 103) between '" + dateCriteria+"' and '"+ServiceAcceptanceDate+"' order by ns.Id desc";
                 var data1 = ent.Database.SqlQuery<NurseAppointmentList>(qry1).ToList();
                 if (data1.Count() == 0)
                 {
                     TempData["msg"] = "Your Selected Date Doesn't Contain any Information.";
+                    model.NurseAppointmentList = data1;
+                    return View(model);
+
                 }
                 else
                 {
@@ -344,11 +451,11 @@ where A.IsPaid=1 and A.OrderDate between DATEADD(DAY, -7, GETDATE()) AND GETDATE
                 string date = dateCriteria.ToString("dd/MM/yyyy");
                 var qry1 = @"select v.VehicleNumber, IsNull(v.VehicleName,'NA') as VehicleName, 
 v.Id as VehicleId, d.DriverName, Sum(trm.Amount) as Amount
-from TravelRecordMaster trm 
+from DriverLocation trm 
 join Driver d on d.Id = trm.Driver_Id
-join Vehicle v on v.Id = trm.Vehicle_Id
-join Patient p on p.Id = trm.Patient_Id
-where trm.IsDriveCompleted = 1 and trm.RequestDate between '"+dateCriteria+"' and '"+ RequestDate + "' group by v.VehicleNumber, v.VehicleName, v.Id,d.DriverName";
+join Vehicle v on v.VehicleType_Id = trm.VehicleType_Id
+join Patient p on p.Id = trm.PatientId
+where trm.IsPay = 'Y' and trm.EntryDate between '" + dateCriteria+"' and '"+ RequestDate + "' group by v.VehicleNumber, v.VehicleName, v.Id,d.DriverName";
                 var data1 = ent.Database.SqlQuery<AmbulanceReport>(qry1).ToList();
                 if (data1.Count() == 0)
                 {
@@ -374,11 +481,11 @@ where trm.IsDriveCompleted = 1 and trm.RequestDate between '"+dateCriteria+"' an
             }
             var doctor = @"select v.VehicleNumber, IsNull(v.VehicleName,'NA') as VehicleName, 
 v.Id as VehicleId, d.DriverName, Sum(trm.Amount) as Amount
-from TravelRecordMaster trm 
+from DriverLocation trm 
 join Driver d on d.Id = trm.Driver_Id
-join Vehicle v on v.Id = trm.Vehicle_Id
-join Patient p on p.Id = trm.Patient_Id
-where trm.IsDriveCompleted = 1 and trm.RequestDate between DateAdd(DD,-7,GETDATE() ) and GETDATE() group by v.VehicleNumber, v.VehicleName, v.Id,d.DriverName";
+join Vehicle v on v.VehicleType_Id = trm.VehicleType_Id
+join Patient p on p.Id = trm.PatientId
+where trm.IsPay = 'Y' and trm.EntryDate between DateAdd(DD,-7,GETDATE() ) and GETDATE() group by v.VehicleNumber, v.VehicleName, v.Id,d.DriverName";
             var data = ent.Database.SqlQuery<AmbulanceReport>(doctor).ToList();
             if (data.Count() == 0)
             {

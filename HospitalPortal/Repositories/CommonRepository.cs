@@ -55,7 +55,7 @@ namespace HospitalPortal.Repositories
 
         public IEnumerable<Department> GetDepartments()
         {
-            var data = ent.Departments.Where(a=> !a.IsDeleted).OrderBy(a=> new {a.DepartmentName }).ToList();
+            var data = ent.Departments.Where(a=> a.IsDeleted==false).OrderBy(a=> new {a.DepartmentName }).ToList();
             return data;
         }
 

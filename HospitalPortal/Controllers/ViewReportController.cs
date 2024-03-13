@@ -68,11 +68,12 @@ namespace HospitalPortal.Controllers
                 if (sdate != null && edate != null)
             {
                //data = data.Where(A => A.AppointmentDate == sdate && A.AppointmentDate == edate).ToList();
-                var qry1 = @"SELECT  DATENAME(month, A.AppointmentDate)as  AppointmentDate1, DATENAME(yy, A.AppointmentDate) as  Year ,SUM(A.Amount) as Amount from PatientAppointment A where A.AppointmentDate between '" + sdate + "' and '" + edate+ "' and A.IsPaid=1 GROUP BY DATENAME(month, A.AppointmentDate), DATENAME(yy, A.AppointmentDate) order by Year('1' + DATENAME(MONTH, A.AppointmentDate) +'00')  , Year";
+                var qry1 = @"SELECT  DATENAME(month, A.AppointmentDate)as  AppointmentDate1, DATENAME(yy, A.AppointmentDate) as  Year ,SUM(A.TotalFee) as Amount from PatientAppointment A where A.AppointmentDate between Convert(datetime,'" + sdate + "',103) and Convert(datetime,'" + edate + "',103) and A.IsPaid=1 GROUP BY DATENAME(month, A.AppointmentDate), DATENAME(yy, A.AppointmentDate) order by  Year('1' + DATENAME(MONTH, A.AppointmentDate) +'00')  , Year ";
                 var data1 = ent.Database.SqlQuery<Doctors>(qry1).ToList();
                 if (data1.Count() == 0)
                 {
                     TempData["msg"] = "Your Selected Date Doesn't Contain any Information.";
+                    return View(model);
                 }
                 else
                 {
@@ -133,11 +134,12 @@ namespace HospitalPortal.Controllers
             {
                 DateTime dateCriteria = week.Value.AddDays(-7);
                 string date = dateCriteria.ToString("dd/MM/yyyy");
-                var qry1 = @"select 'Week'+'-'+ DATENAME(WW, P.AppointmentDate)as  Weeks, DATENAME(YY, P.AppointmentDate)as  Year, Sum(P.TotalFee) as Amount from PatientAppointment P where P.AppointmentDate between '" + dateCriteria + "' and '"+week+"' GROUP BY P.AppointmentDate, P.TotalFee";
+                var qry1 = @"select 'Week'+'-'+ DATENAME(WW, P.AppointmentDate)as  Weeks, DATENAME(YY, P.AppointmentDate)as  Year, Sum(P.TotalFee) as Amount from PatientAppointment P where P.AppointmentDate between Convert(datetime,'" + dateCriteria + "',103) and Convert(datetime,'"+week+"',103) GROUP BY P.AppointmentDate, P.TotalFee";
                 var data1 = ent.Database.SqlQuery<Doctors>(qry1).ToList();
                 if (data1.Count() == 0)
                 {
                     TempData["msg"] = "Your Selected Date Doesn't Contain any Information.";
+                    return View(model);
                 }
                 else
                 {

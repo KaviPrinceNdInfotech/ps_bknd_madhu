@@ -47,13 +47,7 @@ namespace HospitalPortal.Controllers
             model.VehicleTypes = new List<SelectListItem>(ent.VehicleTypes.Select(a => new SelectListItem { Text = a.VehicleTypeName, Value = a.Id.ToString() }));
             model.VendorList = new SelectList(ent.Vendors.Where(a => a.IsDeleted == false && a.IsApproved == true).ToList(), "Id", "CompanyName");
             try
-            {
-
-                //if (!ModelState.IsValid)
-                //{
-                //    return View(model);
-                //}
-
+            { 
                 //Chek if Any Vehicle Exists Before
 
                  if(ent.Vehicles.Any(a=>a.VehicleNumber == model.VehicleNumber))
@@ -61,65 +55,7 @@ namespace HospitalPortal.Controllers
                     TempData["msg"] = "This Vehicle Number Already Registerd With Us.";
                     return View(model);
                 }
-                // fitness certificate image upload
-                //if (model.FitnessCertificateImageFile == null)
-                //{
-                //    TempData["msg"] = "Fitness certificate is mandatory";
-                //    return View(model);
-                //}
-                //var FitnessImg = FileOperation.UploadImage(model.FitnessCertificateImageFile, "Images");
-                //if (FitnessImg == "not allowed")
-                //{
-                //    TempData["msg"] = "Only png,jpg,jpeg files are allowed.";
-                //    return View(model);
-                //}
-                //model.FitnessCerficateImage = FitnessImg;
-
-                // insurrance doc upload
-                //if (model.InsurranceImageFile != null)
-                //{
-                //    var insurranceImg = FileOperation.UploadImage(model.InsurranceImageFile, "Images");
-                //    if (insurranceImg == "not allowed")
-                //    {
-                //        TempData["msg"] = "Only png,jpg,jpeg docs with insurrance are allowed.";
-                //        return View(model);
-                //    }
-                //    model.InsuranceImage = insurranceImg;
-                //}
-
-                // pollution doc upload
-                //if (model.PollutionImageFile != null)
-                //{
-                //    var pollutionImg = FileOperation.UploadImage(model.PollutionImageFile, "Images");
-                //    if (pollutionImg == "not allowed")
-                //    {
-                //        TempData["msg"] = "Only png,jpg,jpeg docs with pollution are allowed.";
-                //        return View(model);
-                //    }
-                //    model.PollutionImage = pollutionImg;
-                //}
-                //RC File
-                //if (model.RC_ImageFile != null)
-                //{
-                //    var rcImg = FileOperation.UploadImage(model.RC_ImageFile, "Images");
-                //    if (rcImg == "not allowed")
-                //    {
-                //        TempData["msg"] = "Only png,jpg,jpeg docs with RC are allowed.";
-                //        return View(model);
-                //    }
-                //    model.RC_Image = rcImg;
-                //}
-                //Vehicle Image
-                //if (model.VehicleImgFile != null)
-                //{
-                //    var vehcleImg = FileOperation.UploadImage(model.VehicleImgFile, "Images");
-                //    if (vehcleImg == "not allowed")
-                //    {
-                //        TempData["msg"] = "Only png,jpg,jpeg docs with RC are allowed.";
-                //        return View(model);
-                //    }
-                //    model.VehicleImg = vehcleImg;
-                //}
+                 
                 //Cancel Cheque Image
                 if (model.CancelChequeFile != null)
                 {

@@ -1,6 +1,7 @@
 ﻿@model IEnumerable<HospitalPortal.Models.ViewModels.RWADTO>
 @{
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    int count = 1;
 }
 
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
@@ -22,7 +23,7 @@
                 <h3>Rwa List</h3>
             </div>
         </div>
-        @using (Html.BeginForm("All", "Rwa", FormMethod.Get))
+        @*@using (Html.BeginForm("All", "Rwa", FormMethod.Get))
         {
             <div class="row">
                 <div class="col-md-4">
@@ -35,22 +36,24 @@
                     <a href="/Rwa/All" class="btn btn-primary">Show All</a>
                 </div>
             </div>
-        }
+        }*@
         
 
 
             <div class="double-scroll">
-               <table class="table table-bordered">
+               <table id="myTable" class="table table-bordered">
                  <thead>
                      <tr>
+                         <th>Sr No.</th>
                          <th>RWA Id</th>
                          <th>RWA Name</th>
-                         <th>MobileNo</th>
+                         <th>MobileNo/Phone</th>
                          <th>Lanline No</th>
                          <th>Email</th>
                          <th>Address</th>
                          <th>Certificate</th>
                          <th>Approval</th>
+                         <th>Approval for Bank Update</th>
                          <th>Action</th>
                      </tr>
                  </thead>
@@ -58,16 +61,26 @@
                        @foreach(var item in Model)
                        {
                            <tr>
+                               <td>@count</td>
                                <td>@item.RWAId</td>
                                <td>@item.AuthorityName</td>
-                               <td>@item.MobileNumber</td>
-                               <td>@item.PhoneNumber</td>
+                               <td>@item.MobileNumber / @item.PhoneNumber</td>
+                               <td>@item.LandlineNumber</td>
                                <td>@item.EmailId</td>
                                <td>@item.Location , @item.CityName, @item.StateName</td>
                                <td>
-                                   <a href="/Images/@item.CertificateImage">
-                                   <img src="/Images/@item.CertificateImage" style="width:100px; height:80px;"/>
-                                   </a>
+                                   @item.CertificateNo
+                                   @if (@item.CertificateImage != null)
+                                   {
+                                       <a href="/Images/@item.CertificateImage">
+                                           <img src="/Images/@item.CertificateImage" style="width:100px; height:80px;" />
+                                       </a>
+                                   }
+                                   else
+                                   {
+                                       <p>No Image</p>
+                                   }
+
                                </td>
                                <td>
                                    @if (item.IsApproved)
@@ -80,11 +93,22 @@
                                    }
                                </td>
                                <td>
+                                   @if (item.IsBankUpdateApproved)
+                                   {
+                                       <a href="/RWA/UpdateBankUpdateStatus?id=@item.Id" class="btn btn-success">Update Bank Approved</a>
+                                   }
+                                   else
+                                   {
+                                       <a href="/RWA/UpdateBankUpdateStatus?id=@item.Id" class="btn btn-danger">Update Bank Not Approved</a>
+                                   }
+                               </td>
+                               <td>
                                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { onclick = "return confirm('Are sure wants to Edit?');", @class = "btn btn-info" })
 
                                    @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { onclick = "return confirm('Are sure wants to delete?');", @class = "btn btn-danger" })
                                </td>
                            </tr>
+                           count++;
                        }
                    </tbody>
                </table>

@@ -7,10 +7,10 @@
 {
     <div class="row">
         <div class="col-md-4">
-            @Html.TextBoxFor(a => a.sdate, new { @class = "datepicker form-control", required = "required" })
+            @Html.TextBoxFor(a => a.sdate, new { @class = "form-control", required = "required" ,type="date"})
         </div>
         <div class="col-md-4">
-            @Html.TextBoxFor(a => a.edate, new { @class = "datepicker form-control", required = "required" })
+            @Html.TextBoxFor(a => a.edate, new { @class = "form-control", required = "required", type = "date" })
         </div>
         <div class="col-md-4">
             <input type="button" id="test" value="Search" class="btn btn-primary" />

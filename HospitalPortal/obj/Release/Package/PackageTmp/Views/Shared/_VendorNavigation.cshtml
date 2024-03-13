@@ -31,16 +31,16 @@
             </ul>
         </li>
         <!--Gallery Add and Show-->
-        <li class="nav-header">
+        @*<li class="nav-header">
             <a href="/Gallery/Gallery" style="cursor:pointer">
                 <i class="fa fa-pencil"></i> Gallery
             </a>
-        </li>
+        </li>*@
 
         @if (CurrentStatus == false) { }
         else
         {
-        <li class="nav-header"><a href="/Gallery/Gallery/" style="cursor:pointer"><i class="fa fa-image"></i>  Add Gallery</a></li>
+        <li class="nav-header"><a href="/Gallery/Gallery?id=@vendorId" style="cursor:pointer"><i class="fa fa-image"></i>  Add Gallery</a></li>
         <li class="nav-header"><a href="/AddTest/All/" style="cursor:pointer"><i class="fa fa-list"></i>  Add Test</a></li>
         <li class="nav-header"><a href="/RoleUpdate/Department?id=@loginId" style="cursor:pointer"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Add Specialist &amp; Department</a></li>
         <li class="nav-header"><a href="/RoleUpdate/Add?id=@loginId" style="cursor:pointer"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Add Vehicle Type</a></li>

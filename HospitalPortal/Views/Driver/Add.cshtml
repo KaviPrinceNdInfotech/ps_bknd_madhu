@@ -50,31 +50,13 @@
                     <span class="red">
                         @Html.ValidationMessageFor(a => a.DriverName)
                     </span>
-                </div>
-                @*<fieldset style="margin-top:3%; margin-bottom:3%;">
-            <legend><b>Vehicle Images: </b></legend>
-            <div class="form-group">
-                Vehicle Image 1: @Html.TextBoxFor(a => a.DlFile2, new { @class = "form-control", type = "file" })
-                <span class="red">
-                    @Html.ValidationMessageFor(a => a.DlFile1)
-                </span>
-            </div>
-            <div class="form-group">
-                Vehicle Image 2 : @Html.TextBoxFor(a => a.DlFile3, new { @class = "form-control", type = "file" })
-                <span class="red">
-                    @Html.ValidationMessageFor(a => a.DlFile1)
-                </span>
-            </div>
-        </fieldset>*@
-
+                </div> 
                 <div class="form-group">
                     Mobile Number * @Html.TextBoxFor(a => a.MobileNumber, new { @class = "form-control" })
                     <span class="red">
                         @Html.ValidationMessageFor(a => a.MobileNumber)
                     </span>
-                </div>
-
-
+                </div> 
                 <div class="form-group">
                     Email Id  @Html.TextBoxFor(a => a.EmailId, new { @class = "form-control", AutoComplete = "off" })
                     <span class="red">
@@ -97,7 +79,7 @@
                 </div>
 
                 <div class="form-group">
-                    State * @Html.DropDownListFor(a => a.StateMaster_Id, Model.States, "Select", new { @class = "form-control" })
+                    State * @Html.DropDownListFor(a => a.StateMaster_Id, Model.States, "--Select State--", new { @class = "form-control" })
                     <span class="red">
                         @Html.ValidationMessageFor(a => a.StateMaster_Id)
                     </span>
@@ -105,9 +87,9 @@
 
                 <div class="form-group">
                     @{ Html.EnableClientValidation(false);}
-                    City  @Html.DropDownListFor(a => a.CityMaster_Id,
-          Enumerable.Empty<SelectListItem>()
-          , "Select", new { @class = "form-control" })
+                    District * @Html.DropDownListFor(a => a.CityMaster_Id,
+Enumerable.Empty<SelectListItem>()
+, "--Select District--", new { @class = "form-control" })
                     <span class="red">
 
                         @Html.ValidationMessageFor(a => a.CityMaster_Id)
@@ -137,19 +119,27 @@
                         @Html.ValidationMessageFor(a => a.PinCode)
                     </span>
                 </div>
-
-                <div class="form-group">
+                @if (Model.Vendor_Id > 0)
+                {
+                    @Html.HiddenFor(a => a.Vendor_Id)
+                }
+                else
+                {
+                    <div class="form-group">
+                        @Html.HiddenFor(a => a.Vendor_Id)
+                        Franchise Id <input type="text" id="txtVdr" name="txtVdr" class="form-control" placeholder="Search by Company ID" />
+                        <span class="red">
+                            @Html.ValidationMessageFor(a => a.Vendor_Id)
+                        </span>
+                    </div>
+                }
+                @*<div class="form-group">
                     Franchise ID * @Html.TextBoxFor(a => a.RefId, new { @class = "form-control" })
                     <span class="red">
                         @Html.ValidationMessageFor(a => a.RefId)
                     </span>
-                </div>
-                @*<div class="form-group">
-            Your Photo * @Html.TextBoxFor(a => a.DriverImageFile, new { @class = "form-control", type = "file" })
-            <span class="red">
-                @Html.ValidationMessageFor(a => a.DriverImageFile)
-            </span>
-        </div>*@
+                </div>*@
+
                 <fieldset style="margin-top:3%; margin-bottom:3%;">
                     <legend><b>Driver's Licence Images: </b></legend>
                     <div class="form-group">
@@ -180,77 +170,6 @@
                     </span>
                 </div>
 
-                @*<div class="form-group">
-            DL Valid Upto * @Html.TextBoxFor(a => a.DlValidity, new { @class = "form-control dp" })
-            <span class="red">
-                @Html.ValidationMessageFor(a => a.DlValidity)
-            </span>
-        </div>*@
-
-                @*<div class="form-group">
-            PAN Number  @Html.TextBoxFor(a => a.PAN, new { @class = "form-control"})
-            <span class="red">
-                @Html.ValidationMessageFor(a => a.PAN)
-            </span>
-        </div>*@
-                @*<div class="form-group">
-            Aadhar Number  @Html.TextBoxFor(a => a.AadharNumber, new { @class = "form-control"})
-            <span class="red">
-                @Html.ValidationMessageFor(a => a.AadharNumber)
-            </span>
-        </div>*@
-
-                @*<div class="form-group">
-            Kindaly Check
-            <input type="radio" name="image1" value="Aadhar" id="Image1">Aadhar Image
-            <input type="radio" name="image1" value="Pan" id="Image2">Pan Image
-        </div>*@
-                @*<div class="form-group" id="AadharimageDiv" style="display:none">
-            <div class="form-group">
-                Aadhar Image 1*  @Html.TextBoxFor(a => a.AadharImageFile, new { @class = "form-control", type = "file" })
-                <span class="red">
-                    @Html.ValidationMessageFor(a => a.AadharImageFile)
-                </span>
-            </div>
-            <div class="form-group">
-                Aadhar Image 2*  @Html.TextBoxFor(a => a.AadharImageFile2, new { @class = "form-control", type = "file" })
-                <span class="red">
-                    @Html.ValidationMessageFor(a => a.AadharImageFile)
-                </span>
-            </div>
-        </div>*@
-
-                @*<div class="form-group" id="PanimageDiv" style="display:none">
-            <div class="form-group">
-                Pan Image*  @Html.TextBoxFor(a => a.PanImageFile, new { @class = "form-control", type = "file" })
-                <span class="red">
-                    @Html.ValidationMessageFor(a => a.AadharImageFile)
-                </span>
-            </div>
-        </div>*@
-                @*<div class="form-group">
-            Vehicle Type * @Html.DropDownListFor(a => a.VehicleType_Id, Model.VehicleList, "Select", new { @class = "form-control" })
-            <span class="red">
-                @Html.ValidationMessageFor(a => a.VehicleType_Id)
-            </span>
-        </div>*@
-                @*<div class="form-group">
-            Has Police Verification
-            @Html.CheckBoxFor(a => a.IsVerifiedByPolice)
-        </div>*@
-
-                @*<div class="form-group" id="verificationDiv" style="display:none">
-            Police verification doc.
-            @Html.TextBoxFor(a => a.VerificationImage, new { type = "file" })
-        </div>*@
-                @*@if (User.Identity.IsAuthenticated)
-        {
-
-        }
-        else
-        {
-            @Html.Partial("~/Views/Shared/_Terms&ConditionView.cshtml")
-        }*@
                 <div class="form-group">
                     <input type="submit" value="Save" class="btn btn-info" />
                 </div>
@@ -265,6 +184,9 @@
     @Html.Partial("~/Views/Shared/_script.cshtml")
 }
 <script src="/Scripts/Library/jquery-1.7.1.min.js"></script>
+<link href="~/css/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
+<script src="~/js/FranchiseAutoComplete.js"></script>
 <script>
     $("#StateMaster_Id").change(function () {
         var stateId = $(this).val();
@@ -353,12 +275,12 @@
 
 
 @*<script type="text/javascript">
-    google.maps.event.addDomListener(window, 'load', function () {
-        var options = {
-            types: ['(cities)'],
-            componentRestrictions: { country: "in" }
-        };
-        var input = document.getElementById('Location');
-        var places = new google.maps.places.Autocomplete(input, options);
-    });
-</script>*@
+        google.maps.event.addDomListener(window, 'load', function () {
+            var options = {
+                types: ['(cities)'],
+                componentRestrictions: { country: "in" }
+            };
+            var input = document.getElementById('Location');
+            var places = new google.maps.places.Autocomplete(input, options);
+        });
+    </script>*@

@@ -5,11 +5,11 @@
     Layout= null;
 }
 
-<h2>Ambulance TDS Report</h2>
+
 
 <link href="/Styles/bootstrap.min.css" rel="stylesheet" />
 <div style="margin:auto; width:85%">
-
+    <h2>Ambulance TDS Report</h2>
     <div class="row" style="margin-bottom: 3%;">
         <div class="col-md-3">
             @Html.TextBoxFor(a => a.RequestDate, new { @class = "datepicker form-control", required = "required" })
@@ -71,16 +71,16 @@
                             @ViewBag.Commission %
                         </td>
                         @{
-                            double amt = (Math.Round(item.Amount * ViewBag.Commission) / 100);
-                            double Value = item.Amount - amt;
+                            double amt = (Math.Round((double)item.Amount * ViewBag.Commission) / 100);
+                            double Value = (double)item.Amount - amt;
                         }
                         <td>₹ @Math.Round(amt)</td>
                         <td>₹ @Math.Round(Value)</td>
                     </tr>
-                            }
+                }
             </tbody>
         </table>
-                            }
+    }
 
     <nav aria-label="Page navigation example">
         <ul class="pagination">

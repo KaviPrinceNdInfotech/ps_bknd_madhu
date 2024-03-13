@@ -106,7 +106,7 @@ else
                         double? razarfeeamt = razorpaycomm - basicamt;
 
                     }
-                    <td>@razarfeeamt</td>
+                    <td>@String.Format("{0:F2}", razarfeeamt) </td>
                     <td>
                         @ViewBag.gstAmount
                     </td>

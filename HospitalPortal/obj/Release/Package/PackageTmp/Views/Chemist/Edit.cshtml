@@ -25,11 +25,7 @@
         @Html.HiddenFor(a => a.Id)
         @Html.HiddenFor(a => a.IsDeleted)
         @Html.HiddenFor(a => a.IsApproved)
-        @Html.HiddenFor(a => a.AdminLogin_Id)
-        @Html.HiddenFor(a => a.EmailId)
-        @Html.HiddenFor(a => a.MobileNumber)
-        @Html.HiddenFor(a => a.Password)
-        @Html.HiddenFor(a => a.ConfirmPassword)
+        @Html.HiddenFor(a => a.AdminLogin_Id)   
         @Html.HiddenFor(a => a.LicenceImage)
         @Html.HiddenFor(a => a.IsCheckedTermsCondition)
         @Html.Partial("~/Views/Shared/_DisplayMessageUpdate.cshtml")
@@ -43,14 +39,30 @@
                         @Html.ValidationMessageFor(a => a.ChemistName)
                     </span>
                 </div>
-
                 <div class="form-group">
                     Shop Name * @Html.TextBoxFor(a => a.ShopName, new { @class = "form-control" })
                     <span class="red">
                         @Html.ValidationMessageFor(a => a.ShopName)
                     </span>
                 </div>
-                 
+                <div class="form-group">
+                    Mobile Number * @Html.TextBoxFor(a => a.MobileNumber, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.MobileNumber)
+                    </span>
+                </div>
+                <div class="form-group">
+                    Email Id * @Html.TextBoxFor(a => a.EmailId, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.EmailId)
+                    </span>
+                </div>
+                <div class="form-group">
+                    GST Number * @Html.TextBoxFor(a => a.GSTNumber, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.GSTNumber)
+                    </span>
+                </div>
 
                 <div class="form-group">
                     State * @Html.DropDownListFor(a => a.StateMaster_Id, Model.States, "Select", new { @class = "form-control" })
@@ -73,16 +85,13 @@ Model.Cities
                     <span class="red">
                         @Html.ValidationMessageFor(a => a.Location)
                     </span>
-                </div>
- 
-
+                </div> 
                 <div class="form-group">
-                    GST Number * @Html.TextBoxFor(a => a.GSTNumber, new { @class = "form-control" })
+                    Licence Validity * @Html.TextBoxFor(a => a.LicenseValidity, new { @class = "form-control" })
                     <span class="red">
-                        @Html.ValidationMessageFor(a => a.GSTNumber)
+                        @Html.ValidationMessageFor(a => a.LicenseValidity)
                     </span>
                 </div>
-
                 @{Html.EnableClientValidation(false);}
                 <div class="form-group">
                     @if (!string.IsNullOrEmpty(Model.LicenceImage))

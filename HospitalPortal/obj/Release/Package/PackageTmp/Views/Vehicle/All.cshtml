@@ -3,6 +3,7 @@
 @{
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
     string role = HospitalPortal.Utility.UserIdentity.UserRole;
+    int count = 1;
 }
 
 
@@ -78,16 +79,7 @@
                             <th>Franchise</th>
                             <th>Vehicle Type</th>
                             <th>Vehicle Category</th>
-                            <th>Driver Charges</th>
-                            @*<th>Tax validity</th>*@
-                            @*<th>Fitness Cert.</th>
-                            <th>Fitness Cert. Validity</th>*@
-                            @*<th>Insurrance doc.</th>
-                            <th>Insurrance Valid upto</th>*@
-                            @*<th>Pollution doc.</th>
-                            <th>Pollution Valid upto</th>*@
-                            @*<th>RC Image</th>
-                            <th>RC Number</th>*@
+                            <th>Driver Charges</th> 
                             @if (role == "admin")
                         {
                                 <th>Approval</th>
@@ -96,10 +88,12 @@
                         </tr>
                     </thead>
                     <tbody>
+
                         @foreach (var item in Model)
-                    {
+                        {
+                            
                             <tr>
-                                <td>@item.Id</td>
+                                <td>@count</td>
                                 <td>@item.VehicleNumber</td>
                                 <td>@item.VehicleOwnerName</td>
                                 <td>
@@ -112,6 +106,7 @@
                                     }
                                     else
                                     {
+                                        <a href="/Admin/ShareToVendor?Id=@item.Id&Role=Vehicle">Change Franchise</a>
                                         @item.VendorName <span>/ @item.UniqueId</span>
                                     }
                                 </td>
@@ -121,92 +116,34 @@
                                     @item.VehicleTypeName
                                 </td>
                                 <td>@item.DriverCharges</td>
-                                @*<td>@item.Validity.ToString("dd-MMM-yyyy")</td>*@
-                                @*<td>
-            <a href="/Images/@item.FitnessCerficateImage">
-                <img src="/Images/@item.FitnessCerficateImage" class="thumb" />
-            </a>
-        </td>*@
 
-                                @*<td>@item.FitnessCertificateValidity.ToString("dd-MMM-yyyy")</td>*@
-                                @*<td>
-            @if (string.IsNullOrEmpty(item.InsuranceImage))
-        {
-                <span>No image</span>
-        }
-        else
-        {
-                <a href="/Images/@item.InsuranceImage"><img src="/Images/@item.InsuranceImage" class="thumb" /></a>
-        }
-        </td>*@
-
-
-                                @*<td>
-            @if (item.InsurranceDate != null)
-        {
-                <span> @item.InsurranceDate.Value.ToString("dd-MMM-yyyy") </span>
-        }
-        </td>*@
-                                @*<td>
-            @if (string.IsNullOrEmpty(item.PollutionImage))
-        {
-                <span>No image</span>
-        }
-        else
-        {
-                <a href="/Images/@item.PollutionImage"><img src="/Images/@item.PollutionImage" class="thumb" /></a>
-        }
-        @*</td>
-        <td>
-            @if (item.PollutionDate != null)
-        {
-                <span> @item.PollutionDate.Value.ToString("dd-MMM-yyyy") </span>
-        }
-        </td>*@
-                                @*<td>
-            @if (string.IsNullOrEmpty(item.RC_Image))
-        {
-                <span>No image</span>
-        }
-        else
-        {
-                <a href="/Images/@item.RC_Image"><img src="/Images/@item.RC_Image" class="thumb" /></a>
-        }
-        </td>*@
-                                @*<td>@item.RC_No</td>*@
 
                                 @if (role == "admin")
                                 {
-                                    @*<td>
+                                    <td>
                                         @if (item.IsApproved)
                                         {
-                                            @Html.ActionLink("Dispproved", "UpdateStatus", new { id = item.Id, IsApproved = false }, new { @class = "btn btn-danger" })
+                                            @Html.ActionLink("Approved", "UpdateStatus", new { id = item.Id }, new { @class = "btn btn-success" })
                                         }
                                         else
                                         {
-                                            @Html.ActionLink("Approved", "UpdateStatus", new { id = item.Id, IsApproved = true }, new { @class = "btn btn-success" })
+                                            @Html.ActionLink("Not Approved", "UpdateStatus", new { id = item.Id }, new { @class = "btn btn-danger" })
                                         }
-                                    </td>*@
-
+                                    </td>
                                     <td>
-                @if (item.IsApproved)
-            {
-                    @Html.ActionLink("Approved", "UpdateStatus", new { id = item.Id }, new { @class = "btn btn-success" })
-            }
-            else
-            {
-                    @Html.ActionLink("Not Approved", "UpdateStatus", new { id = item.Id }, new { @class = "btn btn-danger" })
-            }
-            </td>
-                            <td>
-                                @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { onclick = "return confirm('Are sure wants to Edit?');", @class = "btn btn-info" })
-                                <a href="/Common/AmbulaneBankDetails?Id=@item.Id" class="btn btn-primary">Bank Details</a>
-                                @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { onclick = "return confirm('Are sure wants to delete?');", @class = "btn btn-danger" })
-                            </td>
+                                        @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { onclick = "return confirm('Are sure wants to Edit?');", @class = "btn btn-info" })
+                                        <a href="/Common/AmbulaneBankDetails?Id=@item.Id" class="btn btn-primary">Bank Details</a>
+                                        @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { onclick = "return confirm('Are sure wants to delete?');", @class = "btn btn-danger" })
+                                    </td>
                                 }
                                 <td></td>
+
                             </tr>
-                    }
+
+                            count++;
+
+                        }
+                        
                     </tbody>
                 </table>
             </div>

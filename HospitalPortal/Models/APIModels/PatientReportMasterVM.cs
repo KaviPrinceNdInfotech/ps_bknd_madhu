@@ -37,9 +37,11 @@ namespace HospitalPortal.Models.APIModels
         public string Location { get; set; }
         public string ClinicName { get; set; }
         public string DepartmentName { get; set; }
-        //public TimeSpan StartTime { get; set; }
-        //public TimeSpan EndTime { get; set; }
+        public string PinCode { get; set; }
+        
         public string AvailableTime { get; set; }
+        public int? StateMaster_Id { get; set; }
+        public int? CityMaster_Id { get; set; }
 
     }
 
@@ -53,7 +55,8 @@ namespace HospitalPortal.Models.APIModels
         public string StateName { get; set; }
         public string CityName { get; set; }
         public string PinCode { get; set; }
-
+        public int? CityMaster_Id { get; set; }
+        public int? StateMaster_Id { get; set; }
         public string Location { get; set; }
 
 

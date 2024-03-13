@@ -16,6 +16,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Windows;
 
 namespace HospitalPortal.Controllers
 {
@@ -948,8 +949,9 @@ GROUP BY  P.PatientName,P.Id, P.PatientRegNo, L.LabName";
         public ActionResult AmbulaneBankDetails(int Id)
         {
             var model = new AmbulaneBankDetailsVM();
-            string q = @"select * from Vehicle where Id="+ Id;
-            var data = ent.Database.SqlQuery<AmbulaneBankDetailsVM>(q).ToList();
+            string q = @"select * from Vehicle Vehicle where Id=" + Id;
+            var data = ent.Database.SqlQuery<BankDetailsList>(q).ToList();
+            model.BankDetails = data;
             model.AccountNo = data.FirstOrDefault().AccountNo;
             model.BranchAddress = data.FirstOrDefault().BranchAddress;
             model.BranchName = data.FirstOrDefault().BranchName;
@@ -966,7 +968,40 @@ GROUP BY  P.PatientName,P.Id, P.PatientRegNo, L.LabName";
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
-        
+        [HttpGet]
+        public ActionResult AddDoctorDurationTime()
+        {
+            var model = new DurationDTO();
+            var Q = @"select * from DurationTime";
+            var data = ent.Database.SqlQuery<DurationList>(Q).ToList();
+            model.DurationLists = data;
+            return View(model);
+        }
 
+        [HttpPost]
+        public ActionResult AddDoctorDurationTime(string Duration = "")
+        {
+            if (!ModelState.IsValid)
+            {
+                TempData["msg"] = "Some Error";
+                return RedirectToAction("AddDoctorDurationTime");
+            }
+              
+            var data = new DurationTime();
+            data.Duration = Duration; 
+            ent.DurationTimes.Add(data);
+            ent.SaveChanges();
+            TempData["msg"] = "SuccessFully Saved";
+            return RedirectToAction("AddDoctorDurationTime");
+        }
+
+        public ActionResult DeleteDuration(int Id)
+        {
+            var data = ent.DurationTimes.Find(Id);
+            ent.DurationTimes.Remove(data);
+            ent.SaveChanges();
+            TempData["msg"] = "Deleted Successfully.";
+            return RedirectToAction("AddDoctorDurationTime");
+        }
     }
 }

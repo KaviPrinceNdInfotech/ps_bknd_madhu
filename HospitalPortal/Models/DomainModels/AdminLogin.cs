@@ -27,7 +27,6 @@ namespace HospitalPortal.Models.DomainModels
             this.Nurses = new HashSet<Nurse>();
             this.HealthCheckupCenters = new HashSet<HealthCheckupCenter>();
             this.NurseComplaints = new HashSet<NurseComplaint>();
-            this.Doctors = new HashSet<Doctor>();
             this.Chemists = new HashSet<Chemist>();
         }
     
@@ -63,8 +62,6 @@ namespace HospitalPortal.Models.DomainModels
         public virtual ICollection<HealthCheckupCenter> HealthCheckupCenters { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<NurseComplaint> NurseComplaints { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Doctor> Doctors { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Chemist> Chemists { get; set; }
     }

@@ -25,7 +25,7 @@
         </div>
     </div>
 
-    @using (Html.BeginForm())
+    @*@using (Html.BeginForm("All", "AddTest", FormMethod.Get))
     {
         <div class="row">
             <div class="col-md-4">
@@ -38,14 +38,14 @@
                 <input type="submit" value="Filter" class="btn btn-primary" />
             </div>
         </div>
-    }
+    }*@
 
 
 
 
     <div class="row">
         <div class="col-md-12">
-            <table class="table table-bordered">
+            <table id="myTable" class="table table-bordered">
                 <thead>
                     <tr>
                         <th>Test Name</th>

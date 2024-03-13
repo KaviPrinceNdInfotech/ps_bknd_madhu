@@ -384,7 +384,7 @@ namespace HospitalPortal.Controllers
                 TempData["msg"] = "Some Error";
                 return View(model);
             }
-            TempData["msg"] = "Successfully Shared";
+            TempData["msg"] = "Successfully Shared.";
             return View(model);
         }
 

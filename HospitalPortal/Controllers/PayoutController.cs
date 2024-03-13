@@ -92,6 +92,39 @@ namespace HospitalPortal.Controllers
             }
             return View(model);
         }
+        public ActionResult DoctorDetails(int? NurseId, DateTime? ServiceAcceptanceDate)
+        {
+            var model = new NurseCommissionReports();
+            double commision = ent.Database.SqlQuery<double>(@"select Commission from CommissionMaster where IsDeleted=0 and Name='Nurse'").FirstOrDefault();
+            double gst = ent.Database.SqlQuery<double>(@"select Amount from GSTMaster where IsDeleted=0 and Name='Nurse'").FirstOrDefault();
+            double tds = ent.Database.SqlQuery<double>(@"select Amount from TDSMaster where IsDeleted=0 and Name='Nurse'").FirstOrDefault();
+            
+            string q = @"select ns.Nurse_Id, ns.Id, ns.ServiceStatus, ns.IsPaid, case when ns.PaymentDate is null then 'N/A' else Convert(nvarchar(100), ns.PaymentDate, 103) end as PaymentDate, case when ns.ServiceAcceptanceDate is null then 'N/A' else Convert(nvarchar(100), ns.ServiceAcceptanceDate, 103) end as ServiceAcceptanceDate, Convert(nvarchar(100), ns.RequestDate, 103) as RequestDate,'From ' + Convert(nvarchar(100), ns.StartDate, 103) + ' to ' + Convert(nvarchar(100), ns.EndDate, 103) as ServiceTiming ,IsNull(n.NurseName, 'N/A') as NurseName, IsNull(n.MobileNumber, 'N/A') as NurseMobileNumber, ns.TotalFee from NurseService ns join Nurse n on ns.Nurse_Id = n.Id where ns.ServiceAcceptanceDate BETWEEN DATEADD(DAY, -7, GETDATE()) AND GETDATE() and ns.ServiceStatus='Approved' and ns.IsPaid = 1 and ns.Nurse_Id=" + NurseId + " order by ns.Id desc";
+
+            var data = ent.Database.SqlQuery<NurseAppointmentList>(q).ToList();
+            if (data.Count() == 0)
+            {
+                TempData["msg"] = "Something Went Wrong.";
+            }
+            else
+            {
+                ViewBag.Amount = commision;
+                ViewBag.gstAmount = (double?)gst;
+                ViewBag.tdsAmount = (double?)tds;
+                model.NurseName = data.FirstOrDefault().NurseName;
+                model.NurseId = data.FirstOrDefault().Nurse_Id;
+                model.NurseAppointmentList = data;
+                foreach (var item in data)
+                {
+                    var razorcomm = item.TotalFee * (2.36 / 100);
+                    // var razorcommafter = razorcomm * 2.36 / 100;
+                    var totalrazorcomm = razorcomm;
+                    item.Amountwithrazorpaycomm = item.TotalFee + totalrazorcomm;
+
+                }
+            }
+            return View(model);
+        }
         public ActionResult PayDoctor(int Doctor_Id, double Amount)
         {
             var model = new DoctorPayOut();
@@ -617,11 +650,14 @@ where trm.EntryDate between DateAdd(DD,-7,GETDATE() ) and GETDATE() and trm.IsPa
                     model.Ambulance = data;
                     foreach (var item in data)
                     {
-                        var razorcomm = (double?)item.Amount * (2.36 / 100);
+                        //var razorcomm = (double?)item.Amount * (2.36 / 100);
+                        //// var razorcommafter = razorcomm * 2.36 / 100;
+                        //var totalrazorcomm = razorcomm;
+                        //item.Amountwithrazorpaycomm = (int?)((double?)item.Amount + totalrazorcomm);
+                        var razorcomm = ((double?)item.Amount * 2) / 100;
                         // var razorcommafter = razorcomm * 2.36 / 100;
                         var totalrazorcomm = razorcomm;
-                        item.Amountwithrazorpaycomm = (int?)((double?)item.Amount + totalrazorcomm);
-
+                        item.Amountwithrazorpaycomm = ((double?)item.Amount + totalrazorcomm);
                     }
                 }
             }
@@ -649,7 +685,7 @@ where trm.EntryDate between Convert(datetime,'" + dateCriteria + "',103) and Con
                     model.Ambulance = data1;
                     foreach (var item in data1)
                     {
-                        var razorcomm = (double?)item.Amount * (2.36 / 100);
+                        var razorcomm = ((double?)item.Amount * 2) / 100;
                         // var razorcommafter = razorcomm * 2.36 / 100;
                         var totalrazorcomm = razorcomm;
                         item.Amountwithrazorpaycomm = ((double?)item.Amount + totalrazorcomm);

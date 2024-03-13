@@ -952,6 +952,9 @@
     <Compile Include="Models\DomainModels\Content.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\DomainModels\DayName.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\DomainModels\Department.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -1001,6 +1004,9 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DomainModels\DriverPayOut.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\DurationTime.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DomainModels\Employee.cs">
@@ -1385,6 +1391,7 @@
     <Compile Include="Models\ViewModels\DoctorCommissionReport.cs" />
     <Compile Include="Models\ViewModels\DoctorReports.cs" />
     <Compile Include="Models\ViewModels\DoctorslotDTO.cs" />
+    <Compile Include="Models\ViewModels\DurationDTO.cs" />
     <Compile Include="Models\ViewModels\EmployeeNameVM.cs" />
     <Compile Include="Models\ViewModels\EverifyUploadModel.cs" />
     <Compile Include="Models\ViewModels\ExpenseReportDTO.cs" />
@@ -2141,6 +2148,8 @@
     <Content Include="Views\Charges\ViewDoctorSlot.cshtml" />
     <Content Include="Views\Chemist\AddChemistMedicine.cshtml" />
     <Content Include="Views\Chemist\MedicineList.cshtml" />
+    <Content Include="Views\Common\AddDoctorDurationTime.cshtml" />
+    <Content Include="Views\CommisionReport\DoctorDetails.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

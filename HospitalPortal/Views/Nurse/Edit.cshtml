@@ -24,11 +24,9 @@
         @Html.HiddenFor(a => a.Id)
         @Html.HiddenFor(a => a.IsDeleted)
         @Html.HiddenFor(a => a.AdminLogin_Id)
-        @Html.HiddenFor(a => a.IsApproved)
-        @Html.HiddenFor(a => a.EmailId)
-        @Html.HiddenFor(a => a.MobileNumber)
-        @Html.HiddenFor(a => a.Password)
-        @*@Html.HiddenFor(a => a.AadharImage)*@
+        @Html.HiddenFor(a => a.IsApproved) 
+        @Html.HiddenFor(a => a.PanImage)
+        @Html.HiddenFor(a => a.NurseImage)
         @Html.HiddenFor(a => a.CertificateImage)
         @Html.HiddenFor(a => a.VerificationDoc)
         @Html.HiddenFor(a => a.IsCheckedTermsCondition)
@@ -44,6 +42,20 @@
                         @Html.ValidationMessageFor(a => a.NurseName)
                     </span>
                 </div>
+                <div class="form-group">
+                    @{Html.EnableClientValidation(false);}
+                    @if (!string.IsNullOrEmpty(Model.NurseImage))
+                    {
+                        <img src="/Images/@Model.NurseImage" class="thumb" />
+                    }
+                    Nurse Image * @Html.TextBoxFor(a => a.NurseImageBase, new { @class = "form-control", type = "file" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.NurseImageBase)
+                    </span>
+                    @{Html.EnableClientValidation(true);}
+
+
+                </div>
 
                 <div class="form-group">
                     Nurse Profile * @Html.DropDownListFor(a => a.NurseType_Id, Model.NurseTypes, "Select", new { @class = "form-control" })
@@ -51,19 +63,30 @@
                         @Html.ValidationMessageFor(a => a.NurseType_Id)
                     </span>
                 </div>
-                 
+                <div class="form-group">
+                    Mobile Number * @Html.TextBoxFor(a => a.MobileNumber, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.MobileNumber)
+                    </span>
+                </div>
+                <div class="form-group">
+                    Email Id * @Html.TextBoxFor(a => a.EmailId, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.EmailId)
+                    </span>
+                </div>
 
                 <div class="form-group">
-                    State * @Html.DropDownListFor(a => a.StateMaster_Id, Model.States, "Select", new { @class = "form-control" })
+                    State * @Html.DropDownListFor(a => a.StateMaster_Id, Model.States, "--Select State--", new { @class = "form-control" })
                     <span class="red">
                         @Html.ValidationMessageFor(a => a.StateMaster_Id)
                     </span>
                 </div>
 
                 <div class="form-group">
-                    City * @Html.DropDownListFor(a => a.CityMaster_Id,
+                    District * @Html.DropDownListFor(a => a.CityMaster_Id,
 Model.Cities
-, "Select", new { @class = "form-control" })
+, "--Select District", new { @class = "form-control" })
                     <span class="red">
                         @Html.ValidationMessageFor(a => a.CityMaster_Id)
                     </span>
@@ -107,7 +130,27 @@ Model.Cities
                     <span class="red">
                         @Html.ValidationMessageFor(a => a.CertificateNumber)
                     </span>
-                </div> 
+                </div>
+                <div class="form-group">
+                    Pan Number* @Html.TextBoxFor(a => a.PAN, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.PAN)
+                    </span>
+                </div>
+                <div class="form-group">
+                    @{Html.EnableClientValidation(false);}
+                    @if (!string.IsNullOrEmpty(Model.PanImage))
+                    {
+                        <img src="/Images/@Model.PanImage" class="thumb" />
+                    }
+                    Pan Image * @Html.TextBoxFor(a => a.PanImageFile, new { @class = "form-control", type = "file" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.PanImageFile)
+                    </span>
+                    @{Html.EnableClientValidation(true);}
+
+
+                </div>
 
                 <div class="form-group">
                     <input type="submit" value="Update" class="btn btn-info" />
