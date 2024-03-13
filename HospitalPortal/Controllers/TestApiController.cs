@@ -1330,5 +1330,11 @@ v.VehicleNumber, tm.StatusKey, tm.Lat_Driver, tm.Lang_Driver, pr.VehicelType_Id 
             public Nullable<System.DateTime> PaymentDate { get; set; }
 
         }
+
+        public class Days
+        {
+            public int Id { get; set; }
+            public string Name { get; set; }
+        }
     }
 }

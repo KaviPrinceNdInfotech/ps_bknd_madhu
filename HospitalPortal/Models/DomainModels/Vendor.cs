@@ -46,6 +46,7 @@ namespace HospitalPortal.Models.DomainModels
         public Nullable<bool> IsCheckedTermsCondition { get; set; }
         public string PinCode { get; set; }
         public string About { get; set; }
+        public Nullable<bool> IsBankUpdateApproved { get; set; }
     
         public virtual AdminLogin AdminLogin { get; set; }
         public virtual CityMaster CityMaster { get; set; }

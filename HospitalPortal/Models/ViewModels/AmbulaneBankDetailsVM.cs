@@ -23,6 +23,7 @@ namespace HospitalPortal.Models.ViewModels
         public string BranchName { get; set; }
         public string BranchAddress { get; set; }
         public string HolderName { get; set; }
+        public string MobileNumber { get; set; }
         public string CancelCheque { get; set; }
     }
 }

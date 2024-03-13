@@ -14,17 +14,7 @@
 </style>
 <div id="main">
 
-    @using (Html.BeginForm())
-    {
-        <div class="row">
-            <div class="col-md-4">
-                <input type="text" id="year" class="form-control" placeholder="Enter Any Year" />
-            </div>
-            <div class="col-md-4">
-                <input type="button" id="test" value="Search" class="btn btn-primary" />
-            </div>
-        </div>
-    }
+  
 
     @if (Model.Ambulance == null)
     {

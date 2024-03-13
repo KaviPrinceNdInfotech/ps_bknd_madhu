@@ -63,6 +63,7 @@ namespace HospitalPortal.Models.ViewModels
         public string ConfirmPassword { get; set; }
         public int AdminLogin_Id { get; set; }
         public bool IsApproved { get; set; }
+        public bool IsBankUpdateApproved { get; set; }
         //[Required]
         //public HttpPostedFileBase DriverImageFile { get; set; }
         [Required(ErrorMessage = "Driving Licence Can't Be Empty")]
@@ -192,12 +193,14 @@ namespace HospitalPortal.Models.ViewModels
         public int? Id { get; set; }
         public string DriverName { get; set; }
         public string MobileNumber { get; set; }
+        public string EmailId { get; set; }
         public string VehicleName { get; set; }
         public int StateMaster_Id { get; set; }
        
         public int CityMaster_Id { get; set; }
        
         public string Location { get; set; }
+        public string PinCode { get; set; }
         
         public string DlNumber { get; set; }
         public string DlImage { get; set; }

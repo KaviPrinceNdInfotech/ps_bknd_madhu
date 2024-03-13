@@ -14,23 +14,7 @@
 </style>
 <div id="main">
 
-    @using (Html.BeginForm("WeeklyRecord", "AmbulanceReport", FormMethod.Get))
-    {
-        <div class="row">
-            <div class="col-md-4">
-                Start Date
-                @Html.TextBoxFor(a => a.sdate, new { @class = "datepicker form-control", required = "required" })
-            </div>
-            <div class="col-md-4">
-                End Date
-                @Html.TextBoxFor(a => a.edate, new { @class = "datepicker form-control", required = "required" })
-            </div>
-            <div class="col-md-4">
-                <input type="submit" id="test" value="Search" class="btn btn-primary" />
-            </div>
-        </div>
-    }
-
+    
     @if (Model.Ambulance == null)
     {
         if (TempData["msg"] != null)

@@ -1,6 +1,7 @@
 ﻿@model HospitalPortal.Models.ViewModels.VendorDTO
 @{
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    string role = HospitalPortal.Utility.UserIdentity.UserRole;
 }
 
 <style>
@@ -26,7 +27,11 @@
                 <h3>Edit Your Profile</h3>
             </div>
         </div>
-        <a href="/Vendor/All" class="btn btn-info">Back</a>
+        @if (role == "admin")
+        {
+            <a href="/Vendor/All" class="btn btn-info">Back</a>
+        }
+         
         @Html.HiddenFor(a => a.Id)
         @Html.HiddenFor(a => a.IsDeleted)
         @Html.HiddenFor(a => a.AdminLogin_Id)
@@ -95,8 +100,8 @@
                 <div class="form-group">
                     @{ Html.EnableClientValidation(false);}
                     City * @Html.DropDownListFor(a => a.City_Id,
-                Model.Cities
-                 , "Select", new { @class = "form-control" })
+Model.Cities
+, "Select", new { @class = "form-control" })
                     <span class="red">
                         @Html.ValidationMessageFor(a => a.City_Id)
                     </span>

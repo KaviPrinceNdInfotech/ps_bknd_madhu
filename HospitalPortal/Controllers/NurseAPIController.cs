@@ -241,7 +241,7 @@ join Location l on nl.Location_Id=l.Id
         public IHttpActionResult AppoinmentHistory(int ID)
         {
             var rm = new PatientAppointment();
-            string query = @"Select NS.Id,P.PatientName,P.MobileNumber,P.Location,NS.TotalFee as Amount,NS.StartDate,NS.EndDate from Patient as P
+            string query = @"Select NS.Id,P.PatientName,P.MobileNumber,P.Location+','+ cm.CityName + ', ' + sm.StateName AS Location,NS.TotalFee as Amount,NS.StartDate,NS.EndDate from Patient as P
                    left join NurseService as NS on NS.Patient_Id=P.Id
                 left join Nurse as N on N.Id=NS.Nurse_Id 
                 where N.Id=" + ID + " and NS.ServiceStatus='Approved' order by NS.Id desc";
@@ -278,20 +278,41 @@ join Location l on nl.Location_Id=l.Id
 
         [Route("api/NurseAPI/getNurseList")]
         [HttpGet]
-        public IHttpActionResult getNurseList(int State_Id,int City_Id,int NurseType_Id)
+        //public IHttpActionResult getNurseList(int State_Id,int City_Id,int NurseType_Id,DateTime Startdate,DateTime EndDate)
+        //{
+        //    try
+        //    {
+        //        var model = new NurseListV();
+
+        //        var getdata = ent.NurseServices.Where(n => n.StartDate == Startdate).FirstOrDefault();
+
+
+        //        string query = @"select Nurse.id,Nurse.NurseName,Nurse.Fee,Nurse.About,Nurse.Experience,Nt.NurseTypeName ,(select avg(rating1 + rating2 + rating3 + rating4 + rating5) from Review where Review.pro_Id=Nurse.Id) As Rating  from Nurse
+        //                       left join NurseType as Nt on Nurse.NurseType_Id = Nt.id                            
+        //                       where Nurse.IsDeleted = 0 and Nurse.StateMaster_Id="+ State_Id + " and Nurse.CityMaster_Id="+ City_Id + " and Nurse.NurseType_Id="+ NurseType_Id + " and Nurse.IsApproved=1 group by Nurse.id,Nurse.NurseName,Nurse.Fee,Nurse.About,Nurse.Experience,Nt.NurseTypeName";
+        //        var data = ent.Database.SqlQuery<NurseDetail>(query).ToList();
+        //        model.NurseLists = data;
+        //        return Ok(model);
+        //    }
+        //    catch
+        //    {
+        //        return BadRequest("Server Error");
+        //    }
+        //}
+        public IHttpActionResult GetNurseList(int State_Id, int City_Id, int NurseType_Id, DateTime Startdate, DateTime EndDate)
         {
             try
             {
                 var model = new NurseListV();
 
-                //string query = @"select Nurse.id,Nurse.NurseName,Nurse.Fee,Nurse.About,Nurse.Experience,Nt.NurseTypeName ,(select avg(rating1 + rating2 + rating3 + rating4 + rating5) from Review where Review.pro_Id=Nurse.Id) As Rating  from Nurse
-                //               left join NurseType as Nt on Nurse.NurseType_Id = Nt.id                            
-                //               where Nurse.IsDeleted = 0 and Nurse.Location_id='" + Loc_id + "'group by Nurse.id,Nurse.NurseName,Nurse.Fee,Nurse.About,Nurse.Experience,Nt.NurseTypeName";
-                string query = @"select Nurse.id,Nurse.NurseName,Nurse.Fee,Nurse.About,Nurse.Experience,Nt.NurseTypeName ,(select avg(rating1 + rating2 + rating3 + rating4 + rating5) from Review where Review.pro_Id=Nurse.Id) As Rating  from Nurse
-                               left join NurseType as Nt on Nurse.NurseType_Id = Nt.id                            
-                               where Nurse.IsDeleted = 0 and Nurse.StateMaster_Id="+ State_Id + " and Nurse.CityMaster_Id="+ City_Id + " and Nurse.NurseType_Id="+ NurseType_Id + " and Nurse.IsApproved=1 group by Nurse.id,Nurse.NurseName,Nurse.Fee,Nurse.About,Nurse.Experience,Nt.NurseTypeName";
+                string query = @"SELECT Nurse.id, Nurse.NurseName, Nurse.Fee, Nurse.About, Nurse.Experience, Nt.NurseTypeName, (SELECT AVG(rating1 + rating2 + rating3 + rating4 + rating5) FROM Review WHERE Review.pro_Id = Nurse.Id) AS Rating 
+                 FROM Nurse
+                 LEFT JOIN NurseType AS Nt ON Nurse.NurseType_Id = Nt.id                            
+                 WHERE Nurse.IsDeleted = 0 AND Nurse.StateMaster_Id = " + State_Id + " AND Nurse.CityMaster_Id = " + City_Id + " AND Nurse.NurseType_Id = " + NurseType_Id + " AND Nurse.IsApproved = 1 AND NOT EXISTS (SELECT 1 FROM NurseService WHERE NurseService.Nurse_Id = Nurse.Id AND NurseService.StartDate < '" + EndDate.ToString("yyyy-MM-dd") + "' AND NurseService.EndDate > '" + Startdate.ToString("yyyy-MM-dd") + "') GROUP BY Nurse.id, Nurse.NurseName, Nurse.Fee, Nurse.About, Nurse.Experience, Nt.NurseTypeName";
+
                 var data = ent.Database.SqlQuery<NurseDetail>(query).ToList();
                 model.NurseLists = data;
+
                 return Ok(model);
             }
             catch
@@ -299,6 +320,7 @@ join Location l on nl.Location_Id=l.Id
                 return BadRequest("Server Error");
             }
         }
+
 
         [HttpGet]
         public IHttpActionResult NurseDetails(int id) 
@@ -318,7 +340,7 @@ where Nurse.id ='"+ id + "' group by Nurse.id,Nurse.NurseName,Nurse.Fee,Nurse.Ab
         public IHttpActionResult GetNurseProfile(int Id)
         {
             var rm = new Nurse();
-          string query= @" select  Nurse.id,Nurse.NurseName,Nurse.EmailId,Nurse.MobileNumber,Nurse.Location,Nurse.PinCode ,sm.StateName,cm.CityName from Nurse as Nurse with(nolock)
+          string query= @"select  Nurse.Id,Nurse.NurseName,Nurse.EmailId,Nurse.MobileNumber,Nurse.Location,Nurse.PinCode ,sm.StateName,cm.CityName,Nurse.StateMaster_Id,Nurse.CityMaster_Id from Nurse as Nurse with(nolock)
           left join citymaster as cm with(nolock) on cm.id = Nurse.CityMaster_Id
         left join statemaster as sm with(nolock) on sm.id = Nurse.stateMaster_Id where Nurse.id = " + Id + "";
             var NurseProfile = ent.Database.SqlQuery<GetNurseProfile>(query).FirstOrDefault();
@@ -329,14 +351,13 @@ where Nurse.id ='"+ id + "' group by Nurse.id,Nurse.NurseName,Nurse.Fee,Nurse.Ab
         [HttpPost]
         [Route("api/NurseAPI/UpdateNurseProfile")]
         public IHttpActionResult UpdateNurseProfile(NurseUpdate model)
-        {
-            
+        {            
             try
-            {
-                              
+            {                              
                 var data = ent.Nurses.Where(a => a.Id == model.Id).FirstOrDefault();
                 data.NurseName = model.NurseName;
                 data.MobileNumber = model.MobileNumber;
+                data.EmailId = model.EmailId;
                 data.StateMaster_Id = model.StateMaster_Id;
                 data.CityMaster_Id = model.CityMaster_Id;
                 data.Location = model.Location;
@@ -344,7 +365,7 @@ where Nurse.id ='"+ id + "' group by Nurse.id,Nurse.NurseName,Nurse.Fee,Nurse.Ab
                
                 ent.SaveChanges();
                 rm.Status = 1;
-                rm.Message = " Nurse Profile has been updated.";
+                rm.Message = "Nurse Profile has been updated.";
             }
             catch (Exception ex)
             {
@@ -356,8 +377,8 @@ where Nurse.id ='"+ id + "' group by Nurse.id,Nurse.NurseName,Nurse.Fee,Nurse.Ab
         }
 
          
-        [System.Web.Http.HttpPost]
-        [System.Web.Http.Route("api/NurseAPI/Nurse_UploadReport")]
+        [HttpPost]
+        [Route("api/NurseAPI/Nurse_UploadReport")]
         public IHttpActionResult Nurse_UploadReport(Nurse_uploadreport model)
         {
             string[] allowedExtensions = { ".jpg", ".jpeg", ".png" };

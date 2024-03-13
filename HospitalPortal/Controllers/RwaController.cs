@@ -6,9 +6,11 @@ using HospitalPortal.Utilities;
 using log4net;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using static HospitalPortal.Utilities.EmailOperations;
 
 namespace HospitalPortal.Controllers
 {
@@ -144,17 +146,15 @@ namespace HospitalPortal.Controllers
         [HttpPost]
         public ActionResult Edit(RWADTO model)
         {
-            model.States = new SelectList(repos.GetAllStates(), "Id", "StateName", model.StateMaster_Id);
-            model.Cities = new SelectList(repos.GetCitiesByState(model.StateMaster_Id), "Id", "CityName", model.CityMaster_Id);
+            var existingrwa = ent.RWAs.Find(model.Id);
+            if (existingrwa == null)
+            {
+                TempData["msg"] = "RWA not found";
+                return RedirectToAction("Edit", new { id = model.Id });
+            }
             try
             {
-                ModelState.Remove("MobileNumber");
-                ModelState.Remove("EmailId");
-                ModelState.Remove("Password");
-                ModelState.Remove("ConfirmPassword");
-                ModelState.Remove("IsCheckedTermsCondition");
-                if (!ModelState.IsValid)
-                    return View(model);
+                
                 if (model.CertificateFile != null)
                 {
                     var verf = FileOperation.UploadImage(model.CertificateFile, "Images");
@@ -166,8 +166,18 @@ namespace HospitalPortal.Controllers
                     model.CertificateImage = verf;
                 }
 
-                var domainModel = Mapper.Map<RWA>(model);
-                ent.Entry(domainModel).State = System.Data.Entity.EntityState.Modified;
+                //var domainModel = Mapper.Map<RWA>(model);
+                existingrwa.AuthorityName = model.AuthorityName; 
+                existingrwa.StateMaster_Id = model.StateMaster_Id;
+                existingrwa.CityMaster_Id = model.CityMaster_Id;
+                existingrwa.Location = model.Location;
+                existingrwa.EmailId = model.EmailId;
+                existingrwa.MobileNumber = model.MobileNumber;
+                existingrwa.LandlineNumber = model.LandlineNumber;
+                existingrwa.Location = model.Location;
+                existingrwa.Pincode = model.PinCode; 
+                existingrwa.PAN = model.PAN; 
+                existingrwa.CertificateImage = model.CertificateImage; 
                 ent.SaveChanges();
                 TempData["msg"] = "ok";
             }
@@ -199,7 +209,35 @@ where v.IsDeleted=0  order by v.Id desc";
             ent.Database.ExecuteSqlCommand(q);
             return RedirectToAction("All");
         }
+        public ActionResult UpdateBankUpdateStatus(int id)
+        {
+            string q = @"update RWA set IsBankUpdateApproved = case when IsBankUpdateApproved=1 then 0 else 1 end where id=" + id;
+            ent.Database.ExecuteSqlCommand(q);
 
+            string mobile = ent.Database.SqlQuery<string>("select MobileNumber from RWA where Id=" + id).FirstOrDefault();
+            string Email = ent.Database.SqlQuery<string>(@"select EmailId from RWA where Id=" + id).FirstOrDefault();
+            string Name = ent.Database.SqlQuery<string>(@"select AuthorityName from RWA where Id=" + id).FirstOrDefault();
+            //var msg = "Dear " + Name + ", Now you Can Upadate your bank details.";
+            //Message.SendSms(mobile, msg);
+            var query = "SELECT IsBankUpdateApproved FROM RWA WHERE Id = @Id";
+            var parameters = new SqlParameter("@Id", id);
+            bool isApproved = ent.Database.SqlQuery<bool>(query, parameters).FirstOrDefault();
+
+            var mailmsg = "Dear " + Name + ", Now you Can Update your bank details.";
+
+            if (isApproved == true)
+            {
+                EmailEF ef = new EmailEF()
+                {
+                    EmailAddress = Email,
+                    Message = mailmsg,
+                    Subject = "PS Wellness Approval Status."
+                };
+                EmailOperations.SendEmainew(ef);
+
+            }
+            return RedirectToAction("All");
+        }
         public ActionResult Delete(int id)
         {
             var data = ent.RWAs.Find(id);

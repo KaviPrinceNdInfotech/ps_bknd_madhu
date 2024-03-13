@@ -1,0 +1,67 @@
+﻿@model HospitalPortal.Models.ViewModels.DurationDTO
+@{
+    ViewBag.Title = "AddDoctorDurationTime";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+ 
+<div style="margin:auto; width:90%">
+
+    <h2>Add Slot Timing</h2>
+    @using (Html.BeginForm("AddDoctorDurationTime", "Common", FormMethod.Post))
+    {
+        <div class="row" style="margin-bottom:3%">
+            <div class="col-md-3">
+                <input type="text" name="Duration" placeholder="Enter the Duration In Min." class="form-control" />
+            </div>
+            <div class="col-md-3">
+                <input type="submit" value="Submit" class="btn btn-primary" />
+            </div>
+        </div>
+        if (TempData["msg"] != null)
+        {
+            <div class="alert alert-success">
+                @TempData["msg"]
+            </div>
+
+        }
+
+    }
+
+    @if (Model.DurationLists.Count() <= 0)
+    {
+        <div class="alert alert-danger">
+            No data available.
+        </div>
+    }
+    else
+    {
+        <table class="table table-bordered">
+            <tr>
+                <th>
+                    Time
+                </th>
+
+                <th>
+                    Action
+                </th>
+            </tr>
+            <tbody>
+                @foreach (var item in Model.DurationLists)
+                {
+                    <tr>
+                        <td>@item.Duration min. </td>
+                        <td>
+                             
+                            @Html.ActionLink("Delete", "DeleteDuration", new { Id = item.Id },
+            new { onclick = "return confirm('Are sure wants to delete?');", @class = "btn btn-danger" })
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+
+
+

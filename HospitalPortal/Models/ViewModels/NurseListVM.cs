@@ -59,6 +59,8 @@ namespace HospitalPortal.Models.ViewModels
         public string PinCode { get; set; }
 
         public string Location { get; set; }
+        public int? CityMaster_Id { get; set; }
+        public int? StateMaster_Id { get; set; }
 
 
     }

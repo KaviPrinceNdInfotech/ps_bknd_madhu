@@ -122,7 +122,6 @@ namespace HospitalPortal.Models.DomainModels
         public virtual DbSet<DoctorChooseDepartment> DoctorChooseDepartments { get; set; }
         public virtual DbSet<RWA_PaymentReport> RWA_PaymentReport { get; set; }
         public virtual DbSet<RWA_Complaints> RWA_Complaints { get; set; }
-        public virtual DbSet<Doctor> Doctors { get; set; }
         public virtual DbSet<Lab> Labs { get; set; }
         public virtual DbSet<LabComplaint> LabComplaints { get; set; }
         public virtual DbSet<chemistcomplaint> chemistcomplaints { get; set; }
@@ -155,6 +154,9 @@ namespace HospitalPortal.Models.DomainModels
         public virtual DbSet<DriverPayOut> DriverPayOuts { get; set; }
         public virtual DbSet<DoctorTimeSlot> DoctorTimeSlots { get; set; }
         public virtual DbSet<ChemistMedicine> ChemistMedicines { get; set; }
+        public virtual DbSet<DayName> DayNames { get; set; }
+        public virtual DbSet<DurationTime> DurationTimes { get; set; }
+        public virtual DbSet<Doctor> Doctors { get; set; }
     
         [DbFunction("DbEntities", "udf_AppointmentSlots")]
         public virtual IQueryable<udf_AppointmentSlots_Result> udf_AppointmentSlots(Nullable<int> doctorId)

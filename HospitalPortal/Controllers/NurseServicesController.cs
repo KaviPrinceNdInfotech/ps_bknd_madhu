@@ -250,6 +250,8 @@ where ns.Patient_Id="+patientId+ " and ns.ServiceStatus='Approved' order by ns.I
                     NurseTypeId = model.NurseTypeId,
                     StateMaster_Id = model.StateMaster_Id,
                     CityMaster_Id = model.CityMaster_Id,
+                    StartDate = model.StartDate,
+                    EndDate = model.EndDate,
                     NumberOfDay = NumberOfDays,
                 };
 

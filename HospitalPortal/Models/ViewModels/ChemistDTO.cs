@@ -24,6 +24,7 @@ namespace HospitalPortal.Models.ViewModels
         public int Id { get; set; }
         public bool IsDeleted { get; set; }
         public bool IsApproved { get; set; }
+        public bool IsBankUpdateApproved { get; set; }
         [Required (ErrorMessage ="Chemist Name Required")]
         public string ChemistName { get; set; }
         [Required(ErrorMessage = "Shop Name Required")]
@@ -36,7 +37,8 @@ namespace HospitalPortal.Models.ViewModels
         [FormValidations]
         public string EmailId { get; set; }
         public string LicenceImage { get; set; }
-        [Required (ErrorMessage ="Licence Number Required")]
+        public string Certificateimg { get; set; }
+        
         public string PAN { get; set; }
         public string LicenceNumber { get; set; }
         [Required]
@@ -163,6 +165,7 @@ namespace HospitalPortal.Models.ViewModels
 
         public class chemistpro_detail
         {
+            public int Id { get; set; }
             public string ChemistName { get; set; }
             public string EmailId { get; set; }
             public string MobileNumber { get; set; }
@@ -170,6 +173,8 @@ namespace HospitalPortal.Models.ViewModels
             public string StateName { get; set; }
             public string cityname { get; set; }
             public string PinCode { get; set; }
+            public int StateMaster_Id { get; set; }
+            public int CityMaster_Id { get; set; }
         }
 
         public class payoutdetail
@@ -189,7 +194,8 @@ namespace HospitalPortal.Models.ViewModels
             public int StateMaster_Id { get; set; }
             public int CityMaster_Id { get; set; }
             public string Location { get; set; }
-            public string GSTNumber { get; set; }
+            public string GSTNumber { get; set; } 
+            public string EmailId { get; set; } 
             public string LicenceNumber { get; set; }
             public string LicenceImage { get; set; }
             public string LicenceImageBase64 { get; set; }

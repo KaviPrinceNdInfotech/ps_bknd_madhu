@@ -27,28 +27,27 @@ namespace HospitalPortal.Controllers
             decimal gst = ent.Database.SqlQuery<decimal>(@"select Amount from FranchiseGstMaster where IsDeleted=0 and Department='Franchise' and Name='Doctor'").FirstOrDefault();
             decimal tds = ent.Database.SqlQuery<decimal>(@"select Amount from FranchiseTDSMaster where IsDeleted=0 and Department='Franchise' and Name='Doctor'").FirstOrDefault();
             //double payment = ent.Database.SqlQuery<double>(@"select Amount from PaymentMaster p where p.Department='Franchise' and Name='Doctor'").FirstOrDefault();
-            string q = @"select d.DoctorId as UniqueId,Sum(pa.TotalFee) as Amount,v.VendorName, V.Id, v.CompanyName from Doctor d 
+            string q = @"select d.DoctorId ,Sum(pa.TotalFee) as Amount,v.VendorName,v.UniqueId, V.Id, v.CompanyName from Doctor d 
 join Vendor v on d.Vendor_Id = v.Id join dbo.PatientAppointment pa on pa.Doctor_Id = d.Id  
-where pa.AppointmentDate  >= DATEADD(day,-7, GETDATE())   group by v.VendorName,v.CompanyName, V.Id,d.DoctorId";
+where pa.AppointmentDate  >= DATEADD(day,-7, GETDATE())   group by v.VendorName,v.CompanyName, V.Id,d.DoctorId,v.UniqueId";
             var data = ent.Database.SqlQuery<VendorList>(q).ToList();
             if (data.Count() == 0)
             {
                 TempData["msg"] = "No Result";
                 return View(model);
-            }
-            //ViewBag.Payment = payment;
-            //ViewBag.Commission = commision;
+            } 
             ViewBag.VendorCommission = (decimal)vendorCommission;
             ViewBag.gst = (decimal)gst;
             ViewBag.tds = (decimal)tds;
             model.Vendorses = data;
             foreach (var item in data)
             {
-                var razorcomm = item.Amount * (2.36 / 100);
-                // var razorcommafter = razorcomm * 2.36 / 100;
+                var razorcomm = (item.Amount * 2) / 100;
+                // var razorcomm = item.Amount * (2.36 / 100); 
                 var totalrazorcomm = razorcomm;
                 item.Amountwithrazorpaycomm = (decimal)(item.Amount + totalrazorcomm);
-
+                 
+                ViewBag.FraPaidableamt = (item.Amount * 3) / 100;
             }
             return View(model);
         }

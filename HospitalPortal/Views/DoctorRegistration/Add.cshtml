@@ -26,21 +26,14 @@
     <div id="mainContainer">
         @Html.HiddenFor(a => a.Vendor_Id)
         @Html.HiddenFor(a => a.HospitalId)
-        @*<div class="row">
-               <div class="col-md-6">
-                  @Html.ActionLink("Show All", "All", null, new { @class="btn btn-info"})
-               </div>
-            </div>*@
+        
 
         <div class="row">
             <div class="col-md-6">
                 <h3>Doctor Registration</h3>
             </div>
         </div>
-        @*@Html.HiddenFor(a => a.Id)
-            @Html.HiddenFor(a=>a.IsDeleted)
-            @Html.HiddenFor(a=>a.AdminLogin_Id)
-        *@
+        
         @Html.Partial("~/Views/Shared/_DisplayMessage.cshtml")
 
 
@@ -60,7 +53,13 @@
                     </span>
                 </div>
                 <div class="form-group">
-                    Department * @Html.DropDownListFor(a => a.Department_Id, Model.DepartmentList, "Select", new { @class = "form-control" })
+                    Week Off Day @Html.DropDownListFor(a => a.Day_Id, Model.DayList, "--Select Day--", new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.Day_Id)
+                    </span>
+                </div>
+                <div class="form-group">
+                    Department * @Html.DropDownListFor(a => a.Department_Id, Model.DepartmentList, "--Select Department--", new { @class = "form-control" })
                     <span class="red">
                         @Html.ValidationMessageFor(a => a.Department_Id)
                     </span>
@@ -68,7 +67,7 @@
                 <div class="form-group">
                     Specialist * @Html.DropDownListFor(a => a.Specialist_Id,
 Enumerable.Empty<SelectListItem>()
-, "Select", new { @class = "form-control" })
+, "--Select Specialist--", new { @class = "form-control" })
                     <span class="red">
                         @Html.ValidationMessageFor(a => a.Specialist_Id)
                     </span>
@@ -109,7 +108,7 @@ Enumerable.Empty<SelectListItem>()
                 </div>
 
                 <div class="form-group">
-                    State * @Html.DropDownListFor(a => a.StateMaster_Id, Model.States, "Select", new { @class = "form-control" })
+                    State * @Html.DropDownListFor(a => a.StateMaster_Id, Model.States, "--Select State--", new { @class = "form-control" })
                     <span class="red">
                         @Html.ValidationMessageFor(a => a.StateMaster_Id)
                     </span>
@@ -117,7 +116,7 @@ Enumerable.Empty<SelectListItem>()
 
                 <div class="form-group">
                     @{ Html.EnableClientValidation(false);}
-                    City * @Html.DropDownListFor(a => a.CityMaster_Id, Enumerable.Empty<SelectListItem>(), "Select", new { @class = "form-control" })
+                    District * @Html.DropDownListFor(a => a.CityMaster_Id, Enumerable.Empty<SelectListItem>(), "--Select District--", new { @class = "form-control" })
                     <span class="red">
 
                         @Html.ValidationMessageFor(a => a.CityMaster_Id)
@@ -141,10 +140,7 @@ Enumerable.Empty<SelectListItem>()
                         @Html.ValidationMessageFor(a => a.Location)
                     </span>
                 </div>
-                @*<div class="form-group">
 
-           Location* @Html.TextArea("Description", "This is dummy description.", new { @class = "form-control" })
-        </div>*@
                 <div class="form-group">
                     PinCode * @Html.TextBoxFor(a => a.PinCode, new { @class = "form-control" })
                     <span class="red">
@@ -152,10 +148,36 @@ Enumerable.Empty<SelectListItem>()
                     </span>
                 </div>
 
+                @*<div class="form-group">
+            Franchise ID * @Html.TextBoxFor(a => a.RefId, new { @class = "form-control" })
+            <span class="red">
+                @Html.ValidationMessageFor(a => a.RefId)
+            </span>
+        </div>*@
+                @if (Model.Vendor_Id > 0)
+                {
+                    @Html.HiddenFor(a => a.Vendor_Id)
+                }
+                else
+                {
+                    <div class="form-group">
+                        @Html.HiddenFor(a => a.Vendor_Id)
+                        Franchise  <input type="text" id="txtVdr" name="txtVdr" class="form-control" placeholder="Search by Company ID" />
+                        <span class="red">
+                            @Html.ValidationMessageFor(a => a.Vendor_Id)
+                        </span>
+                    </div>
+                }
                 <div class="form-group">
-                    Franchise ID * @Html.TextBoxFor(a => a.RefId, new { @class = "form-control" })
+                    Fee*  @Html.TextBoxFor(a => a.Fee, new { @class = "form-control" })
                     <span class="red">
-                        @Html.ValidationMessageFor(a => a.RefId)
+                        @Html.ValidationMessageFor(a => a.Fee)
+                    </span>
+                </div>
+                <div class="form-group">
+                    Virtual Fee*  @Html.TextBoxFor(a => a.VirtualFee, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.VirtualFee)
                     </span>
                 </div>
                 <div class="form-group">
@@ -187,9 +209,9 @@ Enumerable.Empty<SelectListItem>()
                 </div>
 
                 <div class="form-group">
-                    Licence Validity * @Html.TextBoxFor(a => a.LicenseValidity, new { @class = "form-control dp" })
+                    Licence Validity * @Html.TextBoxFor(a => a.LicenseValidity, new { @class = "form-control", type = "date" })
                     <span class="red">
-                        @Html.ValidationMessageFor(a => a.LicenceNumber)
+                        @Html.ValidationMessageFor(a => a.LicenseValidity)
                     </span>
                 </div>
 
@@ -221,11 +243,6 @@ Enumerable.Empty<SelectListItem>()
                     </span>
                 </div>
 
-
-
-
-
-
                 @*Appointment Slot*@
                 <div class="form-group">
                     <div class="row">
@@ -245,15 +262,20 @@ Enumerable.Empty<SelectListItem>()
                         </div>
                     </div>
                 </div>
-
                 <div class="form-group">
-                    Morning Slot Timing *  @Html.DropDownListFor(a => a.SlotTiming, new List<SelectListItem>() { new SelectListItem() { Text = "10", Value = "10" }, new SelectListItem() { Text="15", Value="1" },
-new SelectListItem() { Text="20", Value="20" },new SelectListItem() { Text="25", Value="25" },new SelectListItem() { Text="30", Value="30" }
-}, "Select Slot Timing", new { @class = "form-control", required = "required" })
+                    Morning Slot Timing * @Html.DropDownListFor(a => a.SlotTiming, Model.DurationTimeList, "Select Duration slot", new { @class = "form-control" })
                     <span class="red">
                         @Html.ValidationMessageFor(a => a.SlotTiming)
                     </span>
                 </div>
+                @*<div class="form-group">
+                            Morning Slot Timing *  @Html.DropDownListFor(a => a.SlotTiming, new List<SelectListItem>() { new SelectListItem() { Text = "10", Value = "10" }, new SelectListItem() { Text="15", Value="15" },
+        new SelectListItem() { Text="20", Value="20" },new SelectListItem() { Text="25", Value="25" },new SelectListItem() { Text="30", Value="30" }
+        }, "Select Slot Timing", new { @class = "form-control", required = "required" })
+                            <span class="red">
+                                @Html.ValidationMessageFor(a => a.SlotTiming)
+                            </span>
+                        </div>*@
 
 
                 <div class="form-group">
@@ -274,15 +296,20 @@ new SelectListItem() { Text="20", Value="20" },new SelectListItem() { Text="25",
                         </div>
                     </div>
                 </div>
-
                 <div class="form-group">
-                    Evening Slot Timing * @Html.DropDownListFor(a => a.SlotTiming2, new List<SelectListItem>() { new SelectListItem() { Text = "10", Value = "10" }, new SelectListItem() { Text="15", Value="1" },
-new SelectListItem() { Text="20", Value="20" },new SelectListItem() { Text="25", Value="25" },new SelectListItem() { Text="30", Value="30" }
-}, "Select Slot Timing", new { @class = "form-control" })
+                    Evening Slot Timing * @Html.DropDownListFor(a => a.SlotTiming2, Model.DurationTimeList, "Select Duration slot", new { @class = "form-control" })
                     <span class="red">
                         @Html.ValidationMessageFor(a => a.SlotTiming2)
                     </span>
                 </div>
+                @*<div class="form-group">
+                            Evening Slot Timing * @Html.DropDownListFor(a => a.SlotTiming2, new List<SelectListItem>() { new SelectListItem() { Text = "10", Value = "10" }, new SelectListItem() { Text="15", Value="15" },
+        new SelectListItem() { Text="20", Value="20" },new SelectListItem() { Text="25", Value="25" },new SelectListItem() { Text="30", Value="30" }
+        }, "Select Slot Timing", new { @class = "form-control" })
+                            <span class="red">
+                                @Html.ValidationMessageFor(a => a.SlotTiming2)
+                            </span>
+                        </div>*@
             </div>
                 @if (User.Identity.IsAuthenticated)
                 {
@@ -311,8 +338,9 @@ new SelectListItem() { Text="20", Value="20" },new SelectListItem() { Text="25",
 <script src="/Scripts/Library/jquery-1.7.1.min.js"></script>
 <link href="~/css/jquery-ui.css" rel="stylesheet" />
 <script src="~/Scripts/jquery-ui.js"></script>
+<script src="~/js/FranchiseAutoComplete.js"></script>
 <script>
-    $(".datepicker").datepicker().datepicker('setdate', 'today');
+    /*$(".datepicker").datepicker().datepicker('setdate', 'today');*/
     $(function () {
         $("#btnAddAttr").click(function () {
             debugger
@@ -366,17 +394,7 @@ new SelectListItem() { Text="20", Value="20" },new SelectListItem() { Text="25",
             var btn = $(this);
             var currentRow = btn.parent().parent();
             alert(currentRow.val());
-            // finding all rows after this row ad increase their index by 1
-            //currentRow.nextAll().find(":input").each(function () {
-            //    var row = $(this);
-            //    var name = row.attr('name');
-            //    var index = parseInt(name.replace(/[^\d.]/g, ''));
-            //    var nextIndex = index - 1;
-            //    var newName = name.replace(index, nextIndex);
-            //    row.attr('name', newName);
-            //    console.log(row.attr("name"));
-            //});
-            //currentRow.remove();
+            
         });
     });
 </script>
@@ -433,17 +451,4 @@ new SelectListItem() { Text="20", Value="20" },new SelectListItem() { Text="25",
 
 <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places"></script>
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyAVJ6WcbMb96HxFwYJTgo3a00yxYj-ha80"></script>
-
-
-
-
-@*<script type="text/javascript">
-    google.maps.event.addDomListener(window, 'load', function () {
-        var options = {
-            types: ['(cities)'],
-            componentRestrictions: { country: "in" }
-        };
-        var input = document.getElementById('Location');
-        var places = new google.maps.places.Autocomplete(input, options);
-    });
-</script>*@
+ 

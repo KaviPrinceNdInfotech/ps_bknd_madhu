@@ -4,15 +4,7 @@
 }
 
 <link href="/css/bootstrap.min.css" rel="stylesheet" />
-
-<div class="row">
-        <div class="col-md-4">
-            @Html.TextBoxFor(a => a.JoiningDate, new { @class = "datepicker form-control"})
-        </div>
-        <div class="col-md-4">
-            <input type="button" id="test" value="Search" class="btn btn-primary" />
-        </div>
-</div>
+ 
 
 @if (Model.Vendors == null)
 {

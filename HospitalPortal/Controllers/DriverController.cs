@@ -8,6 +8,7 @@ using log4net;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -164,7 +165,8 @@ namespace HospitalPortal.Controllers
                     admin.UserID = domainModel.DriverId;                   
                     domainModel.AdminLogin_Id = admin.Id;
                     domainModel.PAN = domainModel.PAN;
-                    domainModel.JoiningDate = DateTime.Now;                   
+                    domainModel.JoiningDate = DateTime.Now;
+                    domainModel.IsBankUpdateApproved = false;
                     ent.Drivers.Add(domainModel);
                     ent.SaveChanges();
                      
@@ -221,130 +223,134 @@ namespace HospitalPortal.Controllers
         [HttpPost]
         public ActionResult Edit(DriverDTO model)
         {
-            using (var tran = ent.Database.BeginTransaction())
+            try
             {
-                if (!string.IsNullOrEmpty(model.OtherCity))
-                    ModelState.Remove("CityMaster_Id");
-                model.VehicleList = new SelectList(repos.GetVehicleType(), "Id", "VehicleTypeName");
-                model.States = new SelectList(repos.GetAllStates(), "Id", "StateName", model.StateMaster_Id);
-                model.Cities = new SelectList(repos.GetCitiesByState(model.StateMaster_Id), "Id", "CityName", model.CityMaster_Id);
-                ModelState.Remove("MobileNumber");
-                ModelState.Remove("Password");
-                ModelState.Remove("ConfirmPassword");
-                ModelState.Remove("DriverImageFile");
-                ModelState.Remove("DlFile");
-                ModelState.Remove("DlFile1");
-                ModelState.Remove("DlFile2");
-                ModelState.Remove("DlFile3");
-                ModelState.Remove("AadharImageFile");
-                ModelState.Remove("JoiningDate");
-                ModelState.Remove("IsCheckedTermsCondition");
-                try
+                var existingdriver = ent.Drivers.Find(model.Id);
+                if (existingdriver == null)
                 {
-                    if (!ModelState.IsValid)
+                    TempData["msg"] = "Driver not found";
+                    return RedirectToAction("Edit", new { id = model.Id });
+                }
+
+                if (model.DlFile != null)
+                {
+                    var dlImg = FileOperation.UploadImage(model.DlFile, "Images");
+                    if (dlImg == "not allowed")
+                    {
+
+                        TempData["msg"] = "Only png,jpg,jpeg files are allowed as DL Image.";
+
                         return View(model);
-                  
-                    if (model.DlFile != null)
-                    {
-                        var dlImg = FileOperation.UploadImage(model.DlFile, "Images");
-                        if (dlImg == "not allowed")
-                        {
-
-                            TempData["msg"] = "Only png,jpg,jpeg files are allowed as DL Image.";
-                            tran.Rollback();
-                            return View(model);
-                        }
-                        model.DlImage1 = dlImg;
                     }
-                    if (model.DlFile1 != null)
-                    {
-                        var dlImg = FileOperation.UploadImage(model.DlFile1, "Images");
-                        if (dlImg == "not allowed")
-                        {
-
-                            TempData["msg"] = "Only png,jpg,jpeg files are allowed as DL Image.";
-                            tran.Rollback();
-                            return View(model);
-                        }
-                        model.DlImage2 = dlImg;
-                    }
-                    if (model.AadharImageFile != null)
-                    {
-                        var adImg = FileOperation.UploadImage(model.AadharImageFile, "Images");
-                        if (adImg == "not allowed")
-                        {
-
-                            TempData["msg"] = "Only png,jpg,jpeg files are allowed as DL Image.";
-                            tran.Rollback();
-                            return View(model);
-                        }
-                        model.AadharImage = adImg;
-                    }
-                    if (model.AadharImageFile2 != null)
-                    {
-                        var adImg2 = FileOperation.UploadImage(model.AadharImageFile2, "Images");
-                        if (adImg2 == "not allowed")
-                        {
-
-                            TempData["msg"] = "Only png,jpg,jpeg files are allowed as DL Image.";
-                            tran.Rollback();
-                            return View(model);
-                        }
-                        model.AadharImage2 = adImg2;
-                    }
-
-                    //Pan Doc
-                    if (model.PanImageFile != null)
-                    {
-                        var PanImg = FileOperation.UploadImage(model.PanImageFile, "Images");
-                        if (PanImg == "not allowed")
-                        {
-                            TempData["msg"] = "Only png,jpg,jpeg files are allowed as Aadhar card document";
-                            model.States = new SelectList(repos.GetAllStates(), "Id", "StateName");
-                            tran.Rollback();
-                            return View(model);
-                        }
-                        model.PanImage = PanImg;
-                    }
-                    // verfn doc
-
-                    if (model.VerificationImage != null)
-                    {
-                        var verf = FileOperation.UploadImage(model.VerificationImage, "Images");
-                        if (verf == "not allowed")
-                        {
-                            TempData["msg"] = "Only png,jpg,jpeg files are allowed as Aadhar card document";
-                            model.States = new SelectList(repos.GetAllStates(), "Id", "StateName");
-                            tran.Rollback();
-                            return View(model);
-                        }
-                        model.VerificationDoc = verf;
-                    }
-                    if (!string.IsNullOrEmpty(model.OtherCity))
-                    {
-                        var cityMaster = new CityMaster
-                        {
-                            CityName = model.OtherCity,
-                            StateMaster_Id = (int)model.StateMaster_Id
-                        };
-                        ent.CityMasters.Add(cityMaster);
-                        ent.SaveChanges();
-                        model.CityMaster_Id = cityMaster.Id;
-                    }
-                    var domainModel = Mapper.Map<Driver>(model);
-                    ent.Entry(domainModel).State = EntityState.Modified;
-                    ent.SaveChanges();
-                    tran.Commit();
-                    TempData["msg"] = "ok";
+                    model.DlImage1 = dlImg;
                 }
-                catch (Exception ex)
+                if (model.DlFile1 != null)
                 {
-                    log.Error(ex.Message);
-                    TempData["msg"] = "Server Error";
-                    tran.Rollback();
+                    var dlImg = FileOperation.UploadImage(model.DlFile1, "Images");
+                    if (dlImg == "not allowed")
+                    {
+
+                        TempData["msg"] = "Only png,jpg,jpeg files are allowed as DL Image.";
+
+                        return View(model);
+                    }
+                    model.DlImage2 = dlImg;
                 }
-                return RedirectToAction("Edit", new { id = model.Id });
+                if (model.AadharImageFile != null)
+                {
+                    var adImg = FileOperation.UploadImage(model.AadharImageFile, "Images");
+                    if (adImg == "not allowed")
+                    {
+
+                        TempData["msg"] = "Only png,jpg,jpeg files are allowed as DL Image.";
+
+                        return View(model);
+                    }
+                    model.AadharImage = adImg;
+                }
+                if (model.AadharImageFile2 != null)
+                {
+                    var adImg2 = FileOperation.UploadImage(model.AadharImageFile2, "Images");
+                    if (adImg2 == "not allowed")
+                    {
+
+                        TempData["msg"] = "Only png,jpg,jpeg files are allowed as DL Image.";
+
+                        return View(model);
+                    }
+                    model.AadharImage2 = adImg2;
+                }
+
+                //Pan Doc
+                if (model.PanImageFile != null)
+                {
+                    var PanImg = FileOperation.UploadImage(model.PanImageFile, "Images");
+                    if (PanImg == "not allowed")
+                    {
+                        TempData["msg"] = "Only png,jpg,jpeg files are allowed as Aadhar card document";
+                        model.States = new SelectList(repos.GetAllStates(), "Id", "StateName");
+
+                        return View(model);
+                    }
+                    model.PanImage = PanImg;
+                }
+                // verfn doc
+
+                if (model.VerificationImage != null)
+                {
+                    var verf = FileOperation.UploadImage(model.VerificationImage, "Images");
+                    if (verf == "not allowed")
+                    {
+                        TempData["msg"] = "Only png,jpg,jpeg files are allowed as Aadhar card document";
+                        model.States = new SelectList(repos.GetAllStates(), "Id", "StateName");
+
+                        return View(model);
+                    }
+                    model.VerificationDoc = verf;
+                }
+                if (!string.IsNullOrEmpty(model.OtherCity))
+                {
+                    var cityMaster = new CityMaster
+                    {
+                        CityName = model.OtherCity,
+                        StateMaster_Id = (int)model.StateMaster_Id
+                    };
+                    ent.CityMasters.Add(cityMaster);
+                    ent.SaveChanges();
+                    model.CityMaster_Id = cityMaster.Id;
+                }
+                var domainModel = Mapper.Map<Driver>(model);
+                existingdriver.DriverName = model.DriverName;
+                existingdriver.EmailId = model.EmailId;
+                existingdriver.StateMaster_Id = model.StateMaster_Id;
+                existingdriver.CityMaster_Id = model.CityMaster_Id;
+                existingdriver.Location = model.Location;
+                existingdriver.EmailId = model.EmailId;
+                existingdriver.MobileNumber = model.MobileNumber;
+                existingdriver.Location = model.Location;
+                existingdriver.PinCode = model.PinCode;
+                existingdriver.VehicleType_Id = model.VehicleType_Id;
+                existingdriver.Paidamount = model.Paidamount;
+                existingdriver.DlNumber = model.DlNumber;
+                existingdriver.DlValidity = model.DlValidity;
+                existingdriver.PAN = model.PAN;
+                existingdriver.DlValidity = model.DlValidity;
+                existingdriver.DlImage1 = model.DlImage1;
+                existingdriver.DlImage2 = model.DlImage2;
+                existingdriver.AadharImage = model.AadharImage;
+                existingdriver.AadharImage2 = model.AadharImage2;
+                existingdriver.PanImage = model.PanImage;
+                ent.SaveChanges();
+
+                TempData["msg"] = "ok";
             }
+            catch (Exception ex)
+            {
+                log.Error(ex.Message);
+                TempData["msg"] = "Server Error";
+            }
+            return RedirectToAction("Edit", new { id = model.Id });
+
         }
 
         public ActionResult All(int? vendorId, string term = null, int? page = 0)
@@ -363,7 +369,7 @@ IsNull(vt.Id,0) as VehicleType_Id,
 d.VerificationDoc,
 d.Vendor_Id,
 IsNull(ve.UniqueId,'N/A') as UniqueId,
-d.IsApproved, d.IsDeleted,
+d.IsApproved,d.IsBankUpdateApproved, d.IsDeleted,
 IsNull(vt.VehicleTypeName,'na') as VehicleTypeName, s.StateName,c.CityName, IsNull(ve.VendorName,'NA') AS VendorName , IsNull(ve.CompanyName,'NA') from Driver d 
 join StateMaster s on d.StateMaster_Id=s.Id
 join CityMaster c on d.CityMaster_Id = c.Id
@@ -401,6 +407,36 @@ where d.IsDeleted=0 order by d.Id desc";
             string Name = ent.Database.SqlQuery<string>(@"select DriverName from Driver where Id=" + id).FirstOrDefault();
             var msg = "Dear " + Name + ", Now you Can Login With Your Registered EmailId " + Email + " and Pasword";
             Message.SendSms(mobile, msg);
+            return RedirectToAction("All");
+        }
+
+        public ActionResult UpdateBankUpdateStatus(int id)
+        {
+            string q = @"update Driver set IsBankUpdateApproved = case when IsBankUpdateApproved=1 then 0 else 1 end where id=" + id;
+            ent.Database.ExecuteSqlCommand(q);
+
+            string mobile = ent.Database.SqlQuery<string>("select MobileNumber from Driver where Id=" + id).FirstOrDefault();
+            string Email = ent.Database.SqlQuery<string>(@"select EmailId from Driver where Id=" + id).FirstOrDefault();
+            string Name = ent.Database.SqlQuery<string>(@"select DriverName from Driver where Id=" + id).FirstOrDefault();
+            //var msg = "Dear " + Name + ", Now you Can Upadate your bank details.";
+            //Message.SendSms(mobile, msg);
+            var query = "SELECT IsBankUpdateApproved FROM Driver WHERE Id = @Id";
+            var parameters = new SqlParameter("@Id", id);
+            bool isApproved = ent.Database.SqlQuery<bool>(query, parameters).FirstOrDefault();
+
+            var mailmsg = "Dear " + Name + ", Now you Can Update your bank details.";
+
+            if (isApproved == true)
+            {
+                EmailEF ef = new EmailEF()
+                {
+                    EmailAddress = Email,
+                    Message = mailmsg,
+                    Subject = "PS Wellness Approval Status."
+                };
+                EmailOperations.SendEmainew(ef);
+
+            }
             return RedirectToAction("All");
         }
 

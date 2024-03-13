@@ -11,18 +11,18 @@
     {
         <div class="form-group">
             Vehicle Category
-            @Html.DropDownListFor(a => a.Category_Id, Model.CategoryList, "Select", new { @class = "form-control", required = "required" })
+            @Html.DropDownListFor(a => a.Category_Id, Model.CategoryList, "--Select Category--", new { @class = "form-control", required = "required" })
         </div>
         <div class="form-group">
             Vehicle Type * @Html.DropDownListFor(a => a.TypeId,
                         Enumerable.Empty<SelectListItem>()
-                        , "Select", new { @class = "form-control", required = "required" })
+                        , "--Select Type--", new { @class = "form-control", required = "required" })
         </div>
         <div class="form-group">
             Charges Apllied for*:
             <select class="form-control" id="AppliedFor" name="AppliedFor" required="required">
                 <option value="">
-                    Select Any
+                    --Select Any--
                 </option>
                 <option value="Driver">
                     Driver

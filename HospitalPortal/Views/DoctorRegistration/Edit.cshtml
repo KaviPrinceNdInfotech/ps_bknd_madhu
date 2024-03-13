@@ -14,28 +14,25 @@
 @using (Html.BeginForm("Edit", "DoctorRegistration", FormMethod.Post, new { @encType = "multipart/form-data" }))
 {
     <div id="mainContainer">
-   
 
+        <a href="/DoctorRegistration/All" class="btn btn-info">Back</a>
         <div class="row">
             <div class="col-md-6">
                 <h3>Update Profile</h3>
             </div>
         </div>
-        <a href="/DoctorRegistration/All" class="bt btn-info">Back</a>
+
         @Html.HiddenFor(a => a.Id)
-        @Html.HiddenFor(a=>a.IsDeleted)
+        @Html.HiddenFor(a => a.IsDeleted)
         @Html.HiddenFor(a => a.AdminLogin_Id)
-        @Html.HiddenFor(a => a.AadharImageName)
-        @*@Html.HiddenFor(a => a.AadharImage2)*@
+        @Html.HiddenFor(a => a.AadharImageName) 
         @Html.HiddenFor(a => a.LicenceImage)
-        @Html.HiddenFor(a => a.IsApproved)
-        @Html.HiddenFor(a => a.EmailId)
+        @*@Html.HiddenFor(a => a.LicenseValidity)*@
+        @Html.HiddenFor(a => a.IsApproved) 
         @Html.HiddenFor(a => a.MobileNumber)
-        @Html.HiddenFor(a => a.Password)
-        @Html.HiddenFor(a=>a.Vendor_Id)
-        @Html.HiddenFor(a=>a.Department_Id)
-        @Html.HiddenFor(a=>a.PinCode)
-        @Html.HiddenFor(a => a.IsCheckedTermsCondition)
+        @Html.HiddenFor(a => a.Password) 
+        @Html.HiddenFor(a => a.Vendor_Id) 
+        @Html.HiddenFor(a => a.PinCode) 
         @Html.Partial("~/Views/Shared/_DisplayMessageUpdate.cshtml")
 
 
@@ -54,7 +51,12 @@
                         @Html.ValidationMessageFor(a => a.ClinicName)
                     </span>
                 </div>
-
+                <div class="form-group">
+                    Week Off Day @Html.DropDownListFor(a => a.Day_Id, Model.DayList, "Select Day", new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.Day_Id)
+                    </span>
+                </div>
                 <div class="form-group">
                     Department * @Html.DropDownListFor(a => a.Department_Id, Model.DepartmentList, "Select", new { @class = "form-control" })
                     <span class="red">
@@ -64,47 +66,24 @@
 
                 <div class="form-group">
                     Specialist * @Html.DropDownListFor(a => a.Specialist_Id,
-                        Model.SpecialistList
-                        , "Select", new { @class = "form-control" })
+Model.SpecialistList
+, "Select", new { @class = "form-control" })
                     <span class="red">
                         @Html.ValidationMessageFor(a => a.Specialist_Id)
                     </span>
                 </div>
-
-                @*<div class="form-group">
-                    Mobile Number * @Html.TextBoxFor(a => a.MobileNumber, new { @class = "form-control" })
+                <div class="form-group">
+                    Email*  @Html.TextBoxFor(a => a.EmailId, new { @class = "form-control" })
                     <span class="red">
-                        @Html.ValidationMessageFor(a => a.MobileNumber)
+                        @Html.ValidationMessageFor(a => a.EmailId)
                     </span>
-                </div>*@
-
+                </div>
                 <div class="form-group">
                     Phone Number  @Html.TextBoxFor(a => a.PhoneNumber, new { @class = "form-control" })
                     <span class="red">
                         @Html.ValidationMessageFor(a => a.PhoneNumber)
                     </span>
                 </div>
-
-                @*<div class="form-group">
-                    Email Id *  @Html.TextBoxFor(a => a.EmailId, new { @class = "form-control" })
-                    <span class="red">
-                        @Html.ValidationMessageFor(a => a.EmailId)
-                    </span>
-                </div>*@
-
-                @*<div class="form-group">
-        Password * @Html.PasswordFor(a => a.Password, new { @class = "form-control" })
-        <span class="red">
-            @Html.ValidationMessageFor(a => a.Password)
-        </span>
-    </div>
-
-    <div class="form-group">
-        Confirm Your Password * @Html.PasswordFor(a => a.ConfirmPassword, new { @class = "form-control" })
-        <span class="red">
-            @Html.ValidationMessageFor(a => a.ConfirmPassword)
-        </span>
-    </div>*@
 
                 <div class="form-group">
                     State * @Html.DropDownListFor(a => a.StateMaster_Id, Model.States, "Select", new { @class = "form-control" })
@@ -114,9 +93,9 @@
                 </div>
 
                 <div class="form-group">
-                    City * @Html.DropDownListFor(a => a.CityMaster_Id,
-                        Model.Cities
-                        , "Select", new { @class = "form-control" })
+                    District * @Html.DropDownListFor(a => a.CityMaster_Id,
+Model.Cities
+, "Select", new { @class = "form-control" })
                     <span class="red">
                         @Html.ValidationMessageFor(a => a.CityMaster_Id)
                     </span>
@@ -128,10 +107,21 @@
                         @Html.ValidationMessageFor(a => a.Location)
                     </span>
                 </div>
-
+                <div class="form-group">
+                    Fee @Html.TextAreaFor(a => a.Fee, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.Fee)
+                    </span>
+                </div>
+                <div class="form-group">
+                    Virtual Fee @Html.TextAreaFor(a => a.VirtualFee, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.VirtualFee)
+                    </span>
+                </div>
                 <div class="form-group">
                     @{ Html.EnableClientValidation(false); }
-                    @if(!string.IsNullOrEmpty(Model.LicenceImage))
+                    @if (!string.IsNullOrEmpty(Model.LicenceImage))
                     {
                         <img src="/Images/@Model.LicenceImage" class="thumb" />
                     }
@@ -149,74 +139,12 @@
                     </span>
                 </div>
                 <div class="form-group">
-                    Licence Validity * @Html.TextBoxFor(a => a.LicenseValidity, new { @class = "form-control datepicker" })
+                    Licence Validity * @Html.TextBoxFor(a => a.LicenseValidity, new { @class = "form-control" })
                     <span class="red">
-                        @Html.ValidationMessageFor(a => a.LicenceNumber)
+                        @Html.ValidationMessageFor(a => a.LicenseValidity)
                     </span>
                 </div>
 
-                @*<div class="form-group">
-                    PAN Number * @Html.TextBoxFor(a => a.PAN, new { @class = "form-control" })
-                    <span class="red">
-                        @Html.ValidationMessageFor(a => a.PAN)
-                    </span>
-                </div>*@
-
-                @*<div class="form-group">
-                    Aadhar Number * @Html.TextBoxFor(a => a.AadharNumber, new { @class = "form-control" })
-                    <span class="red">
-                        @Html.ValidationMessageFor(a => a.AadharNumber)
-                    </span>
-                </div>*@
-
-                <div class="form-group">
-                    @{ Html.EnableClientValidation(false); }
-                   @*@if (string.IsNullOrEmpty(Model.PanImage))
-                   {
-                    <a href="/Images/@Model.AadharImage">
-                        <img src="/Images/@Model.AadharImage" class="thumb" />
-                    </a>
-                                            <a href="/Images/@Model.AadharImage2">
-                                                <img src="/Images/@Model.AadharImage2" class="thumb" />
-                                            </a>
-                   }*@
-                    @*@if (string.IsNullOrEmpty(Model.AadharImage) && string.IsNullOrEmpty(Model.AadharImage2))
-                    {
-                        <a href="/Images/@Model.PanImage">
-                            <img src="/Images/@Model.PanImage" class="thumb" />
-                        </a>
-                    }*@
-                    <div class="form-group">
-                        Kindaly Check
-                        <input type="radio" name="image1" value="Aadhar" id="Image1">Aadhar Image
-                        <input type="radio" name="image1" value="Pan" id="Image2">Pan Image
-                    </div>
-                    
-                    <div class="form-group" id="AadharimageDiv" style="display:none">
-                        @*<div class="form-group">
-                            Aadhar Image 1*  @Html.TextBoxFor(a => a.AadharImageFile, new { @class = "form-control", type = "file" })
-                            <span class="red">
-                                @Html.ValidationMessageFor(a => a.AadharImageFile)
-                            </span>
-                        </div>*@
-                        @*<div class="form-group">
-                            Aadhar Image 2*  @Html.TextBoxFor(a => a.AadharImageFile2, new { @class = "form-control", type = "file" })
-                            <span class="red">
-                                @Html.ValidationMessageFor(a => a.AadharImageFile2)
-                            </span>
-                        </div>*@
-                    </div>
-
-                    @*<div class="form-group" id="PanimageDiv" style="display:none">
-                        <div class="form-group">
-                            Pan Image*  @Html.TextBoxFor(a => a.PanImageFile, new { @class = "form-control", type = "file" })
-                            <span class="red">
-                                @Html.ValidationMessageFor(a => a.PanImageFile)
-                            </span>
-                        </div>
-                    </div>*@
-                    @{ Html.EnableClientValidation(true); }
-                </div>
                 <div class="form-group">
                     <div class="row">
                         <div class="col-md-5">
@@ -237,21 +165,39 @@
 
                 </div>
                 <div class="form-group">
-                    Slot Timing *  @Html.DropDownListFor(a => a.SlotTiming, new List<SelectListItem>() { new SelectListItem() { Text = "10", Value = "10" }, new SelectListItem() { Text="15", Value="15" },
-                                  new SelectListItem() { Text="20", Value="20" },new SelectListItem() { Text="25", Value="25" },new SelectListItem() { Text="30", Value="30" }
-                              }, "Select Slot Timing", new { @class = "form-control", required = "required" })
+                    Morning Slot Timing * @Html.DropDownListFor(a => a.SlotTime, Model.DurationTimeList, "Select Duration slot", new { @class = "form-control" })
                     <span class="red">
-                        @Html.ValidationMessageFor(a => a.SlotTiming)
+                        @Html.ValidationMessageFor(a => a.SlotTime)
                     </span>
                 </div>
-                @*<div class="form-group">
-                    Fee * @Html.TextBoxFor(a => a.Fee, new { @class = "form-control" })
-                    <span class="red">
-                        @Html.ValidationMessageFor(a => a.PAN)
-                    </span>
-                </div>*@
                 <div class="form-group">
-                    <input type="submit" value="Save" class="btn btn-info" />
+                    <div class="row">
+                        <div class="col-md-5">
+                            Start Time2 *  @Html.TextBoxFor(a => a.StartTime2, new { @class = "form-control", type = "time", required = "required" })
+                            <span class="red">
+                                @Html.ValidationMessageFor(a => a.StartTime2)
+                            </span>
+                        </div>
+                        <div class="col-md-2" style="margin-top:5%;"><b>To </b></div>
+
+                        <div class="col-md-5">
+                            End Time2  *  @Html.TextBoxFor(a => a.EndTime2, new { @class = "form-control", type = "time", required = "required" })
+                            <span class="red">
+                                @Html.ValidationMessageFor(a => a.EndTime2)
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="form-group">
+                    Evening Slot Timing * @Html.DropDownListFor(a => a.SlotTime, Model.DurationTimeList, "Select Duration slot", new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.SlotTime)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" value="Update" class="btn btn-info" />
                 </div>
             </div>
         </div>
@@ -264,10 +210,15 @@
 <script src="~/Scripts/jquery-ui.js"></script>
 <script src="/Scripts/Library/jquery-ui-1.8.20.min.js"></script>
 
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+@*<script>
+    $(".dp").datepicker().datepicker('setdate', 'today');
+
+</script>*@
 <script>
-    $(".datepicker").datepicker().datepicker('setdate', 'today');
-</script>
-<script>
+
     //$("#StateMaster_Id").change(function () {
     //    var stateId = $(this).val();
     //    var city = $("#CityMaster_Id");

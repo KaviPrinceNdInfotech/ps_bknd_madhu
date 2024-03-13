@@ -185,14 +185,6 @@
         <EntityTypeShape EntityType="Model.RWA_PaymentReport" Width="1.5" PointX="26.375" PointY="9.75" />
         <AssociationConnector Association="Model.FK_DoctorChooseDepartment_DoctorChooseDepartment" />
         <EntityTypeShape EntityType="Model.RWA_Complaints" Width="1.5" PointX="26.375" PointY="13.75" />
-        <EntityTypeShape EntityType="Model.Doctor" Width="1.125" PointX="11" PointY="2.375" />
-        <AssociationConnector Association="Model.FK__Doctor__AdminLog__2A164134" />
-        <AssociationConnector Association="Model.FK__Cancelled__Docto__1F198FD4" />
-        <AssociationConnector Association="Model.FK__Doctor__StateMas__2DE6D218" />
-        <AssociationConnector Association="Model.FK__DoctorCom__Login__2EDAF651" />
-        <AssociationConnector Association="Model.FK__DoctorPay__Docto__2FCF1A8A" />
-        <AssociationConnector Association="Model.FK__DoctorRep__Docto__30C33EC3" />
-        <AssociationConnector Association="Model.FK__PatientAp__Docto__45BE5BA9" />
         <EntityTypeShape EntityType="Model.Lab" Width="1.5" PointX="0.75" PointY="38" />
         <AssociationConnector Association="Model.FK__BookTestL__Lab_I__55009F39" />
         <AssociationConnector Association="Model.FK__LabPayOut__Lab_I__3F115E1A" />
@@ -234,6 +226,10 @@
         <EntityTypeShape EntityType="Model.DriverPayOut" Width="1.5" PointX="32.375" PointY="25.75" />
         <EntityTypeShape EntityType="Model.DoctorTimeSlot" Width="1.5" PointX="25.375" PointY="33.75" />
         <EntityTypeShape EntityType="Model.ChemistMedicine" Width="1.5" PointX="27.375" PointY="33.75" />
+        <EntityTypeShape EntityType="Model.DayName" Width="1.5" PointX="33.375" PointY="28.75" />
+        <EntityTypeShape EntityType="Model.DurationTime" Width="1.5" PointX="33.375" PointY="31.75" />
+        <EntityTypeShape EntityType="Model.Doctor" Width="1.5" PointX="34.375" PointY="1.375" />
+        <AssociationConnector Association="Model.FK__Cancelled__Docto__1F198FD4" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

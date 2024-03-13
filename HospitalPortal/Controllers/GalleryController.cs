@@ -25,15 +25,21 @@ namespace HospitalPortal.Controllers
         public ActionResult Gallery(int? id)
         {
             var model = new GallertDTO();
-            string q = @"select * from Gallery where IsDeleted=0 and Franchise_Id="+ id + " order by Id desc";
-            var data = ent.Database.SqlQuery<GalleryList>(q).ToList();
-            if(data.Count() == 0)
+            if(id==null || id==0)
             {
-                TempData["msg"] = "No Records";
+                string q = @"select * from Gallery where IsDeleted=0  order by Id desc";
+                var data = ent.Database.SqlQuery<GalleryList>(q).ToList();
+                model.GalleryList = data;
                 return View(model);
             }
-            model.GalleryList = data;
-            return View(model);
+            else
+            {
+                string q = @"select * from Gallery where IsDeleted=0 and Franchise_Id=" + id + " order by Id desc";
+                var data = ent.Database.SqlQuery<GalleryList>(q).ToList();
+                model.GalleryList = data;
+                return View(model);
+            } 
+            
         }
 
         [HttpPost]
@@ -70,7 +76,16 @@ namespace HospitalPortal.Controllers
                 string msg = ex.ToString();
                 TempData["msg"] = "Server Error!";
             }
-            return RedirectToAction("Gallery", new {id=id});
+            
+            if (GetVendorId()!=null)
+            {
+                return RedirectToAction("Gallery", new { id = GetVendorId() });
+            }
+            else
+            {
+                return RedirectToAction("Gallery");
+            }
+            
         }
     }
 }

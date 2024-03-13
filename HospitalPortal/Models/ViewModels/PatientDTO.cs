@@ -60,13 +60,13 @@ namespace HospitalPortal.Models.ViewModels
     public class PatientUpdateReq
     {
         public int Id { get; set; }
-        [Required]
+         
         public string MobileNumber { get; set; }
-        [Required]
-        public int StateMaster_Id { get; set; }
-        [Required]
-        public int CityMaster_Id { get; set; }
-        [Required]
+        public string EmailId { get; set; }
+        public string PatientName { get; set; }
+         
+        public int StateMaster_Id { get; set; } 
+        public int CityMaster_Id { get; set; } 
         public string Location { get; set; }
         public string PinCode { get; set; }
     }

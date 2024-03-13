@@ -8,20 +8,20 @@
 <link href="/Styles/bootstrap.min.css" rel="stylesheet" />
 <h2>Details of <span style="color:red">@Model.NurseName</span></h2>
 
+<a href="/CommisionReport/Nurse" class="btn btn-info">Back</a>
 
 @using (Html.BeginForm())
 {
     <div class="row">
         <div class="col-md-3">
             <input type="hidden" name="NurseId" id="NurseId" value="@Model.NurseId" />
-            @Html.TextBoxFor(a => a.ServiceAcceptanceDate, new { @class = "datepicker form - control", required = "required" })
+            @Html.TextBoxFor(a => a.ServiceAcceptanceDate, new { @class = "form-control", required = "required",type="date" })
         </div>
         <div class="col-md-3">
             <input type="submit" value="Click" />
         </div>
     </div>
 }
-
 
 @if (Model.NurseAppointmentList == null)
 {
@@ -60,10 +60,7 @@ else
             @foreach (var item in Model.NurseAppointmentList)
             {
                 <tr>
-                    <td>@item.RequestDate</td>
-                    @*<td>@item.PatientName</td>
-                        <td>@item.ContactNumber</td>
-                        <td>@item.RegisteredMobileNumber</td>*@
+                    <td>@item.RequestDate</td> 
                     <td>@item.ServiceTiming</td>
                     <td>@item.ServiceStatus</td>
                     <td>@item.TotalDays</td>

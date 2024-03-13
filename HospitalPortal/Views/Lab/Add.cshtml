@@ -43,13 +43,6 @@
                     </span>
                 </div>
 
-                @*<div class="form-group">
-            Shop Name * @Html.TextBoxFor(a => a.ShopName, new { @class = "form-control" })
-            <span class="red">
-                @Html.ValidationMessageFor(a => a.ShopName)
-            </span>
-        </div>*@
-
                 <div class="form-group">
                     Mobile Number * @Html.TextBoxFor(a => a.MobileNumber, new { @class = "form-control" })
                     <span class="red">
@@ -86,7 +79,7 @@
                 </div>
 
                 <div class="form-group">
-                    State * @Html.DropDownListFor(a => a.StateMaster_Id, Model.States, "Select", new { @class = "form-control" })
+                    State * @Html.DropDownListFor(a => a.StateMaster_Id, Model.States, "--Select State--", new { @class = "form-control" })
                     <span class="red">
                         @Html.ValidationMessageFor(a => a.StateMaster_Id)
                     </span>
@@ -94,9 +87,9 @@
 
                 <div class="form-group">
                     @{ Html.EnableClientValidation(false);}
-                    City  @Html.DropDownListFor(a => a.CityMaster_Id,
-    Enumerable.Empty<SelectListItem>()
-    , "Select", new { @class = "form-control" })
+                    District * @Html.DropDownListFor(a => a.CityMaster_Id,
+Enumerable.Empty<SelectListItem>()
+, "--Select District--", new { @class = "form-control" })
                     <span class="red">
 
                         @Html.ValidationMessageFor(a => a.CityMaster_Id)
@@ -114,17 +107,7 @@
                     </span>
                 </div>
 
-                @*<div class="form-group">
-                            @{ Html.EnableClientValidation(false);}
-                            Location * @Html.DropDownListFor(a => a.Location_Id,
-        Enumerable.Empty<SelectListItem>()
-        , "Select", new { @class = "form-control" })*@
 
-                @*<span class="red">
-                @Html.ValidationMessageFor(a => a.Location_Id)
-            </span>
-            @{ Html.EnableClientValidation(true);}
-        </div>*@
 
                 <div class="form-group">
                     Other Location (If you are not able to find it above )
@@ -134,7 +117,7 @@
                     </span>
                 </div>
                 <div class="form-group">
-                    Location* @Html.TextAreaFor(a => a.Location, new { @class = "form-control" })
+                    Location * @Html.TextAreaFor(a => a.Location, new { @class = "form-control" })
                     <span class="red">
                         @Html.ValidationMessageFor(a => a.Location)
                     </span>
@@ -146,12 +129,26 @@
                     </span>
                 </div>
 
-                <div class="form-group">
-                    Franchise ID * @Html.TextBoxFor(a => a.RefId, new { @class = "form-control" })
-                    <span class="red">
-                        @Html.ValidationMessageFor(a => a.RefId)
-                    </span>
-                </div>
+                @*<div class="form-group">
+                        Franchise ID * @Html.TextBoxFor(a => a.RefId, new { @class = "form-control" })
+                        <span class="red">
+                            @Html.ValidationMessageFor(a => a.RefId)
+                        </span>
+                    </div>*@
+                @if (Model.Vendor_Id > 0)
+                {
+                    @Html.HiddenFor(a => a.Vendor_Id)
+                }
+                else
+                {
+                    <div class="form-group">
+                        @Html.HiddenFor(a => a.Vendor_Id)
+                        Franchise  <input type="text" id="txtVdr" name="txtVdr" class="form-control" placeholder="Search by Company ID" />
+                        <span class="red">
+                            @Html.ValidationMessageFor(a => a.Vendor_Id)
+                        </span>
+                    </div>
+                }
 
                 <div class="form-group">
                     Licence Image File * @Html.TextBoxFor(a => a.LicenceImageFile, new { @class = "form-control", type = "file" })
@@ -180,14 +177,6 @@
                         @Html.ValidationMessageFor(a => a.GSTNumber)
                     </span>
                 </div>
-
-                @*<div class="form-group">
-            PAN Number *  @Html.TextBoxFor(a => a.PAN, new { @class = "form-control" })
-            <span class="red">
-                @Html.ValidationMessageFor(a => a.PAN)
-            </span>
-        </div>*@
-
                 <div class="form-group">
                     Aadhar Number  @Html.TextBoxFor(a => a.AadharNumber, new { @class = "form-control" })
                     <span class="red">
@@ -217,13 +206,6 @@
                     </span>
                 </div>
 
-
-                @*<div class="form-group">
-         ChooseDate  @Html.TextBoxFor(a => a.ChooseDate, new { @class = "form-control dp" })
-            <span class="red">
-                @Html.ValidationMessageFor(a => a.ChooseDate)
-            </span>
-        </div>*@
 
                 <div class="form-group">
                     Pan Image  @Html.TextBoxFor(a => a.PanImageFile, new { @class = "form-control", type = "file" })
@@ -272,6 +254,9 @@
     @Html.Partial("~/Views/Shared/_script.cshtml")
 }
 <script src="/Scripts/Library/jquery-1.7.1.min.js"></script>
+<link href="~/css/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
+<script src="~/js/FranchiseAutoComplete.js"></script>
 @Html.Partial("~/Views/Shared/_StateCityLocCascading.cshtml")
 
 
@@ -282,12 +267,12 @@
 
 
 @*<script type="text/javascript">
-    google.maps.event.addDomListener(window, 'load', function () {
-        var options = {
-            types: ['(cities)'],
-            componentRestrictions: { country: "in" }
-        };
-        var input = document.getElementById('Location');
-        var places = new google.maps.places.Autocomplete(input, options);
-    });
-</script>*@
+        google.maps.event.addDomListener(window, 'load', function () {
+            var options = {
+                types: ['(cities)'],
+                componentRestrictions: { country: "in" }
+            };
+            var input = document.getElementById('Location');
+            var places = new google.maps.places.Autocomplete(input, options);
+        });
+    </script>*@

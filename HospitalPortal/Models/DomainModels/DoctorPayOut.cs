@@ -22,7 +22,5 @@ namespace HospitalPortal.Models.DomainModels
         public Nullable<bool> IsGenerated { get; set; }
         public Nullable<int> PaymentId { get; set; }
         public Nullable<int> Slot_id { get; set; }
-    
-        public virtual Doctor Doctor { get; set; }
     }
 }

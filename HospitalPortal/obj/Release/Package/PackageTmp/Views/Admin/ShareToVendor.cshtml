@@ -7,10 +7,43 @@
 <h2>Share To Vendor</h2>
 <style>
     #main {
-        width:50%;
-        margin:auto;
+        width: 50%;
+        margin: auto;
     }
 </style>
+@if (Model.Role == "Nurse")
+{
+    <a href="/Nurse/All" class="btn btn-info">Back</a>
+}
+else if (Model.Role == "Driver")
+{
+    <a href="/Driver/All" class="btn btn-info">Back</a>
+}
+else if (Model.Role == "Doctor")
+{
+    <a href="/DoctorRegistration/All" class="btn btn-info">Back</a>
+}
+else if (Model.Role == "Lab")
+{
+    <a href="/Lab/All" class="btn btn-info">Back</a>
+}
+else if (Model.Role == "Chemist")
+{
+    <a href="/Chemist/All" class="btn btn-info">Back</a>
+}
+else if (Model.Role == "Patient")
+{
+    <a href="/Patient/PatientList" class="btn btn-info">Back</a>
+}
+else if (Model.Role == "Vehicle")
+{
+    <a href="/Vehicle/All" class="btn btn-info">Back</a>
+}
+else
+{
+<a href="/Admin/Dashboard" class="btn btn-info">Back</a>
+}
+
 <div id="main">
     @using (Html.BeginForm())
     {
@@ -27,7 +60,10 @@
     }
     @if (TempData["msg"] != null)
     {
-        @TempData["msg"]
+        <div class="alert alert-success">
+            @TempData["msg"]
+        </div>
+
     }
 </div>
 

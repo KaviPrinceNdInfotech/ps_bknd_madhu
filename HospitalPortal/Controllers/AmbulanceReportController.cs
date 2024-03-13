@@ -186,13 +186,13 @@ from DriverLocation trm
 join Driver d on d.Id = trm.Driver_Id
 join Vehicle v on v.Driver_Id = trm.Driver_Id
 join Patient p on p.Id = trm.PatientId
-where trm.EntryDate between DateAdd(DD,-7,GETDATE() ) and GETDATE() trm.IsPay='Y' and trm.Id=" + Id;
+where trm.EntryDate between DateAdd(DD,-7,GETDATE() ) and GETDATE() and trm.IsPay='Y' and trm.Id=" + Id;
             var data = ent.Database.SqlQuery<Ambulance>(qry).ToList();
             if (date == null)
             {
                 if (data.Count() == 0)
                 {
-                    TempData["msg"] = "No Record of Current Date";
+                    TempData["msg"] = "No Record of Current Week";
                 }
                 else
                 {
@@ -241,7 +241,7 @@ where Month(trm.EntryDate) = Month(GetDate()) and trm.IsPay='Y' group by v.Vehic
             {
                 if (data.Count() == 0)
                 {
-                    TempData["msg"] = "No Record of Current Date";
+                    TempData["msg"] = "No Record of Current Month";
                 }
                 else
                 {

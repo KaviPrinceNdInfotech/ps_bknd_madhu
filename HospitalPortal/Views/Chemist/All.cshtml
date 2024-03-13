@@ -51,11 +51,11 @@
                          <th>Mobile No</th>
                          <th>Email</th>
                          <th>Address</th>
-                         @*<th>PAN</th>*@
                          <th>GST No.</th>
-                         <th>Licence</th>
+                         <th>Certificate</th>
                          <th>Licence No</th>
                          <th>Approval</th>
+                         <th>Approval for Bank Update</th>
                          <th>Action</th>
                      </tr>
                  </thead>
@@ -66,15 +66,16 @@
                                <td>@item.ChemistId</td>
                                <td>@item.ChemistName</td>
                                <td>
-                                   @if (item.Vendor_Id < 0 || item.Vendor_Id == null)
-                {
-                    if (Role == "admin")
-                    {
+                                   @if (item.Vendor_Id == 0 || item.Vendor_Id == null)
+                                   {
+                                       if (Role == "admin")
+                                       {
                                            <a href="/Admin/ShareToVendor?Id=@item.Id&Role=Chemist">Share To Vendor</a>
                                        }
                                    }
                                    else
                                    {
+                                       <a href="/Admin/ShareToVendor?Id=@item.Id&Role=Chemist">Change Franchise</a>
                                        @item.VendorName<span>/ @item.UniqueId</span>
                                    }
                                </td>
@@ -82,16 +83,16 @@
                                <td>@item.MobileNumber</td>
                                <td>@item.EmailId</td>
                                <td>@item.Location , @item.CityName, @item.StateName</td>
-                              
-                               @*<td>@item.PAN</td>*@
+
+
                                <td>@item.GSTNumber</td>
                                <td>
-                                   <a href="/Images/@item.LicenceImage">
-                                       <img src="/Images/@item.LicenceImage" style="width:100px;height:80px" />
+                                   <a href="/Images/@item.Certificateimg">
+                                       <img src="/Images/@item.Certificateimg" style="width:100px;height:80px" />
                                    </a>
                                </td>
                                <td>@item.LicenceNumber</td>
-                               
+
                                <td>
                                    @if (item.IsApproved)
                                    {
@@ -101,6 +102,17 @@
                                    {
                                        @Html.ActionLink("Not Approved", "UpdateStatus", new { id = item.Id }, new { @class = "btn btn-danger" })
                                    }
+
+                               <td>
+                                   @if (item.IsBankUpdateApproved)
+                                   {
+                                       <a href="/Chemist/UpdateBankUpdateStatus?id=@item.Id" class="btn btn-success">Update Bank Approved</a>
+                                   }
+                                   else
+                                   {
+                                       <a href="/Chemist/UpdateBankUpdateStatus?id=@item.Id" class="btn btn-danger">Update Bank Not Approved</a>
+                                   }
+                               </td>
                                </td>
                                <td>
                                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { onclick = "return confirm('Are sure wants to Edit?');", @class = "btn btn-info" })

@@ -120,7 +120,4 @@ namespace HospitalPortal.Models.ViewModels
         public string RegistrationNumber { get; set; }
         public string SignaturePic { get; set; }
     }
-
-
-
 }

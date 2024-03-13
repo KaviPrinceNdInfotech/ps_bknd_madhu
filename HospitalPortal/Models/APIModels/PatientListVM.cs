@@ -48,6 +48,8 @@ namespace HospitalPortal.Models.APIModels
     public class PatientprofileDetail
     {
         public int id { get; set; }
+        public int StateMaster_Id { get; set; }
+        public int CityMaster_Id { get; set; }
 
         public string PatientName { get; set; }
         public string EmailId { get; set; }

@@ -51,6 +51,5 @@ namespace HospitalPortal.Models.DomainModels
         public virtual Hospital Hospital { get; set; }
         public virtual Hospital Hospital1 { get; set; }
         public virtual Patient Patient { get; set; }
-        public virtual Doctor Doctor { get; set; }
     }
 }

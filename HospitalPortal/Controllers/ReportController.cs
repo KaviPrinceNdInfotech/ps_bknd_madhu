@@ -203,7 +203,7 @@ namespace HospitalPortal.Controllers
             var lab = @"select CONVERT(VARCHAR(10), AppointmentDate, 111) as AppointmentDate1,* from PatientAppointment join Patient on Patient.Id = PatientAppointment.Patient_Id where PatientAppointment.IsPaid=1 and Convert(Date,AppointmentDate)='" + date + "'";
             var data = ent.Database.SqlQuery<AppointmentDetails>(lab).ToList();
             model.AppointmentDetails = data;
-            ViewBag.Total = model.AppointmentDetails.Sum(a => a.Amount);
+            ViewBag.Total = model.AppointmentDetails.Sum(a => a.TotalFee);
             return View(model);
         }
 
@@ -422,7 +422,7 @@ var data = ent.Database.SqlQuery<VendorsDoctors>(q).ToList();
             model.VendorName = datas.FirstOrDefault().VendorName;
             string q = @"select d.Id, v.VendorName, v.CompanyName, d.DriverName, c.CityName from Driver d join Vendor v on d.Vendor_Id = v.Id 
 join CityMaster c on c.Id = d.CityMaster_Id
-where v.Id=" + id + "  group by v.VendorName,v.CompanyName, d.DoctorName,c.CityName,d.Id order by d.Id desc";
+where v.Id=" + id + "  group by v.VendorName,v.CompanyName, d.DriverName,c.CityName,d.Id order by d.Id desc";
 var data = ent.Database.SqlQuery<VendorsDriver>(q).ToList();
             if (data.Count() == 0)
             {
