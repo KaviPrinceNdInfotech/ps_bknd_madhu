@@ -24,12 +24,17 @@ namespace HospitalPortal.Models.ViewModels
     public class VendorList
     {
         public int Id { get; set; }
+        public int Count { get; set; }
         public string VendorName { get; set; }
         public string UniqueId { get; set; }
+        public int TotalPrice { get; set; }
+        public string DoctorId { get; set; }
         public double? Amount { get; set; }
+        public double? FraPaidableamt { get; set; }
         public decimal Amountwithrazorpaycomm { get; set; }
         public decimal? AmountForVehicle { get; set; }
         public string CompanyName { get; set; }
+        public double Counts { get; set; }
       
     }
 
@@ -115,6 +120,7 @@ namespace HospitalPortal.Models.ViewModels
     public class VendorsVehicle
     {
         public int Id { get; set; }
+        public int TotalPrice { get; set; }
         public string VehicleNumber { get; set; }
         public string CityName { get; set; }
         public string VendorName { get; set; }

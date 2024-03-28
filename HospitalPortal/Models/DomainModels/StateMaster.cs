@@ -24,7 +24,6 @@ namespace HospitalPortal.Models.DomainModels
             this.Vendors = new HashSet<Vendor>();
             this.Nurses = new HashSet<Nurse>();
             this.HealthCheckupCenters = new HashSet<HealthCheckupCenter>();
-            this.Doctors = new HashSet<Doctor>();
         }
     
         public int Id { get; set; }
@@ -45,7 +44,5 @@ namespace HospitalPortal.Models.DomainModels
         public virtual ICollection<Nurse> Nurses { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<HealthCheckupCenter> HealthCheckupCenters { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Doctor> Doctors { get; set; }
     }
 }

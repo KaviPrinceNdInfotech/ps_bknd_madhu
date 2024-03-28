@@ -58,6 +58,13 @@
           <Property Name="IsDeleted" Type="bit" />
           <Property Name="EntryDate" Type="datetime" />
         </EntityType>
+        <EntityType Name="DayNames">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" />
+        </EntityType>
         <EntityType Name="Discount">
           <Key>
             <PropertyRef Name="Id" />
@@ -92,6 +99,9 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="StartTime" Type="time" Precision="7" />
           <Property Name="EndTime" Type="time" Precision="7" />
+          <Property Name="Doctor_Id" Type="int" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="EntryDate" Type="datetime" />
         </EntityType>
         <EntityType Name="DriverComplaint">
           <Key>
@@ -104,6 +114,13 @@
           <Property Name="IsDeleted" Type="bit" />
           <Property Name="IsResolved" Type="bit" />
           <Property Name="Others" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="DurationTime">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Duration" Type="nvarchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="FraAddVehicleType">
           <Key>
@@ -401,6 +418,14 @@ warning 6002: The table/view 'admin_Hospital.admin_Hospital.franchiseRole' does 
           <Property Name="Slotid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="SlotTime" Type="nvarchar" MaxLength="20" />
         </EntityType>
+        <EntityType Name="TransactionFeeMaster">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Fee" Type="float" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" />
+        </EntityType>
         <EntityType Name="UserWallet">
           <Key>
             <PropertyRef Name="Id" />
@@ -592,6 +617,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <Property Name="ConfirmPassword" Type="nvarchar" MaxLength="250" />
           <Property Name="LicenceImage" Type="nvarchar" MaxLength="500" />
           <Property Name="About" Type="nvarchar" MaxLength="500" />
+          <Property Name="IsBankUpdateApproved" Type="bit" />
         </EntityType>
         <EntityType Name="ChemistPayOut">
           <Key>
@@ -723,6 +749,9 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <Property Name="Qualification" Type="nvarchar" MaxLength="250" />
           <Property Name="RegistrationNumber" Type="nvarchar" MaxLength="250" />
           <Property Name="SignaturePic" Type="nvarchar(max)" />
+          <Property Name="VirtualFee" Type="float" />
+          <Property Name="Day_Id" Type="int" />
+          <Property Name="IsBankUpdateApproved" Type="bit" />
         </EntityType>
         <EntityType Name="DoctorClinics">
           <Key>
@@ -802,7 +831,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <Property Name="MobileNumber" Type="nvarchar" MaxLength="10" Nullable="false" />
           <Property Name="EmailId" Type="nvarchar" MaxLength="100" />
           <Property Name="StateMaster_Id" Type="int" Nullable="false" />
-          <Property Name="CityMaster_Id" Type="numeric" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="CityMaster_Id" Type="int" />
           <Property Name="Location" Type="nvarchar" MaxLength="200" />
           <Property Name="DriverImage" Type="nvarchar" MaxLength="200" />
           <Property Name="DlImage" Type="nvarchar" MaxLength="200" />
@@ -837,6 +866,8 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <Property Name="Lat" Type="float" />
           <Property Name="Lang" Type="float" />
           <Property Name="Charge" Type="int" />
+          <Property Name="IsBankUpdateApproved" Type="bit" />
+          <Property Name="Vehicle_Id" Type="int" />
         </EntityType>
         <EntityType Name="DriverLocation">
           <Key>
@@ -862,6 +893,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <Property Name="ToatlDistance" Type="int" />
           <Property Name="PaymentDate" Type="datetime" />
           <Property Name="RejectedStatus" Type="bit" />
+          <Property Name="PaymentStatus" Type="nvarchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="DriverPayOut">
           <Key>
@@ -1189,6 +1221,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <Property Name="PinCode" Type="nvarchar" MaxLength="50" />
           <Property Name="image" Type="nvarchar" MaxLength="500" />
           <Property Name="LabTest_Id" Type="int" />
+          <Property Name="IsBankUpdateApproved" Type="bit" />
         </EntityType>
         <EntityType Name="LabBooking">
           <Key>
@@ -1391,6 +1424,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <Property Name="about" Type="nvarchar" MaxLength="255" />
           <Property Name="ClinicName" Type="varchar" MaxLength="30" />
           <Property Name="Location_id" Type="int" />
+          <Property Name="IsBankUpdateApproved" Type="bit" />
         </EntityType>
         <EntityType Name="Nurse_Location">
           <Key>
@@ -1595,6 +1629,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <Property Name="CertificateNo" Type="nvarchar" MaxLength="250" />
           <Property Name="About" Type="nvarchar" MaxLength="500" />
           <Property Name="PAN" Type="nvarchar" MaxLength="100" />
+          <Property Name="IsBankUpdateApproved" Type="bit" />
         </EntityType>
         <EntityType Name="RWA_Complaints">
           <Key>
@@ -1820,6 +1855,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <Property Name="IsCheckedTermsCondition" Type="bit" />
           <Property Name="PinCode" Type="nvarchar" MaxLength="250" />
           <Property Name="About" Type="nvarchar" MaxLength="500" />
+          <Property Name="IsBankUpdateApproved" Type="bit" />
         </EntityType>
         <EntityType Name="VendorPayOut">
           <Key>
@@ -1832,18 +1868,6 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <Property Name="PaymentDate" Type="datetime" />
           <Property Name="IsGenerated" Type="bit" />
         </EntityType>
-        <Association Name="FK__BankDetai__Login__269AB60B">
-          <End Role="AdminLogin" Type="Self.AdminLogin" Multiplicity="0..1" />
-          <End Role="BankDetails" Type="Self.BankDetails" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AdminLogin">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="BankDetails">
-              <PropertyRef Name="Login_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK__BookTestL__Patie__56E8E7AB">
           <End Role="Patient" Type="Self.Patient" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
@@ -1970,34 +1994,6 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Chemist__AdminLo__236943A5">
-          <End Role="AdminLogin" Type="Self.AdminLogin" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="Chemist" Type="Self.Chemist" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AdminLogin">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Chemist">
-              <PropertyRef Name="AdminLogin_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Chemist__Vendor___58671BC9">
-          <End Role="Vendor" Type="Self.Vendor" Multiplicity="0..1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="Chemist" Type="Self.Chemist" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Vendor">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Chemist">
-              <PropertyRef Name="Vendor_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK__ChemistPa__Chemi__2645B050">
           <End Role="Chemist" Type="Self.Chemist" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
@@ -2023,32 +2019,6 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
             </Principal>
             <Dependent Role="CityMaster">
               <PropertyRef Name="StateMaster_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__CityTemp__Login___4CC05EF3">
-          <End Role="AdminLogin" Type="Self.AdminLogin" Multiplicity="0..1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="CityTemp" Type="Self.CityTemp" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AdminLogin">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="CityTemp">
-              <PropertyRef Name="Login_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__CityTemp__State___4DB4832C">
-          <End Role="StateMaster" Type="Self.StateMaster" Multiplicity="0..1" />
-          <End Role="CityTemp" Type="Self.CityTemp" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="StateMaster">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="CityTemp">
-              <PropertyRef Name="State_Id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2090,84 +2060,6 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Doctor__AdminLog__2A164134">
-          <End Role="AdminLogin" Type="Self.AdminLogin" Multiplicity="1" />
-          <End Role="Doctor" Type="Self.Doctor" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AdminLogin">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Doctor">
-              <PropertyRef Name="AdminLogin_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Doctor__StateMas__2DE6D218">
-          <End Role="StateMaster" Type="Self.StateMaster" Multiplicity="1" />
-          <End Role="Doctor" Type="Self.Doctor" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="StateMaster">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Doctor">
-              <PropertyRef Name="StateMaster_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__DoctorCom__Login__2EDAF651">
-          <End Role="Doctor" Type="Self.Doctor" Multiplicity="0..1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="DoctorComplaints" Type="Self.DoctorComplaints" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Doctor">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="DoctorComplaints">
-              <PropertyRef Name="Login_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__DoctorPay__Docto__2FCF1A8A">
-          <End Role="Doctor" Type="Self.Doctor" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="DoctorPayOut" Type="Self.DoctorPayOut" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Doctor">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="DoctorPayOut">
-              <PropertyRef Name="Doctor_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__DoctorRep__Docto__30C33EC3">
-          <End Role="Doctor" Type="Self.Doctor" Multiplicity="0..1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="DoctorReports" Type="Self.DoctorReports" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Doctor">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="DoctorReports">
-              <PropertyRef Name="Doctor_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__DoctorRep__Patie__31B762FC">
-          <End Role="Patient" Type="Self.Patient" Multiplicity="0..1" />
-          <End Role="DoctorReports" Type="Self.DoctorReports" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Patient">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="DoctorReports">
-              <PropertyRef Name="Patient_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK__DriverCom__Login__2EDAF651">
           <End Role="Driver" Type="Self.Driver" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
@@ -2182,32 +2074,6 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__DriverLoc__Drive__6ADAD1BF">
-          <End Role="Driver" Type="Self.Driver" Multiplicity="0..1" />
-          <End Role="DriverLocation" Type="Self.DriverLocation" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Driver">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="DriverLocation">
-              <PropertyRef Name="Driver_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__DriverLoc__Patie__7C055DC1">
-          <End Role="Patient" Type="Self.Patient" Multiplicity="0..1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="DriverLocation" Type="Self.DriverLocation" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Patient">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="DriverLocation">
-              <PropertyRef Name="PatientId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK__HealthBoo__Patie__43F60EC8">
           <End Role="Patient" Type="Self.Patient" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
@@ -2219,18 +2085,6 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
             </Principal>
             <Dependent Role="HealthBooking">
               <PropertyRef Name="PatientId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__HealthChe__Admin__3587F3E0">
-          <End Role="AdminLogin" Type="Self.AdminLogin" Multiplicity="1" />
-          <End Role="HealthCheckupCenter" Type="Self.HealthCheckupCenter" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AdminLogin">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="HealthCheckupCenter">
-              <PropertyRef Name="AdminLogin_Id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2258,18 +2112,6 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__HealthChe__State__19DFD96B">
-          <End Role="StateMaster" Type="Self.StateMaster" Multiplicity="1" />
-          <End Role="HealthCheckupCenter" Type="Self.HealthCheckupCenter" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="StateMaster">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="HealthCheckupCenter">
-              <PropertyRef Name="StateMaster_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK__HealthPay__Healt__3864608B">
           <End Role="HealthCheckupCenter" Type="Self.HealthCheckupCenter" Multiplicity="0..1" />
           <End Role="HealthPayOut" Type="Self.HealthPayOut" Multiplicity="*" />
@@ -2279,44 +2121,6 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
             </Principal>
             <Dependent Role="HealthPayOut">
               <PropertyRef Name="Health_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Hospital__AdminL__395884C4">
-          <End Role="AdminLogin" Type="Self.AdminLogin" Multiplicity="1" />
-          <End Role="Hospital" Type="Self.Hospital" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AdminLogin">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Hospital">
-              <PropertyRef Name="AdminLogin_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Hospital__CityMa__48CFD27E">
-          <End Role="CityMaster" Type="Self.CityMaster" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="Hospital" Type="Self.Hospital" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CityMaster">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Hospital">
-              <PropertyRef Name="CityMaster_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Hospital__Vendor__595B4002">
-          <End Role="Vendor" Type="Self.Vendor" Multiplicity="0..1" />
-          <End Role="Hospital" Type="Self.Hospital" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Vendor">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Hospital">
-              <PropertyRef Name="Vendor_Id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2396,94 +2200,6 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__LabPayOut__Lab_I__3F115E1A">
-          <End Role="Lab" Type="Self.Lab" Multiplicity="0..1" />
-          <End Role="LabPayOut" Type="Self.LabPayOut" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Lab">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="LabPayOut">
-              <PropertyRef Name="Lab_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__LabReport__Lab_I__40058253">
-          <End Role="Lab" Type="Self.Lab" Multiplicity="0..1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="LabReport" Type="Self.LabReport" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Lab">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="LabReport">
-              <PropertyRef Name="Lab_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__LabReport__Patie__40F9A68C">
-          <End Role="Patient" Type="Self.Patient" Multiplicity="0..1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="LabReport" Type="Self.LabReport" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Patient">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="LabReport">
-              <PropertyRef Name="Patient_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Nurse__AdminLogi__42E1EEFE">
-          <End Role="AdminLogin" Type="Self.AdminLogin" Multiplicity="1" />
-          <End Role="Nurse" Type="Self.Nurse" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AdminLogin">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Nurse">
-              <PropertyRef Name="AdminLogin_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Nurse__CityMaste__43D61337">
-          <End Role="CityMaster" Type="Self.CityMaster" Multiplicity="1" />
-          <End Role="Nurse" Type="Self.Nurse" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CityMaster">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Nurse">
-              <PropertyRef Name="CityMaster_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Nurse__StateMast__44CA3770">
-          <End Role="StateMaster" Type="Self.StateMaster" Multiplicity="1" />
-          <End Role="Nurse" Type="Self.Nurse" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="StateMaster">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Nurse">
-              <PropertyRef Name="StateMaster_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Nurse__Vendor_Id__70FDBF69">
-          <End Role="Vendor" Type="Self.Vendor" Multiplicity="0..1" />
-          <End Role="Nurse" Type="Self.Nurse" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Vendor">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Nurse">
-              <PropertyRef Name="Vendor_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK__NurseComp__Login__2D87AABC">
           <End Role="AdminLogin" Type="Self.AdminLogin" Multiplicity="0..1" />
           <End Role="NurseComplaint" Type="Self.NurseComplaint" Multiplicity="*" />
@@ -2507,20 +2223,6 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
             </Principal>
             <Dependent Role="NursePayout">
               <PropertyRef Name="Nurse_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__PatientAp__Docto__45BE5BA9">
-          <End Role="Doctor" Type="Self.Doctor" Multiplicity="0..1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="PatientAppointment" Type="Self.PatientAppointment" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Doctor">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="PatientAppointment">
-              <PropertyRef Name="Doctor_Id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2650,42 +2352,6 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__RWA__AdminLogin___498EEC8D">
-          <End Role="AdminLogin" Type="Self.AdminLogin" Multiplicity="1" />
-          <End Role="RWA" Type="Self.RWA" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AdminLogin">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="RWA">
-              <PropertyRef Name="AdminLogin_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__RWA__StateMaster__4B7734FF">
-          <End Role="StateMaster" Type="Self.StateMaster" Multiplicity="1" />
-          <End Role="RWA" Type="Self.RWA" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="StateMaster">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="RWA">
-              <PropertyRef Name="StateMaster_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__RwaPayout__Rwa_I__3429BB53">
-          <End Role="RWA" Type="Self.RWA" Multiplicity="0..1" />
-          <End Role="RwaPayout" Type="Self.RwaPayout" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="RWA">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="RwaPayout">
-              <PropertyRef Name="Rwa_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK__SalaryMas__Emp_I__0E04126B">
           <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
           <End Role="SalaryMaster" Type="Self.SalaryMaster" Multiplicity="*" />
@@ -2709,34 +2375,6 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
             </Principal>
             <Dependent Role="Specialist">
               <PropertyRef Name="Department_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__TestLab__Lab_Id__5224328E">
-          <End Role="Lab" Type="Self.Lab" Multiplicity="0..1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="TestLab" Type="Self.TestLab" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Lab">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="TestLab">
-              <PropertyRef Name="Lab_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__TestLab__Test_Id__51300E55">
-          <End Role="LabTest" Type="Self.LabTest" Multiplicity="0..1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="TestLab" Type="Self.TestLab" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="LabTest">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="TestLab">
-              <PropertyRef Name="Test_Id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2832,20 +2470,6 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Vehicle__Vendor___6166761E">
-          <End Role="Vendor" Type="Self.Vendor" Multiplicity="0..1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="Vehicle" Type="Self.Vehicle" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Vendor">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Vehicle">
-              <PropertyRef Name="Vendor_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK__VehicleCh__Categ__0D99FE17">
           <End Role="MainCategory" Type="Self.MainCategory" Multiplicity="0..1" />
           <End Role="VehicleCharges" Type="Self.VehicleCharges" Multiplicity="*" />
@@ -2867,30 +2491,6 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
             </Principal>
             <Dependent Role="VehicleCharges">
               <PropertyRef Name="TypeId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__VehicleTe__Categ__60C757A0">
-          <End Role="MainCategory" Type="Self.MainCategory" Multiplicity="0..1" />
-          <End Role="VehicleTemp" Type="Self.VehicleTemp" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="MainCategory">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="VehicleTemp">
-              <PropertyRef Name="Category_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__VehicleTe__Login__5090EFD7">
-          <End Role="AdminLogin" Type="Self.AdminLogin" Multiplicity="0..1" />
-          <End Role="VehicleTemp" Type="Self.VehicleTemp" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AdminLogin">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="VehicleTemp">
-              <PropertyRef Name="Login_Id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2920,18 +2520,6 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__VendorPay__Vendo__6ABAD62E">
-          <End Role="Vendor" Type="Self.Vendor" Multiplicity="0..1" />
-          <End Role="VendorPayOut" Type="Self.VendorPayOut" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Vendor">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="VendorPayOut">
-              <PropertyRef Name="Vendor_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_AmbulanceType">
           <End Role="AmbulanceType" Type="Self.AmbulanceType" Multiplicity="0..1" />
           <End Role="MainCategory" Type="Self.MainCategory" Multiplicity="*" />
@@ -2941,30 +2529,6 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
             </Principal>
             <Dependent Role="MainCategory">
               <PropertyRef Name="AmbulanceType_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_DoctorChooseDepartment_DoctorChooseDepartment">
-          <End Role="DoctorChooseDepartment" Type="Self.DoctorChooseDepartment" Multiplicity="1" />
-          <End Role="DoctorChooseDepartment1" Type="Self.DoctorChooseDepartment" Multiplicity="0..1" />
-          <ReferentialConstraint>
-            <Principal Role="DoctorChooseDepartment">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="DoctorChooseDepartment1">
-              <PropertyRef Name="Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Hospital_StateMaster">
-          <End Role="StateMaster" Type="Self.StateMaster" Multiplicity="1" />
-          <End Role="Hospital" Type="Self.Hospital" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="StateMaster">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Hospital">
-              <PropertyRef Name="StateMaster_Id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3156,11 +2720,13 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <EntitySet Name="Bannerprofessional" EntityType="Self.Bannerprofessional" Schema="admin_Hospital" store:Type="Tables" />
           <EntitySet Name="chemistcomplaint" EntityType="Self.chemistcomplaint" Schema="admin_Hospital" store:Type="Tables" />
           <EntitySet Name="ChemistMedicine" EntityType="Self.ChemistMedicine" Schema="admin_Hospital" store:Type="Tables" />
+          <EntitySet Name="DayNames" EntityType="Self.DayNames" Schema="admin_Hospital" store:Type="Tables" />
           <EntitySet Name="Discount" EntityType="Self.Discount" Schema="admin_Hospital" store:Type="Tables" />
           <EntitySet Name="DoctorBookingMode" EntityType="Self.DoctorBookingMode" Schema="admin_Hospital" store:Type="Tables" />
           <EntitySet Name="DoctorChooseDepartment" EntityType="Self.DoctorChooseDepartment" Schema="admin_Hospital" store:Type="Tables" />
           <EntitySet Name="DoctorTimeSlot" EntityType="Self.DoctorTimeSlot" Schema="admin_Hospital" store:Type="Tables" />
           <EntitySet Name="DriverComplaint" EntityType="Self.DriverComplaint" Schema="admin_Hospital" store:Type="Tables" />
+          <EntitySet Name="DurationTime" EntityType="Self.DurationTime" Schema="admin_Hospital" store:Type="Tables" />
           <EntitySet Name="FraAddVehicleType" EntityType="Self.FraAddVehicleType" Schema="admin_Hospital" store:Type="Tables" />
           <EntitySet Name="FranchiseGstMaster" EntityType="Self.FranchiseGstMaster" Schema="admin_Hospital" store:Type="Tables" />
           <EntitySet Name="FranchiseTDSMaster" EntityType="Self.FranchiseTDSMaster" Schema="admin_Hospital" store:Type="Tables" />
@@ -3184,6 +2750,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <EntitySet Name="RWATDSMaster" EntityType="Self.RWATDSMaster" Schema="admin_Hospital" store:Type="Tables" />
           <EntitySet Name="TestInLab" EntityType="Self.TestInLab" Schema="admin_Hospital" store:Type="Tables" />
           <EntitySet Name="TimeSlot" EntityType="Self.TimeSlot" Schema="admin_Hospital" store:Type="Tables" />
+          <EntitySet Name="TransactionFeeMaster" EntityType="Self.TransactionFeeMaster" Schema="admin_Hospital" store:Type="Tables" />
           <EntitySet Name="UserWallet" EntityType="Self.UserWallet" Schema="admin_Hospital" store:Type="Tables" />
           <EntitySet Name="VehicleTemp" EntityType="Self.VehicleTemp" Schema="admin_Hospital" store:Type="Tables" />
           <EntitySet Name="AdminLogin" EntityType="Self.AdminLogin" Schema="dbo" store:Type="Tables" />
@@ -3292,10 +2859,6 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
     [AppLog].[Exception] AS [Exception]
     FROM [dbo].[AppLog] AS [AppLog]</DefiningQuery>
           </EntitySet>
-          <AssociationSet Name="FK__BankDetai__Login__269AB60B" Association="Self.FK__BankDetai__Login__269AB60B">
-            <End Role="AdminLogin" EntitySet="AdminLogin" />
-            <End Role="BankDetails" EntitySet="BankDetails" />
-          </AssociationSet>
           <AssociationSet Name="FK__BookTestL__Patie__56E8E7AB" Association="Self.FK__BookTestL__Patie__56E8E7AB">
             <End Role="Patient" EntitySet="Patient" />
             <End Role="BookTestLab" EntitySet="BookTestLab" />
@@ -3336,14 +2899,6 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
             <End Role="LabTest" EntitySet="LabTest" />
             <End Role="CheckUpReport" EntitySet="CheckUpReport" />
           </AssociationSet>
-          <AssociationSet Name="FK__Chemist__AdminLo__236943A5" Association="Self.FK__Chemist__AdminLo__236943A5">
-            <End Role="AdminLogin" EntitySet="AdminLogin" />
-            <End Role="Chemist" EntitySet="Chemist" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Chemist__Vendor___58671BC9" Association="Self.FK__Chemist__Vendor___58671BC9">
-            <End Role="Vendor" EntitySet="Vendor" />
-            <End Role="Chemist" EntitySet="Chemist" />
-          </AssociationSet>
           <AssociationSet Name="FK__ChemistPa__Chemi__2645B050" Association="Self.FK__ChemistPa__Chemi__2645B050">
             <End Role="Chemist" EntitySet="Chemist" />
             <End Role="ChemistPayOut" EntitySet="ChemistPayOut" />
@@ -3351,14 +2906,6 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <AssociationSet Name="FK__CityMaste__State__2739D489" Association="Self.FK__CityMaste__State__2739D489">
             <End Role="StateMaster" EntitySet="StateMaster" />
             <End Role="CityMaster" EntitySet="CityMaster" />
-          </AssociationSet>
-          <AssociationSet Name="FK__CityTemp__Login___4CC05EF3" Association="Self.FK__CityTemp__Login___4CC05EF3">
-            <End Role="AdminLogin" EntitySet="AdminLogin" />
-            <End Role="CityTemp" EntitySet="CityTemp" />
-          </AssociationSet>
-          <AssociationSet Name="FK__CityTemp__State___4DB4832C" Association="Self.FK__CityTemp__State___4DB4832C">
-            <End Role="StateMaster" EntitySet="StateMaster" />
-            <End Role="CityTemp" EntitySet="CityTemp" />
           </AssociationSet>
           <AssociationSet Name="FK__CmpltChec__Cente__282DF8C2" Association="Self.FK__CmpltChec__Cente__282DF8C2">
             <End Role="HealthCheckupCenter" EntitySet="HealthCheckupCenter" />
@@ -3372,49 +2919,13 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
             <End Role="HealthCheckUp" EntitySet="HealthCheckUp" />
             <End Role="CmpltCheckUp" EntitySet="CmpltCheckUp" />
           </AssociationSet>
-          <AssociationSet Name="FK__Doctor__AdminLog__2A164134" Association="Self.FK__Doctor__AdminLog__2A164134">
-            <End Role="AdminLogin" EntitySet="AdminLogin" />
-            <End Role="Doctor" EntitySet="Doctor" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Doctor__StateMas__2DE6D218" Association="Self.FK__Doctor__StateMas__2DE6D218">
-            <End Role="StateMaster" EntitySet="StateMaster" />
-            <End Role="Doctor" EntitySet="Doctor" />
-          </AssociationSet>
-          <AssociationSet Name="FK__DoctorCom__Login__2EDAF651" Association="Self.FK__DoctorCom__Login__2EDAF651">
-            <End Role="Doctor" EntitySet="Doctor" />
-            <End Role="DoctorComplaints" EntitySet="DoctorComplaints" />
-          </AssociationSet>
-          <AssociationSet Name="FK__DoctorPay__Docto__2FCF1A8A" Association="Self.FK__DoctorPay__Docto__2FCF1A8A">
-            <End Role="Doctor" EntitySet="Doctor" />
-            <End Role="DoctorPayOut" EntitySet="DoctorPayOut" />
-          </AssociationSet>
-          <AssociationSet Name="FK__DoctorRep__Docto__30C33EC3" Association="Self.FK__DoctorRep__Docto__30C33EC3">
-            <End Role="Doctor" EntitySet="Doctor" />
-            <End Role="DoctorReports" EntitySet="DoctorReports" />
-          </AssociationSet>
-          <AssociationSet Name="FK__DoctorRep__Patie__31B762FC" Association="Self.FK__DoctorRep__Patie__31B762FC">
-            <End Role="Patient" EntitySet="Patient" />
-            <End Role="DoctorReports" EntitySet="DoctorReports" />
-          </AssociationSet>
           <AssociationSet Name="FK__DriverCom__Login__2EDAF651" Association="Self.FK__DriverCom__Login__2EDAF651">
             <End Role="Driver" EntitySet="Driver" />
             <End Role="DriverComplaint" EntitySet="DriverComplaint" />
           </AssociationSet>
-          <AssociationSet Name="FK__DriverLoc__Drive__6ADAD1BF" Association="Self.FK__DriverLoc__Drive__6ADAD1BF">
-            <End Role="Driver" EntitySet="Driver" />
-            <End Role="DriverLocation" EntitySet="DriverLocation" />
-          </AssociationSet>
-          <AssociationSet Name="FK__DriverLoc__Patie__7C055DC1" Association="Self.FK__DriverLoc__Patie__7C055DC1">
-            <End Role="Patient" EntitySet="Patient" />
-            <End Role="DriverLocation" EntitySet="DriverLocation" />
-          </AssociationSet>
           <AssociationSet Name="FK__HealthBoo__Patie__43F60EC8" Association="Self.FK__HealthBoo__Patie__43F60EC8">
             <End Role="Patient" EntitySet="Patient" />
             <End Role="HealthBooking" EntitySet="HealthBooking" />
-          </AssociationSet>
-          <AssociationSet Name="FK__HealthChe__Admin__3587F3E0" Association="Self.FK__HealthChe__Admin__3587F3E0">
-            <End Role="AdminLogin" EntitySet="AdminLogin" />
-            <End Role="HealthCheckupCenter" EntitySet="HealthCheckupCenter" />
           </AssociationSet>
           <AssociationSet Name="FK__HealthChe__Cente__3493CFA7" Association="Self.FK__HealthChe__Cente__3493CFA7">
             <End Role="HealthCheckupCenter" EntitySet="HealthCheckupCenter" />
@@ -3424,25 +2935,9 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
             <End Role="HealthCheckupCenter" EntitySet="HealthCheckupCenter" />
             <End Role="HealthCheckUpPackage" EntitySet="HealthCheckUpPackage" />
           </AssociationSet>
-          <AssociationSet Name="FK__HealthChe__State__19DFD96B" Association="Self.FK__HealthChe__State__19DFD96B">
-            <End Role="StateMaster" EntitySet="StateMaster" />
-            <End Role="HealthCheckupCenter" EntitySet="HealthCheckupCenter" />
-          </AssociationSet>
           <AssociationSet Name="FK__HealthPay__Healt__3864608B" Association="Self.FK__HealthPay__Healt__3864608B">
             <End Role="HealthCheckupCenter" EntitySet="HealthCheckupCenter" />
             <End Role="HealthPayOut" EntitySet="HealthPayOut" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Hospital__AdminL__395884C4" Association="Self.FK__Hospital__AdminL__395884C4">
-            <End Role="AdminLogin" EntitySet="AdminLogin" />
-            <End Role="Hospital" EntitySet="Hospital" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Hospital__CityMa__48CFD27E" Association="Self.FK__Hospital__CityMa__48CFD27E">
-            <End Role="CityMaster" EntitySet="CityMaster" />
-            <End Role="Hospital" EntitySet="Hospital" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Hospital__Vendor__595B4002" Association="Self.FK__Hospital__Vendor__595B4002">
-            <End Role="Vendor" EntitySet="Vendor" />
-            <End Role="Hospital" EntitySet="Hospital" />
           </AssociationSet>
           <AssociationSet Name="FK__HospitalN__Nurse__76619304" Association="Self.FK__HospitalN__Nurse__76619304">
             <End Role="NurseType" EntitySet="NurseType" />
@@ -3468,34 +2963,6 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
             <End Role="TestLab" EntitySet="TestLab" />
             <End Role="LabBooking" EntitySet="LabBooking" />
           </AssociationSet>
-          <AssociationSet Name="FK__LabPayOut__Lab_I__3F115E1A" Association="Self.FK__LabPayOut__Lab_I__3F115E1A">
-            <End Role="Lab" EntitySet="Lab" />
-            <End Role="LabPayOut" EntitySet="LabPayOut" />
-          </AssociationSet>
-          <AssociationSet Name="FK__LabReport__Lab_I__40058253" Association="Self.FK__LabReport__Lab_I__40058253">
-            <End Role="Lab" EntitySet="Lab" />
-            <End Role="LabReport" EntitySet="LabReport" />
-          </AssociationSet>
-          <AssociationSet Name="FK__LabReport__Patie__40F9A68C" Association="Self.FK__LabReport__Patie__40F9A68C">
-            <End Role="Patient" EntitySet="Patient" />
-            <End Role="LabReport" EntitySet="LabReport" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Nurse__AdminLogi__42E1EEFE" Association="Self.FK__Nurse__AdminLogi__42E1EEFE">
-            <End Role="AdminLogin" EntitySet="AdminLogin" />
-            <End Role="Nurse" EntitySet="Nurse" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Nurse__CityMaste__43D61337" Association="Self.FK__Nurse__CityMaste__43D61337">
-            <End Role="CityMaster" EntitySet="CityMaster" />
-            <End Role="Nurse" EntitySet="Nurse" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Nurse__StateMast__44CA3770" Association="Self.FK__Nurse__StateMast__44CA3770">
-            <End Role="StateMaster" EntitySet="StateMaster" />
-            <End Role="Nurse" EntitySet="Nurse" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Nurse__Vendor_Id__70FDBF69" Association="Self.FK__Nurse__Vendor_Id__70FDBF69">
-            <End Role="Vendor" EntitySet="Vendor" />
-            <End Role="Nurse" EntitySet="Nurse" />
-          </AssociationSet>
           <AssociationSet Name="FK__NurseComp__Login__2D87AABC" Association="Self.FK__NurseComp__Login__2D87AABC">
             <End Role="AdminLogin" EntitySet="AdminLogin" />
             <End Role="NurseComplaint" EntitySet="NurseComplaint" />
@@ -3503,10 +2970,6 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <AssociationSet Name="FK__NursePayo__Nurse__2EA5EC27" Association="Self.FK__NursePayo__Nurse__2EA5EC27">
             <End Role="Nurse" EntitySet="Nurse" />
             <End Role="NursePayout" EntitySet="NursePayout" />
-          </AssociationSet>
-          <AssociationSet Name="FK__PatientAp__Docto__45BE5BA9" Association="Self.FK__PatientAp__Docto__45BE5BA9">
-            <End Role="Doctor" EntitySet="Doctor" />
-            <End Role="PatientAppointment" EntitySet="PatientAppointment" />
           </AssociationSet>
           <AssociationSet Name="FK__PatientAp__Hospi__1960B67E" Association="Self.FK__PatientAp__Hospi__1960B67E">
             <End Role="Hospital" EntitySet="Hospital" />
@@ -3548,18 +3011,6 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
             <End Role="VehicleType" EntitySet="VehicleType" />
             <End Role="PatientRequest" EntitySet="PatientRequest" />
           </AssociationSet>
-          <AssociationSet Name="FK__RWA__AdminLogin___498EEC8D" Association="Self.FK__RWA__AdminLogin___498EEC8D">
-            <End Role="AdminLogin" EntitySet="AdminLogin" />
-            <End Role="RWA" EntitySet="RWA" />
-          </AssociationSet>
-          <AssociationSet Name="FK__RWA__StateMaster__4B7734FF" Association="Self.FK__RWA__StateMaster__4B7734FF">
-            <End Role="StateMaster" EntitySet="StateMaster" />
-            <End Role="RWA" EntitySet="RWA" />
-          </AssociationSet>
-          <AssociationSet Name="FK__RwaPayout__Rwa_I__3429BB53" Association="Self.FK__RwaPayout__Rwa_I__3429BB53">
-            <End Role="RWA" EntitySet="RWA" />
-            <End Role="RwaPayout" EntitySet="RwaPayout" />
-          </AssociationSet>
           <AssociationSet Name="FK__SalaryMas__Emp_I__0E04126B" Association="Self.FK__SalaryMas__Emp_I__0E04126B">
             <End Role="Employee" EntitySet="Employee" />
             <End Role="SalaryMaster" EntitySet="SalaryMaster" />
@@ -3567,14 +3018,6 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <AssociationSet Name="FK__Specialis__Depar__4C6B5938" Association="Self.FK__Specialis__Depar__4C6B5938">
             <End Role="Department" EntitySet="Department" />
             <End Role="Specialist" EntitySet="Specialist" />
-          </AssociationSet>
-          <AssociationSet Name="FK__TestLab__Lab_Id__5224328E" Association="Self.FK__TestLab__Lab_Id__5224328E">
-            <End Role="Lab" EntitySet="Lab" />
-            <End Role="TestLab" EntitySet="TestLab" />
-          </AssociationSet>
-          <AssociationSet Name="FK__TestLab__Test_Id__51300E55" Association="Self.FK__TestLab__Test_Id__51300E55">
-            <End Role="LabTest" EntitySet="LabTest" />
-            <End Role="TestLab" EntitySet="TestLab" />
           </AssociationSet>
           <AssociationSet Name="FK__TravelMas__Drive__2077C861" Association="Self.FK__TravelMas__Drive__2077C861">
             <End Role="Driver" EntitySet="Driver" />
@@ -3604,10 +3047,6 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
             <End Role="Vehicle" EntitySet="Vehicle" />
             <End Role="TravelRecordMaster" EntitySet="TravelRecordMaster" />
           </AssociationSet>
-          <AssociationSet Name="FK__Vehicle__Vendor___6166761E" Association="Self.FK__Vehicle__Vendor___6166761E">
-            <End Role="Vendor" EntitySet="Vendor" />
-            <End Role="Vehicle" EntitySet="Vehicle" />
-          </AssociationSet>
           <AssociationSet Name="FK__VehicleCh__Categ__0D99FE17" Association="Self.FK__VehicleCh__Categ__0D99FE17">
             <End Role="MainCategory" EntitySet="MainCategory" />
             <End Role="VehicleCharges" EntitySet="VehicleCharges" />
@@ -3615,14 +3054,6 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <AssociationSet Name="FK__VehicleCh__TypeI__0E8E2250" Association="Self.FK__VehicleCh__TypeI__0E8E2250">
             <End Role="VehicleType" EntitySet="VehicleType" />
             <End Role="VehicleCharges" EntitySet="VehicleCharges" />
-          </AssociationSet>
-          <AssociationSet Name="FK__VehicleTe__Categ__60C757A0" Association="Self.FK__VehicleTe__Categ__60C757A0">
-            <End Role="MainCategory" EntitySet="MainCategory" />
-            <End Role="VehicleTemp" EntitySet="VehicleTemp" />
-          </AssociationSet>
-          <AssociationSet Name="FK__VehicleTe__Login__5090EFD7" Association="Self.FK__VehicleTe__Login__5090EFD7">
-            <End Role="AdminLogin" EntitySet="AdminLogin" />
-            <End Role="VehicleTemp" EntitySet="VehicleTemp" />
           </AssociationSet>
           <AssociationSet Name="FK__VehicleTy__Categ__5FD33367" Association="Self.FK__VehicleTy__Categ__5FD33367">
             <End Role="MainCategory" EntitySet="MainCategory" />
@@ -3632,21 +3063,9 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
             <End Role="AdminLogin" EntitySet="AdminLogin" />
             <End Role="Vendor" EntitySet="Vendor" />
           </AssociationSet>
-          <AssociationSet Name="FK__VendorPay__Vendo__6ABAD62E" Association="Self.FK__VendorPay__Vendo__6ABAD62E">
-            <End Role="Vendor" EntitySet="Vendor" />
-            <End Role="VendorPayOut" EntitySet="VendorPayOut" />
-          </AssociationSet>
           <AssociationSet Name="FK_AmbulanceType" Association="Self.FK_AmbulanceType">
             <End Role="AmbulanceType" EntitySet="AmbulanceType" />
             <End Role="MainCategory" EntitySet="MainCategory" />
-          </AssociationSet>
-          <AssociationSet Name="FK_DoctorChooseDepartment_DoctorChooseDepartment" Association="Self.FK_DoctorChooseDepartment_DoctorChooseDepartment">
-            <End Role="DoctorChooseDepartment" EntitySet="DoctorChooseDepartment" />
-            <End Role="DoctorChooseDepartment1" EntitySet="DoctorChooseDepartment" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Hospital_StateMaster" Association="Self.FK_Hospital_StateMaster">
-            <End Role="StateMaster" EntitySet="StateMaster" />
-            <End Role="Hospital" EntitySet="Hospital" />
           </AssociationSet>
           <AssociationSet Name="FK_Vendor_City" Association="Self.FK_Vendor_City">
             <End Role="CityMaster" EntitySet="CityMaster" />
@@ -3748,7 +3167,6 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <NavigationProperty Name="HealthCheckupCenters" Relationship="Model.FK__HealthChe__Admin__3587F3E0" FromRole="AdminLogin" ToRole="HealthCheckupCenter" />
           <Property Name="Confirmpassword" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="NurseComplaints" Relationship="Model.FK__NurseComp__Login__2AAB3E11" FromRole="AdminLogin" ToRole="NurseComplaint" />
-          <NavigationProperty Name="Doctors" Relationship="Model.FK__Doctor__AdminLog__2A164134" FromRole="AdminLogin" ToRole="Doctor" />
           <NavigationProperty Name="Chemists" Relationship="Model.FK__Chemist__AdminLo__236943A5" FromRole="AdminLogin" ToRole="Chemist" />
           <Property Name="DeviceId" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
         </EntityType>
@@ -3962,7 +3380,6 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <Property Name="IsDeleted" Type="Boolean" />
           <Property Name="IsResolved" Type="Boolean" />
           <Property Name="Others" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Doctor" Relationship="Model.FK__DoctorCom__Login__2EDAF651" FromRole="DoctorComplaint" ToRole="Doctor" />
         </EntityType>
         <EntityType Name="DoctorDepartment">
           <Key>
@@ -3987,7 +3404,6 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <Property Name="IsGenerated" Type="Boolean" />
           <Property Name="PaymentId" Type="Int32" />
           <Property Name="Slot_id" Type="Int32" />
-          <NavigationProperty Name="Doctor" Relationship="Model.FK__DoctorPay__Docto__2FCF1A8A" FromRole="DoctorPayOut" ToRole="Doctor" />
         </EntityType>
         <EntityType Name="DoctorReport">
           <Key>
@@ -3999,7 +3415,6 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <Property Name="Image1" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="UploadDate" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Patient" Relationship="Model.FK__DoctorRep__Patie__31B762FC" FromRole="DoctorReport" ToRole="Patient" />
-          <NavigationProperty Name="Doctor" Relationship="Model.FK__DoctorRep__Docto__30C33EC3" FromRole="DoctorReport" ToRole="Doctor" />
         </EntityType>
         <EntityType Name="DoctorSkill">
           <Key>
@@ -4364,7 +3779,6 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <NavigationProperty Name="Patient" Relationship="Model.FK__PatientAp__Patie__46B27FE2" FromRole="PatientAppointment" ToRole="Patient" />
           <Property Name="WorkingShift" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="Slot_id" Type="Int32" />
-          <NavigationProperty Name="Doctor" Relationship="Model.FK__PatientAp__Docto__45BE5BA9" FromRole="PatientAppointment" ToRole="Doctor" />
           <Property Name="TotalFee" Type="Double" />
           <Property Name="BookingMode_Id" Type="Int32" />
           <Property Name="InvoiceNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -4478,7 +3892,6 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <NavigationProperty Name="Vendors" Relationship="Model.FK_Vendor_State" FromRole="StateMaster" ToRole="Vendor" />
           <NavigationProperty Name="Nurses" Relationship="Model.FK__Nurse__StateMast__44CA3770" FromRole="StateMaster" ToRole="Nurse" />
           <NavigationProperty Name="HealthCheckupCenters" Relationship="Model.FK__HealthChe__State__19DFD96B" FromRole="StateMaster" ToRole="HealthCheckupCenter" />
-          <NavigationProperty Name="Doctors" Relationship="Model.FK__Doctor__StateMas__2DE6D218" FromRole="StateMaster" ToRole="Doctor" />
         </EntityType>
         <EntityType Name="TDSMaster">
           <Key>
@@ -5451,35 +4864,6 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
             <End Role="DoctorChooseDepartment1" EntitySet="DoctorChooseDepartments" />
           </AssociationSet>
           <EntitySet Name="RWA_Complaints" EntityType="Model.RWA_Complaints" />
-          <EntitySet Name="Doctors" EntityType="Model.Doctor" />
-          <AssociationSet Name="FK__Doctor__AdminLog__2A164134" Association="Model.FK__Doctor__AdminLog__2A164134">
-            <End Role="AdminLogin" EntitySet="AdminLogins" />
-            <End Role="Doctor" EntitySet="Doctors" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Cancelled__Docto__1F198FD4" Association="Model.FK__Cancelled__Docto__1F198FD4">
-            <End Role="Doctor" EntitySet="Doctors" />
-            <End Role="CancelledAppointment" EntitySet="CancelledAppointments" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Doctor__StateMas__2DE6D218" Association="Model.FK__Doctor__StateMas__2DE6D218">
-            <End Role="StateMaster" EntitySet="StateMasters" />
-            <End Role="Doctor" EntitySet="Doctors" />
-          </AssociationSet>
-          <AssociationSet Name="FK__DoctorCom__Login__2EDAF651" Association="Model.FK__DoctorCom__Login__2EDAF651">
-            <End Role="Doctor" EntitySet="Doctors" />
-            <End Role="DoctorComplaint" EntitySet="DoctorComplaints" />
-          </AssociationSet>
-          <AssociationSet Name="FK__DoctorPay__Docto__2FCF1A8A" Association="Model.FK__DoctorPay__Docto__2FCF1A8A">
-            <End Role="Doctor" EntitySet="Doctors" />
-            <End Role="DoctorPayOut" EntitySet="DoctorPayOuts" />
-          </AssociationSet>
-          <AssociationSet Name="FK__DoctorRep__Docto__30C33EC3" Association="Model.FK__DoctorRep__Docto__30C33EC3">
-            <End Role="Doctor" EntitySet="Doctors" />
-            <End Role="DoctorReport" EntitySet="DoctorReports" />
-          </AssociationSet>
-          <AssociationSet Name="FK__PatientAp__Docto__45BE5BA9" Association="Model.FK__PatientAp__Docto__45BE5BA9">
-            <End Role="Doctor" EntitySet="Doctors" />
-            <End Role="PatientAppointment" EntitySet="PatientAppointments" />
-          </AssociationSet>
           <EntitySet Name="Labs" EntityType="Model.Lab" />
           <AssociationSet Name="FK__BookTestL__Lab_I__55009F39" Association="Model.FK__BookTestL__Lab_I__55009F39">
             <End Role="Lab" EntitySet="Labs" />
@@ -5574,6 +4958,14 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <EntitySet Name="DriverPayOuts" EntityType="Model.DriverPayOut" />
           <EntitySet Name="DoctorTimeSlots" EntityType="Model.DoctorTimeSlot" />
           <EntitySet Name="ChemistMedicines" EntityType="Model.ChemistMedicine" />
+          <EntitySet Name="DayNames" EntityType="Model.DayName" />
+          <EntitySet Name="DurationTimes" EntityType="Model.DurationTime" />
+          <EntitySet Name="Doctors" EntityType="Model.Doctor" />
+          <AssociationSet Name="FK__Cancelled__Docto__1F198FD4" Association="Model.FK__Cancelled__Docto__1F198FD4">
+            <End Role="Doctor" EntitySet="Doctors" />
+            <End Role="CancelledAppointment" EntitySet="CancelledAppointments" />
+          </AssociationSet>
+          <EntitySet Name="TransactionFeeMasters" EntityType="Model.TransactionFeeMaster" />
           </EntityContainer>
         <ComplexType Name="sp_AppointmentHistory_Result">
           <Property Type="Int32" Name="AppointmentId" Nullable="false" />
@@ -5812,7 +5204,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <Property Name="MobileNumber" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
           <Property Name="EmailId" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="StateMaster_Id" Type="Int32" Nullable="false" />
-          <Property Name="CityMaster_Id" Type="Int32" Nullable="false" />
+          <Property Name="CityMaster_Id" Type="Int32" />
           <Property Name="Location" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="DriverImage" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="DlImage" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
@@ -5852,6 +5244,8 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <Property Name="Lang" Type="Double" />
           <Property Name="Charge" Type="Int32" />
           <NavigationProperty Name="DriverLocations" Relationship="Model.FK__DriverLoc__Drive__6ADAD1BF" FromRole="Driver" ToRole="DriverLocation" />
+          <Property Name="IsBankUpdateApproved" Type="Boolean" />
+          <Property Name="Vehicle_Id" Type="Int32" />
         </EntityType>
         <EntityType Name="Hospital">
           <Key>
@@ -5915,6 +5309,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <Property Name="CertificateNo" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="About" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="PAN" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="IsBankUpdateApproved" Type="Boolean" />
         </EntityType>
         <EntityType Name="Vendor">
           <Key>
@@ -5950,6 +5345,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <NavigationProperty Name="Chemists" Relationship="Model.FK__Chemist__Vendor___58671BC9" FromRole="Vendor" ToRole="Chemist" />
           <Property Name="PinCode" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="About" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="IsBankUpdateApproved" Type="Boolean" />
         </EntityType>
         <Association Name="FK__Hospital__AdminL__395884C4">
           <End Type="Model.AdminLogin" Role="AdminLogin" Multiplicity="1" />
@@ -6706,6 +6102,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <Property Name="about" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="ClinicName" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="Location_id" Type="Int32" />
+          <Property Name="IsBankUpdateApproved" Type="Boolean" />
         </EntityType>
         <Association Name="FK__Nurse__AdminLogi__42E1EEFE">
           <End Type="Model.AdminLogin" Role="AdminLogin" Multiplicity="1" />
@@ -7087,153 +6484,6 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <Property Name="IsResolved" Type="Boolean" />
           <Property Name="Others" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="Doctor">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
-          <Property Name="DoctorName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="PhoneNumber" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="MobileNumber" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="EmailId" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="StateMaster_Id" Type="Int32" Nullable="false" />
-          <Property Name="CityMaster_Id" Type="Int32" Nullable="false" />
-          <Property Name="Location" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="LicenceImage" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="LicenceNumber" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="ClinicName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="Department_Id" Type="Int32" Nullable="false" />
-          <Property Name="Specialist_Id" Type="Int32" Nullable="false" />
-          <Property Name="Fee" Type="Double" Nullable="false" />
-          <Property Name="Password" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="IsApproved" Type="Boolean" Nullable="false" />
-          <Property Name="AdminLogin_Id" Type="Int32" Nullable="false" />
-          <Property Name="PAN" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="AadharNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="AadharImage" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
-          <Property Name="Vendor_Id" Type="Int32" />
-          <Property Name="StartTime" Type="Time" Precision="7" />
-          <Property Name="EndTime" Type="Time" Precision="7" />
-          <Property Name="SlotTime" Type="Int32" />
-          <Property Name="JoiningDate" Type="DateTime" Precision="3" />
-          <Property Name="LicenseValidity" Type="DateTime" Precision="3" />
-          <Property Name="PinCode" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
-          <Property Name="AadharImage2" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
-          <Property Name="PanImage" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="HospitalId" Type="Int32" />
-          <Property Name="DoctorId" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="IsCheckedTermsCondition" Type="Boolean" />
-          <Property Name="StartTime2" Type="Time" Precision="7" />
-          <Property Name="EndTime2" Type="Time" Precision="7" />
-          <Property Name="SlotTime2" Type="Int32" />
-          <Property Name="RefId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Experience" Type="Int32" />
-          <Property Name="About" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="Disease" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="AdminLogin" Relationship="Model.FK__Doctor__AdminLog__2A164134" FromRole="Doctor" ToRole="AdminLogin" />
-          <NavigationProperty Name="CancelledAppointments" Relationship="Model.FK__Cancelled__Docto__1F198FD4" FromRole="Doctor" ToRole="CancelledAppointment" />
-          <NavigationProperty Name="StateMaster" Relationship="Model.FK__Doctor__StateMas__2DE6D218" FromRole="Doctor" ToRole="StateMaster" />
-          <NavigationProperty Name="DoctorComplaints" Relationship="Model.FK__DoctorCom__Login__2EDAF651" FromRole="Doctor" ToRole="DoctorComplaint" />
-          <NavigationProperty Name="DoctorPayOuts" Relationship="Model.FK__DoctorPay__Docto__2FCF1A8A" FromRole="Doctor" ToRole="DoctorPayOut" />
-          <NavigationProperty Name="DoctorReports" Relationship="Model.FK__DoctorRep__Docto__30C33EC3" FromRole="Doctor" ToRole="DoctorReport" />
-          <NavigationProperty Name="PatientAppointments" Relationship="Model.FK__PatientAp__Docto__45BE5BA9" FromRole="Doctor" ToRole="PatientAppointment" />
-          <Property Name="Qualification" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="RegistrationNumber" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="SignaturePic" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <Association Name="FK__Doctor__AdminLog__2A164134">
-          <End Type="Model.AdminLogin" Role="AdminLogin" Multiplicity="1" />
-          <End Type="Model.Doctor" Role="Doctor" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AdminLogin">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Doctor">
-              <PropertyRef Name="AdminLogin_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Cancelled__Docto__1F198FD4">
-          <End Type="Model.Doctor" Role="Doctor" Multiplicity="0..1" />
-          <End Type="Model.CancelledAppointment" Role="CancelledAppointment" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Doctor">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="CancelledAppointment">
-              <PropertyRef Name="Doctor_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Doctor__StateMas__2DE6D218">
-          <End Type="Model.StateMaster" Role="StateMaster" Multiplicity="1" />
-          <End Type="Model.Doctor" Role="Doctor" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="StateMaster">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Doctor">
-              <PropertyRef Name="StateMaster_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__DoctorCom__Login__2EDAF651">
-          <End Type="Model.Doctor" Role="Doctor" Multiplicity="0..1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Type="Model.DoctorComplaint" Role="DoctorComplaint" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Doctor">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="DoctorComplaint">
-              <PropertyRef Name="Login_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__DoctorPay__Docto__2FCF1A8A">
-          <End Type="Model.Doctor" Role="Doctor" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Type="Model.DoctorPayOut" Role="DoctorPayOut" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Doctor">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="DoctorPayOut">
-              <PropertyRef Name="Doctor_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__DoctorRep__Docto__30C33EC3">
-          <End Type="Model.Doctor" Role="Doctor" Multiplicity="0..1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Type="Model.DoctorReport" Role="DoctorReport" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Doctor">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="DoctorReport">
-              <PropertyRef Name="Doctor_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__PatientAp__Docto__45BE5BA9">
-          <End Type="Model.Doctor" Role="Doctor" Multiplicity="0..1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Type="Model.PatientAppointment" Role="PatientAppointment" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Doctor">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="PatientAppointment">
-              <PropertyRef Name="Doctor_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="Lab">
           <Key>
             <PropertyRef Name="Id" />
@@ -7278,6 +6528,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <NavigationProperty Name="TestLabs" Relationship="Model.FK__TestLab__Lab_Id__5224328E" FromRole="Lab" ToRole="TestLab" />
           <Property Name="image" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="LabTest_Id" Type="Int32" />
+          <Property Name="IsBankUpdateApproved" Type="Boolean" />
         </EntityType>
         <Association Name="FK__BookTestL__Lab_I__55009F39">
           <End Type="Model.Lab" Role="Lab" Multiplicity="0..1">
@@ -7394,6 +6645,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <NavigationProperty Name="Vendor" Relationship="Model.FK__Chemist__Vendor___58671BC9" FromRole="Chemist" ToRole="Vendor" />
           <NavigationProperty Name="ChemistPayOuts" Relationship="Model.FK__ChemistPa__Chemi__2645B050" FromRole="Chemist" ToRole="ChemistPayOut" />
           <Property Name="About" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="IsBankUpdateApproved" Type="Boolean" />
         </EntityType>
         <Association Name="FK__Chemist__AdminLo__236943A5">
           <End Type="Model.AdminLogin" Role="AdminLogin" Multiplicity="1">
@@ -7602,6 +6854,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <NavigationProperty Name="Driver" Relationship="Model.FK__DriverLoc__Drive__6ADAD1BF" FromRole="DriverLocation" ToRole="Driver" />
           <NavigationProperty Name="Patient" Relationship="Model.FK__DriverLoc__Patie__7C055DC1" FromRole="DriverLocation" ToRole="Patient" />
           <Property Name="RejectedStatus" Type="Boolean" />
+          <Property Name="PaymentStatus" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK__DriverLoc__Drive__6ADAD1BF">
           <End Type="Model.Driver" Role="Driver" Multiplicity="0..1" />
@@ -7838,6 +7091,9 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="StartTime" Type="Time" Precision="7" />
           <Property Name="EndTime" Type="Time" Precision="7" />
+          <Property Name="Doctor_Id" Type="Int32" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="EntryDate" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="ChemistMedicine">
           <Key>
@@ -7848,6 +7104,92 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <Property Name="Medicine_Id" Type="Int32" />
           <Property Name="IsDeleted" Type="Boolean" />
           <Property Name="EntryDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="DayName">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="DurationTime">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Duration" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Doctor">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+          <Property Name="DoctorName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="MobileNumber" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="EmailId" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="StateMaster_Id" Type="Int32" Nullable="false" />
+          <Property Name="CityMaster_Id" Type="Int32" Nullable="false" />
+          <Property Name="Location" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="LicenceImage" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="LicenceNumber" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ClinicName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Department_Id" Type="Int32" Nullable="false" />
+          <Property Name="Specialist_Id" Type="Int32" Nullable="false" />
+          <Property Name="Fee" Type="Double" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="IsApproved" Type="Boolean" Nullable="false" />
+          <Property Name="AdminLogin_Id" Type="Int32" Nullable="false" />
+          <Property Name="PAN" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AadharNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AadharImage" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="Vendor_Id" Type="Int32" />
+          <Property Name="StartTime" Type="Time" Precision="7" />
+          <Property Name="EndTime" Type="Time" Precision="7" />
+          <Property Name="SlotTime" Type="Int32" />
+          <Property Name="JoiningDate" Type="DateTime" Precision="3" />
+          <Property Name="LicenseValidity" Type="DateTime" Precision="3" />
+          <Property Name="PinCode" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="AadharImage2" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="PanImage" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="HospitalId" Type="Int32" />
+          <Property Name="DoctorId" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IsCheckedTermsCondition" Type="Boolean" />
+          <Property Name="StartTime2" Type="Time" Precision="7" />
+          <Property Name="EndTime2" Type="Time" Precision="7" />
+          <Property Name="SlotTime2" Type="Int32" />
+          <Property Name="RefId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Experience" Type="Int32" />
+          <Property Name="About" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Disease" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Qualification" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="RegistrationNumber" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="SignaturePic" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="VirtualFee" Type="Double" />
+          <Property Name="Day_Id" Type="Int32" />
+          <Property Name="IsBankUpdateApproved" Type="Boolean" />
+          <NavigationProperty Name="CancelledAppointments" Relationship="Model.FK__Cancelled__Docto__1F198FD4" FromRole="Doctor" ToRole="CancelledAppointment" />
+        </EntityType>
+        <Association Name="FK__Cancelled__Docto__1F198FD4">
+          <End Type="Model.Doctor" Role="Doctor" Multiplicity="0..1" />
+          <End Type="Model.CancelledAppointment" Role="CancelledAppointment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Doctor">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CancelledAppointment">
+              <PropertyRef Name="Doctor_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="TransactionFeeMaster">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Fee" Type="Double" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -9045,6 +8387,8 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <EntitySetMapping Name="Drivers">
             <EntityTypeMapping TypeName="Model.Driver">
               <MappingFragment StoreEntitySet="Driver">
+                <ScalarProperty Name="Vehicle_Id" ColumnName="Vehicle_Id" />
+                <ScalarProperty Name="IsBankUpdateApproved" ColumnName="IsBankUpdateApproved" />
                 <ScalarProperty Name="Charge" ColumnName="Charge" />
                 <ScalarProperty Name="Lang" ColumnName="Lang" />
                 <ScalarProperty Name="Lat" ColumnName="Lat" />
@@ -9117,6 +8461,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <EntitySetMapping Name="RWAs">
             <EntityTypeMapping TypeName="Model.RWA">
               <MappingFragment StoreEntitySet="RWA">
+                <ScalarProperty Name="IsBankUpdateApproved" ColumnName="IsBankUpdateApproved" />
                 <ScalarProperty Name="PAN" ColumnName="PAN" />
                 <ScalarProperty Name="About" ColumnName="About" />
                 <ScalarProperty Name="CertificateNo" ColumnName="CertificateNo" />
@@ -9145,6 +8490,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <EntitySetMapping Name="Vendors">
             <EntityTypeMapping TypeName="Model.Vendor">
               <MappingFragment StoreEntitySet="Vendor">
+                <ScalarProperty Name="IsBankUpdateApproved" ColumnName="IsBankUpdateApproved" />
                 <ScalarProperty Name="About" ColumnName="About" />
                 <ScalarProperty Name="PinCode" ColumnName="PinCode" />
                 <ScalarProperty Name="IsCheckedTermsCondition" ColumnName="IsCheckedTermsCondition" />
@@ -9309,6 +8655,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <EntitySetMapping Name="Nurses">
             <EntityTypeMapping TypeName="Model.Nurse">
               <MappingFragment StoreEntitySet="Nurse">
+                <ScalarProperty Name="IsBankUpdateApproved" ColumnName="IsBankUpdateApproved" />
                 <ScalarProperty Name="Location_id" ColumnName="Location_id" />
                 <ScalarProperty Name="ClinicName" ColumnName="ClinicName" />
                 <ScalarProperty Name="about" ColumnName="about" />
@@ -9524,58 +8871,10 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Doctors">
-            <EntityTypeMapping TypeName="Model.Doctor">
-              <MappingFragment StoreEntitySet="Doctor">
-                <ScalarProperty Name="SignaturePic" ColumnName="SignaturePic" />
-                <ScalarProperty Name="RegistrationNumber" ColumnName="RegistrationNumber" />
-                <ScalarProperty Name="Qualification" ColumnName="Qualification" />
-                <ScalarProperty Name="Disease" ColumnName="Disease" />
-                <ScalarProperty Name="About" ColumnName="About" />
-                <ScalarProperty Name="Experience" ColumnName="Experience" />
-                <ScalarProperty Name="RefId" ColumnName="RefId" />
-                <ScalarProperty Name="SlotTime2" ColumnName="SlotTime2" />
-                <ScalarProperty Name="EndTime2" ColumnName="EndTime2" />
-                <ScalarProperty Name="StartTime2" ColumnName="StartTime2" />
-                <ScalarProperty Name="IsCheckedTermsCondition" ColumnName="IsCheckedTermsCondition" />
-                <ScalarProperty Name="DoctorId" ColumnName="DoctorId" />
-                <ScalarProperty Name="HospitalId" ColumnName="HospitalId" />
-                <ScalarProperty Name="PanImage" ColumnName="PanImage" />
-                <ScalarProperty Name="AadharImage2" ColumnName="AadharImage2" />
-                <ScalarProperty Name="PinCode" ColumnName="PinCode" />
-                <ScalarProperty Name="LicenseValidity" ColumnName="LicenseValidity" />
-                <ScalarProperty Name="JoiningDate" ColumnName="JoiningDate" />
-                <ScalarProperty Name="SlotTime" ColumnName="SlotTime" />
-                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
-                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
-                <ScalarProperty Name="Vendor_Id" ColumnName="Vendor_Id" />
-                <ScalarProperty Name="AadharImage" ColumnName="AadharImage" />
-                <ScalarProperty Name="AadharNumber" ColumnName="AadharNumber" />
-                <ScalarProperty Name="PAN" ColumnName="PAN" />
-                <ScalarProperty Name="AdminLogin_Id" ColumnName="AdminLogin_Id" />
-                <ScalarProperty Name="IsApproved" ColumnName="IsApproved" />
-                <ScalarProperty Name="Password" ColumnName="Password" />
-                <ScalarProperty Name="Fee" ColumnName="Fee" />
-                <ScalarProperty Name="Specialist_Id" ColumnName="Specialist_Id" />
-                <ScalarProperty Name="Department_Id" ColumnName="Department_Id" />
-                <ScalarProperty Name="ClinicName" ColumnName="ClinicName" />
-                <ScalarProperty Name="LicenceNumber" ColumnName="LicenceNumber" />
-                <ScalarProperty Name="LicenceImage" ColumnName="LicenceImage" />
-                <ScalarProperty Name="Location" ColumnName="Location" />
-                <ScalarProperty Name="CityMaster_Id" ColumnName="CityMaster_Id" />
-                <ScalarProperty Name="StateMaster_Id" ColumnName="StateMaster_Id" />
-                <ScalarProperty Name="EmailId" ColumnName="EmailId" />
-                <ScalarProperty Name="MobileNumber" ColumnName="MobileNumber" />
-                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
-                <ScalarProperty Name="DoctorName" ColumnName="DoctorName" />
-                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Labs">
             <EntityTypeMapping TypeName="Model.Lab">
               <MappingFragment StoreEntitySet="Lab">
+                <ScalarProperty Name="IsBankUpdateApproved" ColumnName="IsBankUpdateApproved" />
                 <ScalarProperty Name="LabTest_Id" ColumnName="LabTest_Id" />
                 <ScalarProperty Name="image" ColumnName="image" />
                 <ScalarProperty Name="PinCode" ColumnName="PinCode" />
@@ -9643,6 +8942,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <EntitySetMapping Name="Chemists">
             <EntityTypeMapping TypeName="Model.Chemist">
               <MappingFragment StoreEntitySet="Chemist">
+                <ScalarProperty Name="IsBankUpdateApproved" ColumnName="IsBankUpdateApproved" />
                 <ScalarProperty Name="About" ColumnName="About" />
                 <ScalarProperty Name="LicenceImage" ColumnName="LicenceImage" />
                 <ScalarProperty Name="ConfirmPassword" ColumnName="ConfirmPassword" />
@@ -9842,6 +9142,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <EntitySetMapping Name="DriverLocations">
             <EntityTypeMapping TypeName="Model.DriverLocation">
               <MappingFragment StoreEntitySet="DriverLocation">
+                <ScalarProperty Name="PaymentStatus" ColumnName="PaymentStatus" />
                 <ScalarProperty Name="RejectedStatus" ColumnName="RejectedStatus" />
                 <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
                 <ScalarProperty Name="ToatlDistance" ColumnName="ToatlDistance" />
@@ -10084,6 +9385,9 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <EntitySetMapping Name="DoctorTimeSlots">
             <EntityTypeMapping TypeName="Model.DoctorTimeSlot">
               <MappingFragment StoreEntitySet="DoctorTimeSlot">
+                <ScalarProperty Name="EntryDate" ColumnName="EntryDate" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Doctor_Id" ColumnName="Doctor_Id" />
                 <ScalarProperty Name="EndTime" ColumnName="EndTime" />
                 <ScalarProperty Name="StartTime" ColumnName="StartTime" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
@@ -10097,6 +9401,83 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
                 <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
                 <ScalarProperty Name="Medicine_Id" ColumnName="Medicine_Id" />
                 <ScalarProperty Name="Chemist_Id" ColumnName="Chemist_Id" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DayNames">
+            <EntityTypeMapping TypeName="Model.DayName">
+              <MappingFragment StoreEntitySet="DayNames">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DurationTimes">
+            <EntityTypeMapping TypeName="Model.DurationTime">
+              <MappingFragment StoreEntitySet="DurationTime">
+                <ScalarProperty Name="Duration" ColumnName="Duration" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Doctors">
+            <EntityTypeMapping TypeName="Model.Doctor">
+              <MappingFragment StoreEntitySet="Doctor">
+                <ScalarProperty Name="IsBankUpdateApproved" ColumnName="IsBankUpdateApproved" />
+                <ScalarProperty Name="Day_Id" ColumnName="Day_Id" />
+                <ScalarProperty Name="VirtualFee" ColumnName="VirtualFee" />
+                <ScalarProperty Name="SignaturePic" ColumnName="SignaturePic" />
+                <ScalarProperty Name="RegistrationNumber" ColumnName="RegistrationNumber" />
+                <ScalarProperty Name="Qualification" ColumnName="Qualification" />
+                <ScalarProperty Name="Disease" ColumnName="Disease" />
+                <ScalarProperty Name="About" ColumnName="About" />
+                <ScalarProperty Name="Experience" ColumnName="Experience" />
+                <ScalarProperty Name="RefId" ColumnName="RefId" />
+                <ScalarProperty Name="SlotTime2" ColumnName="SlotTime2" />
+                <ScalarProperty Name="EndTime2" ColumnName="EndTime2" />
+                <ScalarProperty Name="StartTime2" ColumnName="StartTime2" />
+                <ScalarProperty Name="IsCheckedTermsCondition" ColumnName="IsCheckedTermsCondition" />
+                <ScalarProperty Name="DoctorId" ColumnName="DoctorId" />
+                <ScalarProperty Name="HospitalId" ColumnName="HospitalId" />
+                <ScalarProperty Name="PanImage" ColumnName="PanImage" />
+                <ScalarProperty Name="AadharImage2" ColumnName="AadharImage2" />
+                <ScalarProperty Name="PinCode" ColumnName="PinCode" />
+                <ScalarProperty Name="LicenseValidity" ColumnName="LicenseValidity" />
+                <ScalarProperty Name="JoiningDate" ColumnName="JoiningDate" />
+                <ScalarProperty Name="SlotTime" ColumnName="SlotTime" />
+                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+                <ScalarProperty Name="Vendor_Id" ColumnName="Vendor_Id" />
+                <ScalarProperty Name="AadharImage" ColumnName="AadharImage" />
+                <ScalarProperty Name="AadharNumber" ColumnName="AadharNumber" />
+                <ScalarProperty Name="PAN" ColumnName="PAN" />
+                <ScalarProperty Name="AdminLogin_Id" ColumnName="AdminLogin_Id" />
+                <ScalarProperty Name="IsApproved" ColumnName="IsApproved" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Fee" ColumnName="Fee" />
+                <ScalarProperty Name="Specialist_Id" ColumnName="Specialist_Id" />
+                <ScalarProperty Name="Department_Id" ColumnName="Department_Id" />
+                <ScalarProperty Name="ClinicName" ColumnName="ClinicName" />
+                <ScalarProperty Name="LicenceNumber" ColumnName="LicenceNumber" />
+                <ScalarProperty Name="LicenceImage" ColumnName="LicenceImage" />
+                <ScalarProperty Name="Location" ColumnName="Location" />
+                <ScalarProperty Name="CityMaster_Id" ColumnName="CityMaster_Id" />
+                <ScalarProperty Name="StateMaster_Id" ColumnName="StateMaster_Id" />
+                <ScalarProperty Name="EmailId" ColumnName="EmailId" />
+                <ScalarProperty Name="MobileNumber" ColumnName="MobileNumber" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="DoctorName" ColumnName="DoctorName" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TransactionFeeMasters">
+            <EntityTypeMapping TypeName="Model.TransactionFeeMaster">
+              <MappingFragment StoreEntitySet="TransactionFeeMaster">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Fee" ColumnName="Fee" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

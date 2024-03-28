@@ -1,0 +1,98 @@
+﻿@model HospitalPortal.Controllers.AmbulancePaymentController.AmbulanceList
+@{
+    ViewBag.Title = "NurseDetails";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+<link href="/Styles/bootstrap.min.css" rel="stylesheet" />
+<a href="/CommisionReport/Commision" class="btn btn-info">Back</a>
+<h2>Details of <span style="color:red">@Model.VehicleNumber</span></h2>
+
+ 
+
+@*@using (Html.BeginForm())
+{*@
+    @*<div class="row">
+        <div class="col-md-3">
+            <input type="hidden" name="VehicleId" id="VehicleId" value="@Model.VehicleId" />
+            @Html.TextBoxFor(a => a.AppointmentDate, new { @class = "form-control", required = "required", type = "date" })
+        </div>
+        <div class="col-md-3">
+            <input type="submit" class="btn btn-info" value="Click" />
+        </div>
+    </div>
+}*@
+
+
+
+<table class="table table-bordered">
+    <thead style="background-color:lavender;">
+        <tr>
+            <th>Booking Date</th>
+            <th>
+                Amount
+            </th>
+            <th>
+                Transaction Fee @ViewBag.transaction %
+            </th>
+            <th>
+                Commission Amount @ViewBag.Commission %
+            </th>
+            <th>
+                TDS Amount @ViewBag.tds %
+            </th>
+            <th>Payment Date</th>
+
+            <th>
+                Payable Amount
+            </th>
+        </tr>
+    </thead>
+    @if (Model.Ambulance == null)
+    {
+        if (TempData["msg"] != null)
+        {
+            <h3 style="color:red">@TempData["msg"]</h3>
+        }
+    }
+    else
+    {
+        <tbody>
+            @foreach (var item in Model.Ambulance)
+            {
+                <tr>
+                    <td>@item.EntryDate</td>
+                    <td>₹ @item.TotalPrice</td>
+                    @{
+                        double? razorpaycomm = @item.Amountwithrazorpaycomm;
+                        double? basicamt = @item.TotalPrice;
+                        double? razarfeeamt = razorpaycomm - basicamt;
+                    }
+                    <td>@String.Format("{0:F2}", razarfeeamt) </td>
+                    @{
+                        double amt = (Math.Round(item.TotalPrice * ViewBag.Commission) / 100);
+
+
+
+                        double tds = (Math.Round((double)item.TotalPrice * (double)ViewBag.tds) / 100);
+                        double payableAmount = item.TotalPrice - (amt + tds + (double)razarfeeamt);
+
+                    }
+                    <td>₹ @amt</td>
+                    <td>₹ @tds</td>
+                    <td>@item.PaymentDate</td>
+                    <td>₹ @payableAmount</td>
+
+
+
+                </tr>
+            }
+        </tbody>
+                        }
+    </table>
+
+<script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
+<link href="~/css/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
+ 

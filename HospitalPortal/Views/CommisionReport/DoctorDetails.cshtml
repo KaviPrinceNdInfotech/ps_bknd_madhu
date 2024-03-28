@@ -1,0 +1,125 @@
+﻿@model HospitalPortal.Models.ViewModels.ReportDTO
+@{
+    ViewBag.Title = "NurseDetails";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+<link href="/Styles/bootstrap.min.css" rel="stylesheet" />
+<a href="/CommisionReport/Commision" class="btn btn-info">Back</a>
+<h2>Details of <span style="color:red">@Model.DoctorName</span></h2>
+
+<div class=" row">
+    <div class="col-md-3">
+        <div class=" form-group">
+            <a href="@Url.Action("DownloadDoctorDetails", "CommisionReport", new { Doctor_Id = @Model.Doctor_Id })">
+                <img src="https://www.pinclipart.com/picdir/big/178-1780962_download-105-free-excel-icons-here-excel-download.png" alt="List View" style="width: 55px;">
+            </a>
+
+        </div>
+    </div>
+</div>
+
+@using (Html.BeginForm())
+{
+    <div class="row">
+        <div class="col-md-3">
+            <input type="hidden" name="DoctorId" id="DoctorId" value="@Model.Doctor_Id" />
+            @Html.TextBoxFor(a => a.AppointmentDate, new { @class = "form-control", required = "required", type = "date" })
+        </div>
+        <div class="col-md-3">
+            <input type="submit" class="btn btn-info" value="Click" />
+        </div>
+    </div>
+}
+
+@if (Model.DoctorCommisionReport == null)
+{
+    if (TempData["msg"] != null)
+    {
+        <h3 style="color:red">@TempData["msg"]</h3>
+    }
+}
+else
+{
+
+    <table class="table table-bordered">
+        <thead style="background-color:lavender;">
+            <tr>
+                <th>Appointment Date</th>
+                <th>
+                    Amount
+                </th>
+                <th>
+                    Transaction Fee @ViewBag.transaction %
+                </th>
+                <th>
+                    Commission Amount @ViewBag.Commission %
+                </th>
+                <th>
+                    TDS Amount @ViewBag.tds %
+                </th>
+                <th>Payment Date</th>
+
+                <th>
+                    Payable Amount
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.DoctorCommisionReport)
+            {
+                <tr>
+                    <td>@item.Appointment</td>
+                    <td>₹ @item.Amount</td>
+                    @{
+                        double? razorpaycomm = @item.Amountwithrazorpaycomm;
+                        double? basicamt = @item.Amount;
+                        double? razarfeeamt = razorpaycomm - basicamt;
+                    }
+                    <td>@String.Format("{0:F2}", razarfeeamt) </td>
+                    @{
+                        double amt = (Math.Round(item.Amount * ViewBag.Commission) / 100);
+
+
+
+                        double tds = (Math.Round((double)item.Amount * (double)ViewBag.tds) / 100);
+                        double payableAmount = item.Amount - (amt + tds + (double)razarfeeamt);
+
+                    }
+                    <td>₹ @amt</td>
+                    <td>₹ @tds</td>
+                    <td>@item.PaymentDate</td>
+                    <td>₹ @payableAmount</td>
+
+
+
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+<script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
+<link href="~/css/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
+<script>
+    $(".datepicker").datepicker({});
+
+    $("#test2").click(function () {
+        debugger;
+        var name = $("#DoctorName").val();
+        var date = $("#AppointmentDate").val();
+        $.ajax({
+            url: "/CommisionReport/Doctor",
+            data: { term: "Doctor", Name: name, AppointmentDate: date },
+            type: "GET",
+            success: function (response) {
+                console.log(response);
+                $("#prevAtt").html(response);
+            },
+            error: function (error) {
+                console.log(error.responseText);
+            }
+        });
+    });
+</script>

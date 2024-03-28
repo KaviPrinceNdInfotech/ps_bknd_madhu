@@ -59,7 +59,6 @@ namespace HospitalPortal
             }
         }
 
-
         protected void Application_BeginRequest()
         {
             {

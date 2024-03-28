@@ -29,7 +29,7 @@ namespace HospitalPortal.Models.DomainModels
         public string MobileNumber { get; set; }
         public string EmailId { get; set; }
         public int StateMaster_Id { get; set; }
-        public int CityMaster_Id { get; set; }
+        public Nullable<int> CityMaster_Id { get; set; }
         public string Location { get; set; }
         public string DriverImage { get; set; }
         public string DlImage { get; set; }
@@ -64,6 +64,8 @@ namespace HospitalPortal.Models.DomainModels
         public Nullable<double> Lat { get; set; }
         public Nullable<double> Lang { get; set; }
         public Nullable<int> Charge { get; set; }
+        public Nullable<bool> IsBankUpdateApproved { get; set; }
+        public Nullable<int> Vehicle_Id { get; set; }
     
         public virtual Vehicle Vehicle { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

@@ -21,7 +21,5 @@ namespace HospitalPortal.Models.DomainModels
         public Nullable<bool> IsDeleted { get; set; }
         public Nullable<bool> IsResolved { get; set; }
         public string Others { get; set; }
-    
-        public virtual Doctor Doctor { get; set; }
     }
 }

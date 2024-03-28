@@ -1,6 +1,7 @@
 ﻿@model IEnumerable<HospitalPortal.Models.ViewModels.VendorDTO>
 @{
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    int count = 1;
 }
 
 
@@ -45,11 +46,11 @@
             </div>
         }
         @if (Model.Count() > 0)
-        {
-        <div class="double-scroll">
-               <table class="table table-bordered">
-                 <thead>
+        { 
+               <table id="myTable" class="table table-bordered">
+                 <thead style="background-color:lavender;">
                      <tr>
+                         <th>Sr No</th>
                          <th>Unique Id</th>
                          <th>Name</th>
                          <th>Company</th>
@@ -58,8 +59,8 @@
                          <th>Address</th>
                          <th>GST</th>
                          <th>PAN</th>
-                         <th>Aadhar Details</th>
                          <th>Approval</th>
+                         <th>Approval for Bank Update</th>
                          <th>Action</th>
                      </tr>
                  </thead>
@@ -67,6 +68,7 @@
                        @foreach (var item in Model)
                        {
                            <tr>
+                               <td>@count</td>
                                <td>@item.UniqueId</td>
                                <td>@item.VendorName</td>
                                <td>@item.CompanyName</td>
@@ -74,63 +76,63 @@
                                <td>@item.EmailId</td>
                                <td>@item.Location , @item.CityName, @item.StateName</td>
                                <td>@item.GSTNumber</td>
+                                
                                <td>
-                                   @item.PanNumber<br />
-                               @if (string.IsNullOrEmpty(item.AadharOrPANImage) && string.IsNullOrEmpty(item.AadharOrPANImage2))
-                               {
-                                   <a href="/Images/@item.PanImage">
-                                       <img src="/Images/@item.PanImage" style="width:100px; height:80px;" />
-                                   </a>
-                               }
-                               else
-                               {
-                                   <text>No Images</text>
-                               }
-                           </td>
-                           <td>
-                              @item.AadharOrPANNumber
-                               @if (string.IsNullOrEmpty(item.PanImage))
-                               {
-                                   <a href="/Images/@item.AadharOrPANImage">
-                                       <img src="/Images/@item.AadharOrPANImage" style="width:100px; height:80px;" />
-                                   </a>
-                                           <a href="/Images/@item.AadharOrPANImage2">
-                                               <img src="/Images/@item.AadharOrPANImage2" style="width:100px; height:80px;" />
-                                           </a>
-                               }
-                               else
-                               {
-                                <text>No Images</text>
-                               }
-                           </td>
-                           <td>
-                               @if (item.IsApproved)
-                               {
-                                   <a href="/Vendor/UpdateStatus?id=@item.Id" class="btn btn-success">Approved</a>
-                                   @*@Html.ActionLink("Approved", "UpdateStatus", new { id = item.Id }, new { @class = "btn btn-success" })*@
-                               }
-                               else
-                               {
-                                   <a href="/Vendor/UpdateStatus?id=@item.Id" class="btn btn-danger">Not Approve</a>
-                               }
-                           </td>
+                                   @item.PanNumber
+                                   @if (!string.IsNullOrEmpty(item.PanImage))
+                                   {
+                                       <a href="/Images/@item.PanImage">
+                                           <img src="/Images/@item.PanImage" style="width:100px; height:80px;" />
+                                       </a>
+                                       @*<a href="/Images/@item.AadharOrPANImage2">
+                    <img src="/Images/@item.AadharOrPANImage2" style="width:100px; height:80px;" />
+                </a>*@
+                                   }
+                                   else
+                                   {
+                                       <text>No Images</text>
+                                   }
+                               </td>
+                               <td>
+                                   @if (item.IsApproved)
+                                   {
+                                       <a href="/Vendor/UpdateStatus?id=@item.Id" class="btn btn-success">Approved</a>
+                                       @*@Html.ActionLink("Approved", "UpdateStatus", new { id = item.Id }, new { @class = "btn btn-success" })*@
+                                   }
+                                   else
+                                   {
+                                       <a href="/Vendor/UpdateStatus?id=@item.Id" class="btn btn-danger">Not Approve</a>
+                                   }
+                               </td>
+                               <td>
+                                   @if (item.IsBankUpdateApproved)
+                                   {
+                                       <a href="/Vendor/UpdateBankUpdateStatus?id=@item.Id" class="btn btn-success">Update Bank Approved</a>
+                                   }
+                                   else
+                                   {
+                                       <a href="/Vendor/UpdateBankUpdateStatus?id=@item.Id" class="btn btn-danger">Update Bank Not Approved</a>
+                                   }
+                               </td>
                                <td>
                                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { onclick = "return confirm('Are sure wants to Edit?');", @class = "btn btn-info" })
                                    <a href="/Common/BankDetails?Id=@item.AdminLogin_Id" class="btn btn-primary">Bank Details</a>
                                    @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { onclick = "return confirm('Are sure wants to delete?');", @class = "btn btn-danger" })
                                </td>
                            </tr>
+                           count++;
                        }
                    </tbody>
-               </table>
-            </div>
+               </table> 
         }
         else
         {
             <span>No Records</span>
         }
         </div>
+    <div class="double-scroll">
+        </div>
 
-<script>
-    $('.double-scroll').doubleScroll();
-</script>
+        <script>
+            $('.double-scroll').doubleScroll();
+        </script>

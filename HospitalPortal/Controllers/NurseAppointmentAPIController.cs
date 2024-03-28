@@ -13,9 +13,9 @@ namespace HospitalPortal.Controllers
     {
         returnMessage rm = new returnMessage();
         DbEntities ent = new DbEntities();
-        [HttpGet]
+        [HttpGet]// Nurse booking request
         [Route("api/NurseAppointmentAPI/NurseAppointmentList")]
-        public IHttpActionResult NurseAppointmentList(int NurseId/*, DateTime? startDate , DateTime? endDate, string term = null*/)
+        public IHttpActionResult NurseAppointmentList(int NurseId)
         {
             var model = new NurseAppointmentModel();
             string query = @"select ns.Id,p.PatientName,
@@ -29,20 +29,15 @@ ns.RequestDate as rDate,
 Convert(nvarchar(100), ns.StartDate, 103) + '-' + Convert(nvarchar(100), ns.EndDate, 103) as ServiceTiming,
 Datediff(day,ns.StartDate,ns.EndDate) as TotalDays,
 IsNull(ns.TotalFee,0) as Fee,
-IsNull(Datediff(day,ns.StartDate,ns.EndDate)*ns.TotalFee,0) as TotalFee,AL.DeviceId
+IsNull(ns.Location,0) as Location,
+IsNull(ns.TotalFee,0) as TotalFee,AL.DeviceId
  from NurseService ns
  join Patient p on ns.Patient_Id = p.Id
  join nurse n on ns.Nurse_Id=n.Id
  join AdminLogin AL on AL.Id=p.AdminLogin_Id
 where ns.Nurse_Id =" + NurseId + " and ns.ServiceStatus='Approved'  order by ns.Id desc";
             var data = ent.Database.SqlQuery<NurseAppointmentWithUser>(query).ToList();
-            //if (term != "")
-            //{
-            //    term = term.ToLower();
-            //    data = data.Where(a => a.PatientName.ToLower().Contains(term) || a.RegisteredMobileNumber.StartsWith(term) || a.ContactNumber.StartsWith(term)).ToList();
-            //}
-            //if (startDate != null && endDate != null)
-            //    data = data.Where(a => a.rDate >= startDate && a.rDate <= endDate).ToList();
+            
             return Ok(new { result= data } );
         }
     }

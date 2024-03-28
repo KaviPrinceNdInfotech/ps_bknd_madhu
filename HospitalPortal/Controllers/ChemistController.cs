@@ -9,6 +9,7 @@ using HospitalPortal.Utilities;
 using log4net;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -123,6 +124,7 @@ namespace HospitalPortal.Controllers
                     domainModel.ChemistId = bk.GenerateChemistId();
                     admin.UserID = domainModel.ChemistId;
                     domainModel.PAN = domainModel.PAN;
+                    domainModel.IsBankUpdateApproved = false;
                     //domainModel.Vendor_Id = model.Vendor_Id??0;
                     domainModel.IsCheckedTermsCondition = model.IsCheckedTermsCondition;
                     //if (model.CityNames != null)
@@ -189,18 +191,15 @@ namespace HospitalPortal.Controllers
         [HttpPost]
         public ActionResult Edit(ChemistDTO model)
         {
-            model.States = new SelectList(repos.GetAllStates(), "Id", "StateName", model.StateMaster_Id);
-            model.Cities = new SelectList(repos.GetCitiesByState(model.StateMaster_Id), "Id", "CityName", model.CityMaster_Id);
-            ModelState.Remove("MobileNumber");
-            ModelState.Remove("EmailId");
-            ModelState.Remove("Password");
-            ModelState.Remove("ConfirmPassword");
-            ModelState.Remove("LicenceImageFile");
-            ModelState.Remove("IsCheckedTermsCondition");
+            var existingchemist = ent.Chemists.Find(model.Id);  
+            if (existingchemist == null)
+            {
+                TempData["msg"] = "Chemist not found";
+                return RedirectToAction("Edit", new { id = model.Id });
+            }
             try
             {
-                if (!ModelState.IsValid)
-                    return View(model);
+                
                 // Licence Section 
                 if (model.LicenceImageFile != null)
                 {
@@ -213,8 +212,20 @@ namespace HospitalPortal.Controllers
 
                     model.LicenceImage = img;
                 }
-                var domainModel = Mapper.Map<Chemist>(model);
-                ent.Entry(domainModel).State = System.Data.Entity.EntityState.Modified;
+                //var domainModel = Mapper.Map<Chemist>(model);
+                existingchemist.ChemistName = model.ChemistName;
+                existingchemist.ShopName = model.ShopName;
+                existingchemist.StateMaster_Id = model.StateMaster_Id;
+                existingchemist.CityMaster_Id = model.CityMaster_Id;
+                existingchemist.Location = model.Location;
+                existingchemist.EmailId = model.EmailId;
+                existingchemist.MobileNumber = model.MobileNumber;
+                existingchemist.Location = model.Location;
+                existingchemist.PinCode = model.PinCode;
+                existingchemist.GSTNumber = model.GSTNumber;
+                existingchemist.LicenseValidity = model.LicenseValidity;
+                existingchemist.LicenceImage = model.LicenceImage;
+                existingchemist.LicenceNumber = model.LicenceNumber;  
                 ent.SaveChanges();
                 TempData["msg"] = "ok";
             }
@@ -234,7 +245,7 @@ namespace HospitalPortal.Controllers
 join StateMaster s on v.StateMaster_Id=s.Id
 join CityMaster c on v.CityMaster_Id = c.Id
 left join Vendor ve on ve.Id = v.Vendor_Id 
-where v.IsDeleted=0 order by v.Id desc";
+where v.IsDeleted=0 order by v.Id asc";
             var data = ent.Database.SqlQuery<ChemistDTO>(q).ToList();
             if (vendorId != null)
                 data = data.Where(a => a.Vendor_Id == vendorId).ToList();
@@ -255,6 +266,36 @@ where v.IsDeleted=0 order by v.Id desc";
             string Name = ent.Database.SqlQuery<string>(@"select ChemistName from Chemist where Id=" + id).FirstOrDefault();
             var msg = "Dear " + Name + ", Now you Can Login With Your Registered EmailId " + Email + " and Pasword";
             Message.SendSms(mobile, msg);
+            return RedirectToAction("All");
+        }
+
+        public ActionResult UpdateBankUpdateStatus(int id)
+        {
+            string q = @"update Chemist set IsBankUpdateApproved = case when IsBankUpdateApproved=1 then 0 else 1 end where id=" + id;
+            ent.Database.ExecuteSqlCommand(q);
+
+            string mobile = ent.Database.SqlQuery<string>("select MobileNumber from Chemist where Id=" + id).FirstOrDefault();
+            string Email = ent.Database.SqlQuery<string>(@"select EmailId from Chemist where Id=" + id).FirstOrDefault();
+            string Name = ent.Database.SqlQuery<string>(@"select ChemistName from Chemist where Id=" + id).FirstOrDefault();
+            //var msg = "Dear " + Name + ", Now you Can Upadate your bank details.";
+            //Message.SendSms(mobile, msg);
+            var query = "SELECT IsBankUpdateApproved FROM Chemist WHERE Id = @Id";
+            var parameters = new SqlParameter("@Id", id);
+            bool isApproved = ent.Database.SqlQuery<bool>(query, parameters).FirstOrDefault();
+
+            var mailmsg = "Dear " + Name + ", Now you Can Update your bank details.";
+
+            if (isApproved == true)
+            {
+                EmailEF ef = new EmailEF()
+                {
+                    EmailAddress = Email,
+                    Message = mailmsg,
+                    Subject = "PS Wellness Approval Status."
+                };
+                EmailOperations.SendEmainew(ef);
+
+            }
             return RedirectToAction("All");
         }
 

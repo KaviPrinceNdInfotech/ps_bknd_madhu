@@ -5,6 +5,7 @@
     string role = HospitalPortal.Utility.UserIdentity.UserRole;
 
     DbEntities db = new DbEntities();
+    int count = 1;
 }
 
 
@@ -50,9 +51,10 @@
             </div>
         }
             <div class="double-scroll">
-               <table class="table table-bordered">
-                 <thead>
+               <table id="myTable" class="table table-bordered">
+                 <thead style="background-color:lavender;">
                      <tr>
+                         <th>Sr No</th>
                          <th>Nurse Id</th>
                          <th>Name</th>
                          <th>Nurse Type</th>
@@ -60,11 +62,11 @@
                          <th>Mobile No</th>
                          <th>Email</th>
                          <th>Address</th>
+                         <th>Nurse Image</th>
                          <th>Certificate</th>
-                         @*<th>PAN</th>*@
-                         @*<th>Aadhar</th>*@
+                         <th>Pan</th>
                          <th>Approval</th>
-                         @*<th>Police verified</th>*@
+                         <th>Approval for Bank Update</th>
                          <th>Action</th>
                      </tr>
                  </thead>
@@ -73,88 +75,86 @@
                        {
                            var result = db.Nurses.Find(item.Id);
                            <tr>
+                               <td>@count</td>
                                <td>@item.NurseId</td>
                                <td>@item.NurseName</td>
                                <td>@item.NurseTypeName</td>
                                <td>
                                    @if (item.Vendor_Id < 0 || item.Vendor_Id == null)
-                {
-                    if (role == "admin")
-                    {
+                                   {
+                                       if (role == "admin")
+                                       {
                                            <a href="/Admin/ShareToVendor?Id=@item.Id&Role=Nurse">Share To Vendor</a>
                                        }
                                    }
                                    else
                                    {
+                                       <a href="/Admin/ShareToVendor?Id=@item.Id&Role=Nurse">Change Franchise</a>
                                        @item.VendorName;
-                }
+                                   }
                                </td>
                                <td>@item.MobileNumber</td>
                                <td>@item.EmailId</td>
                                <td>@item.Location , @item.CityName, @item.StateName</td>
                                <td>
+
+                                   <a href="/Images/@item.NurseImage">
+                                       <img src="/Images/@item.NurseImage" class="thumb" />
+                                   </a>
+                               </td>
+                               <td>
+                                   @item.CertificateNumber
                                    <a href="/Images/@item.CertificateImage">
                                        <img src="/Images/@item.CertificateImage" style="width:100px;height:80px" />
                                    </a>
                                </td>
-                               @*<td>@item.PAN
-                                   @if (string.IsNullOrEmpty(item.AadharImage) && string.IsNullOrEmpty(item.AadharImage2))
-                {
-                                       <a href="/Images/@item.PanImage">
-                                           <img src="/Images/@item.PanImage" class="thumb" />
-                                       </a>
-                                   }
-                               </td>*@
-                               @*<td>@item.AadharNumber
-                                   @if (string.IsNullOrEmpty(item.PanImage))
-                {
-                                       <a href="/Images/@item.AadharImage">
-                                           <img src="/Images/@item.AadharImage" class="thumb" />
-                                       </a>
-                                       <a href="/Images/@item.AadharImage2">
-                                           <img src="/Images/@item.AadharImage2" class="thumb" />
-                                       </a>
-                                   }
-                               </td>*@
-                           <td>
-                               @if (item.IsApproved)
-                               {
-                                   @Html.ActionLink("Approved", "UpdateStatus", new { id = item.Id }, new { @class = "btn btn-success" })
-                               }
-                               else
-                               {
-                                   @Html.ActionLink("Not Approved", "UpdateStatus", new { id = item.Id }, new { @class = "btn btn-danger" })
-                               }
+                               <td>
+                                   @item.PAN
 
-                               @if (result.FileName != null)
-                               {
-                                   <a href="/Nurse/DownloadFile?fileId=@result.Id" class="mt-3 text-primary text-justify">Click Download Everify Docs</a>
-                               }
-                           </td>
-                               @*<td>
-                                   @if (item.IsVerifiedByPolice)
+                                   <a href="/Images/@item.PanImage">
+                                       <img src="/Images/@item.PanImage" class="thumb" />
+                                   </a>
+                               </td>
+
+
+                               <td>
+                                   @if (item.IsApproved)
                                    {
-                                    <a href="/Images/@item.VerificationDoc"> <img class="thumb" src="/Images/@item.VerificationDoc" /> </a>
+                                       @Html.ActionLink("Approved", "UpdateStatus", new { id = item.Id }, new { @class = "btn btn-success" })
                                    }
                                    else
                                    {
-                                       <span>No</span>
+                                       @Html.ActionLink("Not Approved", "UpdateStatus", new { id = item.Id }, new { @class = "btn btn-danger" })
                                    }
-                               </td>*@
-                           <td>
-                               @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { onclick = "return confirm('Are sure wants to Edit?');", @class = "btn btn-info" })
-                               <a href="/Common/BankDetails?Id=@item.AdminLogin_Id" class="btn btn-primary">Bank Details</a>
-                               @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { onclick = "return confirm('Are sure wants to delete?');", @class = "btn btn-danger" })
-                               <a href="/Nurse/EverifyDocs?id=@item.Id" class="btn btn-warning">Everify Docs</a>
-                           </td>
+
+                                   @if (result.FileName != null)
+                                   {
+                                       <a href="/Nurse/DownloadFile?fileId=@result.Id" class="mt-3 text-primary text-justify">Click Download Everify Docs</a>
+                                   }
+                               </td>
+                               <td>
+                                   @if (item.IsBankUpdateApproved)
+                                   {
+                                       <a href="/Nurse/UpdateBankUpdateStatus?id=@item.Id" class="btn btn-success">Update Bank Approved</a>
+                                   }
+                                   else
+                                   {
+                                       <a href="/Nurse/UpdateBankUpdateStatus?id=@item.Id" class="btn btn-danger">Update Bank Not Approved</a>
+                                   }
+                               </td>
+                                
+                               <td>
+                                   @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { onclick = "return confirm('Are sure wants to Edit?');", @class = "btn btn-info" })
+                                   <a href="/Common/BankDetails?Id=@item.AdminLogin_Id" class="btn btn-primary">Bank Details</a>
+                                   @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { onclick = "return confirm('Are sure wants to delete?');", @class = "btn btn-danger" })
+                                   <a href="/Nurse/EverifyDocs?id=@item.Id" class="btn btn-warning">Everify Docs</a>
+                               </td>
 
                            </tr>
+                           count++;
                        }
                    </tbody>
                </table>
             </div>
         </div>
-<script>
-    $('.double-scroll').doubleScroll();
-</script>
-
+ 

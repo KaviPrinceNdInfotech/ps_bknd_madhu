@@ -32,10 +32,7 @@
                 <h3>Chemist Registration</h3>
             </div>
         </div>
-        @*@Html.HiddenFor(a => a.Id)
-            @Html.HiddenFor(a=>a.IsDeleted)
-            @Html.HiddenFor(a=>a.AdminLogin_Id)
-        *@
+         
         @Html.Partial("~/Views/Shared/_DisplayMessage.cshtml")
         <div class="row">
             <div class="col-md-12">
@@ -82,7 +79,7 @@
                 </div>
 
                 <div class="form-group">
-                    State * @Html.DropDownListFor(a => a.StateMaster_Id, Model.States, "Select", new { @class = "form-control" })
+                    State * @Html.DropDownListFor(a => a.StateMaster_Id, Model.States, "--Select State--", new { @class = "form-control" })
                     <span class="red">
                         @Html.ValidationMessageFor(a => a.StateMaster_Id)
                     </span>
@@ -90,9 +87,9 @@
 
                 <div class="form-group">
                     @{ Html.EnableClientValidation(false);}
-                    City  @Html.DropDownListFor(a => a.CityMaster_Id,
-          Enumerable.Empty<SelectListItem>()
-          , "Select", new { @class = "form-control" })
+                    District *  @Html.DropDownListFor(a => a.CityMaster_Id,
+Enumerable.Empty<SelectListItem>()
+, "--Select District--", new { @class = "form-control" })
                     <span class="red">
 
                         @Html.ValidationMessageFor(a => a.CityMaster_Id)
@@ -100,23 +97,7 @@
 
 
                     </span>
-                </div>
-
-
-                @*<div class="form-group">
-            @{ Html.EnableClientValidation(false);}
-            City  @Html.DropDownListFor(a => a.CityMaster_Id,
-                    Enumerable.Empty<SelectListItem>()
-                    , "Select", new { @class = "form-control" })
-            <span class="red">
-
-                @Html.ValidationMessageFor(a => a.CityMaster_Id)
-                @{ Html.EnableClientValidation(true);}
-
-
-            </span>
-        </div>*@
-
+                </div> 
                 <div class="form-group">
                     Other City (If you are not able to find it above )
                     @Html.TextBoxFor(a => a.OtherCity, new { @class = "form-control" })
@@ -124,19 +105,11 @@
                         @Html.ValidationMessageFor(a => a.OtherCity)
                     </span>
                 </div>
-                @*<div class="form-group">
-            If City Not Available. Please (✓)
-            @Html.CheckBoxFor(a => a.IsCityAvailable)
-        </div>
-        <div class="form-group" id="CityNamesdiv" style="display:none">
-            New City Name:
-            @Html.TextBoxFor(a => a.CityNames, new { @class = "form-control" })
-        </div>*@
                 <div class="form-group">
                     @{ Html.EnableClientValidation(false);}
                     Location * : @Html.DropDownListFor(a => a.Location_Id,
 Enumerable.Empty<SelectListItem>()
-, "Select", new { @class = "form-control" })
+, "--Select Location--", new { @class = "form-control" })
 
                     <span class="red">
                         @Html.ValidationMessageFor(a => a.Location_Id)
@@ -151,14 +124,7 @@ Enumerable.Empty<SelectListItem>()
                         @Html.ValidationMessageFor(a => a.OtherLocation)
                     </span>
                 </div>
-                @*<div class="form-group">
-            If Location Not Available. Please (✓)
-            @Html.CheckBoxFor(a => a.IsLocationAvail)
-        </div>
-        <div class="form-group" id="LocNamesdiv" style="display:none">
-            New Location Name:
-            @Html.TextBoxFor(a => a.LocationName, new { @class = "form-control" })
-        </div>*@
+
                 <div class="form-group">
                     Address * @Html.TextAreaFor(a => a.Location, new { @class = "form-control" })
                     <span class="red">
@@ -172,38 +138,26 @@ Enumerable.Empty<SelectListItem>()
                     </span>
                 </div>
 
-                <div class="form-group">
-                    Franchise ID * @Html.TextBoxFor(a => a.RefId, new { @class = "form-control" })
-                    <span class="red">
-                        @Html.ValidationMessageFor(a => a.RefId)
-                    </span>
-                </div>
                 @*<div class="form-group">
-            PAN Number * @Html.TextBoxFor(a => a.PAN, new { @class = "form-control" })
-            <span class="red">
-                @Html.ValidationMessageFor(a => a.PAN)
-            </span>
-        </div>*@
-                @*<div class="form-group">
-            PAN Image: @Html.TextBoxFor(a => a.PanImageFile, new { @class = "form-control", type = "file" })
-            <span class="red">
-                @Html.ValidationMessageFor(a => a.PanImageFile)
-            </span>
-        </div>*@
-
-                @*<div class="form-group">
-            Aadhar Number @Html.TextBoxFor(a => a.AadharOrPANNumber, new { @class = "form-control" })
-            <span class="red">
-                @Html.ValidationMessageFor(a => a.AadharOrPANNumber)
-            </span>
-        </div>
-
-        <div class="form-group">
-            Aadhar doc. @Html.TextBoxFor(a => a.AadharOrImageFile, new { @class = "form-control", type = "file" })
-            <span class="red">
-                @Html.ValidationMessageFor(a => a.AadharOrImageFile)
-            </span>
-        </div>*@
+                        Franchise ID * @Html.TextBoxFor(a => a.RefId, new { @class = "form-control" })
+                        <span class="red">
+                            @Html.ValidationMessageFor(a => a.RefId)
+                        </span>
+                    </div>*@
+                @if (Model.Vendor_Id > 0)
+                {
+                    @Html.HiddenFor(a => a.Vendor_Id)
+                }
+                else
+                {
+                    <div class="form-group">
+                        @Html.HiddenFor(a => a.Vendor_Id)
+                        Franchise ID <input type="text" id="txtVdr" name="txtVdr" class="form-control" placeholder="Search by Company ID" />
+                        <span class="red">
+                            @Html.ValidationMessageFor(a => a.Vendor_Id)
+                        </span>
+                    </div>
+                }
                 <div class="form-group">
                     <span>GST Number<em class="text-danger">*</em> </span> @Html.TextBoxFor(a => a.GSTNumber, new { @class = "form-control", @required = "require" })
                     <span class="red">
@@ -266,14 +220,10 @@ Enumerable.Empty<SelectListItem>()
     $(".datepicker").datepicker().datepicker('setdate', 'today');
 </script>
 <script>
-    $("#IsCityAvailable").click(function () {
-        //$("#Citydiv").css("display", "none");
-        //$('#CityMaster_Id').empty();
+    $("#IsCityAvailable").click(function () { 
         $("#CityNamesdiv").toggle();
     });
-    $("#IsLocationAvail").click(function () {
-        //$("#Locdiv").css("display", "none");
-        //$('#Location_Id').empty();
+    $("#IsLocationAvail").click(function () { 
         $("#LocNamesdiv").toggle();
     });
 
@@ -295,6 +245,9 @@ Enumerable.Empty<SelectListItem>()
     });
 </script>
 <script src="/Scripts/Library/jquery-1.7.1.min.js"></script>
+<link href="~/css/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
+<script src="~/js/FranchiseAutoComplete.js"></script>
 @Html.Partial("~/Views/Shared/_StateCityLocCascading.cshtml")
 
 
@@ -306,12 +259,12 @@ Enumerable.Empty<SelectListItem>()
 
 
 @*<script type="text/javascript">
-    google.maps.event.addDomListener(window, 'load', function () {
-        var options = {
-            types: ['(cities)'],
-            componentRestrictions: { country: "in" }
-        };
-        var input = document.getElementById('Location');
-        var places = new google.maps.places.Autocomplete(input, options);
-    });
-</script>*@
+        google.maps.event.addDomListener(window, 'load', function () {
+            var options = {
+                types: ['(cities)'],
+                componentRestrictions: { country: "in" }
+            };
+            var input = document.getElementById('Location');
+            var places = new google.maps.places.Autocomplete(input, options);
+        });
+    </script>*@

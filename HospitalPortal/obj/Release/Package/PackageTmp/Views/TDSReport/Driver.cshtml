@@ -5,82 +5,109 @@
     Layout= null;
 }
 
-<h2>Ambulance TDS Report</h2>
+
 
 <link href="/Styles/bootstrap.min.css" rel="stylesheet" />
 <div style="margin:auto; width:85%">
+    <h2>Ambulance TDS Report</h2>
+ 
+    <div class="row" style="margin-bottom: 2%;">
 
-    <div class="row" style="margin-bottom: 3%;">
-        <div class="col-md-3">
-            @Html.TextBoxFor(a => a.RequestDate, new { @class = "datepicker form-control", required = "required" })
+
+        <div class="col-md-2">
+            @Html.TextBoxFor(a => a.startdate, new { @class = "form-control", required = "required", type = "date" })
         </div>
-        <div class="col-md-3">
+        <div class="col-md-2">
+            @Html.TextBoxFor(a => a.enddate, new { @class = "form-control", required = "required", type = "date" })
+        </div>
+        <div class="col-md-2">
             <input type="button" id="test" value="Search" class="btn btn-primary" />
         </div>
-        <div class="col-md-3">
-            @Html.TextBoxFor(a => a.VehicleNumber, new { @class = "form-control", required = "required", placeholder = "Search by Name" })
+        <div class="col-md-4">
+            @Html.TextBoxFor(a => a.VehicleNumber, new { @class = "form-control", required = "required", placeholder = "Search by Vehicle Number" })
         </div>
-        <div class="col-md-3">
+        <div class="col-md-2">
             <input type="button" id="test2" value="Search" class="btn btn-primary" />
         </div>
+
+
+
     </div>
 
-    @if (Model.Ambulance == null)
-    {
-        if (TempData["msg"] != null)
-        {
-            @TempData["msg"];
-        }
-    }
-    else
-    {
+    
 
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>
-                        Vehicle Number
-                    </th>
-                    <th>
-                        Driver Name
-                    </th>
-                    <th>
-                        Total Amount
-                    </th>
-                    <th>
-                        TDS Amount(in %)
-                    </th>
-                    <th>
-                        TDS Amount
-                    </th>
-                    <th>
-                        Payable Amount
-                    </th>
-                </tr>
-            </thead>
+    <table class="table table-bordered">
+        <thead style="background-color:lavender;">
+            <tr>
+                <th>
+                    Vehicle Number
+                </th>
+                <th>
+                    Driver Name
+                </th>
+                <th>
+                    Total Amount
+                </th>
+
+                <th>
+                    TDS Amount @ViewBag.tds %
+                </th>
+                <th>
+                    Payable Amount
+                </th>
+            </tr>
+        </thead>
+        @if (Model.Ambulance == null)
+        {
+            if (TempData["msg"] != null)
+            {
+                <div class="alert alert-danger">
+                    @TempData["msg"];
+                </div>
+
+            }
+        }
+        else
+        {
             <tbody>
+                @{
+                    double TotalBasicAmount = 0;
+                    double TotaltdsAmount = 0;
+                    double totalPayableAmount = 0;
+                }
                 @foreach (var item in Model.Ambulance)
                 {
                     <tr>
                         <td>@item.VehicleNumber</td>
                         <td>
-                            @item.DriverName
+                            @item.DriverName (@item.DriverId)
                         </td>
                         <td> ₹ @item.Amount </td>
-                        <td>
-                            @ViewBag.Commission %
-                        </td>
+
                         @{
-                            double amt = (Math.Round(item.Amount * ViewBag.Commission) / 100);
-                            double Value = item.Amount - amt;
+                            double amt = (Math.Round((double)item.Amount * (double)ViewBag.tds) / 100);
+                            double Value = (double)item.Amount - amt;
+                            TotalBasicAmount += (double)item.Amount;
+                            TotaltdsAmount += amt;
+                            totalPayableAmount += Value;
                         }
                         <td>₹ @Math.Round(amt)</td>
                         <td>₹ @Math.Round(Value)</td>
                     </tr>
-                            }
+                }
             </tbody>
-        </table>
+            <tfoot>
+                <tr>
+                    <td colspan="2" style="text-align: right;"><strong>Total:</strong></td>
+                    <td><strong>₹ @TotalBasicAmount</strong></td>
+                    <td><strong>₹ @TotaltdsAmount</strong></td>
+                    <td><strong>₹ @totalPayableAmount</strong></td>
+                    <td></td>
+                </tr>
+            </tfoot>
                             }
+        </table>
+   
 
     <nav aria-label="Page navigation example">
         <ul class="pagination">
@@ -89,11 +116,11 @@
             {
                 if (i == Model.PageNumber)
                 {
-                    <li class="page-item active"><a class="page-link" href="/CommisionReport/Driver?pageNumber=@i">@i</a></li>
+                    <li class="page-item active"><a class="page-link" href="/TDSReport/Driver?pageNumber=@i">@i</a></li>
                 }
                 else
                 {
-                    <li class="page-item"><a class="page-link" href="/CommisionReport/Driver?pageNumber=@i">@i</a></li>
+                    <li class="page-item"><a class="page-link" href="/TDSReport/Driver?pageNumber=@i">@i</a></li>
                 }
             }
             <li class="page-item"><a class="page-link" href="#">Next</a></li>
@@ -105,42 +132,48 @@
 <link href="~/css/jquery-ui.css" rel="stylesheet" />
 <script src="~/Scripts/jquery-ui.js"></script>
 <script>
- $(".datepicker").datepicker().datepicker('setdate','today');
+    $(".datepicker").datepicker().datepicker('setdate', 'today');
+    $("#test").click(function () {
+        var startDate = $("#startdate").val();
+        var endDate = $("#enddate").val();
 
- $("#test").click(function () {
-     var date = $("#RequestDate").val();
-     $.ajax({
-         url: "/TDSReport/Driver?term=Driver&RequestDate=" + date + "",
-         type: "get",
-         success: function (response) {
-             console.log(response);
-             $("#prevAtt").html(response);
-         },
-         error: function (error) {
-             console.log(error.responseText);
+        $.ajax({
+            url: "/TDSReport/Driver",
+            type: "get",
+            data: {
+                term: "Driver",
+                startDate: startDate,
+                endDate: endDate
+            },
+            success: function (response) {
+                console.log(response);
+                $("#prevAtt").html(response);
+            },
+            error: function (error) {
+                console.log(error.responseText);
+            }
+        });
 
-         }
-     });
-
- });
 
 
- $("#test2").click(function () {
-     debugger
-     var name = $("#VehicleNumber").val();
-     var date = $("#RequestDate").val();
-     $.ajax({
-         url: "/TDSReport/Driver?term=Driver&Name='" + name + "'&RequestDate=" + date + "",
-         type: "get",
-         success: function (response) {
-             console.log(response);
-             $("#prevAtt").html(response);
-         },
-         error: function (error) {
-             console.log(error.responseText);
+    });
 
-         }
-     });
 
- });
+    $("#test2").click(function () {
+        debugger;
+        var name = $("#VehicleNumber").val();
+         
+        $.ajax({
+            url: "/TDSReport/Driver",
+            data: { term: "Driver", Name: name },
+            type: "GET",
+            success: function (response) {
+                console.log(response);
+                $("#prevAtt").html(response);
+            },
+            error: function (error) {
+                console.log(error.responseText);
+            }
+        });
+    });
 </script>

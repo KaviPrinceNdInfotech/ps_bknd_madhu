@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Common.Logging;
+using DocumentFormat.OpenXml.EMMA;
 using DocumentFormat.OpenXml.Wordprocessing;
 using HospitalPortal.BL;
 using HospitalPortal.Models.APIModels;
@@ -14,7 +15,8 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Runtime.Remoting.Messaging;
-using System.Web.Http;
+using System.Threading.Tasks;
+using System.Web.Http; 
 using static HospitalPortal.Controllers.TestApiController;
 using static HospitalPortal.Models.ViewModels.ChemistDTO;
 using static HospitalPortal.Models.ViewModels.VendorDTO;
@@ -32,8 +34,6 @@ namespace HospitalPortal.Controllers
         CommonRepository repos = new CommonRepository();
         ILog log = LogManager.GetLogger(typeof(PatientApiController));
 
-         
-
         //===========================EditProfile==========================//
 
         [HttpPost]
@@ -41,33 +41,20 @@ namespace HospitalPortal.Controllers
         public IHttpActionResult EditProfile(Fra_EditProfile model)
         {
             string[] allowedExtensions = { ".jpg", ".jpeg", ".png" };
-            //using (var tran = ent.Database.BeginTransaction())
-            //{
+            
             try
-            {
-
-                if (!ModelState.IsValid)
-                {
-                    var message = string.Join(" | ",
-ModelState.Values
-.SelectMany(a => a.Errors)
-.Select(a => a.ErrorMessage));
-                    rm.Message = message;
-                    rm.Status = 0;
-                    return Ok(rm);
-                }
-
+            { 
                 if (model.AadharOrPANImage == null)
                 {
                     rm.Message = "AadharOrPANImage Image File Picture can not be null";
-                    //tran.Rollback();
+                    
                     return Ok(rm);
                 }
                 var img = FileOperation.UploadFileWithBase64("Images", model.AadharOrPANImage, model.AadharOrPANImagebase64, allowedExtensions);
                 if (img == "not allowed")
                 {
                     rm.Message = "Only png,jpg,jpeg,pdf files are allowed.";
-                    //tran.Rollback();
+                    
                     return Ok(rm);
                 }
                 model.AadharOrPANImage = img;
@@ -82,6 +69,7 @@ ModelState.Values
 
                 data.CompanyName = model.VendorName;
                 data.MobileNumber = model.MobileNumber;
+                data.EmailId = model.EmailId;
                 data.StateMaster_Id = model.StateMaster_Id;
                 data.City_Id = model.City_Id;
                 data.Location = model.Location;
@@ -99,7 +87,7 @@ ModelState.Values
                 rm.Message = "Internal server error";
             }
             return Ok(rm);
-            //}
+            
         }
 
         //===========================ADD GALLERY==========================//
@@ -120,7 +108,7 @@ ModelState.Values
                         tran.Rollback();
                         return Ok(rm);
                     }
-                    var img = FileOperation.UploadFileWithBase64("Images", model.Images, model.Imagesbase64, allowedExtensions);
+                    var img = FileOperation.UploadFileWithBase64("Gallery", model.Images, model.Imagesbase64, allowedExtensions);
                     if (img == "not allowed")
                     {
                         rm.Message = "Only png,jpg,jpeg,pdf files are allowed.";
@@ -295,15 +283,17 @@ ModelState.Values
                 }
 
 
+                data.VendorName = model.VendorName;
                 data.CompanyName = model.CompanyName;
                 data.MobileNumber = model.MobileNumber;
+                data.EmailId = model.EmailId;
                 data.StateMaster_Id = model.StateMaster_Id;
                 data.City_Id = model.City_Id;
                 data.Location = model.Location;
                 data.PinCode = model.PinCode;
                 ent.SaveChanges();
                 rm.Status = 1;
-                rm.Message = " Franchise Profile Updated Successfully .";
+                rm.Message = "Franchise Profile Updated Successfully .";
             }
             catch (Exception ex)
             {
@@ -325,7 +315,7 @@ ModelState.Values
 
         public IHttpActionResult Fra_ProfileDetail(int Id)
         {
-            string qry = @"select V.VendorName,V.EmailId,V.MobileNumber,V.Location,sm.StateName,cm.cityname,V.CompanyName,V.GSTNumber,V.AadharOrPANImage,V.AadharOrPANNumber from Vendor as V with(nolock) left join citymaster as cm with(nolock) on cm.id=V.City_Id left join statemaster as sm with(nolock) on sm.id=V.StateMaster_Id where V.Id=" + Id + "";
+            string qry = @"select V.Id,V.UniqueId,V.VendorName,V.EmailId,V.MobileNumber,V.Location,sm.StateName,cm.cityname,V.PinCode,V.CompanyName,V.GSTNumber,V.AadharOrPANImage,V.AadharOrPANNumber,V.StateMaster_Id,V.City_ID from Vendor as V with(nolock) left join citymaster as cm with(nolock) on cm.id=V.City_Id left join statemaster as sm with(nolock) on sm.id=V.StateMaster_Id where V.Id=" + Id + "";
             var FrancjiseProfile = ent.Database.SqlQuery<Fra_ProDetail>(qry).FirstOrDefault();
             return Ok(FrancjiseProfile);
 
@@ -611,7 +601,12 @@ Inner join VendorPayOut as VP on VP.Vendor_Id=V.Id";
 
         public IHttpActionResult Fra_vehicleCat_dropdown()
         {
-            string qry = @"select * from MainCategory where IsDeleted = 0 order by CategoryName";
+            //string qry = @"select * from MainCategory where IsDeleted = 0 order by CategoryName";
+            string qry = @"SELECT Id, 
+       CONCAT('[', Type, '] ', CategoryName) AS CategoryName 
+FROM MainCategory 
+WHERE IsDeleted = 0 
+ORDER BY CategoryName;";
             var VehicleCatDropdown = ent.Database.SqlQuery<Vehiclecat>(qry).ToList();
             return Ok(new { VehicleCatDropdown });
         }
@@ -683,8 +678,7 @@ Inner join VendorPayOut as VP on VP.Vendor_Id=V.Id";
         {
             var rm = new ReturnMessage();
             string[] allowedExtensions = { ".jpg", ".jpeg", ".png" };
-            //using (var tran = ent.Database.BeginTransaction())
-            //{
+            
             try
             {
                 if (ent.AdminLogins.Any(a => a.Username == model.EmailId))
@@ -725,7 +719,7 @@ Inner join VendorPayOut as VP on VP.Vendor_Id=V.Id";
                 if (img == "not allowed")
                 {
                     rm.Message = "Only png,jpg,jpeg files are allowed.";
-                    //tran.Rollback();
+                    
                     return Ok(rm);
                 }
                 model.Certificateimg = img;
@@ -733,7 +727,6 @@ Inner join VendorPayOut as VP on VP.Vendor_Id=V.Id";
 
                 var domainModel = new Chemist();
                 {
-                    // var domainModel = Mapper.Map<Lab>(model);
                     domainModel.ChemistName = model.ChemistName;
                     domainModel.ShopName = model.ShopName;
                     domainModel.EmailId = model.EmailId;
@@ -752,7 +745,7 @@ Inner join VendorPayOut as VP on VP.Vendor_Id=V.Id";
                     domainModel.JoiningDate = DateTime.Now;
                     domainModel.AdminLogin_Id = admin.Id;
                     domainModel.ChemistId = bk.GenerateChemistId();
-
+                    domainModel.IsBankUpdateApproved = false;
                     admin.UserID = domainModel.ChemistId;
                 };
                 ent.Chemists.Add(domainModel);
@@ -774,8 +767,7 @@ Inner join VendorPayOut as VP on VP.Vendor_Id=V.Id";
 </body>
 </html>";
 
-                // string msg1 = "Welcome to PS Wellness. Your signup is complete. To finalize your registration please proceed to log in using the credentials you provided during the signup process. Your User Id: " + admin.UserID + ", Password: " + admin.Password + ".";
-
+                
                 EmailEF ef = new EmailEF()
                 {
                     EmailAddress = model.EmailId,
@@ -787,7 +779,7 @@ Inner join VendorPayOut as VP on VP.Vendor_Id=V.Id";
 
                 string msg1 = "Welcome to PSWELLNESS. Your User Name :  " + domainModel.EmailId + "(" + domainModel.ChemistId + "), Password : " + admin.Password + ".";
                 Message.SendSms(domainModel.MobileNumber, msg1);
-                rm.Message = "You have registered successfully.Please wait for approval to login.";
+                rm.Message = "Welcome to PS Wellness. Sign up process completed. Approval pending.";
                 rm.Status = 1;
                 return Ok(rm);
 
@@ -795,18 +787,14 @@ Inner join VendorPayOut as VP on VP.Vendor_Id=V.Id";
 
             catch (Exception ex)
             {
-                log.Error(ex.Message);
-                //tran.Rollback();
+                log.Error(ex.Message); 
                 return InternalServerError(ex);
-            }
-
-            // }
-
+            } 
         }
 
         //======================FRANCHISE DOCTOR REGISTRATION==========================//
 
-        [System.Web.Http.HttpPost, Route("api/FranchisesApi/fra_DoctorRegistration")]
+        [HttpPost, Route("api/FranchisesApi/fra_DoctorRegistration")]
         public IHttpActionResult Fra_DoctorRegistration(fra_DoctorReg model)
         {
             var rm = new ReturnMessage();
@@ -815,14 +803,7 @@ Inner join VendorPayOut as VP on VP.Vendor_Id=V.Id";
             {
                 try
                 {
-                    //if (!ModelState.IsValid)
-                    //{
-                    //    var message = string.Join(" | ", ModelState.Values.SelectMany(a => a.Errors).Select(a => a.ErrorMessage));
-                    //    rm.Message = message;
-                    //    rm.Status = 0;
-                    //    return Ok(rm);
-                    //}
-
+                    
                     if (ent.Doctors.Any(a => a.DoctorName == model.DoctorName && a.MobileNumber == model.MobileNumber))
                     {
                         var data = ent.Doctors.Where(a => a.DoctorName == model.DoctorName && a.MobileNumber == model.MobileNumber).FirstOrDefault();
@@ -912,6 +893,10 @@ Inner join VendorPayOut as VP on VP.Vendor_Id=V.Id";
                     domainModel.SignaturePic = model.SignaturePic;
                     domainModel.JoiningDate = DateTime.Now;
                     domainModel.DoctorId = UniqeIdDoc;
+                    domainModel.About = model.About;
+                    domainModel.Day_Id = model.Day_Id;
+                    domainModel.VirtualFee = model.VirtualFee;
+                    domainModel.IsBankUpdateApproved = false;
                     ent.Doctors.Add(domainModel);
                     ent.SaveChanges();
 
@@ -946,7 +931,7 @@ Inner join VendorPayOut as VP on VP.Vendor_Id=V.Id";
                     Message.SendSms(domainModel.MobileNumber, msg1);
                     tran.Commit();
                     rm.Status = 1;
-                    rm.Message = "You have registered successfully.Please wait for approval to login.";
+                    rm.Message = "Welcome to PS Wellness. Sign up process completed. Approval pending.";
                     return Ok(rm);
                 }
 
@@ -968,7 +953,7 @@ Inner join VendorPayOut as VP on VP.Vendor_Id=V.Id";
 
 
         //======================FRANCHISE LAB REGISTRATION==========================//
-        [System.Web.Http.HttpPost, Route("api/FranchisesApi/Fra_LabRegistration")]
+        [HttpPost, Route("api/FranchisesApi/Fra_LabRegistration")]
         public IHttpActionResult Fra_LabRegistration(fra_LabReg model)
         {
             var rm = new ReturnMessage();
@@ -1049,6 +1034,7 @@ Inner join VendorPayOut as VP on VP.Vendor_Id=V.Id";
                     domainModel.PAN = model.PAN;
                     domainModel.JoiningDate = DateTime.Now;
                     domainModel.AdminLogin_Id = admin.Id;
+                    domainModel.IsBankUpdateApproved = false;
                     domainModel.lABId = bk.GenerateLabId();
 
                     admin.UserID = domainModel.lABId;
@@ -1085,7 +1071,7 @@ Inner join VendorPayOut as VP on VP.Vendor_Id=V.Id";
 
                 string msg1 = "Welcome to PSWELLNESS. Your User Name :  " + domainModel.EmailId + "(" + domainModel.lABId + "), Password : " + admin.Password + ".";
                 Message.SendSms(domainModel.MobileNumber, msg1);
-                rm.Message = "You have registered successfully.Please wait for approval to login.";
+                rm.Message = "Welcome to PS Wellness. Sign up process completed. Approval pending.";
                 rm.Status = 1;
                 return Ok(rm);
 
@@ -1102,7 +1088,7 @@ Inner join VendorPayOut as VP on VP.Vendor_Id=V.Id";
         }
 
         //======================FRANCHISE PATIENT REGISTRATION==========================//
-        [System.Web.Http.HttpPost, Route("api/FranchisesApi/Fra_PatientRegistration")]
+        [HttpPost, Route("api/FranchisesApi/Fra_PatientRegistration")]
         public IHttpActionResult Fra_PatientRegistration(fra_PatientReg model)
         {
             var rm = new ReturnMessage();
@@ -1203,7 +1189,7 @@ Inner join VendorPayOut as VP on VP.Vendor_Id=V.Id";
                     tran.Commit(); 
                     string msg1 = "Welcome to PSWELLNESS. Your User Name :  " + admin.Username + "(" + domainModel.PatientRegNo + "), Password : " + admin.Password + ".";
                     Message.SendSms(domainModel.MobileNumber, msg1);
-                    rm.Message = "Thanks for joining us.Please wait for approval to login";
+                    rm.Message = "Welcome to PS Wellness. Sign up process completed. Approval pending.";
                     rm.Status = 1;
                     return Ok(rm);
                 }
@@ -1219,7 +1205,7 @@ Inner join VendorPayOut as VP on VP.Vendor_Id=V.Id";
 
         //======================FRANCHISE DRIVER REGISTRATION==========================//
 
-        [System.Web.Http.HttpPost, Route("api/FranchisesApi/Fra_DriverRegistration")]
+        [HttpPost, Route("api/FranchisesApi/Fra_DriverRegistration")]
         public IHttpActionResult Fra_DriverRegistration(fra_DriverReg model)
         {
             var rm = new ReturnMessage();
@@ -1350,7 +1336,7 @@ ModelState.Values
                         domainModel.JoiningDate = DateTime.Now;
                         domainModel.AdminLogin_Id = admin.Id;
                         domainModel.DriverId = bk.GenerateDriverId();
-
+                        domainModel.IsBankUpdateApproved = false;
                         admin.UserID = domainModel.DriverId;
                     };
 
@@ -1387,7 +1373,7 @@ ModelState.Values
                     rm.Status = 1;
                     string msg1 = "Welcome to PSWELLNESS. Your User Name :  " + admin.Username + "(" + domainModel.DriverId + "), Password : " + admin.Password + ".";
                     Message.SendSms(domainModel.MobileNumber, msg1);
-                    rm.Message = "You have registered successfully.Please wait for approval to login";
+                    rm.Message = "Welcome to PS Wellness. Sign up process completed. Approval pending.";
                     tran.Commit();
                     return Ok(rm);
                 }
@@ -1482,6 +1468,7 @@ ModelState.Values
                         domainModel.PAN = model.PAN;
                         domainModel.Vendor_Id = model.Vendor_Id;
                         domainModel.JoiningDate = DateTime.Now;
+                        domainModel.IsBankUpdateApproved = false;
                         domainModel.RWAId = bk.GenerateRWA_Id();
                         admin.UserID = domainModel.RWAId;
                 };
@@ -1520,7 +1507,7 @@ ModelState.Values
                     rm.Status = 1;
                     string msg1 = "Welcome to PSWELLNESS. Your User Name :  " + admin.Username + "(" + domainModel.Id + "), Password : " + admin.Password + ".";
                     Message.SendSms(domainModel.PhoneNumber, msg1);
-                    rm.Message = "You have registered successfully.Please wait for approval to login.";
+                    rm.Message = "Welcome to PS Wellness. Sign up process completed. Approval pending.";
                     return Ok(rm);
                 }
                 catch (Exception ex)
@@ -1637,8 +1624,7 @@ ModelState.Values
                         domainModel.PAN = model.PAN;
                         domainModel.AdminLogin_Id = admin.Id;
                         domainModel.NurseId = HUniquId;
-                        // domainModel.NurseId = bk.GenerateNurseId();
-
+                        domainModel.IsBankUpdateApproved = false;
                     };
 
 
@@ -1671,7 +1657,7 @@ ModelState.Values
 
                     EmailOperations.SendEmainew(ef);
 
-                    rm.Message = "You have registered successfully.Please wait for approval to login.";
+                    rm.Message = "Welcome to PS Wellness. Sign up process completed. Approval pending.";
                     rm.Status = 1;
                     string msg1 = "Welcome to PSWELLNESS. Your User Name :  " + admin.Username + "(" + domainModel.NurseId + "), Password : " + admin.Password + ".";
                     Message.SendSms(domainModel.MobileNumber, msg1);
@@ -1695,36 +1681,9 @@ ModelState.Values
         public IHttpActionResult Fra_VehicleRegistration(fra_VehicleReg model)
         {
             var rm = new ReturnMessage();
-            string[] allowedExtensions = { ".jpg", ".png", ".jpeg" };
-            using (var tran = ent.Database.BeginTransaction())
-            {
+            
                 try
-                {
-                    if (!ModelState.IsValid)
-                    {
-                        var message = string.Join(" | ",
-                        ModelState.Values
-                        .SelectMany(a => a.Errors)
-                        .Select(a => a.ErrorMessage));
-                        rm.Message = message;
-                        rm.Status = 0;
-                        return Ok(rm);
-                    }
-
-
-                    // Cancel_Cheque Picture Section 
-                    var Cancel_Cheque = FileOperation.UploadFileWithBase64("Images", model.CancelCheque, model.CancelChequeBase64, allowedExtensions);
-                    if (Cancel_Cheque == "not allowed")
-                    {
-                        rm.Message = "Only png,jpg,jpeg files are allowed.";
-                        tran.Rollback();
-                        return Ok(rm);
-                    }
-                    model.CancelCheque = Cancel_Cheque;
-
-
-
-
+                {  
                     var domainModel = new Vehicle();
                     {
                         domainModel.VehicleName = model.VehicleName;
@@ -1749,9 +1708,9 @@ ModelState.Values
                     ent.SaveChanges();
 
 
-                    rm.Message = "You have registered successfully.Please wait for approval to login.";
+                    rm.Message = "Welcome to PS Wellness. Sign up process completed. Approval pending.";
 
-                    tran.Commit();
+                     
                     return Ok(rm);
 
                 }
@@ -1759,10 +1718,10 @@ ModelState.Values
                 {
                     log.Error(ex.Message);
                     rm.Message = "Server Error";
-                    tran.Rollback();
+                    
                     return Ok(rm);
                 }
-            }
+            
         }
 
 
@@ -2139,7 +2098,7 @@ ModelState.Values
 
         public IHttpActionResult GetOldDriverList()
         {
-            string qry = @"select D.Id,V.VehicleNumber,D.DriverName from Driver as D inner join Vehicle as V on V.Driver_Id=D.Id where D.IsDeleted=0 and V.IsDeleted=0";
+            string qry = @"select V.Id,V.VehicleNumber,D.DriverName from Driver as D inner join Vehicle as V on V.Driver_Id=D.Id where D.IsDeleted=0 and V.IsDeleted=0";
             var GetOldDriver = ent.Database.SqlQuery<Get_oldDriver>(qry).ToList();
             return Ok(new { GetOldDriver });
 
@@ -2199,7 +2158,8 @@ ModelState.Values
 
         public IHttpActionResult GetNewDriverList()
         {
-            string query = @"select Id,DriverName from Driver where IsDeleted=0 Order by Id desc";
+            //string query = @"select Id,DriverName from Driver where IsDeleted=0 Order by Id desc";
+            string query = @"select * from driver where VehicleType_Id=0 or VehicleType_Id is null and IsDeleted = 0";
             var NewDriver = ent.Database.SqlQuery<NewDriverList>(query).ToList();
             return Ok(new { NewDriver });
         }
@@ -2250,8 +2210,8 @@ ModelState.Values
 
         //=====================FRANCHISE ABOUT==================//
 
-        [System.Web.Http.HttpGet]
-        [System.Web.Http.Route("api/FranchisesApi/Franchise_About")]
+        [HttpGet]
+        [Route("api/FranchisesApi/Franchise_About")]
 
         public IHttpActionResult Franchise_About(int Id)
         {
@@ -2916,8 +2876,6 @@ where Veh.IsDeleted=0 and Veh.RegistrationDate > DATEADD(year,-1,GETDATE())";
             return Ok(rm);
         }
 
-
-
         [HttpPost, Route("api/FranchisesApi/AddVehCat_Type")]
         public IHttpActionResult AddVehCat_Type(AddCat_Vehicletype model)
         {
@@ -2972,6 +2930,118 @@ where Veh.IsDeleted=0 and Veh.RegistrationDate > DATEADD(year,-1,GETDATE())";
             }
             return Ok(rm);
         }
-    }
 
+
+
+		[HttpPost, Route("api/FranchisesApi/VehicleAllotment")]		 
+
+		public IHttpActionResult VehicleAllotment(VehicleAllotmentDTO model)
+		{
+			if (!ModelState.IsValid)
+			{
+				return BadRequest(ModelState);
+			}
+
+			try
+			{ 
+				var list = ent.Vehicles.Where(a => a.Id == model.VehicleNumberId).ToList();
+				var vehicle = list.FirstOrDefault();
+                var getexistVehicle = ent.Drivers.Where(d => d.Vehicle_Id == model.VehicleNumberId && d.IsDeleted==false).FirstOrDefault();
+				
+				if (getexistVehicle!=null)
+                {
+					string ExistdriverName = ent.Database.SqlQuery<string>("select DriverName from Driver where Vehicle_Id=" + model.VehicleNumberId).FirstOrDefault();
+					rm.Message= "The Selected Vehicle is Already Running on " + ExistdriverName;
+
+				}
+                else
+                {
+					if (vehicle == null)
+					{
+						return BadRequest("Vehicle not found");
+					} 
+
+					var vehicleId = vehicle.Id;
+					var vehicleNumber = vehicle.VehicleNumber;
+
+
+					string updateVehicleQuery = $"update Vehicle set Driver_Id = {model.DriverId} where Id = {vehicleId}";
+					ent.Database.ExecuteSqlCommand(updateVehicleQuery);
+
+					string updateDriverQuery = $"update Driver set VehicleType_Id = {model.VehicleTypeId},Vehicle_Id={model.VehicleNumberId} where Id = {model.DriverId}";
+					ent.Database.ExecuteSqlCommand(updateDriverQuery);
+					string driverName = ent.Database.SqlQuery<string>($"select DriverName from Driver where Id = {model.DriverId}").FirstOrDefault();
+
+					rm.Message = $"The Vehicle Number {vehicleNumber} has been Replaced to {driverName}";
+                    rm.Status = 1;
+
+				}
+
+
+				return Ok(rm);
+			}
+			catch (Exception ex)
+			{ 
+				return InternalServerError(ex);
+			}
+		}
+
+		[HttpGet, Route("api/FranchisesApi/GetDriverVehicleId")]
+		public IHttpActionResult GetDriverVehicleId(int VehicleNumberId)
+		{
+			string qry = @"Select d.Id,v.VehicleNumber,d.DriverName from Driver as d
+join Vehicle as v on v.Id=d.Vehicle_Id where d.Vehicle_Id="+ VehicleNumberId + "";
+			var VehicleNumberdetail = ent.Database.SqlQuery<VehicleNumbers>(qry).ToList();
+			return Ok(new { VehicleNumberdetail });
+		}
+		[HttpGet, Route("api/FranchisesApi/GetDriverForUpdate")]
+		public IHttpActionResult GetDriverForUpdate()
+		{
+			string qry = @"Select Id,DriverName from Driver";
+			var Drivers = ent.Database.SqlQuery<DriversName>(qry).ToList();
+			return Ok(new { Drivers });
+		}
+
+		[HttpPost, Route("api/FranchisesApi/SwapDriver")]
+		public IHttpActionResult SwapDriver(VehicleAllotmentDTO model)
+		{
+			var list = ent.Drivers.Where(a => a.Id == model.DriverId).ToList();
+			if (list.Count == 0)
+			{
+				return Content(HttpStatusCode.NotFound, "Driver not found");
+			}
+
+			var driverId = list.First().Id;
+			var name = list.First().DriverName;
+
+			var vehicle = ent.Vehicles.Find(model.Id);
+			if (vehicle == null)
+			{
+				return Content(HttpStatusCode.NotFound, "Vehicle not found");
+			}
+
+			var vehicleTypeId = vehicle.VehicleType_Id;
+
+			if (ent.Vehicles.Any(a => a.Driver_Id == driverId))
+			{
+				string vehicleNumber = ent.Database.SqlQuery<string>("select VehicleNumber from Vehicle where Driver_Id = "+driverId+"").FirstOrDefault();
+				return Content(HttpStatusCode.BadRequest, "The Selected Driver is Already Running on " + vehicleNumber);
+			}
+
+			vehicle.Driver_Id = driverId;
+			ent.SaveChanges();
+
+			var driver = ent.Drivers.Find(driverId);
+			if (driver != null)
+			{
+				driver.VehicleType_Id = vehicleTypeId;
+				driver.Vehicle_Id = model.Id;
+				ent.SaveChanges();
+			}
+
+			string newVehicleNumber = ent.Database.SqlQuery<string>("select VehicleNumber from Vehicle where Driver_Id = "+ driverId + "").FirstOrDefault();
+			return Content(HttpStatusCode.OK, "The Vehicle Number " + newVehicleNumber + " has been Replaced to " + name);
+
+		}
+	}
 }

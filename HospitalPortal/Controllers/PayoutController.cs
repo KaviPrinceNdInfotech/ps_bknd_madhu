@@ -1,10 +1,14 @@
-﻿using HospitalPortal.Models.APIModels;
+﻿using DocumentFormat.OpenXml.EMMA;
+using DocumentFormat.OpenXml.Wordprocessing;
+using HospitalPortal.Models.APIModels;
 using HospitalPortal.Models.DomainModels;
 using HospitalPortal.Models.ViewModels;
+using log4net.Util.TypeConverters;
 using OfficeOpenXml;
 using Org.BouncyCastle.Asn1.X509;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -22,19 +26,26 @@ namespace HospitalPortal.Controllers
             return View();
         }
         //Doctor PAYOUT History Section
-        public ActionResult Doctor(DateTime? week, string name = null)
+        public ActionResult Doctor(DateTime? startdate,DateTime? enddate, string name = null)
         {
             var model = new PayOutVM();
             double commision = ent.Database.SqlQuery<double>(@"select Commission from CommissionMaster where IsDeleted=0 and Name='Doctor'").FirstOrDefault();
+            double Transactionfee = ent.Database.SqlQuery<double>(@"select Fee from TransactionFeeMaster where Name='Doctor'").FirstOrDefault();
             double gst = ent.Database.SqlQuery<double>(@"select Amount from GSTMaster where IsDeleted=0 and Name='Doctor'").FirstOrDefault();
             double tds = ent.Database.SqlQuery<double>(@"select Amount from TDSMaster where IsDeleted=0 and Name='Doctor'").FirstOrDefault();
-            if (week != null)
+            if (startdate != null)
             {
-                DateTime dateCriteria = week.Value.AddDays(-7);
+                DateTime dateCriteria = startdate.Value.AddDays(-7);
                 string date = dateCriteria.ToString("dd/MM/yyyy");
-                //var qry1 = @"select A.Doctor_Id, D.DoctorName, SUM(A.Amount) as Amount, (SUM(A.Amount) - (SUM(A.Amount) * 7 /100)) As NetAmount from PatientAppointment A join Doctor D on D.Id = A.Doctor_Id  where A.AppointmentDate between '" + dateCriteria + "' and '" + week + "' GROUP BY A.Amount, D.DoctorName, A.Doctor_Id";
-                var qry1 = @"select D.DoctorId, A.Doctor_Id, D.DoctorName, SUM(dp.Amount) as Amount, dp.IsGenerated from PatientAppointment A join Doctor D on D.Id = A.Doctor_Id left join DoctorPayOut dp on D.Id = dp.Doctor_Id where A.AppointmentDate between CONVERT(datetime, '" + dateCriteria + "', 103) and CONVERT(datetime, '" + week + "', 103) group by D.DoctorName, A.Doctor_Id, dp.IsGenerated,D.DoctorId";
-                var data1 = ent.Database.SqlQuery<PayOutDocHistroy>(qry1).ToList();
+				//var qry1 = @"select A.Doctor_Id, D.DoctorName, SUM(A.Amount) as Amount, (SUM(A.Amount) - (SUM(A.Amount) * 7 /100)) As NetAmount from PatientAppointment A join Doctor D on D.Id = A.Doctor_Id  where A.AppointmentDate between '" + dateCriteria + "' and '" + week + "' GROUP BY A.Amount, D.DoctorName, A.Doctor_Id";
+				//var qry1 = @"select D.DoctorId, A.Doctor_Id, D.DoctorName, SUM(dp.Amount) as Amount, dp.IsGenerated from PatientAppointment A join Doctor D on D.Id = A.Doctor_Id left join DoctorPayOut dp on D.Id = dp.Doctor_Id where A.AppointmentDate between CONVERT(datetime, '" + startdate + "', 103) and CONVERT(datetime, '" + enddate + "', 103) group by D.DoctorName, A.Doctor_Id, dp.IsGenerated,D.DoctorId";
+				//and D.Vendor_Id is null or D.Vendor_Id = 0
+
+				var qry1 = @"select D.DoctorId,A.Doctor_Id, D.DoctorName, SUM(A.TotalFee) as Amount from PatientAppointment A join Doctor D on D.Id = A.Doctor_Id where A.AppointmentDate between @startdate and @enddate group by D.DoctorName, A.Doctor_Id,D.DoctorId";
+                //var data1 = ent.Database.SqlQuery<PayOutDocHistroy>(qry1).ToList();
+                var data1 = ent.Database.SqlQuery<PayOutDocHistroy>(qry1,
+             new SqlParameter("startdate", startdate),
+             new SqlParameter("enddate", enddate)).ToList();
                 if (name != null)
                 {
                     data1 = data1.Where(a => a.DoctorName.ToLower().Contains(name)).ToList();
@@ -47,60 +58,101 @@ namespace HospitalPortal.Controllers
                 {
 
 
+                    ViewBag.Transactionfee = Transactionfee;
                     ViewBag.Amount = (double?)commision;
                     ViewBag.gstAmount = (double?)gst;
                     ViewBag.tdsAmount = (double?)tds;
                     // ViewBag.Amount = commision;
                     model.PayHistory = data1;
                     foreach (var item in data1)
-                    {
-                        var razorcomm = item.Amount * (2.36 / 100);
-                        // var razorcommafter = razorcomm * 2.36 / 100;
+                    { 
+                        var razorcomm = (item.Amount * Transactionfee) / 100; 
                         var totalrazorcomm = razorcomm;
                         item.Amountwithrazorpaycomm = item.Amount + totalrazorcomm;
 
                     }
-                    return View(model);
+                    
                 }
-            }
+				return View(model);
+			}
             //var qry = @"select A.Doctor_Id, D.DoctorName, SUM(A.Amount) as Amount, (SUM(A.Amount) - (SUM(A.Amount) * 7 /100)) As NetAmount from PatientAppointment A join Doctor D on D.Id = A.Doctor_Id where A.AppointmentDate BETWEEN DATEADD(DAY, -7, GETDATE()) AND GETDATE() group by A.Amount, D.DoctorName, A.Doctor_Id";
-            var qry = @"select D.DoctorId,A.Doctor_Id, D.DoctorName, SUM(A.TotalFee) as Amount from PatientAppointment A join Doctor D on D.Id = A.Doctor_Id where A.AppointmentDate BETWEEN DATEADD(DAY, -7, GETDATE()) AND GETDATE() group by D.DoctorName, A.Doctor_Id,D.DoctorId";
-            var data = ent.Database.SqlQuery<PayOutDocHistroy>(qry).ToList();
-            if (data.Count() == 0)
-            {
-                TempData["msg"] = "No Record of Current Week";
-            }
             else
             {
-                ViewBag.Amount = (double?)commision;
-                ViewBag.gstAmount = (double?)gst;
-                ViewBag.tdsAmount = (double?)tds;
-                //ViewBag.Amount = commision;
-                model.PayHistory = data;
-                foreach (var item in data)
-                {
-                    var razorcomm = item.Amount * (2.36 / 100);
-                    // var razorcommafter = razorcomm * 2.36 / 100;
-                    var totalrazorcomm = razorcomm;
-                    item.Amountwithrazorpaycomm = item.Amount + totalrazorcomm;
+				//var qry = @"select D.DoctorId,A.Doctor_Id, D.DoctorName, SUM(A.TotalFee) as Amount from PatientAppointment A join Doctor D on D.Id = A.Doctor_Id where A.AppointmentDate BETWEEN DATEADD(DAY, -7, GETDATE()) AND GETDATE() group by D.DoctorName, A.Doctor_Id,D.DoctorId";
+				var qry = @"SELECT D.DoctorId, A.Doctor_Id, D.DoctorName, SUM(A.TotalFee) AS Amount 
+FROM PatientAppointment A 
+JOIN Doctor D ON D.Id = A.Doctor_Id 
+LEFT JOIN (
+    SELECT Doctor_Id, IsPaid, MAX(PaymentDate) AS LatestPayoutDate
+    FROM DoctorPayOut
+    GROUP BY Doctor_Id, IsPaid
+) AS dp ON dp.Doctor_Id = D.Id
+WHERE (dp.IsPaid = 0 OR dp.IsPaid IS NULL) 
+AND A.AppointmentDate BETWEEN DATEADD(DAY, -7, GETDATE()) AND GETDATE()
+GROUP BY D.DoctorId, A.Doctor_Id, D.DoctorName;";
+				var data = ent.Database.SqlQuery<PayOutDocHistroy>(qry).ToList();
+				if (data.Count() == 0)
+				{
+					TempData["msg"] = "No Record of Current Week";
+				}
+				else
+				{
+					ViewBag.Transactionfee = Transactionfee;
+					ViewBag.Amount = (double?)commision;
+					ViewBag.gstAmount = (double?)gst;
+					ViewBag.tdsAmount = (double?)tds; 
+					model.PayHistory = data;
+					foreach (var item in data)
+					{
+						var razorcomm = (item.Amount * Transactionfee) / 100; 
+						var totalrazorcomm = razorcomm;
+						item.Amountwithrazorpaycomm = item.Amount + totalrazorcomm;
 
 
-                }
-                return View(model);
-            }
-            return View(model);
+					}
+					return View(model);
+				}
+				return View(model);
+			}
+           
         }
-        public ActionResult PayDoctor(int Doctor_Id, double Amount)
+         
+        public ActionResult PayDoctor(int? Doctor_Id, double? Amount,string multydocid)
         {
-            var model = new DoctorPayOut();
-            model.Amount = Amount;
-            model.IsPaid = false;
-            model.IsGenerated = true;
-            model.PaymentDate = DateTime.Now.Date;
-            model.Doctor_Id = Doctor_Id;
-            ent.DoctorPayOuts.Add(model);
-            ent.SaveChanges();
-            return RedirectToAction("ViewPayoutHistory", new { Id = model.Doctor_Id });
+            if (!string.IsNullOrEmpty(multydocid))
+            {
+                string[] mulidoc = multydocid == null ? null : multydocid.Split('-');
+                for (int i = 0; i < mulidoc.Length - 1; i++)
+                {
+                    string[] perdoc = mulidoc[i].Split(',');
+                    int doctorid = Convert.ToInt32(perdoc[0]);
+                    double doctoramount = Convert.ToDouble(perdoc[1]);
+                    var model1 = new DoctorPayOut();
+                    model1.Amount = doctoramount;
+                    model1.IsPaid = true;
+                    model1.IsGenerated = true;
+                    model1.PaymentDate = DateTime.Now.Date;
+                    model1.Doctor_Id = doctorid;
+                    ent.DoctorPayOuts.Add(model1);
+                    ent.SaveChanges();
+					
+
+				}
+				return RedirectToAction("DoctorList");
+			}
+            else
+            {
+                var model = new DoctorPayOut();
+                model.Amount = (double)Amount;
+                model.IsPaid = true;
+                model.IsGenerated = true;
+                model.PaymentDate = DateTime.Now.Date;
+                model.Doctor_Id = (int)Doctor_Id;
+                ent.DoctorPayOuts.Add(model);
+                ent.SaveChanges();
+				return RedirectToAction("ViewPayoutHistory", new { Id = model.Doctor_Id });
+			}
+           
         }
         public ActionResult ViewPayoutHistory(int Id, DateTime? date)
         {
@@ -481,14 +533,99 @@ namespace HospitalPortal.Controllers
             return RedirectToAction("ViewChemistPayoutHistory", new { Id = Id });
         }
         //Nurse Payout
-        public ActionResult Nurse()
+        public ActionResult Nurse(DateTime? startdate, DateTime? enddate,string name)
         {
             var model = new PayOutVM();
             model.NurseTypeList = new SelectList(ent.NurseTypes.ToList(), "Id", "NurseTypeName");
-            var NurseQuery = @"select P.NurseId,P.Id, P.NurseName, d.NurseTypeName from Nurse P join NurseType D ON d.Id = p.NurseType_Id join NurseService ns on ns.Nurse_Id = P.Id where ns.ServiceAcceptanceDate BETWEEN DATEADD(DAY, -7, GETDATE()) AND GETDATE() and ns.ServiceStatus='Approved' group by  P.NurseName, d.NurseTypeName,P.Id,P.NurseId";
-            var data = ent.Database.SqlQuery<PayOutNurseHistory>(NurseQuery).ToList();
-            model.NurseHistory = data;
-            return View(model);
+			double commision = ent.Database.SqlQuery<double>(@"select Commission from CommissionMaster where IsDeleted=0 and Name='Nurse'").FirstOrDefault();
+			double Transactionfee = ent.Database.SqlQuery<double>(@"select Fee from TransactionFeeMaster where Name='Nurse'").FirstOrDefault();
+			double gst = ent.Database.SqlQuery<double>(@"select Amount from GSTMaster where IsDeleted=0 and Name='Nurse'").FirstOrDefault(); 
+			double tds = ent.Database.SqlQuery<double>(@"select Amount from TDSMaster where IsDeleted=0 and Name='Nurse'").FirstOrDefault();
+
+			//var NurseQuery = @"select P.NurseId,P.Id, P.NurseName, d.NurseTypeName from Nurse P join NurseType D ON d.Id = p.NurseType_Id join NurseService ns on ns.Nurse_Id = P.Id where ns.ServiceAcceptanceDate BETWEEN DATEADD(DAY, -7, GETDATE()) AND GETDATE() and ns.ServiceStatus='Approved' group by  P.NurseName, d.NurseTypeName,P.Id,P.NurseId";
+
+			if (startdate != null)
+			{
+				DateTime dateCriteria = startdate.Value.AddDays(-7);
+				string date = dateCriteria.ToString("dd/MM/yyyy");
+				 
+				var qry1 = @"select n.NurseId,ns.Nurse_Id,n.NurseName, nt.NurseTypeName, ns.Id, case when ns.PaymentDate is null then 'N/A' else Convert(nvarchar(100),
+ns.PaymentDate, 103) end as PaymentDate, case when ns.ServiceAcceptanceDate is null then 'N/A' else Convert(nvarchar(100), 
+ns.ServiceAcceptanceDate, 103) end as ServiceAcceptanceDate, Convert(nvarchar(100), ns.RequestDate, 103) as RequestDate,
+'From ' + Convert(nvarchar(100), ns.StartDate, 103) + ' to ' + Convert(nvarchar(100), ns.EndDate, 103) as ServiceTiming ,
+IsNull(n.NurseName, 'N/A') as NurseName, Sum(ns.TotalFee) as Amount from NurseService ns 
+join Nurse n on ns.Nurse_Id = n.Id
+join NurseType nt ON nt.Id = n.NurseType_Id 
+where ns.ServiceAcceptanceDate between @startdate and @enddate and ns.ServiceStatus='Approved' and ns.IsPaid = 1 GROUP BY n.NurseId,ns.Nurse_Id,n.NurseName, nt.NurseTypeName, ns.Id,ns.ServiceAcceptanceDate,ns.RequestDate,ns.PaymentDate,ns.StartDate,ns.EndDate";
+				 
+				var data1 = ent.Database.SqlQuery<PayOutNurseHistory>(qry1,
+			 new SqlParameter("startdate", startdate),
+			 new SqlParameter("enddate", enddate)).ToList();
+				if (name != null)
+				{
+					data1 = data1.Where(a => a.NurseName.ToLower().Contains(name)).ToList();
+				}
+				if (data1.Count() == 0)
+				{
+					TempData["msg"] = "Your Selected Date Doesn't Contain any Information.";
+				}
+				else
+				{
+
+
+					ViewBag.Transactionfee = Transactionfee;
+					ViewBag.Amount = (double?)commision;
+					ViewBag.gstAmount = (double?)gst;
+					ViewBag.tdsAmount = (double?)tds; 
+					model.NurseHistory = data1;
+					foreach (var item in data1)
+					{
+						var razorcomm = (item.Amount * Transactionfee) / 100;
+						var totalrazorcomm = razorcomm;
+						item.Amountwithrazorpaycomm = item.Amount + totalrazorcomm;
+
+					}
+					
+				}
+				return View(model);
+			}
+            else
+            {
+				var NurseQuery = @"select n.NurseId,ns.Nurse_Id,n.NurseName, nt.NurseTypeName, ns.Id, case when ns.PaymentDate is null then 'N/A' else Convert(nvarchar(100),
+ns.PaymentDate, 103) end as PaymentDate, case when ns.ServiceAcceptanceDate is null then 'N/A' else Convert(nvarchar(100), 
+ns.ServiceAcceptanceDate, 103) end as ServiceAcceptanceDate, Convert(nvarchar(100), ns.RequestDate, 103) as RequestDate,
+'From ' + Convert(nvarchar(100), ns.StartDate, 103) + ' to ' + Convert(nvarchar(100), ns.EndDate, 103) as ServiceTiming ,
+IsNull(n.NurseName, 'N/A') as NurseName, Sum(ns.TotalFee) as Amount from NurseService ns 
+join Nurse n on ns.Nurse_Id = n.Id
+join NurseType nt ON nt.Id = n.NurseType_Id 
+LEFT JOIN (
+    SELECT Nurse_Id, IsPaid, MAX(PaymentDate) AS LatestPayoutDate
+    FROM NursePayout
+    GROUP BY Nurse_Id, IsPaid
+) AS np ON np.Nurse_Id = n.Id
+WHERE (np.IsPaid = 0 OR np.IsPaid IS NULL)
+and ns.ServiceAcceptanceDate BETWEEN DATEADD(DAY, -7, GETDATE()) AND GETDATE() and ns.ServiceStatus='Approved' and ns.IsPaid = 1 GROUP BY n.NurseId,ns.Nurse_Id,n.NurseName, nt.NurseTypeName, ns.Id,ns.ServiceAcceptanceDate,ns.RequestDate,ns.PaymentDate,ns.StartDate,ns.EndDate";
+				var data = ent.Database.SqlQuery<PayOutNurseHistory>(NurseQuery).ToList();
+
+
+				ViewBag.Transactionfee = Transactionfee;
+				ViewBag.Amount = (double?)commision;
+				ViewBag.gstAmount = (double?)gst;
+				ViewBag.tdsAmount = (double?)tds;
+
+				model.NurseHistory = data;
+				foreach (var item in data)
+				{
+					var razorcomm = (item.Amount * Transactionfee) / 100; 
+					var totalrazorcomm = razorcomm;
+					item.Amountwithrazorpaycomm = item.Amount + totalrazorcomm;
+
+
+				}
+				return View(model);
+			}
+
+			
         }
         public ActionResult NurseDetails(int? NurseId, DateTime? ServiceAcceptanceDate)
         {
@@ -534,19 +671,43 @@ namespace HospitalPortal.Controllers
             }
             return View(model);
         }
-        public ActionResult NursePay(int Nurse_Id, double Amount)
+        public ActionResult NursePay(int? Nurse_Id, double? Amount, string multyid)
         {
-            var model = new NursePayout();
-            //int labId = ent.Database.SqlQuery<int>("select AdminLogin_Id from Lab where Id=" + Lab_Id).FirstOrDefault();
-            //var Id = labId;
-            model.Nurse_Id = Nurse_Id;
-            model.Amount = Amount;
-            model.IsPaid = false;
-            model.IsGenerated = true;
-            model.PaymentDate = DateTime.Now.Date;
-            ent.NursePayouts.Add(model);
-            ent.SaveChanges();
-            return RedirectToAction("ViewNursePayoutHistory", new { Id = Nurse_Id });
+			if (!string.IsNullOrEmpty(multyid))
+			{
+				string[] mulidoc = multyid == null ? null : multyid.Split('-');
+				for (int i = 0; i < mulidoc.Length - 1; i++)
+				{
+					string[] perdoc = mulidoc[i].Split(',');
+					int nurseid = Convert.ToInt32(perdoc[0]);
+					double amount = Convert.ToDouble(perdoc[1]);
+					var model = new NursePayout();
+					model.Amount = amount;
+					model.IsPaid = true;
+					model.IsGenerated = true;
+					model.PaymentDate = DateTime.Now.Date;
+					model.Nurse_Id = nurseid;
+					ent.NursePayouts.Add(model);
+					ent.SaveChanges();
+
+
+				}
+				return RedirectToAction("NurseList");
+			}
+            else
+            {
+				var model = new NursePayout();
+				model.Nurse_Id = Nurse_Id;
+				model.Amount = Amount;
+				model.IsPaid = true;
+				model.IsGenerated = true;
+				model.PaymentDate = DateTime.Now.Date;
+				ent.NursePayouts.Add(model);
+				ent.SaveChanges();
+				return RedirectToAction("ViewNursePayoutHistory", new { Id = Nurse_Id });
+			}
+
+			
         }
         public ActionResult ViewNursePayoutHistory(int Id)
         {
@@ -581,10 +742,11 @@ namespace HospitalPortal.Controllers
             ent.Database.ExecuteSqlCommand(q);
             return RedirectToAction("ViewNursePayoutHistory", new { Id = Id });
         }
-        public ActionResult Ambulance(DateTime? sdate)
+        public ActionResult Ambulance(DateTime? startdate, DateTime? enddate)
         {
             var model = new AmbulancesReport();
-            double commision = ent.Database.SqlQuery<double>(@"select Top 1 Commission from CommissionMaster where IsDeleted=0 and Name='Ambulance'").FirstOrDefault();
+            double commision = ent.Database.SqlQuery<double>(@"select Commission from CommissionMaster where IsDeleted=0 and Name='Ambulance'").FirstOrDefault();
+            double Transactionfee = ent.Database.SqlQuery<double>(@"select Fee from TransactionFeeMaster where Name='Ambulance'").FirstOrDefault();
             double gst = ent.Database.SqlQuery<double>(@"select Amount from GSTMaster where IsDeleted=0 and Name='Ambulance'").FirstOrDefault();
             double tds = ent.Database.SqlQuery<double>(@"select Amount from TDSMaster where IsDeleted=0 and Name='Ambulance'").FirstOrDefault();
             //            var qry = @"select v.VehicleNumber, IsNull(v.VehicleName,'NA') as VehicleName, 
@@ -595,45 +757,43 @@ namespace HospitalPortal.Controllers
             //join Patient p on p.Id = trm.Patient_Id
             //where trm.IsDriveCompleted = 1 and trm.RequestDate between DateAdd(DD,-7,GETDATE() ) and GETDATE() group by v.VehicleNumber, v.VehicleName, v.Id,d.DriverName";
             var qry = @"select d.DriverId,trm.Driver_Id,v.VehicleNumber, IsNull(v.VehicleName,'NA') as VehicleName,v.Id as VehicleId, d.DriverName,
-Sum(trm.Amount) as Amount from DriverLocation trm 
+Sum(trm.TotalPrice) as TotalPrice from DriverLocation trm 
  join Driver d on d.Id = trm.Driver_Id 
  join Vehicle v on v.Driver_Id = trm.Driver_Id 
  join Patient p on p.Id = trm.PatientId
 where trm.EntryDate between DateAdd(DD,-7,GETDATE() ) and GETDATE() and trm.IsPay='Y' group by v.VehicleNumber, v.VehicleName, v.Id,d.DriverName,trm.Driver_Id,d.DriverId";
             var data = ent.Database.SqlQuery<Ambulance>(qry).ToList();
-            if (sdate == null)
+            if (startdate == null)
             {
                 if (data.Count() == 0)
                 {
-                    TempData["msg"] = "No Record of Current Date";
+                    TempData["msg"] = "No Record Avialable.";
                 }
                 else
                 {
-                    ViewBag.Amount = commision;
-                    ViewBag.gstAmount = gst;
-                    ViewBag.tdsAmount = tds;
-                    model.Ambulance = data;
+					ViewBag.Transactionfee = Transactionfee;
+					ViewBag.Amount = (double?)commision;
+					ViewBag.gstAmount = (double?)gst;
+					ViewBag.tdsAmount = (double?)tds;
+					model.Ambulance = data;
                     foreach (var item in data)
                     {
-                        var razorcomm = (double?)item.Amount * (2.36 / 100);
-                        // var razorcommafter = razorcomm * 2.36 / 100;
-                        var totalrazorcomm = razorcomm;
-                        item.Amountwithrazorpaycomm = (int?)((double?)item.Amount + totalrazorcomm);
-
-                    }
+						var razorcomm = ((double?)item.TotalPrice * Transactionfee) / 100;
+						var totalrazorcomm = razorcomm;
+						item.Amountwithrazorpaycomm = (double?)item.TotalPrice + totalrazorcomm;
+					}
                 }
             }
             else
             {
-                DateTime dateCriteria = sdate.Value.AddDays(-7);
-                string Tarikh = dateCriteria.ToString("dd/MM/yyyy");
-                var qry1 = @"select d.DriverId,v.VehicleNumber, IsNull(v.VehicleName,'NA') as VehicleName, 
-v.Id as VehicleId
-from DriverLocation trm 
+                //DateTime dateCriteria = sdate.Value.AddDays(-7);
+                //string Tarikh = dateCriteria.ToString("dd/MM/yyyy");
+                var qry1 = @"select d.DriverId,trm.Driver_Id,v.VehicleNumber, IsNull(v.VehicleName,'NA') as VehicleName,v.Id as VehicleId, d.DriverName,
+Sum(trm.TotalPrice) as TotalPrice from DriverLocation trm 
  join Driver d on d.Id = trm.Driver_Id 
  join Vehicle v on v.Driver_Id = trm.Driver_Id 
  join Patient p on p.Id = trm.PatientId
-where trm.EntryDate between Convert(datetime,'" + dateCriteria + "',103) and Convert(datetime,'" + sdate + "',103) group by v.VehicleNumber, v.VehicleName, v.Id,d.DriverId";
+where trm.EntryDate between Convert(datetime,'" + startdate + "',103) and Convert(datetime,'" + enddate + "',103) group by v.VehicleNumber, v.VehicleName, v.Id,d.DriverName,trm.Driver_Id,d.DriverId";
                 var data1 = ent.Database.SqlQuery<Ambulance>(qry1).ToList();
                 if (data1.Count() == 0)
                 {
@@ -641,18 +801,19 @@ where trm.EntryDate between Convert(datetime,'" + dateCriteria + "',103) and Con
                 }
                 else
                 {
-                    ViewBag.Amount = commision;
-                    ViewBag.gstAmount = (double?)gst;
-                    ViewBag.tdsAmount = (double?)tds;
-                    model.Ambulance = data1;
+					ViewBag.Transactionfee = Transactionfee;
+					ViewBag.Amount = (double?)commision;
+					ViewBag.gstAmount = (double?)gst;
+					ViewBag.tdsAmount = (double?)tds;
+					model.Ambulance = data1;
                     foreach (var item in data1)
                     {
-                        var razorcomm = (double?)item.Amount * (2.36 / 100);
-                        // var razorcommafter = razorcomm * 2.36 / 100;
-                        var totalrazorcomm = razorcomm;
-                        item.Amountwithrazorpaycomm = ((double?)item.Amount + totalrazorcomm);
+                         
+						var razorcomm = ((double?)item.TotalPrice * Transactionfee) / 100;
+						var totalrazorcomm = razorcomm;
+						item.Amountwithrazorpaycomm = (double?)item.TotalPrice + totalrazorcomm;
 
-                    }
+					}
                     return View(model);
                 }
             }

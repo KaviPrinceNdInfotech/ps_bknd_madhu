@@ -46,7 +46,6 @@ namespace HospitalPortal.BL
                 }
             }
         }
-
         public string GeneratePatientRegNo()
         {
             using (DbEntities ent = new DbEntities())
@@ -74,6 +73,10 @@ namespace HospitalPortal.BL
                     {
                         return "PS" + IncrementedVal;
                     }
+                    else if (IncrementedVal < 100000)
+                    {
+                        return "PS" + IncrementedVal;
+                    }
                     else
                     {
                         throw new Exception("Patient ID overflow");
@@ -81,11 +84,10 @@ namespace HospitalPortal.BL
                 }
                 else
                 {
-                    return "DR0001";
+                    return "PS000";
                 }
             }
         }
-
         public string GenerateDriverId()
         {
             using (DbEntities ent = new DbEntities())
@@ -113,6 +115,10 @@ namespace HospitalPortal.BL
                     {
                         return "DVR" + IncrementedVal;
                     }
+                    else if (IncrementedVal < 100000)
+                    {
+                        return "DVR" + IncrementedVal;
+                    }
                     else
                     {
                         throw new Exception("Driver ID overflow");
@@ -124,7 +130,6 @@ namespace HospitalPortal.BL
                 }
             }
         }
-
         public string GenerateNurseId()
         {
             using (DbEntities ent = new DbEntities())
@@ -152,6 +157,10 @@ namespace HospitalPortal.BL
                     {
                         return "N" + IncrementedVal;
                     }
+                    else if (IncrementedVal < 100000)
+                    {
+                        return "N" + IncrementedVal;
+                    }
                     else
                     {
                         throw new Exception("Nurse ID overflow");
@@ -163,7 +172,6 @@ namespace HospitalPortal.BL
                 }
             }
         }
-
         public string GenerateLabId()
         {
             using (DbEntities ent = new DbEntities())
@@ -191,6 +199,10 @@ namespace HospitalPortal.BL
                     {
                         return "LAB" + IncrementedVal;
                     }
+                    else if (IncrementedVal < 100000)
+                    {
+                        return "LAB" + IncrementedVal;
+                    }
                     else
                     {
                         throw new Exception("Lab ID overflow");
@@ -202,9 +214,6 @@ namespace HospitalPortal.BL
                 }
             }
         }
-
-
-
         public string GenerateHealthCenterId()
         {
             using (DbEntities ent = new DbEntities())
@@ -243,7 +252,6 @@ namespace HospitalPortal.BL
                 }
             }
         }
-
         public string GenerateHospitalId()
         {
             using (DbEntities ent = new DbEntities())
@@ -282,7 +290,6 @@ namespace HospitalPortal.BL
                 }
             }
         }
-
         public string GenerateDoctorId()
         {
             using (DbEntities ent = new DbEntities())
@@ -310,6 +317,10 @@ namespace HospitalPortal.BL
                     {
                         return "DR" + IncrementedVal;
                     }
+                    else if (IncrementedVal < 100000)
+                    { 
+                        return "DR" + IncrementedVal;
+                    }
                     else
                     {
                         throw new Exception("Doctor ID overflow");
@@ -321,10 +332,6 @@ namespace HospitalPortal.BL
                 }
             }
         }
-
-
-
-
         public string GenerateChemistId()
         {
             using (DbEntities ent = new DbEntities())
@@ -352,6 +359,10 @@ namespace HospitalPortal.BL
                     {
                         return "CH" + IncrementedVal;
                     }
+                    else if (IncrementedVal < 100000)
+                    {
+                        return "CH" + IncrementedVal;
+                    }
                     else
                     {
                         throw new Exception("Chemist ID overflow");
@@ -363,7 +374,6 @@ namespace HospitalPortal.BL
                 }
             }
         }
-
         public string GenerateVenderId()
         {
             using (DbEntities ent = new DbEntities())
@@ -391,6 +401,10 @@ namespace HospitalPortal.BL
                     {
                         return "FR" + IncrementedVal;
                     }
+                    else if (IncrementedVal < 100000)
+                    {
+                        return "FR" + IncrementedVal;
+                    }
                     else
                     {
                         throw new Exception("Franchise ID overflow");
@@ -415,19 +429,23 @@ namespace HospitalPortal.BL
 
                     if (IncrementedVal < 10)
                     {
-                        return "RWA000" + IncrementedVal;
+                        return "FRRWA000" + IncrementedVal;
                     }
                     else if (IncrementedVal < 100)
                     {
-                        return "RWA00" + IncrementedVal;
+                        return "FRRWA00" + IncrementedVal;
                     }
                     else if (IncrementedVal < 1000)
                     {
-                        return "RWA0" + IncrementedVal;
+                        return "FRRWA0" + IncrementedVal;
                     }
                     else if (IncrementedVal < 10000)
                     {
-                        return "RWA" + IncrementedVal;
+                        return "FRRWA" + IncrementedVal;
+                    }
+                    else if (IncrementedVal < 100000)
+                    {
+                        return "FRRWA" + IncrementedVal;
                     }
                     else
                     {
@@ -436,13 +454,9 @@ namespace HospitalPortal.BL
                 }
                 else
                 {
-                    return "RWA0001"; //id not exit 
+                    return "FRRWA0001"; //id not exit 
                 }
             }
         }
-
-        
-
-
     }
 }

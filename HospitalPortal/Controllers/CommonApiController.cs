@@ -4,6 +4,7 @@ using HospitalPortal.Models.DomainModels;
 using HospitalPortal.Models.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Dynamic;
 using System.Linq;
 using System.Net;
@@ -31,9 +32,7 @@ namespace HospitalPortal.Controllers
             obj.Cities = Mapper.Map<IEnumerable<CityMasterDTO>>(ent.CityMasters.Where(a=>a.StateMaster_Id==stateId && a.IsDeleted == false).OrderBy(a=>a.CityName).ToList());
             return Ok(obj);
         }
-
-        
-
+         
         [HttpGet]
         public IHttpActionResult GetLocationByCity(int cityId)
         {
@@ -50,8 +49,7 @@ namespace HospitalPortal.Controllers
             obj.Departments = Mapper.Map<IEnumerable<DepartmentDTO>>(ent.Departments.Where(a => a.IsDeleted == false).OrderBy(a => a.DepartmentName).ToList());
             return Ok(obj);
         }
-
-        
+         
         public IHttpActionResult GetSpecialistByDept(int depId)
         {
             dynamic obj = new ExpandoObject();
@@ -112,10 +110,7 @@ namespace HospitalPortal.Controllers
             obj.Location = Mapper.Map<IEnumerable<LocationDTO>>(ent.Locations.Where(a => a.IsDeleted == false).OrderBy(a => a.LocationName).ToList());
             return Ok(obj);
         }
-        /// <summary>
-        ///==================== complain api=====================================//////
-        /// </summary>
-        /// <returns></returns>
+        
         [HttpGet]
         public IHttpActionResult GetComplaint()
         {
@@ -127,8 +122,7 @@ namespace HospitalPortal.Controllers
             var data = ent.Database.SqlQuery<ComplaintDTO>(query).ToList();
             return Ok(data);
         }
-
-
+         
         public IHttpActionResult GetHospitals()
         {
             dynamic obj = new ExpandoObject();
@@ -186,32 +180,7 @@ where BT.Lab_Id=" + Id + "";
             var PatientName = ent.Database.SqlQuery<Labrepo>(qry).ToList();
 
             return Ok(new { PatientName });
-        }
-
-        //=====================UPDATE BANK DETAIL===================//
-        [HttpPost]
-        [Route("api/CommonApi/UpdateBank")]
-        public IHttpActionResult UpdateBank(UpdateBankDetailss model)
-        {
-            if (!ModelState.IsValid)
-            {
-                var message = string.Join(" | ",
-ModelState.Values
-.SelectMany(a => a.Errors)
-.Select(a => a.ErrorMessage));
-                RM.Message = message;
-                RM.Status = 0;
-                return Ok(RM);
-            }
-
-            var data = ent.BankDetails.Where(a => a.Login_Id == model.Login_Id).ToList();
-
-            string qry = @"update BankDetails set AccountNo='" + model.AccountNo + "',BranchName='" + model.BranchName + "', IFSCCode='" + model.IFSCCode + "', isverified=0 where Login_Id=" + model.Login_Id + "";
-            ent.Database.ExecuteSqlCommand(qry);
-            RM.Message = "Successfully Updated";
-            RM.Status = 1;
-            return Ok(RM);
-        }
+        } 
 
         //==========================Test Dropdown=====================//
 
@@ -227,6 +196,214 @@ ModelState.Values
         }
 
 
+        [HttpGet, Route("api/CommonApi/GetBankDetail")]
+        public IHttpActionResult GetBankDetail(int AdminLogin_Id)
+        { 
+            var qry = @"select * from BankDetails where Login_Id=" + AdminLogin_Id + "";
+            var Bankdetail = ent.Database.SqlQuery<BankDetailsList>(qry).FirstOrDefault();
 
-    }
+            return Ok( Bankdetail );
+        }
+
+        [HttpPost, Route("api/CommonApi/AddBankDetail")]
+        public IHttpActionResult AddBankDetail(BankDetail model)
+        {
+            try
+            {
+                var ExitAdminLoginId = ent.AdminLogins.Where(a => a.Id == model.Login_Id).FirstOrDefault();
+                if (ExitAdminLoginId == null)
+                {
+                    return Ok(new { Message = "Not found." });
+                }
+                var AddBnkDet = ent.BankDetails.Where(a => a.Login_Id == model.Login_Id).FirstOrDefault();
+                if (AddBnkDet == null)
+                {
+                    var data = new BankDetail()
+                    {
+                        Login_Id = model.Login_Id,
+                        AccountNo = model.AccountNo,
+                        IFSCCode = model.IFSCCode,
+                        BranchName = model.BranchName,
+                        BranchAddress = model.BranchAddress,
+                        HolderName = model.HolderName,
+                        MobileNumber = model.MobileNumber,
+                        isverified = true,
+                    };
+                    ent.BankDetails.Add(data);
+                    ent.SaveChanges();
+                    return Ok(new { Message = "Bank Detail Add SuccessFully!!!" });
+                }
+                else
+                {
+                    return BadRequest("Already Exist!!!");
+                }
+            }
+            catch (Exception ex)
+            {
+                return Ok("Internal server error");
+            }
+
+        }
+
+        //=====================UPDATE BANK DETAIL===================//
+        [HttpPost]
+        [Route("api/CommonApi/UpdateBank")]
+        public IHttpActionResult UpdateBank(UpdateBankDetailss model)
+        {
+            var getrole = ent.AdminLogins.Where(r => r.Id == model.Login_Id).Select(r => r.Role).FirstOrDefault();
+            if (getrole == "driver")
+            {
+                var driver = ent.Drivers.Where(d => d.AdminLogin_Id == model.Login_Id).Select(d => d.IsBankUpdateApproved).FirstOrDefault();
+                if (driver == false)
+                {
+                    RM.Message = "Your account is not approved by admin yet";
+                    RM.Status = 0;
+                    return Ok(RM);
+                }
+                else
+                {
+                    string updatestatus = @"update Driver set IsBankUpdateApproved=0 where AdminLogin_Id=" + model.Login_Id + "";
+                    ent.Database.ExecuteSqlCommand(updatestatus);
+
+                }
+
+            }
+            else if (getrole == "nurse")
+            {
+                var nurse = ent.Nurses.Where(d => d.AdminLogin_Id == model.Login_Id).Select(d => d.IsBankUpdateApproved).FirstOrDefault();
+                if (nurse == false)
+                {
+                    RM.Message = "Your account is not approved by admin yet";
+                    RM.Status = 0;
+                    return Ok(RM);
+                }
+                else
+                {
+                    string updatestatus = @"update Nurse set IsBankUpdateApproved=0 where AdminLogin_Id=" + model.Login_Id + "";
+                    ent.Database.ExecuteSqlCommand(updatestatus);
+
+                }
+
+            }
+            else if (getrole == "doctor")
+            {
+                var doctor = ent.Doctors.Where(d => d.AdminLogin_Id == model.Login_Id).Select(d => d.IsBankUpdateApproved).FirstOrDefault();
+                if (doctor == false)
+                {
+                    RM.Message = "Your account is not approved by admin yet";
+                    RM.Status = 0;
+                    return Ok(RM);
+                }
+                else
+                {
+                    string updatestatus = @"update Doctor set IsBankUpdateApproved=0 where AdminLogin_Id=" + model.Login_Id + "";
+                    ent.Database.ExecuteSqlCommand(updatestatus);
+
+                }
+
+            }
+            else if (getrole == "chemist")
+            {
+                var chemist = ent.Chemists.Where(d => d.AdminLogin_Id == model.Login_Id).Select(d => d.IsBankUpdateApproved).FirstOrDefault();
+                if (chemist == false)
+                {
+                    RM.Message = "Your account is not approved by admin yet";
+                    RM.Status = 0;
+                    return Ok(RM);
+                }
+                else
+                {
+                    string updatestatus = @"update Chemist set IsBankUpdateApproved=0 where AdminLogin_Id=" + model.Login_Id + "";
+                    ent.Database.ExecuteSqlCommand(updatestatus);
+
+                }
+
+            }
+            else if (getrole == "Franchise")
+            {
+                var Franchise = ent.Vendors.Where(d => d.AdminLogin_Id == model.Login_Id).Select(d => d.IsBankUpdateApproved).FirstOrDefault();
+                if (Franchise == false)
+                {
+                    RM.Message = "Your account is not approved by admin yet";
+                    RM.Status = 0;
+                    return Ok(RM);
+                }
+                else
+                {
+                    string updatestatus = @"update Vendor set IsBankUpdateApproved=0 where AdminLogin_Id=" + model.Login_Id + "";
+                    ent.Database.ExecuteSqlCommand(updatestatus);
+
+                }
+
+            }
+            else if (getrole == "lab")
+            {
+                var lab = ent.Labs.Where(d => d.AdminLogin_Id == model.Login_Id).Select(d => d.IsBankUpdateApproved).FirstOrDefault();
+                if (lab == false)
+                {
+                    RM.Message = "Your account is not approved by admin yet";
+                    RM.Status = 0;
+                    return Ok(RM);
+                }
+                else
+                {
+                    string updatestatus = @"update Lab set IsBankUpdateApproved=0 where AdminLogin_Id=" + model.Login_Id + "";
+                    ent.Database.ExecuteSqlCommand(updatestatus);
+
+                }
+
+            }
+            else if (getrole == "RWA")
+            {
+                var lab = ent.RWAs.Where(d => d.AdminLogin_Id == model.Login_Id).Select(d => d.IsBankUpdateApproved).FirstOrDefault();
+                if (lab == false)
+                {
+                    RM.Message = "Your account is not approved by admin yet";
+                    RM.Status = 0;
+                    return Ok(RM);
+                }
+                else
+                {
+                    string updatestatus = @"update RWA set IsBankUpdateApproved=0 where AdminLogin_Id=" + model.Login_Id + "";
+                    ent.Database.ExecuteSqlCommand(updatestatus);
+
+                }
+
+            }
+
+            var data = ent.BankDetails.Where(a => a.Login_Id == model.Login_Id).ToList();
+
+            string qry = @"update BankDetails set AccountNo='" + model.AccountNo + "',BranchName='" + model.BranchName + "', IFSCCode='" + model.IFSCCode + "', BranchAddress='" + model.BranchAddress + "', HolderName='" + model.HolderName + "', isverified=0 where Login_Id=" + model.Login_Id + "";
+            ent.Database.ExecuteSqlCommand(qry);
+
+
+            RM.Message = "Successfully Updated";
+            RM.Status = 1;
+            return Ok(RM);
+        }
+
+		[HttpGet, Route("api/CommonApi/GetVehicleType")]
+		public IHttpActionResult GetVehicleType()
+		{
+			string qry = @"SELECT Id,VehicleTypeName FROM VehicleType WHERE IsDeleted = 0 ORDER BY VehicleTypeName;";
+			var VehicleType = ent.Database.SqlQuery<VehicleTypes>(qry).ToList();
+			return Ok(new { VehicleType });
+		}
+
+		[HttpGet, Route("api/CommonApi/GetVehicleNumberListByVehicleType")]
+		public IHttpActionResult GetVehicleNumberListByVehicleType(int VehicleType_Id)
+		{
+            string qry = @"SELECT Id,VehicleNumber FROM Vehicle WHERE IsDeleted = 0 AND VehicleType_Id = "+ VehicleType_Id + " ORDER BY VehicleNumber;"; 
+			var VehicleNumberList = ent.Database.SqlQuery<VehicleNumbers>(qry).ToList();
+			return Ok(new { VehicleNumberList });
+		}
+
+		[HttpGet, Route("api/CommonApi/GetVehicleNumberListByVehicleType")]
+		public IHttpActionResult GetVehicleNumber()
+		{
+			string qry = @"SELECT Id,VehicleNumber FROM Vehicle WHERE IsDeleted = 0  ORDER BY VehicleNumber;";
+			var VehicleNumberList = ent.Database.SqlQuery<VehicleNumbers>(qry).ToList();
+			return Ok(new { VehicleNumberList });
+		}
+	}
 }

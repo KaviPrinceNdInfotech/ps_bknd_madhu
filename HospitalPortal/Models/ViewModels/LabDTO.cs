@@ -20,6 +20,7 @@ namespace HospitalPortal.Models.ViewModels
         public string RefId { get; set; }
         public bool IsDeleted { get; set; }
         public bool IsApproved { get; set; }
+        public bool IsBankUpdateApproved { get; set; }
        // [Required(ErrorMessage = "Lab Name Can't Be Empty")]
         public string LabName { get; set; }
      
@@ -211,6 +212,7 @@ namespace HospitalPortal.Models.ViewModels
     public class LabREgis
     {
         public int ID { get; set; }
+        public int Vendor_Id { get; set; }
         public string PAN { get; set; }
         public string LabName { get; set; }
         public string PhoneNumber { get; set; }

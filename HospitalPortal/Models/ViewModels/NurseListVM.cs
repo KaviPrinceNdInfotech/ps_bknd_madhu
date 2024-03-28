@@ -41,6 +41,7 @@ namespace HospitalPortal.Models.ViewModels
         public string NurseTypeName { get; set; }
 
         public int? Rating { get; set; }
+        
     }
 
 
@@ -58,6 +59,8 @@ namespace HospitalPortal.Models.ViewModels
         public string PinCode { get; set; }
 
         public string Location { get; set; }
+        public int? CityMaster_Id { get; set; }
+        public int? StateMaster_Id { get; set; }
 
 
     }
@@ -74,6 +77,7 @@ namespace HospitalPortal.Models.ViewModels
         public Nullable<System.DateTime> ServiceDate { get; set; }
         public string SlotTime { get; set; }
         public int? TotalNumberofdays { get; set; }
+        public string DeviceId { get; set; }
     }
 
     

@@ -19,13 +19,10 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.AccessControl;
 using System.Security.Cryptography;
-using System.Web.Http;
-using System.Web.Mvc;
+using System.Web.Http; 
 using System.Xml.Linq;
+using static HospitalPortal.Utilities.EmailOperations;
 using static iTextSharp.text.pdf.AcroFields;
-using HttpGetAttribute = System.Web.Http.HttpGetAttribute;
-using RouteAttribute = System.Web.Http.RouteAttribute;
-//using System.Web.Http;
 
 namespace HospitalPortal.Controllers
 {
@@ -37,20 +34,12 @@ namespace HospitalPortal.Controllers
         Rmwithparm rwithprm = new Rmwithparm();
         ILog log = LogManager.GetLogger(typeof(PatientApiController));
 
-        [System.Web.Http.HttpPost]
+        [HttpPost]
         public IHttpActionResult UpdateProfile(PatientUpdateReq model)
         {
             var rm = new ReturnMessage();
             try
-            {
-                if (!ModelState.IsValid)
-                {
-                    var message = string.Join(" | ", ModelState.Values.SelectMany(a => a.Errors).Select(a => a.ErrorMessage));
-                    rm.Message = message;
-                    rm.Status = 0;
-                    return Ok(rm);
-                }
-
+            { 
                 var data = ent.Patients.Find(model.Id);
                 if (data == null)
                 {
@@ -58,6 +47,8 @@ namespace HospitalPortal.Controllers
                     rm.Message = "No record found";
                     return Ok(rm);
                 }
+                data.PatientName = model.PatientName;
+                data.EmailId = model.EmailId;
                 data.MobileNumber = model.MobileNumber;
                 data.CityMaster_Id = model.CityMaster_Id;
                 data.Location = model.Location;
@@ -76,7 +67,7 @@ namespace HospitalPortal.Controllers
             return Ok(rm);
         }
 
-        [System.Web.Http.HttpGet]
+        [HttpGet]
         public IHttpActionResult GetDoctorInfo(int cityId, int specialistId)
         {
             //var data = ent.Doctors.Where(a => !a.IsDeleted && a.IsApproved && a.CityMaster_Id == cityId && a.Specialist_Id == specialistId)
@@ -123,39 +114,8 @@ namespace HospitalPortal.Controllers
             return Ok(dict);
         }
 
-        //public IHttpActionResult GetDoctor(int hospitalId, int specialistId)
-        //{
-        //    var data = (from doctor in ent.HospitalDoctors
-        //                join state in ent.StateMasters on doctor.StateMaster_Id equals state.Id
-        //                join city in ent.CityMasters on doctor.CityMaster_Id equals city.Id
-        //                join specialist in ent.Specialists on doctor.Specialist_Id equals specialist.Id
-        //                join hospital in ent.Hospitals on doctor.Hospital_Id equals hospital.Id
-        //                join dept in ent.Departments on doctor.Department_Id equals dept.Id
-        //                where doctor.Hospital_Id == hospitalId && doctor.Specialist_Id == specialistId && !doctor.IsDeleted
-        //                select new DoctorSearchResult
-        //                {
-        //                    DoctorId = doctor.Id,
-        //                    //HospitalId = doctor.Hospital_Id,
-        //                    HospitalName = doctor.ClinicName != null ? doctor.ClinicName : hospital.HospitalName,
-        //                    DoctorName = doctor.DoctorName,
-        //                    EmailId = doctor.EmailId,
-        //                    PhoneNumber = doctor.PhoneNumber,
-        //                    MobileNumber = doctor.MobileNumber,
-        //                    StateName = state.StateName,
-        //                    CityName = city.CityName,
-        //                    DepartmentName = dept.DepartmentName,
-        //                    SpecialistName = specialist.SpecialistName,
-        //                    //Availability1 = doctor.StartTime,
-        //                    //Availability2 = doctor.EndTime,
-        //                    //Fee = doctor.Fee,
-        //                    Location = doctor.Location
-        //                }).ToList();
-        //    Dictionary<string, object> dict = new Dictionary<string, object>();
-        //    dict["doctors"] = data;
-        //    return Ok(dict);
-        //}
-
-        [System.Web.Http.HttpPost]
+      
+        [HttpPost]
         public IHttpActionResult MakeAppointment(PatientAppointmentVM model)
         {
             try
@@ -235,7 +195,7 @@ namespace HospitalPortal.Controllers
         }
 
         //View Appointments by Patient
-        [System.Web.Http.HttpGet]
+        [HttpGet]
         public IHttpActionResult ShowAppointMent(int PatientId, DateTime? date = null)
         {
             var query = @"execute [sp_PatientAppointments] @patientId=" + PatientId;
@@ -276,7 +236,7 @@ namespace HospitalPortal.Controllers
 
 
         //View Appointments of Hospitals Doctors by Patient
-        [System.Web.Http.HttpGet]
+        [HttpGet]
         public IHttpActionResult ShowAppointMentOfDoctor(int PatientId, DateTime? date = null)
         {
             var query = @"select PatientAppointment.Id as AppointmentId, AppointmentDate, Doctor.MobileNumber as MobileNo ,isnull(PatientAppointment.HospitalDoc_Id,0) as HospitalDoc_Id, isnull(PatientAppointment.Hospital_Id,0) as Hospital_Id, 
@@ -302,7 +262,7 @@ where Patient_Id='" + PatientId + "' and MONTH(AppointmentDate) =  MONTH(GETDATE
             return Ok(dict);
         }
 
-        [System.Web.Http.HttpGet]
+        [HttpGet]
         //Show SlotTiming choosing DoctorId
         public IHttpActionResult SlotTiming(int DoctorId)
         {
@@ -317,7 +277,7 @@ where Patient_Id='" + PatientId + "' and MONTH(AppointmentDate) =  MONTH(GETDATE
             return Ok(model);
         }
 
-        [System.Web.Http.HttpGet]
+        [HttpGet]
         public IHttpActionResult TestBookingHistory(int PatientId, DateTime? date = null)
         {
             var model = new BookedTests();
@@ -344,7 +304,7 @@ join Lab on Lab.Id = BookTestLab.Lab_Id join LabTest on LabTest.Id = BookTestLab
             return Ok(model);
         }
 
-        [System.Web.Http.HttpGet]
+        [HttpGet]
         public IHttpActionResult PaymentStatus(int AppointmentId)
         {
             try
@@ -369,7 +329,7 @@ join Lab on Lab.Id = BookTestLab.Lab_Id join LabTest on LabTest.Id = BookTestLab
             }
         }
 
-        [System.Web.Http.HttpGet]
+        [HttpGet]
         public IHttpActionResult CartCount(int id)
         {
             var model = new kartCount();
@@ -380,7 +340,7 @@ join Lab on Lab.Id = BookTestLab.Lab_Id join LabTest on LabTest.Id = BookTestLab
         }
 
         //Show Hospital Name using AutoComplete Technique
-        [System.Web.Http.HttpGet]
+        [HttpGet]
         public IHttpActionResult SearchHospital(string term)
         {
             try
@@ -407,7 +367,7 @@ join Lab on Lab.Id = BookTestLab.Lab_Id join LabTest on LabTest.Id = BookTestLab
             }
         }
 
-        [System.Web.Mvc.HttpPost]
+        [HttpPost]
         public IHttpActionResult CancelAppointment_ByDoctor(/*CancelAppointementDTO*/CancelAppointent model)
         {
             //string time1 = model.TimeSlot;
@@ -491,7 +451,7 @@ join Lab on Lab.Id = BookTestLab.Lab_Id join LabTest on LabTest.Id = BookTestLab
                 return Ok(rwithprm);
             }
         }
-        [System.Web.Mvc.HttpPost]
+        [HttpPost]
         public IHttpActionResult CancelAppointment_ByNurse(/*CancelAppointementDTO*/CancelAppointent model)
         {
             //string time1 = model.TimeSlot;
@@ -577,8 +537,8 @@ join Lab on Lab.Id = BookTestLab.Lab_Id join LabTest on LabTest.Id = BookTestLab
         }
 
 
-        [System.Web.Http.HttpPost]
-        [System.Web.Http.Route("api/PatientApi/CancelNurseAppointment")]
+        [HttpPost]
+        [Route("api/PatientApi/CancelNurseAppointment")]
         public IHttpActionResult CancelNurseAppointment(NurseCancelApp model)
         {
             if (model.Id != 0)
@@ -619,8 +579,8 @@ join Lab on Lab.Id = BookTestLab.Lab_Id join LabTest on LabTest.Id = BookTestLab
 
 
         //new(from User Side)
-        [System.Web.Http.HttpPost]
-        [System.Web.Http.Route("api/PatientApi/CancelDoctorAppointment")]
+        [HttpPost]
+        [Route("api/PatientApi/CancelDoctorAppointment")]
         public IHttpActionResult CancelDoctorAppointment(NurseCancelApp model)
         {
             if (model.Id != 0)
@@ -650,8 +610,8 @@ join Lab on Lab.Id = BookTestLab.Lab_Id join LabTest on LabTest.Id = BookTestLab
             return Ok("Successfully Cancelled Your Appointment And Your Amount Is Credited Your wallet!!!");
         }
 
-        [System.Web.Http.HttpPost]
-        [System.Web.Http.Route("api/PatientApi/PatientRegistration")]
+        [HttpPost]
+        [Route("api/PatientApi/PatientRegistration")]
         public IHttpActionResult PatientRegistration(PatientDTO model)
         {
             GenerateBookingId Patient = new GenerateBookingId();
@@ -696,19 +656,21 @@ join Lab on Lab.Id = BookTestLab.Lab_Id join LabTest on LabTest.Id = BookTestLab
 
         }
 
-        //View ShowAppointMentOfDoctor by Patient (physical report)
-        [System.Web.Http.HttpGet]
+        //View ShowAppointmentOfDoctor by Patient (physical report)
+        [HttpGet]
 
         //physical booking detail
         public IHttpActionResult DoctorAptP(int PatientId)
         {
             //var model = new LabVM();
-            var query = @"select  IsNull(ca.AppointmentDate,PatientAppointment.AppointmentDate) as AppointmentDate,PatientAppointment.PaymentDate,CONCAT(CONVERT(NVARCHAR, TS.StartTime, 8), ' To ', CONVERT(NVARCHAR, TS.EndTime, 8)) AS SlotTime,Specialist.SpecialistName,Doctor.Location,PatientAppointment.TotalFee,PatientAppointment.Id,Doctor.DoctorName,Doctor.MobileNumber,AL.DeviceId,PatientAppointment.InvoiceNumber,PatientAppointment.OrderId from PatientAppointment
-left join Doctor on Doctor.Id = PatientAppointment.Doctor_Id 
-left join Specialist on Doctor.Specialist_Id = Specialist.Id 
-left join DoctorTimeSlot as TS on PatientAppointment.Slot_id=TS.Id
-left join CancelledAppointment ca on ca.CancelledId = PatientAppointment.Id 
-left join AdminLogin as AL on AL.Id=Doctor.AdminLogin_Id 
+            var query = @"select  PatientAppointment.AppointmentDate as AppointmentDate,PatientAppointment.Id,
+PatientAppointment.PaymentDate,CONCAT(CONVERT(NVARCHAR, TS.StartTime, 8), ' To ', CONVERT(NVARCHAR, TS.EndTime, 8)) AS SlotTime,
+Specialist.SpecialistName,Doctor.Location,PatientAppointment.TotalFee,PatientAppointment.Id,Doctor.DoctorName,
+Doctor.MobileNumber,AL.DeviceId,PatientAppointment.InvoiceNumber,PatientAppointment.OrderId from PatientAppointment
+join Doctor on Doctor.Id = PatientAppointment.Doctor_Id 
+join Specialist on Doctor.Specialist_Id = Specialist.Id 
+join DoctorTimeSlot as TS on PatientAppointment.Slot_id=TS.Id 
+join AdminLogin as AL on AL.Id=Doctor.AdminLogin_Id  
 where PatientAppointment.Patient_Id=" + PatientId + " and PatientAppointment.IsCancelled=0 and PatientAppointment.BookingMode_Id=1 and PatientAppointment.AppointmentIsDone=0 order by PatientAppointment.Id desc";
             var data = ent.Database.SqlQuery<DoctorAppointmentByPatient>(query).ToList();
             Dictionary<string, object> dict = new Dictionary<string, object>();
@@ -734,7 +696,7 @@ where PatientAppointment.Patient_Id=" + PatientId + " and PatientAppointment.IsC
         }
 
 
-        [System.Web.Http.HttpGet]
+        [HttpGet]
 
         public IHttpActionResult LabDetailsByPatient(int PatientId)
         {
@@ -747,11 +709,10 @@ WHERE lbt.Patient_Id =" + PatientId + "order by lbt.id desc").ToList();
         }
 
 
-        [System.Web.Http.HttpGet]
+        [HttpGet]
         public IHttpActionResult PatientProfiledetail(int PatientId)
         {
-            var model = new PatientListp();
-            string query = @"select patient.Id,PatientName,EmailId ,MobileNumber,Location,PinCode,CityName,StateName from Patient
+            string query = @"select patient.Id,PatientName,EmailId ,MobileNumber,Location,PinCode,CityName,StateName,Patient.StateMaster_Id,Patient.CityMaster_Id from Patient
 join CityMaster on CityMaster.Id=Patient.CityMaster_Id
 join StateMaster on StateMaster.Id=Patient.StateMaster_Id
 where Patient.Id = " + PatientId + "";
@@ -761,7 +722,7 @@ where Patient.Id = " + PatientId + "";
         }
 
         //========================Nurse History=======================//
-        [System.Web.Http.HttpGet]
+        [HttpGet]
         public IHttpActionResult AppoinmentHistory(int Id)  
         {
             if (Id != 0)
@@ -781,8 +742,8 @@ left join AdminLogin as AL on AL.Id=Nurse.AdminLogin_Id
         }
 
 
-        [System.Web.Http.HttpPost]
-        [System.Web.Http.Route("api/PatientApi/UpdateProfilebyPatient")]
+        [HttpPost]
+        [Route("api/PatientApi/UpdateProfilebyPatient")]
         public IHttpActionResult UpdateProfilebyPatient(PatientUpdate model)
         {
 
@@ -813,7 +774,7 @@ left join AdminLogin as AL on AL.Id=Nurse.AdminLogin_Id
 
         }
         // ==============================Address post api ============================================         ////////////////////////////////////////
-        [System.Web.Http.HttpPost]
+        [HttpPost]
         public IHttpActionResult MedicineAddress(AddAddressMedicine Model)
         {
             try
@@ -846,8 +807,8 @@ left join AdminLogin as AL on AL.Id=Nurse.AdminLogin_Id
         }
 
 
-        [System.Web.Http.HttpGet]
-        [System.Web.Http.Route("api/PatientApi/GetMedicineAddress")]
+        [HttpGet]
+        [Route("api/PatientApi/GetMedicineAddress")]
         public IHttpActionResult GetMedicineAddress(int Patient_id)
         {
             var model = new AddAddress();
@@ -859,12 +820,10 @@ left join AdminLogin as AL on AL.Id=Nurse.AdminLogin_Id
             model.AddAddressMediciness = data;
             return Ok(model);
         }
-
-
-
+         
         //================= RWA ADD patient ============//
         
-        [System.Web.Http.HttpPost, System.Web.Http.Route("api/PatientApi/AddPatient")]
+        [HttpPost, Route("api/PatientApi/AddPatient")]
         public IHttpActionResult AddPatient(PatientDTO model)
         {
             var rm = new ReturnMessage();
@@ -880,12 +839,13 @@ left join AdminLogin as AL on AL.Id=Nurse.AdminLogin_Id
                         rm.Status = 0;
                         return Ok(rm);
                     }
+
                     if (ent.Patients.Any(a => a.PatientName == model.PatientName && a.MobileNumber == model.MobileNumber))
                     {
                         var data = ent.Patients.Where(a => a.PatientName == model.PatientName && a.MobileNumber == model.MobileNumber).FirstOrDefault();
-                        var logData = ent.AdminLogins.Where(a => a.UserID == model.PatientRegNo).FirstOrDefault();
-                        string mssg = "Welcome to PSWELLNESS. Your User Name : " + logData.Username + "(" + logData.UserID + "), Password : " + logData.Password + ".";
-                        Message.SendSms(logData.PhoneNumber, mssg);
+                        //var logData = ent.AdminLogins.Where(a => a.UserID == model.PatientRegNo).FirstOrDefault();
+                        //string mssg = "Welcome to PSWELLNESS. Your User Name : " + logData.Username + "(" + logData.UserID + "), Password : " + logData.Password + ".";
+                        //Message.SendSms(logData.PhoneNumber, mssg);
                         return Ok("You are already registered with pswellness.");
                     }
                     else
@@ -920,11 +880,37 @@ left join AdminLogin as AL on AL.Id=Nurse.AdminLogin_Id
                         ent.SaveChanges();
                         tran.Commit();
 
-                        string msg = "Welcome to PSWELLNESS. Your UserName : " + domenModel.EmailId + "(" + domenModel.PatientRegNo + "), Password : " + admin.Password + ".";
-                        Message.SendSms(domenModel.MobileNumber, msg);
+                        string sms = "Welcome to PSWELLNESS. Your UserName : " + domenModel.EmailId + "(" + domenModel.PatientRegNo + "), Password : " + admin.Password + ".";
+                        Message.SendSms(domenModel.MobileNumber, sms);
 
-                        string EmailMsg = "Welcome to PSWELLNESS. Your UserName : " + domenModel.EmailId + "(" + domenModel.PatientRegNo + "), Password : " + admin.Password + ".";
-                        Utilities.EmailOperations.SendEmail(domenModel.EmailId, "PS-Wellness", EmailMsg, true);
+                        //string EmailMsg = "Welcome to PSWELLNESS. Your UserName : " + domenModel.EmailId + "(" + domenModel.PatientRegNo + "), Password : " + admin.Password + ".";
+                        //Utilities.EmailOperations.SendEmail(domenModel.EmailId, "PS-Wellness", EmailMsg, true);
+
+                        string msg = @"<!DOCTYPE html>
+<html>
+<head>
+    <title>PS Wellness Registration Confirmation</title>
+</head>
+<body>
+    <h1>Welcome to PS Wellness!</h1>
+    <p>Your signup is complete. To finalize your registration, please use the following login credentials:</p>
+    <ul>
+        <li><strong>User ID:</strong> " + admin.UserID + @"</li>
+        <li><strong>Password:</strong> " + admin.Password + @"</li>
+    </ul>
+    <p>Thank you for choosing PS Wellness. We look forward to assisting you on your wellness journey.</p>
+</body>
+</html>";
+
+                        EmailEF ef = new EmailEF()
+                        {
+                            EmailAddress = model.EmailId,
+                            Message = msg,
+                            Subject = "PS Wellness Registration Confirmation"
+                        };
+
+                        EmailOperations.SendEmainew(ef);
+
                         var message = "Patient Added successfully.";
                         rm.Message = message;
                         rm.Status = 200;
@@ -942,29 +928,28 @@ left join AdminLogin as AL on AL.Id=Nurse.AdminLogin_Id
        
        //===================update profile===================//
        
-        [System.Web.Http.HttpPost, System.Web.Http.Route("api/PatientApi/UpdateRWA_Data")]
+        [HttpPost, Route("api/PatientApi/UpdateRWA_Data")]
         public IHttpActionResult UpdateRWA_Data(RWA_Registration model)
         {
             var rm = new ReturnMessage();
             string[] allowedExtensions = { ".jpg", ".png", ".jpeg" };
-            //using (var tran = ent.Database.BeginTransaction())
-            //{
+             
                 try
                 {
                     var RWA_Data = ent.RWAs.Where(a => a.Id == model.ID).FirstOrDefault();
                     if (RWA_Data != null)
                     {
-                        var img = FileOperation.UploadFileWithBase64("Images", model.CertificateImage, model.CertificateImagebase64, allowedExtensions);
-                        if (img == "not allowed")
-                        {
-                            rm.Status = 0;
-                            rm.Message = "Only png,jpg,jpeg files are allowed.";
-                            //tran.Rollback();
-                            return Ok(rm);
-                        }
-                        model.CertificateImage = img;
+                        //var img = FileOperation.UploadFileWithBase64("Images", model.CertificateImage, model.CertificateImagebase64, allowedExtensions);
+                        //if (img == "not allowed")
+                        //{
+                        //    rm.Status = 0;
+                        //    rm.Message = "Only png,jpg,jpeg files are allowed.";
+                           
+                        //    return Ok(rm);
+                        //}
+                        //model.CertificateImage = img;
 
-                        var query = @"UPDATE RWA SET AuthorityName= '" + model.AuthorityName + "', LandlineNumber='" + model.LandlineNumber + "', StateMaster_Id=" + model.StateMaster_Id + ", CityMaster_Id=" + model.CityMaster_Id + ", Location='" + model.Location + "', CertificateImage='" + model.CertificateImage + "' WHERE Id=" + model.ID + " ";
+                        var query = @"UPDATE RWA SET AuthorityName= '" + model.AuthorityName + "', LandlineNumber='" + model.LandlineNumber + "', StateMaster_Id=" + model.StateMaster_Id + ", CityMaster_Id=" + model.CityMaster_Id + ", Location='" + model.Location + "', EmailId='" + model.EmailId + "', Pincode='" + model.Pincode + "' WHERE Id=" + model.ID + " ";
                         ent.Database.ExecuteSqlCommand(query);
                         ent.SaveChanges();  
                         rm.Message = "Updated Successfully.";
@@ -980,17 +965,13 @@ left join AdminLogin as AL on AL.Id=Nurse.AdminLogin_Id
                 }
                 catch (Exception ex)
                 {
-                    log.Error(ex.Message);
-                    //tran.Rollback();
+                    log.Error(ex.Message); 
                     return InternalServerError(ex);
                 }
-            //}
         }
-
-
         //Get-RWA-Profile-Data==== complete ================
-        [System.Web.Http.HttpGet]
-        [System.Web.Http.Route("api/PatientApi/GetRWA_ProfileDetails")]
+        [HttpGet]
+        [Route("api/PatientApi/GetRWA_ProfileDetails")]
         public IHttpActionResult GetRWA_ProfileDetails(int RWA_Id)
         {
             var rm = new ReturnMessage();
@@ -1006,12 +987,12 @@ left join AdminLogin as AL on AL.Id=Nurse.AdminLogin_Id
                 }
                 else
                 {
-                    var query = "SELECT A.Id, A.AuthorityName, A.PhoneNumber, A.EmailId, A.Location, A.PinCode, (SELECT StateName FROM StateMaster WHERE Id=A.StateMaster_Id) AS StateName, (SELECT CityName FROM CityMaster WHERE ID=A.CityMaster_Id) AS CityName FROM RWA A WHERE A.Id = " + RWA_Id + "";
+                    var query ="SELECT A.Id, A.AuthorityName, A.PhoneNumber, A.EmailId, A.Location, A.PinCode,A.CityMaster_Id,A.StateMaster_Id, (SELECT StateName FROM StateMaster WHERE Id=A.StateMaster_Id) AS StateName, (SELECT CityName FROM CityMaster WHERE ID=A.CityMaster_Id) AS CityName FROM RWA A WHERE A.Id= " + RWA_Id + "";
 
-                    var data = ent.Database.SqlQuery<RWA_ProfileDetails>(query);
-                    Dictionary<string, object> dict = new Dictionary<string, object>();
-                    dict["RWA_ProfileDetails"] = data;
-                    return Ok(dict);
+                    var data = ent.Database.SqlQuery<RWA_ProfileDetails>(query).FirstOrDefault();
+                   // Dictionary<string, object> dict = new Dictionary<string, object>();
+                    //dict["RWA_ProfileDetails"] = data;
+                    return Ok(data);
                 }
 
             }
@@ -1021,8 +1002,8 @@ left join AdminLogin as AL on AL.Id=Nurse.AdminLogin_Id
                 return InternalServerError(ex);
             }
         }
-        [System.Web.Http.HttpGet]
-        [System.Web.Http.Route("api/PatientApi/GetPatientList")]
+        [HttpGet]
+        [Route("api/PatientApi/GetPatientList")]
         public IHttpActionResult GetPatientList(int RWA_Id)
         {
             var rm = new ReturnMessage();
@@ -1038,7 +1019,7 @@ left join AdminLogin as AL on AL.Id=Nurse.AdminLogin_Id
                 }
                 else
                 {
-                    var query = "SELECT P.Id, P.PatientName, P.MobileNumber, P.Location, P.PinCode, (SELECT StateName FROM StateMaster WHERE Id=P.StateMaster_Id) AS StateName, (SELECT CityName FROM CityMaster WHERE ID=P.CityMaster_Id) AS CityName FROM Patient P WHERE Rwa_Id = " + RWA_Id + "";
+                    var query = "SELECT Id,PatientName,MobileNumber,EmailId,Location,PinCode FROM Patient WHERE Rwa_Id = " + RWA_Id + "";
 
                     var data = ent.Database.SqlQuery<PatientData>(query).ToList();
                     Dictionary<string, object> dict = new Dictionary<string, object>();
@@ -1053,8 +1034,8 @@ left join AdminLogin as AL on AL.Id=Nurse.AdminLogin_Id
             }
 
         }
-        [System.Web.Http.HttpGet]
-        [System.Web.Http.Route("api/PatientApi/GetRWA_PayoutList")]
+        [HttpGet]
+        [Route("api/PatientApi/GetRWA_PayoutList")]
         public IHttpActionResult GetRWA_PayoutList(int RWA_Id)
         {
             var rm = new ReturnMessage();
@@ -1089,8 +1070,8 @@ left join AdminLogin as AL on AL.Id=Nurse.AdminLogin_Id
 
         //================Get-RWA-Payment-Report-Data====================//
 
-        [System.Web.Http.HttpGet]
-        [System.Web.Http.Route("api/PatientApi/GetRWA_PaymentReport")]
+        [HttpGet]
+        [Route("api/PatientApi/GetRWA_PaymentReport")]
         public IHttpActionResult GetRWA_PaymentReport(int RWA_Id)
         {
             {
@@ -1129,7 +1110,7 @@ left join AdminLogin as AL on AL.Id=Nurse.AdminLogin_Id
         
         //================ Add-RWA-Complaint====Complete============//
         
-        [System.Web.Http.HttpPost, System.Web.Http.Route("api/PatientApi/Add_RWAComplaint")]
+        [HttpPost, Route("api/PatientApi/Add_RWAComplaint")]
         public IHttpActionResult Add_RWAComplaint(RWAComplaint model)
         {
             var rm = new returnMessage();
@@ -1177,7 +1158,7 @@ left join AdminLogin as AL on AL.Id=Nurse.AdminLogin_Id
         
         //======================[Doctor Rating Review]===============//
 
-        [System.Web.Http.HttpPost]
+        [HttpPost]
         [Route("api/PatientApi/DoctorRatingReview")]
         public IHttpActionResult DoctorRatingReview(getRating model)
         {
@@ -1266,7 +1247,7 @@ left join AdminLogin as AL on AL.Id=Nurse.AdminLogin_Id
         }
        // =======get rating List  ==============================//
 
-        [System.Web.Http.HttpGet]
+        [HttpGet]
         [Route("api/PatientApi/GETDoctorRatingReview")]
         public IHttpActionResult GETDoctorRatingReview(string Professional)
         {
@@ -1281,7 +1262,7 @@ left join AdminLogin as AL on AL.Id=Nurse.AdminLogin_Id
 
         }
 
-        [System.Web.Mvc.HttpGet]
+        [HttpGet]
         [Route("api/PatientApi/GetTotalRating")]
         public IHttpActionResult GetTotalRating(int Pro_Id, string Professional)
 
@@ -1296,8 +1277,8 @@ left join AdminLogin as AL on AL.Id=Nurse.AdminLogin_Id
 
         //=============RWA ABOUT=================//
 
-        [System.Web.Http.HttpGet]
-        [System.Web.Http.Route("api/PatientApi/RWA_About")]
+        [HttpGet]
+        [Route("api/PatientApi/RWA_About")]
         public IHttpActionResult RWA_About(int Id)
         {
             string qry = @"select Id,About from RWA Where IsDeleted=0";
@@ -1307,8 +1288,8 @@ left join AdminLogin as AL on AL.Id=Nurse.AdminLogin_Id
 
         //=============USER(PATIENT) ABOUT=================//
 
-        [System.Web.Http.HttpGet]
-        [System.Web.Http.Route("api/PatientApi/User_About")]
+        [HttpGet]
+        [Route("api/PatientApi/User_About")]
         public IHttpActionResult User_About()
         {
             string qry = @"select Id,About from Patient where IsDeleted=0";
@@ -1318,19 +1299,18 @@ left join AdminLogin as AL on AL.Id=Nurse.AdminLogin_Id
 
         //=============VIEW LAB REPORT BY PATIENT============//
 
-        [System.Web.Http.HttpGet]
-        [System.Web.Http.Route("api/PatientApi/ViewLabReportByPatient")]
+        [HttpGet]
+        [Route("api/PatientApi/ViewLabReportByPatient")]
         public IHttpActionResult ViewLabReportByPatient(int PatientId)
         {
             string qry = @"select LR.Id,L.LabName,LT.TestName,BTL.TestDate,LR.[File] from Patient as P left join LabReport as LR on LR.Patient_Id=P.Id left join LabTest as LT on LT.Id=LR.Test left join Lab as L on L.Id=LR.Lab_Id left join BookTestLab as BTL on LT.Id=BTL.Test_Id where LR.Patient_Id=" + PatientId + " order by LR.Id desc";
             var ViewLabReport_ByPatient = ent.Database.SqlQuery<LabViewReport_ByPatient>(qry).ToList();
             return Ok(new { ViewLabReport_ByPatient });
         }
-
-
+         
         //==========================LabViewReportFile=====================//
 
-        [System.Web.Http.HttpGet]
+        [HttpGet]
         [Route("api/PatientApi/LabReport_File")]
         public IHttpActionResult LabReport_File(int Id)
         {
@@ -1342,8 +1322,8 @@ left join AdminLogin as AL on AL.Id=Nurse.AdminLogin_Id
         }
 
         //======================DoctorViewReport By Patient==========================//
-        [System.Web.Http.HttpGet]
-        [System.Web.Http.Route("api/PatientApi/DoctorViewReportByPatient")]
+        [HttpGet]
+        [Route("api/PatientApi/DoctorViewReportByPatient")]
         public IHttpActionResult DoctorViewReportByPatient(int PatientId)
         {
             string qry = @"select DR.Id,D.DoctorName,DR.Image1 from Patient as P left join DoctorReports as DR on DR.Patient_Id=P.Id left join Doctor as D on D.Id=Dr.Doctor_Id where DR.Patient_Id=" + PatientId + " order by Dr.Id Desc";
@@ -1351,10 +1331,9 @@ left join AdminLogin as AL on AL.Id=Nurse.AdminLogin_Id
             return Ok(new { DoctorReportByPatient });
         }
 
-
         //===================DoctorViewReportFile======================//
-        [System.Web.Http.HttpGet]
-        [System.Web.Http.Route("api/PatientApi/DoctorViewReportFile")]
+        [HttpGet]
+        [Route("api/PatientApi/DoctorViewReportFile")]
         public IHttpActionResult DoctorViewReportFile(int Id)
         {
             string qry = @"select Image1 from DoctorReports where Id=" + Id + "";
@@ -1364,7 +1343,7 @@ left join AdminLogin as AL on AL.Id=Nurse.AdminLogin_Id
 
         //============================NurseViewReport By Patient====================================//
 
-        [System.Web.Http.HttpGet]
+        [HttpGet]
         [Route("api/PatientApi/NurseViewReportByPatient")]
         public IHttpActionResult NurseViewReportByPatient(int PatientId)
         {
@@ -1373,7 +1352,7 @@ left join AdminLogin as AL on AL.Id=Nurse.AdminLogin_Id
             return Ok(new { NurseViewReport });
         }
 
-        [System.Web.Http.HttpGet, Route("api/PatientApi/GetDriverList_ByLatLong")]
+        [HttpGet, Route("api/PatientApi/GetDriverList_ByLatLong")]
 
         public IHttpActionResult GetDriverList_ByLatLong(int VehType_Id, double StartLat, double StartLong)
         {
@@ -1383,7 +1362,7 @@ left join AdminLogin as AL on AL.Id=Nurse.AdminLogin_Id
 
         }
 
-        [System.Web.Http.HttpGet, Route("api/PatientApi/GetDriverDetail")]
+        [HttpGet, Route("api/PatientApi/GetDriverDetail")]
 
         public IHttpActionResult GetDriverDetail(int DriverId)
         {

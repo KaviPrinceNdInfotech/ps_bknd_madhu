@@ -47,8 +47,8 @@ namespace HospitalPortal.Models.ViewModels
         public double? Amountwithrazorpaycomm { get; set; }
         public string ServiceType { get; set; }  //nurse history
         public string ServiceTime { get; set; }  //nurse history
-        public string ServiceDate { get; set; }
-    }
+        public string ServiceDate { get; set; } 
+	}
 
     public class NurseAppointmentWithUser
     {

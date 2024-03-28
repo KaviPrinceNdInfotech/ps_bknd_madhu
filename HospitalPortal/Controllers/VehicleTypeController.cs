@@ -83,7 +83,9 @@ namespace HospitalPortal.Controllers
         {
             var model = new VehicleTypeLISTvm();
             model.CategoryList = new SelectList(repos.GetCategory(), "Id", "CategoryName");
-            string q = @"select * from VehicleType vt join MainCategory mc on mc.Id = vt.Category_Id where vt.IsDeleted=0 and mc.IsDeleted=0 order by CategoryName asc,VehicleTypeName asc";
+            string q = @"select * from VehicleType vt 
+join MainCategory mc on mc.Id = vt.Category_Id 
+where vt.IsDeleted=0 and mc.IsDeleted=0 order by CategoryName asc,VehicleTypeName asc";
             var data = ent.Database.SqlQuery<ListVehicleType>(q).ToList();
             if (data.Count() == 0)
             {

@@ -1,6 +1,7 @@
 ﻿@model HospitalPortal.Models.ViewModels.VendorDTO
 @{
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    string role = HospitalPortal.Utility.UserIdentity.UserRole;
 }
 
 <style>
@@ -16,27 +17,31 @@
     <div id="mainContainer">
 
         @*<div class="row">
-               <div class="col-md-6">
-                  @Html.ActionLink("Show All", "All", null, new { @class="btn btn-info"})
-               </div>
-            </div>*@
+           <div class="col-md-6">
+              @Html.ActionLink("Show All", "All", null, new { @class="btn btn-info"})
+           </div>
+        </div>*@
 
         <div class="row">
             <div class="col-md-6">
                 <h3>Edit Your Profile</h3>
             </div>
         </div>
-
+        @if (role == "admin")
+        {
+            <a href="/Vendor/All" class="btn btn-info">Back</a>
+        }
+         
         @Html.HiddenFor(a => a.Id)
-        @Html.HiddenFor(a=>a.IsDeleted)
+        @Html.HiddenFor(a => a.IsDeleted)
         @Html.HiddenFor(a => a.AdminLogin_Id)
         @Html.HiddenFor(a => a.EmailId)
         @Html.HiddenFor(a => a.MobileNumber)
         @Html.HiddenFor(a => a.AadharOrPANImage)
         @Html.HiddenFor(a => a.Password)
-        @Html.HiddenFor(a=>a.UniqueId)
-        @Html.HiddenFor(a=>a.IsCheckedTermsCondition)
-        
+        @Html.HiddenFor(a => a.UniqueId)
+        @Html.HiddenFor(a => a.IsCheckedTermsCondition)
+
         @Html.Partial("~/Views/Shared/_DisplayMessageUpdate.cshtml")
 
 
@@ -57,33 +62,33 @@
                 </div>
 
                 @*<div class="form-group">
-        Mobile Number * @Html.TextBoxFor(a => a.MobileNumber, new { @class = "form-control" })
-        <span class="red">
-            @Html.ValidationMessageFor(a => a.MobileNumber)
-        </span>
-    </div>
+                    Mobile Number * @Html.TextBoxFor(a => a.MobileNumber, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.MobileNumber)
+                    </span>
+                </div>
 
 
-    <div class="form-group">
-        Email Id * @Html.TextBoxFor(a => a.EmailId, new { @class = "form-control" })
-        <span class="red">
-            @Html.ValidationMessageFor(a => a.EmailId)
-        </span>
-    </div>
+                <div class="form-group">
+                    Email Id * @Html.TextBoxFor(a => a.EmailId, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.EmailId)
+                    </span>
+                </div>
 
-    <div class="form-group">
-        Password * @Html.PasswordFor(a => a.Password, new { @class = "form-control" })
-        <span class="red">
-            @Html.ValidationMessageFor(a => a.Password)
-        </span>
-    </div>
+                <div class="form-group">
+                    Password * @Html.PasswordFor(a => a.Password, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.Password)
+                    </span>
+                </div>
 
-    <div class="form-group">
-        Confirm Your Password * @Html.PasswordFor(a => a.ConfirmPassword, new { @class = "form-control" })
-        <span class="red">
-            @Html.ValidationMessageFor(a => a.ConfirmPassword)
-        </span>
-    </div>*@
+                <div class="form-group">
+                    Confirm Your Password * @Html.PasswordFor(a => a.ConfirmPassword, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.ConfirmPassword)
+                    </span>
+                </div>*@
 
                 <div class="form-group">
                     State * @Html.DropDownListFor(a => a.StateMaster_Id, Model.States, "Select", new { @class = "form-control" })
@@ -95,8 +100,8 @@
                 <div class="form-group">
                     @{ Html.EnableClientValidation(false);}
                     City * @Html.DropDownListFor(a => a.City_Id,
-                       Model.Cities
-                        , "Select", new { @class = "form-control" })
+Model.Cities
+, "Select", new { @class = "form-control" })
                     <span class="red">
                         @Html.ValidationMessageFor(a => a.City_Id)
                     </span>
@@ -133,9 +138,9 @@
 
                 <div class="form-group">
                     @{ Html.EnableClientValidation(false); }
-                    @if(!string.IsNullOrEmpty(Model.AadharOrPANImage))
+                    @if (!string.IsNullOrEmpty(Model.AadharOrPANImage))
                     {
-                        <img  class="thumb" src="/Images/@Model.AadharOrPANImage"/>
+                        <img class="thumb" src="/Images/@Model.AadharOrPANImage" />
                     }
                     PAN/Aadhar doc. @Html.TextBoxFor(a => a.AadharOrImageFile, new { @class = "form-control", type = "file" })
                     <span class="red">
@@ -145,7 +150,7 @@
                 </div>
 
                 <div class="form-group">
-                    <input type="submit" value="Save" class="btn btn-info" />
+                    <input type="submit" value="Update" class="btn btn-info" />
                 </div>
             </div>
         </div>

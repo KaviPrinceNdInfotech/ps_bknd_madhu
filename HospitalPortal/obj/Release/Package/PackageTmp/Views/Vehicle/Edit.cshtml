@@ -25,6 +25,7 @@
         <h3>Edit Vehicle</h3>
     </div>
 </div>
+<a href="/Vehicle/All" class="btn btn-info">Back</a>
 @using (Html.BeginForm("Edit", "Vehicle", FormMethod.Post, new { encType = "multipart/form-data" }))
 {
     @Html.HiddenFor(a => a.Id)
@@ -80,15 +81,22 @@
                 </div>
             </div>*@
 
-        <div class="row" id="row1">
-            <div class="col-md-3">Driver Charges </div>
-            <div class="col-md-3">
-                @Html.TextBoxFor(a => a.DriverCharges, new { @class = "form-control" })
-                <span class="red">
-                    @Html.ValidationMessageFor(a => a.DriverCharges)
-                </span>
-            </div>
+    <div class="row" id="row1">
+        <div class="col-md-3">Driver Charges </div>
+        <div class="col-md-3">
+            @Html.TextBoxFor(a => a.DriverCharges, new { @class = "form-control" })
+            <span class="red">
+                @Html.ValidationMessageFor(a => a.DriverCharges)
+            </span>
         </div>
+        <div class="col-md-3">Owner Name </div>
+        <div class="col-md-3">
+            @Html.TextBoxFor(a => a.VehicleOwnerName, new { @class = "form-control" })
+            <span class="red">
+                @Html.ValidationMessageFor(a => a.VehicleOwnerName)
+            </span>
+        </div>
+    </div>
     </div>
 
     <div class="row">

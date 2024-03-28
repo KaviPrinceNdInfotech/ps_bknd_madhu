@@ -7,6 +7,7 @@ using HospitalPortal.Utilities;
 using log4net;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Dynamic;
 using System.IO;
 using System.Linq;
@@ -43,6 +44,7 @@ namespace HospitalPortal.Controllers
             {
                 model.HospitalId = hospitalId;
             }
+            model.Vendor_Id = vendorId;
             model.NurseTypes = new SelectList(ent.NurseTypes.ToList(), "Id", "NurseTypeName");
             model.States = new SelectList(repos.GetAllStates(), "Id", "StateName");
             return View(model);
@@ -125,60 +127,22 @@ namespace HospitalPortal.Controllers
                     }
                     model.CertificateImage = img;
 
-                    // aadhar image File no. 1
-
-                    //if (model.AadharImageFile != null)
-                    //{
-                    //    var aadharImg = FileOperation.UploadImage(model.AadharImageFile, "Images");
-                    //    if (aadharImg == "not allowed")
-                    //    {
-                    //        TempData["msg"] = "Only png,jpg,jpeg files are allowed as Aadhar card document";
-                    //    tran.Rollback();
-                    //        return View(model);
-                    //    }
-                    //    model.AadharImage = aadharImg;
-                    //}
-
-                    //Aadhar Image File No. 2
-                    //if (model.AadharImageFile2 != null)
-                    //{
-                    //    var aadharImg2 = FileOperation.UploadImage(model.AadharImageFile2, "Images");
-                    //    if (aadharImg2 == "not allowed")
-                    //    {
-                    //        TempData["msg"] = "Only png,jpg,jpeg files are allowed as Aadhar card document";
-                    //        tran.Rollback();
-                    //        return View(model);
-                    //    }
-                    //    model.AadharImage2 = aadharImg2;
-                    //}
-
-                    // police verification file
-
-                    //if (model.VerificationImage != null)
-                    //{
-                    //    var verf = FileOperation.UploadImage(model.VerificationImage, "Images");
-                    //    if (verf == "not allowed")
-                    //    {
-                    //        TempData["msg"] = "Only png,jpg,jpeg files are allowed as verification doc.";
-                    //        tran.Rollback();
-                    //        return View(model);
-                    //    }
-                    //    model.VerificationDoc = verf;
-                    //}
-                    ////Add City Additional CityName
-                    //if (model.CityName != null)
-                    //{
-                    //    var city = new CityTemp
-                    //    {
-                    //        CityName = model.CityName,
-                    //        Login_Id = admin.Id,
-                    //        IsApproved = false,
-                    //        State_Id = model.StateMaster_Id
-                    //    };
-                    //    ent.CityTemps.Add(city);
-                    //    ent.SaveChanges();
-                    //    model.CityMaster_Id = city.Id;
-                    //}
+                    // Pan Image
+                    if (model.PanImageFile == null)
+                    {
+                        TempData["msg"] = "Pan Image File Picture can not be null";
+                        tran.Rollback();
+                        return View(model);
+                    }
+                    var panimg = FileOperation.UploadImage(model.PanImageFile, "Images");
+                    if (panimg == "not allowed")
+                    {
+                        TempData["msg"] = "Only png,jpg,jpeg files are allowed.";
+                        tran.Rollback();
+                        return View(model);
+                    }
+                    model.PanImage = panimg;
+                     
                     if (!string.IsNullOrEmpty(model.OtherCity))
                     {
                         var cityMaster = new CityMaster
@@ -202,15 +166,10 @@ namespace HospitalPortal.Controllers
                     domainModel.NurseId = bk.GenerateNurseId();
                     admin.UserID = domainModel.NurseId;
                     domainModel.PAN = domainModel.PAN;
+                    domainModel.IsBankUpdateApproved = false;
                     ent.Nurses.Add(domainModel);
                     ent.SaveChanges();
-                    //string msg = "Welcome to PSWELLNESS. Your User Name :  " + domainModel.EmailId + "(" + domainModel.NurseId + "), Password : " + admin.Password + ".";
-                    //Message.SendSms(domainModel.MobileNumber, msg);
-
-                    //string msg1 = "Welcome to PSWELLNESS. Your User Name :  " + admin.Username + "(" + admin.UserID + "), Password : " + admin.Password + ".";
-
-                    //Utilities.EmailOperations.SendEmail1(model.EmailId, "Ps Wellness", msg1, true);
-
+                     
                     string msg = @"<!DOCTYPE html>
 <html>
 <head>
@@ -266,60 +225,70 @@ namespace HospitalPortal.Controllers
         {
             try
             {
-                ModelState.Remove("MobileNumber");
-                ModelState.Remove("EmailId");
-                ModelState.Remove("Password");
-                ModelState.Remove("ConfirmPassword");
-                ModelState.Remove("AadharImageFile");
-                ModelState.Remove("CertificateFile");
-                ModelState.Remove("IsCheckedTermsCondition");
-                model.States = new SelectList(repos.GetAllStates(), "Id", "StateName", model.StateMaster_Id);
-                model.Cities = new SelectList(repos.GetCitiesByState(model.StateMaster_Id), "Id", "CityName", model.CityMaster_Id);
-                model.NurseTypes = new SelectList(ent.NurseTypes.ToList(), "Id", "NurseTypeName", model.NurseType_Id);
-                if (!ModelState.IsValid)
-                    return View(model);
+                var existingnurse = ent.Nurses.Find(model.Id); 
+                if (existingnurse == null)
+                {
+                    TempData["msg"] = "Nurse not found";
+                    return RedirectToAction("Edit", new { id = model.Id });
+                }
 
-                // CertificateFile Picture Section 
+                // Nurse Image
+                if (model.NurseImageBase != null)
+                {
+                    var nImg = FileOperation.UploadImage(model.NurseImageBase, "Images");
+                    if (nImg == "not allowed")
+                    {
+                        TempData["msg"] = "Only png, jpg, jpeg, pdf files are allowed as Nurse Image";
+
+                        return View(model);
+                    }
+                    model.NurseImage = nImg;
+                }
+
+                // CertificateFile  
                 if (model.CertificateFile != null)
                 {
 
                     var img = FileOperation.UploadImage(model.CertificateFile, "Images");
                     if (img == "not allowed")
                     {
-                        TempData["msg"] = "Only png,jpg,jpeg files are allowed.";
+                        TempData["msg"] = "Only png,jpg,jpeg files are allowed Certificate document.";
                         return View(model);
                     }
                     model.CertificateImage = img;
                 }
-                // aadhar image upload
+                 
+                // Pan Image
+                if (model.PanImageFile != null)
+                {
+                    var panImg = FileOperation.UploadImage(model.PanImageFile, "Images");
+                    if (panImg == "not allowed")
+                    {
+                        TempData["msg"] = "Only png, jpg, jpeg, pdf files are allowed as Pan document";
 
-                //if (model.AadharImageFile != null)
-                //{
-                //    var aadharImg = FileOperation.UploadImage(model.AadharImageFile, "Images");
-                //    if (aadharImg == "not allowed")
-                //    {
-                //        TempData["msg"] = "Only png,jpg,jpeg files are allowed as Aadhar card document";
-                //        return View(model);
-                //    }
-                //    model.AadharImage = aadharImg;
-                //}
+                        return View(model);
+                    }
+                    model.PanImage = panImg;
+                }
 
-                // police verification file
+                //var domainModel = Mapper.Map<Nurse>(model);
 
-                //if (model.VerificationImage != null)
-                //{
-                //    var verf = FileOperation.UploadImage(model.VerificationImage, "Images");
-                //    if (verf == "not allowed")
-                //    {
-                //        TempData["msg"] = "Only png,jpg,jpeg files are allowed as verification doc.";
-                //        return View(model);
-                //    }
-                //    model.VerificationDoc = verf;
-                //}
+                existingnurse.NurseName = model.NurseName;
+                existingnurse.NurseType_Id = model.NurseType_Id;
+                existingnurse.StateMaster_Id = model.StateMaster_Id;
+                existingnurse.CityMaster_Id = model.CityMaster_Id;
+                existingnurse.Location = model.Location;
+                existingnurse.EmailId = model.EmailId; 
+                existingnurse.MobileNumber = model.MobileNumber; 
+                existingnurse.Location = model.Location;
+                existingnurse.PinCode = model.PinCode;
+                existingnurse.CertificateImage = model.CertificateImage;
+                existingnurse.CertificateNumber = model.CertificateNumber;
+                existingnurse.PanImage = model.PanImage;
+                existingnurse.NurseImage = model.NurseImage;
+                existingnurse.Fee = model.Fee;
+                existingnurse.PAN = model.PAN;
 
-                var domainModel = Mapper.Map<Nurse>(model);
-       
-                ent.Entry(domainModel).State = System.Data.Entity.EntityState.Modified;
                 ent.SaveChanges();
                 TempData["msg"] = "ok";
             }
@@ -333,12 +302,7 @@ namespace HospitalPortal.Controllers
         }
 
         public ActionResult All(int? vendorId, string term = null)
-        {
-            //            string q = @"select v.*,IsNull(ve.UniqueId,'N/A') as UniqueId, s.StateName,c.CityName, IsNull(ve.VendorName,'NA') AS VendorName , IsNull(ve.CompanyName,'NA') as CompanyName from Nurse v 
-            //join StateMaster s on v.StateMaster_Id=s.Id
-            //join CityMaster c on v.CityMaster_Id = c.Id
-            //left join Vendor ve on ve.Id = v.Vendor_Id
-            //where v.IsDeleted=0 order by Id desc";
+        { 
             string q = @"select v.*,IsNull(ve.UniqueId,'N/A') as UniqueId, s.StateName,nt.NurseTypeName,c.CityName, IsNull(ve.VendorName,'NA') AS VendorName , IsNull(ve.CompanyName,'NA') as CompanyName from Nurse v 
 join StateMaster s on v.StateMaster_Id=s.Id
 join NurseType nt on v.NurseType_Id = nt.Id 
@@ -397,7 +361,35 @@ where v.IsDeleted=0 order by v.Id desc";
             Message.SendSms(mobile, msg);
             return RedirectToAction("All");
         }
+        public ActionResult UpdateBankUpdateStatus(int id)
+        {
+            string q = @"update Nurse set IsBankUpdateApproved = case when IsBankUpdateApproved=1 then 0 else 1 end where id=" + id;
+            ent.Database.ExecuteSqlCommand(q);
 
+            string mobile = ent.Database.SqlQuery<string>("select MobileNumber from Nurse where Id=" + id).FirstOrDefault();
+            string Email = ent.Database.SqlQuery<string>(@"select EmailId from Nurse where Id=" + id).FirstOrDefault();
+            string Name = ent.Database.SqlQuery<string>(@"select NurseName from Nurse where Id=" + id).FirstOrDefault();
+            //var msg = "Dear " + Name + ", Now you Can Upadate your bank details.";
+            //Message.SendSms(mobile, msg);
+            var query = "SELECT IsBankUpdateApproved FROM Nurse WHERE Id = @Id";
+            var parameters = new SqlParameter("@Id", id);
+            bool isApproved = ent.Database.SqlQuery<bool>(query, parameters).FirstOrDefault();
+
+            var mailmsg = "Dear " + Name + ", Now you Can Update your bank details.";
+
+            if (isApproved == true)
+            {
+                EmailEF ef = new EmailEF()
+                {
+                    EmailAddress = Email,
+                    Message = mailmsg,
+                    Subject = "PS Wellness Approval Status."
+                };
+                EmailOperations.SendEmainew(ef);
+
+            }
+            return RedirectToAction("All");
+        }
         public ActionResult Delete(int id)
         {
             var data = ent.Nurses.Find(id);

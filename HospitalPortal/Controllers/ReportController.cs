@@ -17,7 +17,7 @@ namespace HospitalPortal.Controllers
         public ActionResult DoctorReport()
         {
             var model = new ReportDTO();
-            var doctor = @"select P.Doctor_Id, D.DoctorName from dbo.PatientAppointment P join Doctor D ON d.Id = p.Doctor_Id where p.IsPaid=1 and  P.AppointmentDate between DateAdd(DD,-7,GETDATE() ) and GETDATE() group by Doctor_Id, DoctorName";
+            var doctor = @"select P.Doctor_Id,D.DoctorId, D.DoctorName from dbo.PatientAppointment P join Doctor D ON d.Id = p.Doctor_Id where p.IsPaid=1 and  P.AppointmentDate between DateAdd(DD,-7,GETDATE() ) and GETDATE() group by Doctor_Id, DoctorName,D.DoctorId";
             var data = ent.Database.SqlQuery<DoctorReports>(doctor).ToList();
             model.DoctorReport = data;
             return View(model);
@@ -34,14 +34,14 @@ namespace HospitalPortal.Controllers
             model.MobileNumber = mek.FirstOrDefault().MobileNumber;
             if (sdate != null && edate != null)
             {
-                var doct = @"select CONVERT(VARCHAR(10), AppointmentDate, 111) as AppointmentDate1, P.AppointmentDate, Sum(P.TotalFee) as Amount, D.DoctorName, D.MobileNumber, D.ClinicName,D.LicenceNumber  from PatientAppointment P join Doctor D on D.Id = p.Doctor_Id where p.IsPaid=1 and p.Doctor_Id='" + DoctorId + "' and P.AppointmentDate between '" + sdate + "' and '" + edate + "' GROUP BY P.AppointmentDate, P.TotalFee, D.DoctorName, D.MobileNumber, D.ClinicName,D.LicenceNumber ";
+                var doct = @"select CONVERT(VARCHAR(10), AppointmentDate, 111) as AppointmentDate1, P.AppointmentDate, Sum(P.TotalFee) as Amount,p.Doctor_Id, D.DoctorName, D.MobileNumber, D.ClinicName,D.LicenceNumber  from PatientAppointment P join Doctor D on D.Id = p.Doctor_Id where p.IsPaid=1 and p.Doctor_Id='" + DoctorId + "' and CONVERT(VARCHAR, P.AppointmentDate,103) between '" + sdate + "' and '" + edate + "' GROUP BY P.AppointmentDate, P.TotalFee, D.DoctorName, D.MobileNumber, D.ClinicName,D.LicenceNumber, p.Doctor_Id";
                 var doctor1 = ent.Database.SqlQuery<DoctorReports>(doct).ToList();
                 //doctorList = doctorList.Where(a => a.AppointmentDate >= sdate && a.AppointmentDate <= edate).ToList();
                 model.DoctorReport = doctor1;
             }
             else
             {
-                var doctor1 = @"select CONVERT(VARCHAR(10), AppointmentDate, 111) as AppointmentDate1, P.AppointmentDate, Sum(P.TotalFee) as Amount, D.DoctorName, D.MobileNumber, D.ClinicName,D.LicenceNumber  from PatientAppointment P join Doctor D on D.Id = p.Doctor_Id where p.IsPaid=1 and p.Doctor_Id='" + DoctorId + "' and P.AppointmentDate between DateAdd(DD,-7,GETDATE() ) and GETDATE()  GROUP BY P.AppointmentDate, P.TotalFee, D.DoctorName, D.MobileNumber, D.ClinicName,D.LicenceNumber";
+                var doctor1 = @"select CONVERT(VARCHAR(10), AppointmentDate, 111) as AppointmentDate1, P.AppointmentDate, Sum(P.TotalFee) as Amount,p.Doctor_Id, D.DoctorName, D.MobileNumber, D.ClinicName,D.LicenceNumber  from PatientAppointment P join Doctor D on D.Id = p.Doctor_Id where p.IsPaid=1 and p.Doctor_Id='" + DoctorId + "' and P.AppointmentDate between DateAdd(DD,-7,GETDATE() ) and GETDATE()  GROUP BY P.AppointmentDate, P.TotalFee, D.DoctorName, D.MobileNumber, D.ClinicName,D.LicenceNumber,p.Doctor_Id";
                 var doctorList = ent.Database.SqlQuery<DoctorReports>(doctor1).ToList();
                 model.DoctorReport = doctorList;
             }
@@ -197,13 +197,13 @@ namespace HospitalPortal.Controllers
             return View(model);
         }
 
-        public ActionResult ViewDoctorAppointment(string date)
+        public ActionResult ViewDoctorAppointment(string date, int DoctorId)
         {
             var model = new ReportDTO();
-            var lab = @"select CONVERT(VARCHAR(10), AppointmentDate, 111) as AppointmentDate1,* from PatientAppointment join Patient on Patient.Id = PatientAppointment.Patient_Id where PatientAppointment.IsPaid=1 and Convert(Date,AppointmentDate)='" + date + "'";
+            var lab = @"select CONVERT(VARCHAR(10), AppointmentDate, 111) as AppointmentDate1,* from PatientAppointment join Patient on Patient.Id = PatientAppointment.Patient_Id where PatientAppointment.IsPaid=1 and Doctor_Id='"+ DoctorId + "' and Convert(Date,AppointmentDate)='" + date + "'";
             var data = ent.Database.SqlQuery<AppointmentDetails>(lab).ToList();
             model.AppointmentDetails = data;
-            ViewBag.Total = model.AppointmentDetails.Sum(a => a.Amount);
+            ViewBag.Total = model.AppointmentDetails.Sum(a => a.TotalFee);
             return View(model);
         }
 
@@ -377,10 +377,10 @@ and ns.Nurse_Id ='" + Id + "' and ns.ServiceAcceptanceDate between "+sdate+" and
         {
             var model = new VendorPaymentDTO();
             double payment = ent.Database.SqlQuery<double>(@"select Amount from PaymentMaster p where p.Department='Vendor' and Name='Vehicle'").FirstOrDefault();
-            string q = @"select COUNT(d.Id) as Amount, d.VendorName, d.CompanyName, d.Id from Vendor d 
+            string q = @"select COUNT(d.Id) as Count, d.VendorName, d.CompanyName, d.Id from Vendor d 
 join Vehicle v on v.Vendor_Id = d.Id  
-join TravelRecordMaster trm on trm.Vehicle_Id = v.Id
-where trm.RequestDate  >= DATEADD(day,-7, GETDATE()) and trm.IsPaid =1  group by d.VendorName,d.CompanyName, d.Id";
+join DriverLocation trm on trm.VehicleType_id = v.VehicleType_Id
+where trm.EntryDate  >= DATEADD(day,-7, GETDATE()) and trm.IsPay = 'Y'  group by d.VendorName,d.CompanyName, d.Id";
             var data = ent.Database.SqlQuery<VendorList>(q).ToList();
             if (data.Count() == 0)
             {
@@ -399,10 +399,10 @@ where trm.RequestDate  >= DATEADD(day,-7, GETDATE()) and trm.IsPaid =1  group by
             var datas = ent.Database.SqlQuery<VendorPaymentDTO>(query).ToList();
             model.CompanyName = datas.FirstOrDefault().CompanyName;
             model.VendorName = datas.FirstOrDefault().VendorName;
-            string q = @"select d.Id, v.VendorName, v.CompanyName, d.DoctorName, pa.AppointmentDate, c.CityName, pa.Amount  from Doctor d join Vendor v on d.Vendor_Id = v.Id 
+            string q = @"select d.Id, v.VendorName, v.CompanyName, d.DoctorName, pa.AppointmentDate, c.CityName, pa.TotalFee as Amount  from Doctor d join Vendor v on d.Vendor_Id = v.Id 
 join CityMaster c on c.Id = d.CityMaster_Id
 join dbo.PatientAppointment pa on pa.Doctor_Id = d.Id
-where v.Id="+id+" and pa.IsPaid=1 and pa.AppointmentDate  >= DATEADD(day,-7, GETDATE()) order by d.Id desc";
+where v.Id=" + id+" and pa.IsPaid=1 and pa.AppointmentDate  >= DATEADD(day,-7, GETDATE()) order by d.Id desc";
 var data = ent.Database.SqlQuery<VendorsDoctors>(q).ToList();
             if(data.Count() == 0)
             {
@@ -422,7 +422,7 @@ var data = ent.Database.SqlQuery<VendorsDoctors>(q).ToList();
             model.VendorName = datas.FirstOrDefault().VendorName;
             string q = @"select d.Id, v.VendorName, v.CompanyName, d.DriverName, c.CityName from Driver d join Vendor v on d.Vendor_Id = v.Id 
 join CityMaster c on c.Id = d.CityMaster_Id
-where v.Id=" + id + "  group by v.VendorName,v.CompanyName, d.DoctorName,c.CityName,d.Id order by d.Id desc";
+where v.Id=" + id + "  group by v.VendorName,v.CompanyName, d.DriverName,c.CityName,d.Id order by d.Id desc";
 var data = ent.Database.SqlQuery<VendorsDriver>(q).ToList();
             if (data.Count() == 0)
             {
@@ -440,9 +440,9 @@ var data = ent.Database.SqlQuery<VendorsDriver>(q).ToList();
             var datas = ent.Database.SqlQuery<VendorPaymentDTO>(query).ToList();
             model.CompanyName = datas.FirstOrDefault().CompanyName;
             model.VendorName = datas.FirstOrDefault().VendorName;
-            string q = @"select d.Id, v.VendorName, v.CompanyName, d.VehicleNumber from Vehicle d 
-join TravelRecordMaster trm on trm.Vehicle_Id = d.Id
-join Vendor v on d.Vendor_Id = v.Id where v.Id="+id+"  group by v.VendorName,v.CompanyName,d.VehicleNumber, d.Id order by d.Id desc";
+            string q = @"select d.Id, v.VendorName,trm.TotalPrice as TotalPrice, v.CompanyName, d.VehicleNumber from Vehicle d 
+join DriverLocation trm on trm.VehicleType_id = d.VehicleType_Id
+join Vendor v on d.Vendor_Id = v.Id where v.Id=" + id + " and trm.IsPay='Y'  group by v.VendorName,v.CompanyName,d.VehicleNumber, d.Id,trm.TotalPrice order by d.Id desc";
             var data = ent.Database.SqlQuery<VendorsVehicle>(q).ToList();
             if (data.Count() == 0)
             {

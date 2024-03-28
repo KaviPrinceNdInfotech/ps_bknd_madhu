@@ -18,118 +18,100 @@ namespace HospitalPortal.Models.ViewModels
         public string UniqueId { get; set; }
         public IEnumerable<DepartmentModelClass> DeptList { get; set; }
         public int? Page { get; set; }
-        public int? NumberOfPages { get; set; }
-        [Required]
-        [RegularExpression(@"^(\d{6,6})$", ErrorMessage = "6 Digits Required")]
+        public int? NumberOfPages { get; set; }        
         public string PinCode { get; set; }
         public DateTime? JoiningDate { get; set; }
         public int? Id { get; set; }
         public bool IsDeleted { get; set; }
         public string VendorName { get; set; }
         public string CompanyName { get; set; }
-        [Required]
-        public string DoctorName { get; set; }      //get doctor 
+        
+        public string DoctorName { get; set; }   
         public string PhoneNumber { get; set; }
-        [Required]
-        [MobileNumberValidation]
-        [RegularExpression("^[0-9]*$", ErrorMessage = "Mobile Number must be numeric")]
+        
         public string MobileNumber { get; set; }
-        [Required]
-        [FormValidations]
+        
         public string EmailId { get; set; }
-        [Required(ErrorMessage = "State Can't Be Empty")] 
-        public int? StateMaster_Id { get; set; }
-        [Required(ErrorMessage = "City Can't Be Empty")]
-        public int? CityMaster_Id { get; set; }
-        //s[Required(ErrorMessage = "Address Can't Be Empty")]
+        
+        public int StateMaster_Id { get; set; }
+        
+        public int CityMaster_Id { get; set; } 
         public string Location { get; set; }
         public string Qualification { get; set; }
         public string RegistrationNumber { get; set; }
         public string SignaturePic { get; set; }
         public HttpPostedFileBase SignatureImageFile { get; set; }
         public string LicenceImage { get; set; }
-        [Required(ErrorMessage = "Licence Number Can't Be Empty")]
+        
         public string LicenceNumber { get; set; }
         public string PAN { get; set; }
          
         public string ClinicName { get; set; }
-        [Required(ErrorMessage = "Department Can't Be Empty")]
-        public int? Department_Id { get; set; }        //get doctor
-        [Required(ErrorMessage = "Specialist Can't Be Empty")]
+        
+        public int? Department_Id { get; set; }   
+        
         public int? Specialist_Id { get; set; }
-        [Required(ErrorMessage = "Fee Can't Be Empty")]
-        public double? Fee { get; set; }  //get doctor
-        [Required]
-        //[DataType(DataType.Password)]
-        //[StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 8)]
-        //[Display(Name = "Password")]
-        //[RegularExpression("^((?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])|(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[^a-zA-Z0-9])|(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[^a-zA-Z0-9])|(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^a-zA-Z0-9])).{8,}$", ErrorMessage = "Passwords must be at least 8 characters and contain at 3 of 4 of the following: upper case (A-Z), lower case (a-z), number (0-9) and special character (e.g. !@#$%^&*)")]
+        
+        public double Fee { get; set; }
+        public double? VirtualFee { get; set; }   
         public string Password { get; set; }
-        [Required, System.ComponentModel.DataAnnotations.Compare("Password")]
+        
         public string ConfirmPassword { get; set; }
         public bool IsApproved { get; set; }
+        public bool IsBankUpdateApproved { get; set; }
         public int? AdminLogin_Id { get; set; }
-       // [Required(ErrorMessage = "Pan No Can't Be Empty")]
-        //public string PAN { get; set; }
-        //[Required(ErrorMessage = "Aadhar Number Can't Be Empty")]
-       // public string AadharNumber { get; set; }
-        //public string AadharImage { get; set; }
-        //public string AadharImage2 { get; set; }
-        //public string PanImage { get; set; }
+       
         public SelectList DepartmentList { get; set; }
         public SelectList SpecialistList { get; set; }
-        //public HttpPostedFileBase AadharImageFile { get; set; }
-        //public HttpPostedFileBase AadharImageFile2 { get; set; }
-        //public HttpPostedFileBase PanImageFile { get; set; }
-        [Required]
+        public SelectList VendorList { get; set; }
+        public SelectList DayList { get; set; }
+        public SelectList DurationTimeList { get; set; }
+         
+       
         public HttpPostedFileBase LicenceImageFile { get; set; }
         public string DepartmentName { get; set; }
         public string SpecialistName { get; set; }
-        public Nullable<int> Vendor_Id { get; set; }
+        public int? Vendor_Id { get; set; }
         public int? HospitalId { get; set; }
         public string LicenceBase64 { get; set; }
         public string LicenceImageName { get; set; }
         public string AadharBase64 { get; set; }
         public string AadharImageName { get; set; }
-        [Required(ErrorMessage = "Start Time Can't Be Empty")]
+        
         public TimeSpan? StartTime { get; set; }
-        [Required(ErrorMessage = "End Time Can't Be Empty")]
+        
         public TimeSpan? EndTime { get; set; }
-        [Required(ErrorMessage = "Slot Timing Can't Be Empty")]
+        
         public string SlotTiming { get; set; }
-        [Required(ErrorMessage = "License Validity Can't Be Empty")]
+         
 
         public TimeSpan? StartTime2 { get; set; }
         public TimeSpan? EndTime2 { get; set; }
         public string SlotTiming2 { get; set; }
-        public Nullable<System.DateTime> LicenseValidity { get; set; }
+        public DateTime? LicenseValidity { get; set; }
         public string OtherCity { get; set; }
 
         public string RefId { get; set; }
+        public int? Day_Id { get; set; }
 
-        public int? Experience { get; set; } //get Doctor
+        public int? Experience { get; set; }  
 
-        public string About { get; set; }   //get Doctor
+        public string About { get; set; }    
 
-        public string Disease { get; set; } //Appoinment Detail
+        public string Disease { get; set; }  
         public bool Status { get; set; }
         public string Message { get; set; }
-
-
-
+        public int? SlotTime { get; set; }
+        public int? SlotTime2 { get; set; }
     }
-    /// ------------------------------------- <summary>
-    /// -------------------------------------
-    /// 
-    /// </summary>
-
+     
     public class DepModel {
         public int Id { get; set; }
         [Required]
         public int Department_Id { get; set; }
         [Required]
         public int Specialist_Id { get; set; }
-         
+        
     }
 
     public class DModel
@@ -220,7 +202,8 @@ namespace HospitalPortal.Models.ViewModels
         public double Fee { get; set; }
         public Nullable<double> TotalFee { get; set; }
         public Nullable<System.DateTime> AppointmentDate { get; set; }
-        public string  SlotTime { get; set; }
+        public TimeSpan  SlotTime { get; set; }
+        public string DeviceId { get; set; }
         
 
 
@@ -306,8 +289,8 @@ namespace HospitalPortal.Models.ViewModels
 
         //public string PanImageName { get; set; }
         //[Required]
-        //public string PanImage { get; set; }
-        //public string PanBase641 { get; set; }
+        public string PanImage { get; set; }
+        public string PanImageBase64 { get; set; }
         public string LicenceImage { get; set; }
         //public string AadharImage { get; set; }
         //public string AadharImage2 { get; set; }
@@ -325,7 +308,11 @@ namespace HospitalPortal.Models.ViewModels
         public string SignaturePic { get; set; }
         public string SignaturePicBase64 { get; set; }
         public int? Experience { get; set; }
-        //public Nullable<System.DateTime> LicenseValidity { get; set; }
+        public int? Day_Id { get; set; }
+        public double VirtualFee { get; set; }
+        public Nullable<System.DateTime> LicenseValidity { get; set; } 
+        public string About { get; set; } 
+        public int Vendor_Id { get; set; } 
     }
 
 
@@ -334,24 +321,14 @@ namespace HospitalPortal.Models.ViewModels
         public int Id { get; set; }
         public string DoctorName { get; set; }
         public string MobileNumber { get; set; }
-        [Required]
-        public int StateMaster_Id { get; set; }
-        [Required]
-        public int CityMaster_Id { get; set; }
-        [Required]
-        public string Location { get; set; }
-        [Required]
-        public string PinCode { get; set; }
-        [Required]
-        public string ClinicName { get; set; }
-        //public int Department_Id { get; set; }
-        //public int Specialist_Id { get; set; }
-        public double Fee { get; set; }
-       
-        //public TimeSpan? StartTime { get; set; }
-        //public TimeSpan? EndTime { get; set; }
-        //public int SlotTiming { get; set; }
-        //public Nullable<System.DateTime> LicenseValidity { get; set; }
+        public string EmailId { get; set; }
+          
+        public int StateMaster_Id { get; set; }  
+        public int CityMaster_Id { get; set; } 
+        public string Location { get; set; } 
+        public string PinCode { get; set; } 
+        public string ClinicName { get; set; } 
+        public double Fee { get; set; } 
     }
     public class DoctorDetail
     {
@@ -365,6 +342,7 @@ namespace HospitalPortal.Models.ViewModels
         public string DepartmentName { get; set; }
 
         public int? Rating { get; set; } 
+     
     }
 
     public class RWA_Registration
@@ -397,6 +375,7 @@ namespace HospitalPortal.Models.ViewModels
         public string CityName { get; set; }
         public string Location { get; set; }
         public string Pincode { get; set; }
+        public string EmailId { get; set; }
     }
 
 
@@ -410,6 +389,8 @@ namespace HospitalPortal.Models.ViewModels
         public string CityName { get; set; }
         public string Location { get; set; }
         public string Pincode { get; set; }
+        public int StateMaster_Id { get; set; }
+        public int CityMaster_Id { get; set; }
     }
     public class RWAComplaint
     {

@@ -15,8 +15,10 @@ namespace HospitalPortal.Models.ViewModels
         public DateTime? JoiningDate { get; set; }
         public IEnumerable<VendorCommissionReport>  VendorCommissionReport { get; set; }
         public int TotalPages { get; set; }
-        public int PageNumber { get; set; }
+        public int PageNumber { get; set; } 
         public DateTime AppointmentDate { get; set; }
+        public DateTime startdate { get; set; }
+        public DateTime enddate { get; set; }
         public DateTime TestDate { get; set; }
         public IEnumerable<HealthCommissionReport> HealthCommisionReport { get; set; }
         public IEnumerable<DoctorCommissionReport> DoctorCommisionReport { get; set; }
@@ -45,6 +47,7 @@ namespace HospitalPortal.Models.ViewModels
         public string Location { get; set; }
         public string LabName { get; set; }
         public string NurseName { get; set; }
+        public int Doctor_Id { get; set; }
         
         public string EmailId { get; set; }
         public int Id { get; set; }

@@ -24,6 +24,7 @@ using System.Security.RightsManagement;
 using System.Web.Mvc;
 using static HospitalPortal.Utilities.EmailOperations;
 using System.Windows.Interop;
+using System.Data.SqlClient;
 
 namespace HospitalPortal.Controllers
 {
@@ -56,11 +57,17 @@ namespace HospitalPortal.Controllers
             model.JoiningDate = DateTime.Now;
             model.States = new SelectList(repos.GetAllStates(), "Id", "StateName");
             model.DepartmentList = new SelectList(ent.Departments.ToList(), "Id", "DepartmentName");
+
+            model.Vendor_Id = vendorId;
+            model.VendorList = new SelectList(ent.Vendors.Where(a => a.IsDeleted == false && a.IsApproved == true).ToList(), "Id", "CompanyName");
+
+            model.DayList = new SelectList(ent.DayNames.ToList(), "Id", "Name");
+            model.DurationTimeList = new SelectList(ent.DurationTimes.ToList(), "Id", "Duration");
             return View(model);
         }
        
-        [System.Web.Mvc.HttpPost]
-        [System.Web.Mvc.AllowAnonymous]
+        [HttpPost]
+        [AllowAnonymous]
         public ActionResult Add(DoctorDTO model)
         {
             model.States = new SelectList(repos.GetAllStates(), "Id", "StateName");
@@ -130,7 +137,17 @@ namespace HospitalPortal.Controllers
                         ent.SaveChanges();
                         model.CityMaster_Id = cityMaster.Id;
                     }
+
                     var domainModel = Mapper.Map<Doctor>(model);
+                    if (model.Vendor_Id == 0)
+                    {
+                        domainModel.Vendor_Id = null;
+                    }
+                    else
+                    {
+                        domainModel.Vendor_Id = model.Vendor_Id;
+                    }
+
                     domainModel.AdminLogin_Id = admin.Id;
                     domainModel.SlotTime = Convert.ToInt32(model.SlotTiming);
                     domainModel.SlotTime2 = Convert.ToInt32(model.SlotTiming2);
@@ -143,6 +160,10 @@ namespace HospitalPortal.Controllers
                     domainModel.RegistrationNumber = domainModel.RegistrationNumber;
                     domainModel.SignaturePic = model.SignaturePic;
                     domainModel.PAN = domainModel.PAN;
+                    domainModel.Day_Id = domainModel.Day_Id;
+                    domainModel.Fee = domainModel.Fee;
+                    domainModel.VirtualFee = domainModel.VirtualFee;
+                    domainModel.IsBankUpdateApproved = false;
                     ent.Doctors.Add(domainModel);
                     ent.SaveChanges();
                     //string msg = "Welcome to PSWELLNESS. Your User Name :  " + admin.Username + "(" + admin.UserID + "), Password : " + admin.Password + ".";
@@ -189,8 +210,7 @@ namespace HospitalPortal.Controllers
             return RedirectToAction("Add", new { vendorId = model.Vendor_Id });
         }
 
-
-        [System.Web.Mvc.HttpPost]
+        [HttpPost]
         public JsonResult AddDepartmentSpecialization(DoctorDepartment DepartmentData)
         {
             DoctorDepartment DocDept = new DoctorDepartment
@@ -218,7 +238,6 @@ namespace HospitalPortal.Controllers
             return RedirectToAction("UpdateDepartment", new { Id= GetDoctorId()});
         }
         
-
         public ActionResult Edit(int id)
         {
             var data = ent.Doctors.Find(id);
@@ -227,6 +246,8 @@ namespace HospitalPortal.Controllers
             model.Cities = new SelectList(repos.GetCitiesByState(model.StateMaster_Id), "Id", "CityName", model.CityMaster_Id);
             model.DepartmentList = new SelectList(ent.Departments.ToList(), "Id", "DepartmentName", model.Department_Id);
             model.SpecialistList = new SelectList(ent.Specialists.Where(a => a.Department_Id == model.Department_Id).ToList(), "Id", "SpecialistName", model.Specialist_Id);
+            model.DayList = new SelectList(ent.DayNames.ToList(), "Id", "Name");
+            model.DurationTimeList = new SelectList(ent.DurationTimes.ToList(), "Id", "Duration");
             return View(model);
         }
 
@@ -234,48 +255,48 @@ namespace HospitalPortal.Controllers
         public ActionResult Edit(DoctorDTO model)
         {
             try
-            {
-                ModelState.Remove("ConfirmPassword");
-                ModelState.Remove("MobileNumber");
-                ModelState.Remove("EmailId");
-                ModelState.Remove("Password");
-                ModelState.Remove("AadharImageFile");
-                ModelState.Remove("LicenceImageFile");
-                ModelState.Remove("Department_Id");
-                ModelState.Remove("PinCode");
-                ModelState.Remove("IsCheckedTermsCondition");
-                if (!ModelState.IsValid)
-                    return View(model);
-
-                model.States = new SelectList(repos.GetAllStates(), "Id", "StateName", model.StateMaster_Id);
-                model.Cities = new SelectList(repos.GetCitiesByState(model.StateMaster_Id), "Id", "CityName", model.CityMaster_Id);
-                model.DepartmentList = new SelectList(ent.Departments.ToList(), "Id", "DepartmentName", model.Department_Id);
-                model.SpecialistList = new SelectList(ent.Specialists.Where(a => a.Department_Id == model.Department_Id).ToList(), "Id", "SpecialistName", model.Specialist_Id);
-                // aadhar doc upload
-                //if (model.AadharImageFile != null)
-                //{
-                //    var aadharImg = FileOperation.UploadImage(model.AadharImageFile, "Images");
-                //    if (aadharImg == "not allowed")
-                //    {
-                //        TempData["msg"] = "Only png,jpg,jpeg files are allowed as Aadhar/PAN card document";
-                //        return View(model);
-                //    }
-                //    model.AadharImage = aadharImg;
-                //}
+            {                 
+                var existingDoctor = ent.Doctors.Find(model.Id); // Assuming 'Id' is the primary key
+                if (existingDoctor == null)
+                {
+                    TempData["msg"] = "Doctor not found";
+                    return RedirectToAction("Edit", new { id = model.Id });
+                }
                 // Licence upload
                 if (model.LicenceImageFile != null)
                 {
                     var licenceImg = FileOperation.UploadImage(model.LicenceImageFile, "Images");
                     if (licenceImg == "not allowed")
                     {
-                        TempData["msg"] = "Only png,jpg,jpeg files are allowed as Licence document";
+                        TempData["msg"] = "Only png, jpg, jpeg, pdf files are allowed as Licence document";
+                       
                         return View(model);
                     }
                     model.LicenceImage = licenceImg;
                 }
-                var domainModel = Mapper.Map<Doctor>(model);
-                domainModel.SlotTime = Convert.ToInt32(model.SlotTiming);
-                ent.Entry(domainModel).State = System.Data.Entity.EntityState.Modified;
+                // Update the existing entity with values from the model
+                existingDoctor.DoctorName = model.DoctorName;
+                existingDoctor.ClinicName = model.ClinicName;
+                existingDoctor.Department_Id = (int)model.Department_Id;
+                existingDoctor.Specialist_Id = (int)model.Specialist_Id;
+                existingDoctor.PhoneNumber = model.PhoneNumber;
+                existingDoctor.EmailId = model.EmailId;
+                existingDoctor.StateMaster_Id = model.StateMaster_Id;
+                existingDoctor.CityMaster_Id = model.CityMaster_Id;
+                existingDoctor.Location = model.Location;
+                existingDoctor.LicenceImage = model.LicenceImage;
+                existingDoctor.LicenceNumber = model.LicenceNumber;
+                existingDoctor.LicenseValidity = model.LicenseValidity;
+                existingDoctor.Day_Id = model.Day_Id;
+                existingDoctor.Fee = model.Fee;
+                existingDoctor.VirtualFee = model.VirtualFee;
+                existingDoctor.StartTime = model.StartTime;
+                existingDoctor.EndTime = model.EndTime;
+                existingDoctor.StartTime2 = model.StartTime2;
+                existingDoctor.EndTime2 = model.EndTime2;
+                existingDoctor.SlotTime = Convert.ToInt32(model.SlotTime);
+                existingDoctor.SlotTime2 = Convert.ToInt32(model.SlotTime2);
+
                 ent.SaveChanges();
                 TempData["msg"] = "ok";
             }
@@ -285,20 +306,19 @@ namespace HospitalPortal.Controllers
                 TempData["msg"] = "Server Error";
             }
             return RedirectToAction("Edit", new { id = model.Id });
-
         }
+
 
         public ActionResult All(int? vendorId, string term = null, int? page = 0)
         {
             var model = new DoctorDTO();
-            string q = @"select v.*,IsNull(ve.UniqueId,'N/A') as UniqueId, s.StateName,Special.*,Dept.*, c.CityName,IsNull(ve.VendorName,'NA') AS VendorName , IsNull(ve.CompanyName,'NA') as CompanyName from Doctor v join StateMaster s on v.StateMaster_Id=s.Id join CityMaster c on v.CityMaster_Id = c.Id inner join Department Dept on Dept.Id = v.Department_Id inner join Specialist Special on Special.Id = v.Specialist_Id left join Vendor ve on ve.Id = v.Vendor_Id where v.IsDeleted=0 order by v.Id desc";
+            string q = @"select v.*,IsNull(ve.UniqueId,'N/A') as UniqueId, s.StateName,Special.*,Dept.*, c.CityName,IsNull(ve.VendorName,'NA') AS VendorName , IsNull(ve.CompanyName,'NA') as CompanyName from Doctor v join StateMaster s on v.StateMaster_Id=s.Id join CityMaster c on v.CityMaster_Id = c.Id inner join Department Dept on Dept.Id = v.Department_Id inner join Specialist Special on Special.Id = v.Specialist_Id left join Vendor ve on ve.Id = v.Vendor_Id where v.IsDeleted=0 order by v.Id asc";
             var data = ent.Database.SqlQuery<DoctorDTO>(q).ToList();
             if (vendorId != null)
                 data = data.Where(a => a.Vendor_Id == vendorId).ToList();
             if (term != null)
             {
                 data = data.Where(a =>a.DoctorId.Contains(term)).ToList();
-              
             }
             if (data.Count() == 0)
             {
@@ -323,12 +343,60 @@ namespace HospitalPortal.Controllers
             ent.Database.ExecuteSqlCommand(q);
             string mobile = ent.Database.SqlQuery<string>("select MobileNumber from Doctor where Id=" + id).FirstOrDefault();
             string Email = ent.Database.SqlQuery<string>(@"select EmailId from Doctor where Id="+ id).FirstOrDefault();
+            string username = ent.Database.SqlQuery<string>(@"select DoctorId from Doctor where Id="+ id).FirstOrDefault();
             string Name = ent.Database.SqlQuery<string>(@"select DoctorName from Doctor where Id=" + id).FirstOrDefault();
-            var msg = "Dear " + Name + ", Now you Can Login With Your Registered EmailId " + Email + " and Pasword";
+            // Assuming you have access to the DbContext instance named 'ent'
+            var query = "SELECT IsApproved FROM Doctor WHERE Id = @Id";
+            var parameters = new SqlParameter("@Id", id);
+            bool isApproved = ent.Database.SqlQuery<bool>(query, parameters).FirstOrDefault();
+
+            var msg = "Dear " + Name + ", Now you Can Login With Your Username " + username + " and Pasword";
             Message.SendSms(mobile, msg);
+             
+            if(isApproved == true)
+            {
+                EmailEF ef = new EmailEF()
+                {
+                    EmailAddress = Email,
+                    Message = msg,
+                    Subject = "PS Wellness Approval Status."
+                };
+                EmailOperations.SendEmainew(ef);
+            }
+           
+
             return RedirectToAction("All");
         }
 
+        public ActionResult UpdateBankUpdateStatus(int id)
+        {
+            string q = @"update Doctor set IsBankUpdateApproved = case when IsBankUpdateApproved=1 then 0 else 1 end where id=" + id;
+            ent.Database.ExecuteSqlCommand(q);
+
+            string mobile = ent.Database.SqlQuery<string>("select MobileNumber from Doctor where Id=" + id).FirstOrDefault();
+            string Email = ent.Database.SqlQuery<string>(@"select EmailId from Doctor where Id=" + id).FirstOrDefault();
+            string Name = ent.Database.SqlQuery<string>(@"select DoctorName from Doctor where Id=" + id).FirstOrDefault();
+            //var msg = "Dear " + Name + ", Now you Can Upadate your bank details.";
+            //Message.SendSms(mobile, msg);
+            var query = "SELECT IsBankUpdateApproved FROM Doctor WHERE Id = @Id";
+            var parameters = new SqlParameter("@Id", id);
+            bool isApproved = ent.Database.SqlQuery<bool>(query, parameters).FirstOrDefault();
+
+            var mailmsg = "Dear " + Name + ", Now you Can Update your bank details.";
+             
+            if (isApproved == true)
+            {
+                EmailEF ef = new EmailEF()
+                {
+                    EmailAddress = Email,
+                    Message = mailmsg,
+                    Subject = "PS Wellness Approval Status."
+                };
+                EmailOperations.SendEmainew(ef);
+                
+            }
+            return RedirectToAction("All");
+        }
         public ActionResult Delete(int id)
         {
             var data = ent.Doctors.Find(id);
@@ -400,7 +468,6 @@ namespace HospitalPortal.Controllers
             return View(model);
         }
 
-
         [System.Web.Mvc.HttpPost]
         public ActionResult UpdateDepartment(DoctorDepartment DepartmentData)
         {
@@ -446,7 +513,6 @@ namespace HospitalPortal.Controllers
             return View(model);
         }
 
-
         public ActionResult DoctorPatientList(int? id, string term, int? pageNumber)
         {
             var mdoel = new PatientDTO();
@@ -467,7 +533,6 @@ namespace HospitalPortal.Controllers
             return View(mdoel);
         }
 
-
         public ActionResult ViewReports(int id)
         {
             var model = new ViewDoctorReports();
@@ -485,7 +550,6 @@ namespace HospitalPortal.Controllers
             model.test = data;
             return View(model);
         }
-
 
         public ActionResult PaymentHistory(int id, DateTime? date = null)
         {
@@ -521,7 +585,6 @@ namespace HospitalPortal.Controllers
             }
             return View(payment);
         }
-
 
         public ActionResult ViewPayoutHistory(int id, DateTime? PaymentDate)
         {
@@ -671,7 +734,6 @@ namespace HospitalPortal.Controllers
 
         }
 
-
         [System.Web.Mvc.HttpGet]
         public ActionResult RegisterClinic()
         {
@@ -713,7 +775,6 @@ namespace HospitalPortal.Controllers
             }
             return RedirectToAction("RegisterClinic");
         }
-
         public ActionResult ViewClinics()
         {
             var model = new AddClinicDTO();
@@ -726,7 +787,6 @@ where dc.DoctorId=" + GetDoctorId();
             model.Clinic = data;
             return View(model);
         }
-        
 
         [System.Web.Mvc.HttpGet]
         public ActionResult EditClinic(int id)
@@ -739,7 +799,6 @@ where dc.DoctorId=" + GetDoctorId();
             model.Cities = new SelectList(repos.GetCitiesByState(model.StateMaster_Id), "Id", "CityName", model.CityMaster_Id);
             return View(model);
         }
-
 
         [System.Web.Mvc.HttpPost]
         public ActionResult EditClinic(EditClinicDTO model)
@@ -864,7 +923,6 @@ where dc.DoctorId=" + GetDoctorId();
 
         }
 
-
         [HttpPost]
         public ActionResult PatientPerticuler(MedicinePrescriptionDTO model)
         {
@@ -926,6 +984,38 @@ where dc.DoctorId=" + GetDoctorId();
                 ent.SaveChanges();
                 TempData["msg"] = "ok";
 
+                var lastrecordId = ent.MedicinePrescriptionDetails.OrderByDescending(a => a.Id).Select(a => a.Id).FirstOrDefault();
+                string query = @"SELECT DISTINCT mpd.Id,mpd.EntryDate, d.Id,d.EmailId as DoctorEmailId,d.doctorId,d.RegistrationNumber, d.DoctorName, pa.AppointmentDate, p.PatientRegNo, p.PatientName, p.EmailId, p.MobileNumber, p.Gender,p.DOB,
+mpd.*
+FROM PatientAppointment AS pa
+JOIN Doctor AS d ON d.Id = pa.Doctor_Id 
+JOIN PrescriptionAppointments ppa ON ppa.Doctor_Id = d.Id
+JOIN MedicinePrescriptionDetail mpd ON mpd.Doctor_Id = D.Id
+JOIN Patient AS p ON p.Id = mpd.Patient_Id
+WHERE mpd.Id = " + lastrecordId + " order by mpd.EntryDate desc";
+
+                var prescription = ent.Database.SqlQuery<PrescriptionPdfModel>(query).FirstOrDefault();
+
+                EmailEF ef = new EmailEF()
+                {
+                    EmailAddress = prescription.EmailId,
+                    Message = "Medicine Prescription",
+                    Subject = "Prescription Pdf.",
+
+                };
+
+                EmailOperations.SendEmainewpdf(ef);
+
+                EmailEF drmail = new EmailEF()
+                {
+                    EmailAddress = prescription.DoctorEmailId,
+                    Message = "Medicine Prescription",
+                    Subject = "Prescription Pdf.",
+
+                };
+
+                EmailOperations.SendEmainewpdf(drmail); 
+
             }
             //catch (Exception ex)
             catch (DbEntityValidationException ex)
@@ -938,11 +1028,12 @@ where dc.DoctorId=" + GetDoctorId();
             return RedirectToAction("PatientPerticuler");
         }
 
-        public string Sendemailpdf()  //Prescription pdf
+        //Prescription pdf
+        public string Sendemailpdf()  
         {
 
             var lastrecordId = ent.MedicinePrescriptionDetails.OrderByDescending(a => a.Id).Select(a => a.Id).FirstOrDefault();
-            string query = @"SELECT DISTINCT mpd.Id,mpd.EntryDate, d.Id, d.doctorId, d.DoctorName, pa.AppointmentDate, p.PatientRegNo, p.PatientName, p.EmailId, p.MobileNumber, p.Gender,p.DOB,
+            string query = @"SELECT DISTINCT mpd.Id,mpd.EntryDate, d.Id, d.doctorId,d.EmailId as DoctorEmailId,d.RegistrationNumber, d.DoctorName, pa.AppointmentDate, p.PatientRegNo, p.PatientName, p.EmailId, p.MobileNumber, p.Gender,p.DOB,
 mpd.*
 FROM PatientAppointment AS pa
 JOIN Doctor AS d ON d.Id = pa.Doctor_Id 
@@ -958,7 +1049,7 @@ WHERE mpd.Id = " + lastrecordId + " order by mpd.EntryDate desc";
                 EmailAddress = prescription.EmailId,
                 Message = "Medicine Prescription",
                 Subject = "Prescription Pdf.",
-                //id = id
+                 
             };
 
             EmailOperations.SendEmainewpdf(ef);
@@ -968,22 +1059,22 @@ WHERE mpd.Id = " + lastrecordId + " order by mpd.EntryDate desc";
                 EmailAddress = prescription.DoctorEmailId,
                 Message = "Medicine Prescription",
                 Subject = "Prescription Pdf.",
-                //id = id
+                
             };
 
             EmailOperations.SendEmainewpdf(drmail);
-            Message.SendSmsUserIdPass("gdfsg");
+             
             return "Email sent successfully";
         }
         public ActionResult MedicinePdf()
         {
             var lastrecordId =ent.MedicinePrescriptionDetails.OrderByDescending (a=>a.Id).Select (a=>a.Id).FirstOrDefault();
             // Execute the SQL query to retrieve prescription data based on the provided ID
-            string query = @"SELECT DISTINCT mpd.Id,mpd.EntryDate, d.Id, d.doctorId, d.DoctorName, pa.AppointmentDate, p.PatientRegNo, p.PatientName, p.EmailId, p.MobileNumber, p.Gender,p.DOB,
+            string query = @"SELECT DISTINCT mpd.Id,mpd.EntryDate, d.Id, d.doctorId, d.DoctorName,d.RegistrationNumber,d.SignaturePic, pa.AppointmentDate, p.PatientRegNo, p.PatientName, p.EmailId, p.MobileNumber, p.Gender,p.DOB,
 mpd.*
 FROM PatientAppointment AS pa
 JOIN Doctor AS d ON d.Id = pa.Doctor_Id 
-JOIN PrescriptionAppointments ppa ON ppa.Doctor_Id = d.Id
+LEFT JOIN PrescriptionAppointments ppa ON ppa.Doctor_Id = d.Id
 JOIN MedicinePrescriptionDetail mpd ON mpd.Doctor_Id = D.Id
 JOIN Patient AS p ON p.Id = mpd.Patient_Id
 WHERE mpd.Id = " + lastrecordId + " order by mpd.EntryDate desc";
@@ -995,397 +1086,418 @@ WHERE mpd.Id = " + lastrecordId + " order by mpd.EntryDate desc";
                 return HttpNotFound();
             }
 
-            using (var memoryStream = new MemoryStream())
-            {
-                using (var document = new Document())
-                {
-                    PdfWriter writer = PdfWriter.GetInstance(document, memoryStream);
-                    document.Open();
-
-                    var header = new PdfPTable(2); // Two columns for doctor details and logo
-                    header.WidthPercentage = 100;
-                    header.SetWidths(new float[] { 1f, 1f }); // Set equal widths for the two columns
-                    header.DefaultCell.Border = PdfPCell.NO_BORDER;
-
-                    // Create a base color for the header background
-                    BaseColor headerBackgroundColor = new BaseColor(0, 255, 255); // Cyan  color
-
-                    // Add hospital name to the header with the background color
-                    var hospitalNameCell = new PdfPCell();
-                    hospitalNameCell.Border = PdfPCell.NO_BORDER;
-                    hospitalNameCell.BackgroundColor = headerBackgroundColor; // Set the background color
-                    //hospitalNameCell.FixedHeight = -10f;
+			using (var memoryStream = new MemoryStream())
+			{
+				using (var document = new Document())
+				{
+					PdfWriter writer = PdfWriter.GetInstance(document, memoryStream);
+					document.Open();
+
+					var header = new PdfPTable(2); // Two columns for doctor details and logo
+					header.WidthPercentage = 100;
+					header.SetWidths(new float[] { 1f, 1f }); // Set equal widths for the two columns
+					header.DefaultCell.Border = PdfPCell.NO_BORDER;
+
+					// Create a base color for the header background
+					BaseColor headerBackgroundColor = new BaseColor(0, 255, 255); // Cyan  color
+
+					// Add hospital name to the header with the background color
+					var hospitalNameCell = new PdfPCell();
+					hospitalNameCell.Border = PdfPCell.NO_BORDER;
+					hospitalNameCell.BackgroundColor = headerBackgroundColor; // Set the background color
+																			  //hospitalNameCell.FixedHeight = -10f;
+
+					// Add hospital name
+					var hospitalNameParagraph = new Paragraph("PS WELLNESS", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD));
+					hospitalNameParagraph.Alignment = Element.ALIGN_LEFT;
+					hospitalNameCell.AddElement(hospitalNameParagraph);
+					hospitalNameCell.AddElement(new Paragraph($"Dr. {prescription.DoctorName}"));
+					hospitalNameCell.AddElement(new Paragraph($"{prescription.Qualification}"));
+					hospitalNameCell.AddElement(new Paragraph($"Reg No.: {prescription.RegistrationNumber}"));
+
+					header.AddCell(hospitalNameCell);
+
+					// Add the logo to the header with the background color
+					var logoAndNameCell = new PdfPCell();
+					logoAndNameCell.Border = PdfPCell.NO_BORDER;
+					logoAndNameCell.BackgroundColor = headerBackgroundColor; // Set the background color
+					logoAndNameCell.FixedHeight = -10f; // Corrected from hospitalNameCell
+
+					// Add the logo
+					var logoImage = Image.GetInstance(Server.MapPath("~/Images/PsLogo.png")); // Replace "logo.png" with your logo file path
+					logoImage.ScaleToFit(100f, 100f); // Set the logo size as needed
+					logoImage.Alignment = Element.ALIGN_RIGHT;
+					logoAndNameCell.AddElement(logoImage);
+
+					header.AddCell(logoAndNameCell);
+
+					// Add a blank line as separator with the same background color
+					var blankCell = new PdfPCell(new Phrase(" "));
+					blankCell.Border = PdfPCell.NO_BORDER; // Remove cell border
+					blankCell.BackgroundColor = headerBackgroundColor; // Set the background color
+					blankCell.Colspan = 2; // Make the blank cell span both columns
+					header.AddCell(blankCell);
+
+					// Add doctor details to the header with the same background color
+					// ... (previous code)
+
+					document.Add(header); // Close the header section
+
+					// Add patient details below the header
+					var patientDetailsTable = new PdfPTable(4); // Create a table with 4 columns
+					patientDetailsTable.DefaultCell.Border = PdfPCell.NO_BORDER;
+					patientDetailsTable.WidthPercentage = 100; // Set the width percentage to align it to the left
+
+					// Calculate age based on DOB
+					DateTime dob = prescription.DOB;
+					DateTime currentDate = DateTime.Now;
+
+					int age = currentDate.Year - dob.Year;
+
+					// Check if the birthday hasn't occurred this year yet
+					if (currentDate.Month < dob.Month || (currentDate.Month == dob.Month && currentDate.Day < dob.Day))
+					{
+						age--;
+					}
+
+					// Add the cells with patient details
+					// First column (labels)
+					patientDetailsTable.AddCell(new PdfPCell(new Phrase("Date:", new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD))) { Border = PdfPCell.NO_BORDER });
+					patientDetailsTable.AddCell(new PdfPCell(new Phrase(prescription.EntryDate.ToShortDateString(), new Font(Font.FontFamily.HELVETICA, 14))) { Border = PdfPCell.NO_BORDER });
+					//patientDetailsTable.AddCell(new PdfPCell(new Phrase(prescription.EntryDate.ToShortDateString())) { Border = PdfPCell.NO_BORDER });
+					patientDetailsTable.AddCell(new PdfPCell(new Phrase("UHID:", new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD))) { Border = PdfPCell.NO_BORDER });
+					patientDetailsTable.AddCell(new PdfPCell(new Phrase(prescription.PatientRegNo, new Font(Font.FontFamily.HELVETICA, 14))) { Border = PdfPCell.NO_BORDER });
+					//patientDetailsTable.AddCell(new PdfPCell(new Phrase(prescription.PatientRegNo)) { Border = PdfPCell.NO_BORDER });
+					patientDetailsTable.AddCell(new PdfPCell(new Phrase("Name:", new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD))) { Border = PdfPCell.NO_BORDER });
+					patientDetailsTable.AddCell(new PdfPCell(new Phrase(prescription.PatientName, new Font(Font.FontFamily.HELVETICA, 14))) { Border = PdfPCell.NO_BORDER });
+					//patientDetailsTable.AddCell(new PdfPCell(new Phrase(prescription.PatientName)) { Border = PdfPCell.NO_BORDER });
+					patientDetailsTable.AddCell(new PdfPCell(new Phrase("Email:", new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD))) { Border = PdfPCell.NO_BORDER });
+					patientDetailsTable.AddCell(new PdfPCell(new Phrase(prescription.EmailId, new Font(Font.FontFamily.HELVETICA, 14))) { Border = PdfPCell.NO_BORDER });
+					//patientDetailsTable.AddCell(new PdfPCell(new Phrase(prescription.EmailId)) { Border = PdfPCell.NO_BORDER });
+					patientDetailsTable.AddCell(new PdfPCell(new Phrase("Mobile:", new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD))) { Border = PdfPCell.NO_BORDER });
+					patientDetailsTable.AddCell(new PdfPCell(new Phrase(prescription.MobileNumber, new Font(Font.FontFamily.HELVETICA, 14))) { Border = PdfPCell.NO_BORDER });
+					//patientDetailsTable.AddCell(new PdfPCell(new Phrase(prescription.MobileNumber)) { Border = PdfPCell.NO_BORDER });
+					patientDetailsTable.AddCell(new PdfPCell(new Phrase("Gender:", new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD))) { Border = PdfPCell.NO_BORDER });
+					patientDetailsTable.AddCell(new PdfPCell(new Phrase(prescription.Gender, new Font(Font.FontFamily.HELVETICA, 14))) { Border = PdfPCell.NO_BORDER });
+					//patientDetailsTable.AddCell(new PdfPCell(new Phrase(prescription.Gender)) { Border = PdfPCell.NO_BORDER });
+					patientDetailsTable.AddCell(new PdfPCell(new Phrase("Weight:", new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD))) { Border = PdfPCell.NO_BORDER });
+					patientDetailsTable.AddCell(new PdfPCell(new Phrase(prescription.Weight, new Font(Font.FontFamily.HELVETICA, 14))) { Border = PdfPCell.NO_BORDER });
+					//patientDetailsTable.AddCell(new PdfPCell(new Phrase(prescription.Weight)) { Border = PdfPCell.NO_BORDER });
+					patientDetailsTable.AddCell(new PdfPCell(new Phrase("Age:", new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD))) { Border = PdfPCell.NO_BORDER });
+					patientDetailsTable.AddCell(new PdfPCell(new Phrase(age.ToString(), new Font(Font.FontFamily.HELVETICA, 14))) { Border = PdfPCell.NO_BORDER });
+					//patientDetailsTable.AddCell(new PdfPCell(new Phrase(age.ToString())) { Border = PdfPCell.NO_BORDER });
+
 
-                    // Add hospital name
-                    var hospitalNameParagraph = new Paragraph("PS WELLNESS", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD));
-                    hospitalNameParagraph.Alignment = Element.ALIGN_LEFT;
-                    hospitalNameCell.AddElement(hospitalNameParagraph);
-                    hospitalNameCell.AddElement(new Paragraph($"Dr. {prescription.DoctorName}"));
-                    hospitalNameCell.AddElement(new Paragraph($"{prescription.Qualification}"));
-                    hospitalNameCell.AddElement(new Paragraph($"Reg No.: {prescription.RegistrationNumber}"));
 
-                    header.AddCell(hospitalNameCell);
+					document.Add(patientDetailsTable);
 
-                    // Add the logo to the header with the background color
-                    var logoAndNameCell = new PdfPCell();
-                    logoAndNameCell.Border = PdfPCell.NO_BORDER;
-                    logoAndNameCell.BackgroundColor = headerBackgroundColor; // Set the background color
-                    logoAndNameCell.FixedHeight = -10f; // Corrected from hospitalNameCell
 
-                    // Add the logo
-                    var logoImage = Image.GetInstance(Server.MapPath("~/Images/PsLogo.png")); // Replace "logo.png" with your logo file path
-                    logoImage.ScaleToFit(100f, 100f); // Set the logo size as needed
-                    logoImage.Alignment = Element.ALIGN_RIGHT;
-                    logoAndNameCell.AddElement(logoImage);
+					var line = new LineSeparator(0.5f, 100f, BaseColor.BLACK, Element.ALIGN_LEFT, 1);
 
-                    header.AddCell(logoAndNameCell);
+					var paragraphWithMargin = new Paragraph();
+					paragraphWithMargin.Add(line);
+					paragraphWithMargin.SpacingBefore = 5f; // Adjust the margin top value (10f in this example)
+					paragraphWithMargin.Font.Size = 14f; // Change the size to your desired value
+					document.Add(paragraphWithMargin);
 
-                    // Add a blank line as separator with the same background color
-                    var blankCell = new PdfPCell(new Phrase(" "));
-                    blankCell.Border = PdfPCell.NO_BORDER; // Remove cell border
-                    blankCell.BackgroundColor = headerBackgroundColor; // Set the background color
-                    blankCell.Colspan = 2; // Make the blank cell span both columns
-                    header.AddCell(blankCell);
 
-                    // Add doctor details to the header with the same background color
-                    // ... (previous code)
 
-                    document.Add(header); // Close the header section
+					var captionParagraph = new Paragraph("Thank you for contacting  PS Wellness regarding your medical concern. As discussed with the doctor, please find below telemedical advice.");
+					captionParagraph.Alignment = Element.ALIGN_LEFT;
+					captionParagraph.SpacingBefore = 20f; // Adjust the margin top value (10f in this example)
+					captionParagraph.Font.Size = 14f; // Change the size to your desired value
+					document.Add(captionParagraph);
 
-                    // Add patient details below the header
-                    var patientDetailsTable = new PdfPTable(4); // Create a table with 4 columns
-                    patientDetailsTable.DefaultCell.Border = PdfPCell.NO_BORDER;
-                    patientDetailsTable.WidthPercentage = 100; // Set the width percentage to align it to the left
 
-                    // Calculate age based on DOB
-                    DateTime dob = prescription.DOB;
-                    DateTime currentDate = DateTime.Now;
 
-                    int age = currentDate.Year - dob.Year;
+					var presentComplaintsSubheading = new Paragraph("Present Complaints", new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD));
+					presentComplaintsSubheading.Alignment = Element.ALIGN_LEFT;
+					presentComplaintsSubheading.Alignment = Element.ALIGN_LEFT;
+					presentComplaintsSubheading.SpacingBefore = 5f;
+					document.Add(presentComplaintsSubheading);
 
-                    // Check if the birthday hasn't occurred this year yet
-                    if (currentDate.Month < dob.Month || (currentDate.Month == dob.Month && currentDate.Day < dob.Day))
-                    {
-                        age--;
-                    }
 
-                    // Add the cells with patient details
-                    // First column (labels)
-                    patientDetailsTable.AddCell(new PdfPCell(new Phrase("Date:", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD))) { Border = PdfPCell.NO_BORDER });
-                    patientDetailsTable.AddCell(new PdfPCell(new Phrase(prescription.EntryDate.ToShortDateString())) { Border = PdfPCell.NO_BORDER });
-                    patientDetailsTable.AddCell(new PdfPCell(new Phrase("UHID:", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD))) { Border = PdfPCell.NO_BORDER });
-                    patientDetailsTable.AddCell(new PdfPCell(new Phrase(prescription.PatientRegNo)) { Border = PdfPCell.NO_BORDER });
-                    patientDetailsTable.AddCell(new PdfPCell(new Phrase("Name:", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD))) { Border = PdfPCell.NO_BORDER });
-                    patientDetailsTable.AddCell(new PdfPCell(new Phrase(prescription.PatientName)) { Border = PdfPCell.NO_BORDER });
-                    patientDetailsTable.AddCell(new PdfPCell(new Phrase("Email:", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD))) { Border = PdfPCell.NO_BORDER });
-                    patientDetailsTable.AddCell(new PdfPCell(new Phrase(prescription.EmailId)) { Border = PdfPCell.NO_BORDER });
-                    patientDetailsTable.AddCell(new PdfPCell(new Phrase("Mobile:", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD))) { Border = PdfPCell.NO_BORDER });
-                    patientDetailsTable.AddCell(new PdfPCell(new Phrase(prescription.MobileNumber)) { Border = PdfPCell.NO_BORDER });
-                    patientDetailsTable.AddCell(new PdfPCell(new Phrase("Gender:", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD))) { Border = PdfPCell.NO_BORDER });
-                    patientDetailsTable.AddCell(new PdfPCell(new Phrase(prescription.Gender)) { Border = PdfPCell.NO_BORDER });
-                    patientDetailsTable.AddCell(new PdfPCell(new Phrase("Weight:", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD))) { Border = PdfPCell.NO_BORDER });
-                    patientDetailsTable.AddCell(new PdfPCell(new Phrase(prescription.Weight)) { Border = PdfPCell.NO_BORDER });
-                    patientDetailsTable.AddCell(new PdfPCell(new Phrase("Age:", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD))) { Border = PdfPCell.NO_BORDER });
-                    patientDetailsTable.AddCell(new PdfPCell(new Phrase(age.ToString())) { Border = PdfPCell.NO_BORDER });
+					document.Add(paragraphWithMargin);
 
 
+					var presentComplaintsContent = new Paragraph(prescription.PresentComplaint);
+					presentComplaintsContent.Alignment = Element.ALIGN_LEFT;
+					presentComplaintsContent.SpacingBefore = 20f;
+					presentComplaintsContent.Font.Size = 14f; // Change the size to your desired value
+					document.Add(presentComplaintsContent);
 
-                    document.Add(patientDetailsTable);
 
+					var pastMedicalSubheading = new Paragraph("Past Medical/Surgical History", new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD));
+					pastMedicalSubheading.Alignment = Element.ALIGN_LEFT;
+					pastMedicalSubheading.SpacingBefore = 5f;
+					pastMedicalSubheading.Font.Size = 14f; // Change the size to your desired value
+					document.Add(pastMedicalSubheading);
 
-                    var line = new LineSeparator(0.5f, 100f, BaseColor.BLACK, Element.ALIGN_LEFT, 1);
+					document.Add(paragraphWithMargin);
 
-                    var paragraphWithMargin = new Paragraph();
-                    paragraphWithMargin.Add(line);
-                    paragraphWithMargin.SpacingBefore = 5f; // Adjust the margin top value (10f in this example)
+					var pastMedicalContent = new Paragraph(prescription.PastMedical_SurgicalHistory);
+					pastMedicalContent.Alignment = Element.ALIGN_LEFT;
+					pastMedicalContent.SpacingBefore = 20f;
+					pastMedicalContent.Font.Size = 14f;
+					document.Add(pastMedicalContent);
 
-                    document.Add(paragraphWithMargin);
+					var allergiesSubheading = new Paragraph("Allergies, if any", new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD));
+					allergiesSubheading.Alignment = Element.ALIGN_LEFT;
+					allergiesSubheading.SpacingBefore = 5f;
+					allergiesSubheading.Font.Size = 14f; // Change the size to your desired value
+					document.Add(allergiesSubheading);
 
+					document.Add(paragraphWithMargin);
+
+					var allergiesContent = new Paragraph(prescription.Allergies);
+					allergiesContent.Alignment = Element.ALIGN_LEFT;
+					allergiesContent.SpacingBefore = 20f;
+					allergiesContent.Font.Size = 14f;
+					document.Add(allergiesContent);
+
+					var primaryDiagnosisSubheading = new Paragraph("Primary Diagnosis Based on Symptoms", new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD));
+					primaryDiagnosisSubheading.Alignment = Element.ALIGN_LEFT;
+					primaryDiagnosisSubheading.SpacingBefore = 5f;
+					document.Add(primaryDiagnosisSubheading);
+
+
+					document.Add(paragraphWithMargin);
+
+					var primaryDiagnosisContent = new Paragraph(prescription.Primarydiagnosis);
+					primaryDiagnosisContent.Alignment = Element.ALIGN_LEFT;
+					primaryDiagnosisContent.SpacingBefore = 20f;
+					primaryDiagnosisContent.Font.Size = 14f;
+					document.Add(primaryDiagnosisContent);
+
+					var PrescribedMedicine = new Paragraph("Prescribed Medicine", new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD));
+					PrescribedMedicine.Alignment = Element.ALIGN_LEFT;
+					PrescribedMedicine.SpacingBefore = 5f;
+					document.Add(PrescribedMedicine);
+					// Create a new PdfPTable with 4 columns
+					var medicinedetail = new PdfPTable(4);
+					medicinedetail.DefaultCell.Border = PdfPCell.BOTTOM_BORDER;
+					medicinedetail.DefaultCell.BorderWidthLeft = 1f;
+					medicinedetail.DefaultCell.BorderWidthRight = 1f;
+					medicinedetail.WidthPercentage = 100;
+
+					int rowNumber = 1;
+					BaseColor purpleColor = new BaseColor(0, 255, 255); // Cyan color
+
+					// Add cells with purple background
+					// Assuming you have a font object defined somewhere, you can create it like this:
+					Font font = new Font(Font.FontFamily.HELVETICA, 14f, Font.NORMAL); // Change the size (10f) as per your requirement
+
+					// Then use this font in your PdfPCell creation like this:
+					medicinedetail.AddCell(new PdfPCell(new Phrase("S#", font)) { Border = PdfPCell.BOTTOM_BORDER, BackgroundColor = purpleColor });
+					medicinedetail.AddCell(new PdfPCell(new Phrase("Medicine Name", font)) { Border = PdfPCell.BOTTOM_BORDER, BackgroundColor = purpleColor });
+					medicinedetail.AddCell(new PdfPCell(new Phrase("Dosage", font)) { Border = PdfPCell.BOTTOM_BORDER, BackgroundColor = purpleColor });
+					medicinedetail.AddCell(new PdfPCell(new Phrase("Instruction", font)) { Border = PdfPCell.BOTTOM_BORDER, BackgroundColor = purpleColor });
+
+
+
+
+					if (!string.IsNullOrEmpty(prescription.MedicineName1))
+					{
+						medicinedetail.AddCell(new PdfPCell(new Phrase(rowNumber.ToString(), font)) { Border = PdfPCell.BOTTOM_BORDER });
+						medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.MedicineName1, font)) { Border = PdfPCell.BOTTOM_BORDER });
+						medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Dosage1, font)) { Border = PdfPCell.BOTTOM_BORDER });
+						medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Instruction1, font)) { Border = PdfPCell.BOTTOM_BORDER });
+						rowNumber++;
+					}
+
+					if (!string.IsNullOrEmpty(prescription.MedicineName2))
+					{
+						medicinedetail.AddCell(new PdfPCell(new Phrase(rowNumber.ToString(), font)) { Border = PdfPCell.BOTTOM_BORDER });
+						medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.MedicineName2, font)) { Border = PdfPCell.BOTTOM_BORDER });
+						medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Dosage2, font)) { Border = PdfPCell.BOTTOM_BORDER });
+						medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Instruction2, font)) { Border = PdfPCell.BOTTOM_BORDER });
+						rowNumber++;
+					}
+
+					if (!string.IsNullOrEmpty(prescription.MedicineName3))
+					{
+						medicinedetail.AddCell(new PdfPCell(new Phrase(rowNumber.ToString(), font)) { Border = PdfPCell.BOTTOM_BORDER });
+						medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.MedicineName3, font)) { Border = PdfPCell.BOTTOM_BORDER });
+						medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Dosage3, font)) { Border = PdfPCell.BOTTOM_BORDER });
+						medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Instruction3, font)) { Border = PdfPCell.BOTTOM_BORDER });
+						rowNumber++;
+					}
+
+					if (!string.IsNullOrEmpty(prescription.MedicineName4))
+					{
+						medicinedetail.AddCell(new PdfPCell(new Phrase(rowNumber.ToString(), font)) { Border = PdfPCell.BOTTOM_BORDER });
+						medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.MedicineName4, font)) { Border = PdfPCell.BOTTOM_BORDER });
+						medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Dosage4, font)) { Border = PdfPCell.BOTTOM_BORDER });
+						medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Instruction4, font)) { Border = PdfPCell.BOTTOM_BORDER });
+						rowNumber++;
+					}
+
+					if (!string.IsNullOrEmpty(prescription.MedicineName5))
+					{
+						medicinedetail.AddCell(new PdfPCell(new Phrase(rowNumber.ToString(), font)) { Border = PdfPCell.BOTTOM_BORDER });
+						medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.MedicineName5, font)) { Border = PdfPCell.BOTTOM_BORDER });
+						medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Dosage5, font)) { Border = PdfPCell.BOTTOM_BORDER });
+						medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Instruction5, font)) { Border = PdfPCell.BOTTOM_BORDER });
+						rowNumber++;
+					}
+
+					if (!string.IsNullOrEmpty(prescription.MedicineName6))
+					{
+						medicinedetail.AddCell(new PdfPCell(new Phrase(rowNumber.ToString(), font)) { Border = PdfPCell.BOTTOM_BORDER });
+						medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.MedicineName6, font)) { Border = PdfPCell.BOTTOM_BORDER });
+						medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Dosage6, font)) { Border = PdfPCell.BOTTOM_BORDER });
+						medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Instruction6, font)) { Border = PdfPCell.BOTTOM_BORDER });
+						rowNumber++;
+					}
+
+					if (!string.IsNullOrEmpty(prescription.MedicineName7))
+					{
+						medicinedetail.AddCell(new PdfPCell(new Phrase(rowNumber.ToString(), font)) { Border = PdfPCell.BOTTOM_BORDER });
+						medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.MedicineName7, font)) { Border = PdfPCell.BOTTOM_BORDER });
+						medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Dosage7, font)) { Border = PdfPCell.BOTTOM_BORDER });
+						medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Instruction7, font)) { Border = PdfPCell.BOTTOM_BORDER });
+						rowNumber++;
+					}
+
+					if (!string.IsNullOrEmpty(prescription.MedicineName8))
+					{
+						medicinedetail.AddCell(new PdfPCell(new Phrase(rowNumber.ToString(), font)) { Border = PdfPCell.BOTTOM_BORDER });
+						medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.MedicineName8, font)) { Border = PdfPCell.BOTTOM_BORDER });
+						medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Dosage8, font)) { Border = PdfPCell.BOTTOM_BORDER });
+						medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Instruction8, font)) { Border = PdfPCell.BOTTOM_BORDER });
+						rowNumber++;
+					}
+
+					if (!string.IsNullOrEmpty(prescription.MedicineName9))
+					{
+						medicinedetail.AddCell(new PdfPCell(new Phrase(rowNumber.ToString(), font)) { Border = PdfPCell.BOTTOM_BORDER });
+						medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.MedicineName9, font)) { Border = PdfPCell.BOTTOM_BORDER });
+						medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Dosage9, font)) { Border = PdfPCell.BOTTOM_BORDER });
+						medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Instruction9, font)) { Border = PdfPCell.BOTTOM_BORDER });
+						rowNumber++;
+					}
 
+					if (!string.IsNullOrEmpty(prescription.MedicineName10))
+					{
+						medicinedetail.AddCell(new PdfPCell(new Phrase(rowNumber.ToString(), font)) { Border = PdfPCell.BOTTOM_BORDER });
+						medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.MedicineName10, font)) { Border = PdfPCell.BOTTOM_BORDER });
+						medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Dosage10, font)) { Border = PdfPCell.BOTTOM_BORDER });
+						medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Instruction10, font)) { Border = PdfPCell.BOTTOM_BORDER });
+						rowNumber++;
+					}
 
-                    var captionParagraph = new Paragraph("Thank you for contacting Falck PS Wellness regarding your medical concern. As discussed with the doctor, please find below telemedical advice.");
-                    captionParagraph.Alignment = Element.ALIGN_LEFT;
-                    captionParagraph.SpacingBefore = 20f; // Adjust the margin top value (10f in this example)
+					document.Add(medicinedetail);
 
-                    document.Add(captionParagraph);
+					var TestPrescribed = new Paragraph("Test Prescribed", new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD));
+					TestPrescribed.Alignment = Element.ALIGN_LEFT;
+					TestPrescribed.SpacingBefore = 5f;
+					document.Add(TestPrescribed);
 
+					document.Add(paragraphWithMargin);
 
+					var TestPrescribedContent = new Paragraph(prescription.TestPrescribed);
+					TestPrescribedContent.Alignment = Element.ALIGN_LEFT;
+					TestPrescribedContent.SpacingBefore = 20f;
+					TestPrescribedContent.Font.Size = 14f;
+					document.Add(TestPrescribedContent);
 
-                    var presentComplaintsSubheading = new Paragraph("Present Complaints", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD));
-                    presentComplaintsSubheading.Alignment = Element.ALIGN_LEFT;
-                    presentComplaintsSubheading.Alignment = Element.ALIGN_LEFT;
-                    presentComplaintsSubheading.SpacingBefore = 5f;
-                    document.Add(presentComplaintsSubheading);
+					var Recommendations = new Paragraph("Further Referral / Recommendations", new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD));
+					Recommendations.Alignment = Element.ALIGN_LEFT;
+					Recommendations.SpacingBefore = 5f;
+					document.Add(Recommendations);
 
+					document.Add(paragraphWithMargin);
 
-                    document.Add(paragraphWithMargin);
+					var RecommendationsContent = new Paragraph(prescription.Furtherrefferal_Recommendations);
+					RecommendationsContent.Alignment = Element.ALIGN_LEFT;
+					RecommendationsContent.SpacingBefore = 20f;
+					RecommendationsContent.Font.Size = 14f;
+					document.Add(RecommendationsContent);
 
-
-                    var presentComplaintsContent = new Paragraph(prescription.PresentComplaint);
-                    presentComplaintsContent.Alignment = Element.ALIGN_LEFT;
-                    presentComplaintsContent.SpacingBefore = 20f;
-                    document.Add(presentComplaintsContent);
-
-
-                    var pastMedicalSubheading = new Paragraph("Past Medical/Surgical History", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD));
-                    pastMedicalSubheading.Alignment = Element.ALIGN_LEFT;
-                    pastMedicalSubheading.SpacingBefore = 5f;
-                    document.Add(pastMedicalSubheading);
-
-                    document.Add(paragraphWithMargin);
-
-                    var pastMedicalContent = new Paragraph(prescription.PastMedical_SurgicalHistory);
-                    pastMedicalContent.Alignment = Element.ALIGN_LEFT;
-                    pastMedicalContent.SpacingBefore = 20f;
-                    document.Add(pastMedicalContent);
-
-                    var allergiesSubheading = new Paragraph("Allergies, if any", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD));
-                    allergiesSubheading.Alignment = Element.ALIGN_LEFT;
-                    allergiesSubheading.SpacingBefore = 5f;
-                    document.Add(allergiesSubheading);
-
-                    document.Add(paragraphWithMargin);
-
-                    var allergiesContent = new Paragraph(prescription.Allergies);
-                    allergiesContent.Alignment = Element.ALIGN_LEFT;
-                    allergiesContent.SpacingBefore = 20f;
-                    document.Add(allergiesContent);
-
-                    var primaryDiagnosisSubheading = new Paragraph("Primary Diagnosis Based on Symptoms", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD));
-                    primaryDiagnosisSubheading.Alignment = Element.ALIGN_LEFT;
-                    primaryDiagnosisSubheading.SpacingBefore = 5f;
-                    document.Add(primaryDiagnosisSubheading);
-
-
-                    document.Add(paragraphWithMargin);
-
-                    var primaryDiagnosisContent = new Paragraph(prescription.Primarydiagnosis);
-                    primaryDiagnosisContent.Alignment = Element.ALIGN_LEFT;
-                    primaryDiagnosisContent.SpacingBefore = 20f;
-                    document.Add(primaryDiagnosisContent);
-
-                    var PrescribedMedicine = new Paragraph("Prescribed Medicine", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD));
-                    PrescribedMedicine.Alignment = Element.ALIGN_LEFT;
-                    PrescribedMedicine.SpacingBefore = 5f;
-                    document.Add(PrescribedMedicine);
-                    // Create a new PdfPTable with 4 columns
-                    var medicinedetail = new PdfPTable(4);
-                    medicinedetail.DefaultCell.Border = PdfPCell.BOTTOM_BORDER;
-                    medicinedetail.DefaultCell.BorderWidthLeft = 1f;
-                    medicinedetail.DefaultCell.BorderWidthRight = 1f;
-                    medicinedetail.WidthPercentage = 100;
-
-                    int rowNumber = 1;
-                    BaseColor purpleColor = new BaseColor(0, 255, 255); // Cyan color
-
-                    // Add cells with purple background
-                    medicinedetail.AddCell(new PdfPCell(new Phrase("S#")) { Border = PdfPCell.BOTTOM_BORDER, BackgroundColor = purpleColor });
-                    medicinedetail.AddCell(new PdfPCell(new Phrase("Medicine Name")) { Border = PdfPCell.BOTTOM_BORDER, BackgroundColor = purpleColor });
-                    medicinedetail.AddCell(new PdfPCell(new Phrase("Dosage")) { Border = PdfPCell.BOTTOM_BORDER, BackgroundColor = purpleColor });
-                    medicinedetail.AddCell(new PdfPCell(new Phrase("Instruction")) { Border = PdfPCell.BOTTOM_BORDER, BackgroundColor = purpleColor });
-
-
-                    if (!string.IsNullOrEmpty(prescription.MedicineName1))
-                    {
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(rowNumber.ToString())) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.MedicineName1)) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Dosage1)) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Instruction1)) { Border = PdfPCell.BOTTOM_BORDER });
-                        rowNumber++;
-                    }
-
-                    if (!string.IsNullOrEmpty(prescription.MedicineName2))
-                    {
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(rowNumber.ToString())) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.MedicineName2)) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Dosage2)) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Instruction2)) { Border = PdfPCell.BOTTOM_BORDER });
-                        rowNumber++;
-                    }
-
-                    if (!string.IsNullOrEmpty(prescription.MedicineName3))
-                    {
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(rowNumber.ToString())) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.MedicineName3)) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Dosage3)) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Instruction3)) { Border = PdfPCell.BOTTOM_BORDER });
-                        rowNumber++;
-                    }
-
-                    if (!string.IsNullOrEmpty(prescription.MedicineName4))
-                    {
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(rowNumber.ToString())) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.MedicineName4)) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Dosage4)) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Instruction4)) { Border = PdfPCell.BOTTOM_BORDER });
-                        rowNumber++;
-                    }
-
-                    if (!string.IsNullOrEmpty(prescription.MedicineName5))
-                    {
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(rowNumber.ToString())) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.MedicineName5)) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Dosage5)) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Instruction5)) { Border = PdfPCell.BOTTOM_BORDER });
-                        rowNumber++;
-                    }
-
-                    if (!string.IsNullOrEmpty(prescription.MedicineName6))
-                    {
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(rowNumber.ToString())) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.MedicineName6)) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Dosage6)) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Instruction6)) { Border = PdfPCell.BOTTOM_BORDER });
-                        rowNumber++;
-                    }
-
-                    if (!string.IsNullOrEmpty(prescription.MedicineName7))
-                    {
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(rowNumber.ToString())) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.MedicineName7)) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Dosage7)) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Instruction7)) { Border = PdfPCell.BOTTOM_BORDER });
-                        rowNumber++;
-                    }
-
-                    if (!string.IsNullOrEmpty(prescription.MedicineName8))
-                    {
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(rowNumber.ToString())) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.MedicineName8)) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Dosage8)) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Instruction8)) { Border = PdfPCell.BOTTOM_BORDER });
-                        rowNumber++;
-                    }
-
-                    if (!string.IsNullOrEmpty(prescription.MedicineName9))
-                    {
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(rowNumber.ToString())) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.MedicineName9)) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Dosage9)) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Instruction9)) { Border = PdfPCell.BOTTOM_BORDER });
-                        rowNumber++;
-                    }
-
-                    if (!string.IsNullOrEmpty(prescription.MedicineName10))
-                    {
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(rowNumber.ToString())) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.MedicineName10)) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Dosage10)) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Instruction10)) { Border = PdfPCell.BOTTOM_BORDER });
-                        rowNumber++;
-                    }
+					// Create a table for doctor's name, registration number, and signature
+					var doctorInfoTable = new PdfPTable(2);
+					doctorInfoTable.DefaultCell.Border = PdfPCell.NO_BORDER;
+					doctorInfoTable.WidthPercentage = 100;
 
-                    document.Add(medicinedetail);
-
-                    var TestPrescribed = new Paragraph("Test Prescribed", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD));
-                    TestPrescribed.Alignment = Element.ALIGN_LEFT;
-                    TestPrescribed.SpacingBefore = 5f;
-                    document.Add(TestPrescribed);
-
-                    document.Add(paragraphWithMargin);
-
-                    var TestPrescribedContent = new Paragraph(prescription.TestPrescribed);
-                    TestPrescribedContent.Alignment = Element.ALIGN_LEFT;
-                    TestPrescribedContent.SpacingBefore = 20f;
-                    document.Add(TestPrescribedContent);
-
-                    var Recommendations = new Paragraph("Further Referral / Recommendations", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD));
-                    Recommendations.Alignment = Element.ALIGN_LEFT;
-                    Recommendations.SpacingBefore = 5f;
-                    document.Add(Recommendations);
-
-                    document.Add(paragraphWithMargin);
-
-                    var RecommendationsContent = new Paragraph(prescription.Furtherrefferal_Recommendations);
-                    RecommendationsContent.Alignment = Element.ALIGN_LEFT;
-                    RecommendationsContent.SpacingBefore = 20f;
-                    document.Add(RecommendationsContent);
-
-                    // Create a table for doctor's name, registration number, and signature
-                    var doctorInfoTable = new PdfPTable(2);
-                    doctorInfoTable.DefaultCell.Border = PdfPCell.NO_BORDER;
-                    doctorInfoTable.WidthPercentage = 100;
-
-
-                    // Cell for doctor's signature image
-                    var signatureCell = new PdfPCell();
-                    signatureCell.Border = PdfPCell.NO_BORDER;
-
-                    // Load the doctor's signature image
-                    string physicalPath = System.Web.HttpContext.Current.Server.MapPath("~/" + "Images" + "/" + prescription.SignaturePic);
-
-                    var signatureImage = Image.GetInstance(Server.MapPath("~/" + "Images" + "/" + prescription.SignaturePic)); // Replace with the actual path to the doctor's signature image
-                                                                                                                               // var signatureImage = Image.GetInstance(Server.MapPath("~/Images/PsLogo.png")); // Replace with the actual path to the doctor's signature image
-
-                    if (signatureImage != null)
-                    {
-                        signatureImage.ScaleToFit(100f, 100f); // Set the image size as needed
-                        signatureImage.Alignment = Element.ALIGN_RIGHT; // Align the image to the right
-                        signatureCell.AddElement(signatureImage);
-                    }
-
-                    // Create a subtable for doctor's name and registration number
-                    var subtable = new PdfPTable(1);
-                    subtable.DefaultCell.Border = PdfPCell.NO_BORDER;
-
-
-                    // Add the doctor's name and registration number
-                    var doctorName = new Paragraph($"Dr. {prescription.DoctorName}", new Font(Font.FontFamily.HELVETICA, 10, Font.NORMAL));
-                    doctorName.Alignment = Element.ALIGN_RIGHT;
-                    var regNumber = new Paragraph($"Reg No.: {prescription.RegistrationNumber}", new Font(Font.FontFamily.HELVETICA, 10, Font.NORMAL));
-
-                    subtable.AddCell(doctorName);
-                    subtable.AddCell(regNumber);
-
-                    // Add the subtable and signatureCell to the doctorInfoTable
-                    doctorInfoTable.AddCell(subtable);
-                    doctorInfoTable.AddCell(signatureCell);
-
-                    document.Add(doctorInfoTable);
-
-
-
-
-
-                    // Add the disclaimer content
-                    var disclaimerText = "Disclaimer: The objective of this medical advice is to provide users of such services with information for a better understanding of their health and medical condition. This information and advice are not intended to be a substitute for professional physical meeting, examination, medical advice, diagnosis, or treatment. It should not be treated as a physical medical consultation and cannot be used for any medico-legal purpose. The decision to follow the medical advice is at the sole discretion of the user, and the advising doctor cannot be held responsible for providing such medical advice.";
-
-                    // Create a paragraph for the disclaimer
-                    var disclaimer = new Paragraph();
-
-                    // Create a smaller font for the disclaimer
-                    var smallerFont = FontFactory.GetFont(FontFactory.HELVETICA, 8f);
-
-                    // Create a bold font for the "Disclaimer:" label
-                    var boldFont = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 8f);
-
-                    // Add "Disclaimer:" in bold
-                    disclaimer.Add(new Chunk("Disclaimer: ", boldFont));
-
-                    // Add the rest of the disclaimer in regular font
-                    disclaimer.Add(new Chunk(disclaimerText.Substring("Disclaimer: ".Length), smallerFont));
-
-                    // Set alignment to left
-                    disclaimer.Alignment = Element.ALIGN_LEFT;
-
-                    // Add spacing before the disclaimer
-                    disclaimer.SpacingBefore = 20f;
-
-                    // Add the disclaimer paragraph to the document
-                    document.Add(disclaimer);
-
-                    document.Close();
-                }
-
-                // Prepare the response to download the PDF
-                Response.Clear();
-                Response.ContentType = "application/pdf";
-                Response.AddHeader("Content-Disposition", "attachment; filename=Prescription.pdf");
-                Response.BinaryWrite(memoryStream.ToArray());
-                Response.End();
-            }
-
-            return new EmptyResult();
+
+					// Cell for doctor's signature image
+					var signatureCell = new PdfPCell();
+					signatureCell.Border = PdfPCell.NO_BORDER;
+
+					// Load the doctor's signature image
+					string physicalPath = System.Web.HttpContext.Current.Server.MapPath("~/" + "Images" + "/" + prescription.SignaturePic);
+
+					var signatureImage = Image.GetInstance(Server.MapPath("~/" + "Images" + "/" + prescription.SignaturePic)); // Replace with the actual path to the doctor's signature image
+
+					if (signatureImage != null)
+					{
+						signatureImage.ScaleToFit(100f, 100f); // Set the image size as needed
+						signatureImage.Alignment = Element.ALIGN_RIGHT; // Align the image to the right
+						signatureCell.AddElement(signatureImage);
+					}
+
+					// Create a subtable for doctor's name and registration number
+					var subtable = new PdfPTable(1);
+					subtable.DefaultCell.Border = PdfPCell.NO_BORDER;
+
+
+					// Add the doctor's name and registration number
+					var doctorName = new Paragraph($"Dr. {prescription.DoctorName}", new Font(Font.FontFamily.HELVETICA, 12, Font.NORMAL));
+					doctorName.Alignment = Element.ALIGN_RIGHT;
+					var regNumber = new Paragraph($"Reg No.: {prescription.RegistrationNumber}", new Font(Font.FontFamily.HELVETICA, 12, Font.NORMAL));
+
+					subtable.AddCell(doctorName);
+					subtable.AddCell(regNumber);
+
+					// Add the subtable and signatureCell to the doctorInfoTable
+					doctorInfoTable.AddCell(subtable);
+					doctorInfoTable.AddCell(signatureCell);
+
+					document.Add(doctorInfoTable);
+
+
+
+
+
+					// Add the disclaimer content
+					var disclaimerText = "Disclaimer: The objective of this medical advice is to provide users of such services with information for a better understanding of their health and medical condition. This information and advice are not intended to be a substitute for professional physical meeting, examination, medical advice, diagnosis, or treatment. It should not be treated as a physical medical consultation and cannot be used for any medico-legal purpose. The decision to follow the medical advice is at the sole discretion of the user, and the advising doctor cannot be held responsible for providing such medical advice.";
+
+					// Create a paragraph for the disclaimer
+					var disclaimer = new Paragraph();
+
+					// Create a smaller font for the disclaimer
+					var smallerFont = FontFactory.GetFont(FontFactory.HELVETICA, 10f);
+
+					// Create a bold font for the "Disclaimer:" label
+					var boldFont = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 10f);
+
+					// Add "Disclaimer:" in bold
+					disclaimer.Add(new Chunk("Disclaimer: ", boldFont));
+
+					// Add the rest of the disclaimer in regular font
+					disclaimer.Add(new Chunk(disclaimerText.Substring("Disclaimer: ".Length), smallerFont));
+
+					// Set alignment to left
+					disclaimer.Alignment = Element.ALIGN_LEFT;
+
+					// Add spacing before the disclaimer
+					disclaimer.SpacingBefore = 20f;
+
+					// Add the disclaimer paragraph to the document
+					document.Add(disclaimer);
+
+					document.Close();
+				}
+
+				// Prepare the response to download the PDF
+				Response.Clear();
+				Response.ContentType = "application/pdf";
+				Response.AddHeader("Content-Disposition", "attachment; filename=Prescription.pdf");
+				Response.BinaryWrite(memoryStream.ToArray());
+				Response.End();
+			}
+
+			return new EmptyResult();
         }
 
         public ActionResult ViewPrescriptionReport(int id, string term, int? pageNumber)
@@ -1437,8 +1549,8 @@ WHERE RowNum = 1 and Doctor_Id='" + id + "' ORDER BY Id DESC";
 mpd.*
 FROM PatientAppointment AS pa
 JOIN Doctor AS d ON d.Id = pa.Doctor_Id 
-JOIN PrescriptionAppointments ppa ON ppa.Doctor_Id = d.Id
-JOIN MedicinePrescriptionDetail mpd ON mpd.Doctor_Id = D.Id
+LEFT JOIN PrescriptionAppointments ppa ON ppa.Doctor_Id = d.Id
+LEFT JOIN MedicinePrescriptionDetail mpd ON mpd.Doctor_Id = D.Id
 JOIN Patient AS p ON p.Id = mpd.Patient_Id
 WHERE mpd.Id = " + Id + " order by mpd.EntryDate desc";
 
@@ -1446,7 +1558,7 @@ WHERE mpd.Id = " + Id + " order by mpd.EntryDate desc";
 
             if (prescription == null)
             {
-                return HttpNotFound();
+                TempData["msg"] = "Record not found.";
             }
 
             using (var memoryStream = new MemoryStream())
@@ -1525,22 +1637,30 @@ WHERE mpd.Id = " + Id + " order by mpd.EntryDate desc";
 
                     // Add the cells with patient details
                     // First column (labels)
-                    patientDetailsTable.AddCell(new PdfPCell(new Phrase("Date:", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD))) { Border = PdfPCell.NO_BORDER });
-                    patientDetailsTable.AddCell(new PdfPCell(new Phrase(prescription.EntryDate.ToShortDateString())) { Border = PdfPCell.NO_BORDER });
-                    patientDetailsTable.AddCell(new PdfPCell(new Phrase("UHID:", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD))) { Border = PdfPCell.NO_BORDER });
-                    patientDetailsTable.AddCell(new PdfPCell(new Phrase(prescription.PatientRegNo)) { Border = PdfPCell.NO_BORDER });
-                    patientDetailsTable.AddCell(new PdfPCell(new Phrase("Name:", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD))) { Border = PdfPCell.NO_BORDER });
-                    patientDetailsTable.AddCell(new PdfPCell(new Phrase(prescription.PatientName)) { Border = PdfPCell.NO_BORDER });
-                    patientDetailsTable.AddCell(new PdfPCell(new Phrase("Email:", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD))) { Border = PdfPCell.NO_BORDER });
-                    patientDetailsTable.AddCell(new PdfPCell(new Phrase(prescription.EmailId)) { Border = PdfPCell.NO_BORDER });
-                    patientDetailsTable.AddCell(new PdfPCell(new Phrase("Mobile:", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD))) { Border = PdfPCell.NO_BORDER });
-                    patientDetailsTable.AddCell(new PdfPCell(new Phrase(prescription.MobileNumber)) { Border = PdfPCell.NO_BORDER });
-                    patientDetailsTable.AddCell(new PdfPCell(new Phrase("Gender:", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD))) { Border = PdfPCell.NO_BORDER });
-                    patientDetailsTable.AddCell(new PdfPCell(new Phrase(prescription.Gender)) { Border = PdfPCell.NO_BORDER });
-                    patientDetailsTable.AddCell(new PdfPCell(new Phrase("Weight:", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD))) { Border = PdfPCell.NO_BORDER });
-                    patientDetailsTable.AddCell(new PdfPCell(new Phrase(prescription.Weight)) { Border = PdfPCell.NO_BORDER });
-                    patientDetailsTable.AddCell(new PdfPCell(new Phrase("Age:", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD))) { Border = PdfPCell.NO_BORDER });
-                    patientDetailsTable.AddCell(new PdfPCell(new Phrase(age.ToString())) { Border = PdfPCell.NO_BORDER });
+                    patientDetailsTable.AddCell(new PdfPCell(new Phrase("Date:", new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD))) { Border = PdfPCell.NO_BORDER });
+                    patientDetailsTable.AddCell(new PdfPCell(new Phrase(prescription.EntryDate.ToShortDateString(), new Font(Font.FontFamily.HELVETICA, 14))) { Border = PdfPCell.NO_BORDER });
+                    //patientDetailsTable.AddCell(new PdfPCell(new Phrase(prescription.EntryDate.ToShortDateString())) { Border = PdfPCell.NO_BORDER });
+                    patientDetailsTable.AddCell(new PdfPCell(new Phrase("UHID:", new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD))) { Border = PdfPCell.NO_BORDER });
+                    patientDetailsTable.AddCell(new PdfPCell(new Phrase(prescription.PatientRegNo, new Font(Font.FontFamily.HELVETICA, 14))) { Border = PdfPCell.NO_BORDER });
+                    //patientDetailsTable.AddCell(new PdfPCell(new Phrase(prescription.PatientRegNo)) { Border = PdfPCell.NO_BORDER });
+                    patientDetailsTable.AddCell(new PdfPCell(new Phrase("Name:", new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD))) { Border = PdfPCell.NO_BORDER });
+                    patientDetailsTable.AddCell(new PdfPCell(new Phrase(prescription.PatientName, new Font(Font.FontFamily.HELVETICA, 14))) { Border = PdfPCell.NO_BORDER });
+                    //patientDetailsTable.AddCell(new PdfPCell(new Phrase(prescription.PatientName)) { Border = PdfPCell.NO_BORDER });
+                    patientDetailsTable.AddCell(new PdfPCell(new Phrase("Email:", new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD))) { Border = PdfPCell.NO_BORDER });
+                    patientDetailsTable.AddCell(new PdfPCell(new Phrase(prescription.EmailId, new Font(Font.FontFamily.HELVETICA, 14))) { Border = PdfPCell.NO_BORDER });
+                    //patientDetailsTable.AddCell(new PdfPCell(new Phrase(prescription.EmailId)) { Border = PdfPCell.NO_BORDER });
+                    patientDetailsTable.AddCell(new PdfPCell(new Phrase("Mobile:", new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD))) { Border = PdfPCell.NO_BORDER });
+                    patientDetailsTable.AddCell(new PdfPCell(new Phrase(prescription.MobileNumber, new Font(Font.FontFamily.HELVETICA, 14))) { Border = PdfPCell.NO_BORDER });
+                    //patientDetailsTable.AddCell(new PdfPCell(new Phrase(prescription.MobileNumber)) { Border = PdfPCell.NO_BORDER });
+                    patientDetailsTable.AddCell(new PdfPCell(new Phrase("Gender:", new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD))) { Border = PdfPCell.NO_BORDER });
+                    patientDetailsTable.AddCell(new PdfPCell(new Phrase(prescription.Gender, new Font(Font.FontFamily.HELVETICA, 14))) { Border = PdfPCell.NO_BORDER });
+                    //patientDetailsTable.AddCell(new PdfPCell(new Phrase(prescription.Gender)) { Border = PdfPCell.NO_BORDER });
+                    patientDetailsTable.AddCell(new PdfPCell(new Phrase("Weight:", new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD))) { Border = PdfPCell.NO_BORDER });
+                    patientDetailsTable.AddCell(new PdfPCell(new Phrase(prescription.Weight, new Font(Font.FontFamily.HELVETICA, 14))) { Border = PdfPCell.NO_BORDER });
+                    //patientDetailsTable.AddCell(new PdfPCell(new Phrase(prescription.Weight)) { Border = PdfPCell.NO_BORDER });
+                    patientDetailsTable.AddCell(new PdfPCell(new Phrase("Age:", new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD))) { Border = PdfPCell.NO_BORDER });
+                    patientDetailsTable.AddCell(new PdfPCell(new Phrase(age.ToString(), new Font(Font.FontFamily.HELVETICA, 14))) { Border = PdfPCell.NO_BORDER });
+                    //patientDetailsTable.AddCell(new PdfPCell(new Phrase(age.ToString())) { Border = PdfPCell.NO_BORDER });
 
 
 
@@ -1552,20 +1672,20 @@ WHERE mpd.Id = " + Id + " order by mpd.EntryDate desc";
                     var paragraphWithMargin = new Paragraph();
                     paragraphWithMargin.Add(line);
                     paragraphWithMargin.SpacingBefore = 5f; // Adjust the margin top value (10f in this example)
+					paragraphWithMargin.Font.Size = 14f; // Change the size to your desired value
+					document.Add(paragraphWithMargin);
 
-                    document.Add(paragraphWithMargin);
 
 
-
-                    var captionParagraph = new Paragraph("Thank you for contacting Falck PS Wellness regarding your medical concern. As discussed with the doctor, please find below telemedical advice.");
+                    var captionParagraph = new Paragraph("Thank you for contacting  PS Wellness regarding your medical concern. As discussed with the doctor, please find below telemedical advice.");
                     captionParagraph.Alignment = Element.ALIGN_LEFT;
                     captionParagraph.SpacingBefore = 20f; // Adjust the margin top value (10f in this example)
+					captionParagraph.Font.Size = 14f; // Change the size to your desired value
+					document.Add(captionParagraph);
 
-                    document.Add(captionParagraph);
 
 
-
-                    var presentComplaintsSubheading = new Paragraph("Present Complaints", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD));
+                    var presentComplaintsSubheading = new Paragraph("Present Complaints", new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD));
                     presentComplaintsSubheading.Alignment = Element.ALIGN_LEFT;
                     presentComplaintsSubheading.Alignment = Element.ALIGN_LEFT;
                     presentComplaintsSubheading.SpacingBefore = 5f;
@@ -1578,34 +1698,39 @@ WHERE mpd.Id = " + Id + " order by mpd.EntryDate desc";
                     var presentComplaintsContent = new Paragraph(prescription.PresentComplaint);
                     presentComplaintsContent.Alignment = Element.ALIGN_LEFT;
                     presentComplaintsContent.SpacingBefore = 20f;
-                    document.Add(presentComplaintsContent);
+					presentComplaintsContent.Font.Size = 14f; // Change the size to your desired value
+					document.Add(presentComplaintsContent);
 
 
-                    var pastMedicalSubheading = new Paragraph("Past Medical/Surgical History", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD));
+                    var pastMedicalSubheading = new Paragraph("Past Medical/Surgical History", new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD));
                     pastMedicalSubheading.Alignment = Element.ALIGN_LEFT;
                     pastMedicalSubheading.SpacingBefore = 5f;
-                    document.Add(pastMedicalSubheading);
+					pastMedicalSubheading.Font.Size = 14f; // Change the size to your desired value
+					document.Add(pastMedicalSubheading);
 
                     document.Add(paragraphWithMargin);
 
                     var pastMedicalContent = new Paragraph(prescription.PastMedical_SurgicalHistory);
                     pastMedicalContent.Alignment = Element.ALIGN_LEFT;
                     pastMedicalContent.SpacingBefore = 20f;
-                    document.Add(pastMedicalContent);
+					pastMedicalContent.Font.Size = 14f;
+					document.Add(pastMedicalContent);
 
-                    var allergiesSubheading = new Paragraph("Allergies, if any", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD));
+                    var allergiesSubheading = new Paragraph("Allergies, if any", new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD));
                     allergiesSubheading.Alignment = Element.ALIGN_LEFT;
                     allergiesSubheading.SpacingBefore = 5f;
-                    document.Add(allergiesSubheading);
+					allergiesSubheading.Font.Size = 14f; // Change the size to your desired value
+					document.Add(allergiesSubheading);
 
                     document.Add(paragraphWithMargin);
 
                     var allergiesContent = new Paragraph(prescription.Allergies);
                     allergiesContent.Alignment = Element.ALIGN_LEFT;
                     allergiesContent.SpacingBefore = 20f;
-                    document.Add(allergiesContent);
+					allergiesContent.Font.Size = 14f;
+					document.Add(allergiesContent);
 
-                    var primaryDiagnosisSubheading = new Paragraph("Primary Diagnosis Based on Symptoms", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD));
+                    var primaryDiagnosisSubheading = new Paragraph("Primary Diagnosis Based on Symptoms", new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD));
                     primaryDiagnosisSubheading.Alignment = Element.ALIGN_LEFT;
                     primaryDiagnosisSubheading.SpacingBefore = 5f;
                     document.Add(primaryDiagnosisSubheading);
@@ -1616,9 +1741,10 @@ WHERE mpd.Id = " + Id + " order by mpd.EntryDate desc";
                     var primaryDiagnosisContent = new Paragraph(prescription.Primarydiagnosis);
                     primaryDiagnosisContent.Alignment = Element.ALIGN_LEFT;
                     primaryDiagnosisContent.SpacingBefore = 20f;
-                    document.Add(primaryDiagnosisContent);
+					primaryDiagnosisContent.Font.Size = 14f;
+					document.Add(primaryDiagnosisContent);
 
-                    var PrescribedMedicine = new Paragraph("Prescribed Medicine", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD));
+                    var PrescribedMedicine = new Paragraph("Prescribed Medicine", new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD));
                     PrescribedMedicine.Alignment = Element.ALIGN_LEFT;
                     PrescribedMedicine.SpacingBefore = 5f;
                     document.Add(PrescribedMedicine);
@@ -1632,106 +1758,112 @@ WHERE mpd.Id = " + Id + " order by mpd.EntryDate desc";
                     int rowNumber = 1;
                     BaseColor purpleColor = new BaseColor(0, 255, 255); // Cyan color
 
-                    // Add cells with purple background
-                    medicinedetail.AddCell(new PdfPCell(new Phrase("S#")) { Border = PdfPCell.BOTTOM_BORDER, BackgroundColor = purpleColor });
-                    medicinedetail.AddCell(new PdfPCell(new Phrase("Medicine Name")) { Border = PdfPCell.BOTTOM_BORDER, BackgroundColor = purpleColor });
-                    medicinedetail.AddCell(new PdfPCell(new Phrase("Dosage")) { Border = PdfPCell.BOTTOM_BORDER, BackgroundColor = purpleColor });
-                    medicinedetail.AddCell(new PdfPCell(new Phrase("Instruction")) { Border = PdfPCell.BOTTOM_BORDER, BackgroundColor = purpleColor });
+					// Add cells with purple background
+					// Assuming you have a font object defined somewhere, you can create it like this:
+					Font font = new Font(Font.FontFamily.HELVETICA, 14f, Font.NORMAL); // Change the size (10f) as per your requirement
 
+					// Then use this font in your PdfPCell creation like this:
+					medicinedetail.AddCell(new PdfPCell(new Phrase("S#", font)) { Border = PdfPCell.BOTTOM_BORDER, BackgroundColor = purpleColor });
+					medicinedetail.AddCell(new PdfPCell(new Phrase("Medicine Name", font)) { Border = PdfPCell.BOTTOM_BORDER, BackgroundColor = purpleColor });
+					medicinedetail.AddCell(new PdfPCell(new Phrase("Dosage", font)) { Border = PdfPCell.BOTTOM_BORDER, BackgroundColor = purpleColor });
+					medicinedetail.AddCell(new PdfPCell(new Phrase("Instruction", font)) { Border = PdfPCell.BOTTOM_BORDER, BackgroundColor = purpleColor });
+
+
+					 
 
                     if (!string.IsNullOrEmpty(prescription.MedicineName1))
                     {
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(rowNumber.ToString())) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.MedicineName1)) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Dosage1)) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Instruction1)) { Border = PdfPCell.BOTTOM_BORDER });
+                        medicinedetail.AddCell(new PdfPCell(new Phrase(rowNumber.ToString(), font)) { Border = PdfPCell.BOTTOM_BORDER });
+                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.MedicineName1, font)) { Border = PdfPCell.BOTTOM_BORDER });
+                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Dosage1, font)) { Border = PdfPCell.BOTTOM_BORDER });
+                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Instruction1, font)) { Border = PdfPCell.BOTTOM_BORDER });
                         rowNumber++;
                     }
 
                     if (!string.IsNullOrEmpty(prescription.MedicineName2))
                     {
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(rowNumber.ToString())) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.MedicineName2)) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Dosage2)) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Instruction2)) { Border = PdfPCell.BOTTOM_BORDER });
+                        medicinedetail.AddCell(new PdfPCell(new Phrase(rowNumber.ToString(), font)) { Border = PdfPCell.BOTTOM_BORDER });
+                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.MedicineName2, font)) { Border = PdfPCell.BOTTOM_BORDER });
+                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Dosage2, font)) { Border = PdfPCell.BOTTOM_BORDER });
+                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Instruction2, font)) { Border = PdfPCell.BOTTOM_BORDER });
                         rowNumber++;
                     }
 
                     if (!string.IsNullOrEmpty(prescription.MedicineName3))
                     {
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(rowNumber.ToString())) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.MedicineName3)) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Dosage3)) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Instruction3)) { Border = PdfPCell.BOTTOM_BORDER });
+                        medicinedetail.AddCell(new PdfPCell(new Phrase(rowNumber.ToString(), font)) { Border = PdfPCell.BOTTOM_BORDER });
+                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.MedicineName3, font)) { Border = PdfPCell.BOTTOM_BORDER });
+                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Dosage3, font)) { Border = PdfPCell.BOTTOM_BORDER });
+                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Instruction3, font)) { Border = PdfPCell.BOTTOM_BORDER });
                         rowNumber++;
                     }
 
                     if (!string.IsNullOrEmpty(prescription.MedicineName4))
                     {
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(rowNumber.ToString())) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.MedicineName4)) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Dosage4)) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Instruction4)) { Border = PdfPCell.BOTTOM_BORDER });
+                        medicinedetail.AddCell(new PdfPCell(new Phrase(rowNumber.ToString(), font)) { Border = PdfPCell.BOTTOM_BORDER });
+                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.MedicineName4, font)) { Border = PdfPCell.BOTTOM_BORDER });
+                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Dosage4, font)) { Border = PdfPCell.BOTTOM_BORDER });
+                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Instruction4, font)) { Border = PdfPCell.BOTTOM_BORDER });
                         rowNumber++;
                     }
 
                     if (!string.IsNullOrEmpty(prescription.MedicineName5))
                     {
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(rowNumber.ToString())) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.MedicineName5)) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Dosage5)) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Instruction5)) { Border = PdfPCell.BOTTOM_BORDER });
+                        medicinedetail.AddCell(new PdfPCell(new Phrase(rowNumber.ToString(), font)) { Border = PdfPCell.BOTTOM_BORDER });
+                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.MedicineName5, font)) { Border = PdfPCell.BOTTOM_BORDER });
+                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Dosage5, font)) { Border = PdfPCell.BOTTOM_BORDER });
+                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Instruction5, font)) { Border = PdfPCell.BOTTOM_BORDER });
                         rowNumber++;
                     }
 
                     if (!string.IsNullOrEmpty(prescription.MedicineName6))
                     {
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(rowNumber.ToString())) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.MedicineName6)) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Dosage6)) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Instruction6)) { Border = PdfPCell.BOTTOM_BORDER });
+                        medicinedetail.AddCell(new PdfPCell(new Phrase(rowNumber.ToString(), font)) { Border = PdfPCell.BOTTOM_BORDER });
+                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.MedicineName6, font)) { Border = PdfPCell.BOTTOM_BORDER });
+                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Dosage6, font)) { Border = PdfPCell.BOTTOM_BORDER });
+                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Instruction6, font)) { Border = PdfPCell.BOTTOM_BORDER });
                         rowNumber++;
                     }
 
                     if (!string.IsNullOrEmpty(prescription.MedicineName7))
                     {
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(rowNumber.ToString())) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.MedicineName7)) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Dosage7)) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Instruction7)) { Border = PdfPCell.BOTTOM_BORDER });
+                        medicinedetail.AddCell(new PdfPCell(new Phrase(rowNumber.ToString(), font)) { Border = PdfPCell.BOTTOM_BORDER });
+                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.MedicineName7, font)) { Border = PdfPCell.BOTTOM_BORDER });
+                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Dosage7, font)) { Border = PdfPCell.BOTTOM_BORDER });
+                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Instruction7, font)) { Border = PdfPCell.BOTTOM_BORDER });
                         rowNumber++;
                     }
 
                     if (!string.IsNullOrEmpty(prescription.MedicineName8))
                     {
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(rowNumber.ToString())) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.MedicineName8)) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Dosage8)) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Instruction8)) { Border = PdfPCell.BOTTOM_BORDER });
+                        medicinedetail.AddCell(new PdfPCell(new Phrase(rowNumber.ToString(), font)) { Border = PdfPCell.BOTTOM_BORDER });
+                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.MedicineName8, font)) { Border = PdfPCell.BOTTOM_BORDER });
+                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Dosage8, font)) { Border = PdfPCell.BOTTOM_BORDER });
+                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Instruction8, font)) { Border = PdfPCell.BOTTOM_BORDER });
                         rowNumber++;
                     }
 
                     if (!string.IsNullOrEmpty(prescription.MedicineName9))
                     {
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(rowNumber.ToString())) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.MedicineName9)) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Dosage9)) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Instruction9)) { Border = PdfPCell.BOTTOM_BORDER });
+                        medicinedetail.AddCell(new PdfPCell(new Phrase(rowNumber.ToString(), font)) { Border = PdfPCell.BOTTOM_BORDER });
+                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.MedicineName9, font)) { Border = PdfPCell.BOTTOM_BORDER });
+                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Dosage9, font)) { Border = PdfPCell.BOTTOM_BORDER });
+                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Instruction9, font)) { Border = PdfPCell.BOTTOM_BORDER });
                         rowNumber++;
                     }
 
                     if (!string.IsNullOrEmpty(prescription.MedicineName10))
                     {
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(rowNumber.ToString())) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.MedicineName10)) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Dosage10)) { Border = PdfPCell.BOTTOM_BORDER });
-                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Instruction10)) { Border = PdfPCell.BOTTOM_BORDER });
+                        medicinedetail.AddCell(new PdfPCell(new Phrase(rowNumber.ToString(), font)) { Border = PdfPCell.BOTTOM_BORDER });
+                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.MedicineName10, font)) { Border = PdfPCell.BOTTOM_BORDER });
+                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Dosage10, font)) { Border = PdfPCell.BOTTOM_BORDER });
+                        medicinedetail.AddCell(new PdfPCell(new Phrase(prescription.Instruction10, font)) { Border = PdfPCell.BOTTOM_BORDER });
                         rowNumber++;
                     }
 
                     document.Add(medicinedetail);
 
-                    var TestPrescribed = new Paragraph("Test Prescribed", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD));
+                    var TestPrescribed = new Paragraph("Test Prescribed", new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD));
                     TestPrescribed.Alignment = Element.ALIGN_LEFT;
                     TestPrescribed.SpacingBefore = 5f;
                     document.Add(TestPrescribed);
@@ -1741,9 +1873,10 @@ WHERE mpd.Id = " + Id + " order by mpd.EntryDate desc";
                     var TestPrescribedContent = new Paragraph(prescription.TestPrescribed);
                     TestPrescribedContent.Alignment = Element.ALIGN_LEFT;
                     TestPrescribedContent.SpacingBefore = 20f;
-                    document.Add(TestPrescribedContent);
+					TestPrescribedContent.Font.Size = 14f;
+					document.Add(TestPrescribedContent);
 
-                    var Recommendations = new Paragraph("Further Referral / Recommendations", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD));
+                    var Recommendations = new Paragraph("Further Referral / Recommendations", new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD));
                     Recommendations.Alignment = Element.ALIGN_LEFT;
                     Recommendations.SpacingBefore = 5f;
                     document.Add(Recommendations);
@@ -1753,7 +1886,8 @@ WHERE mpd.Id = " + Id + " order by mpd.EntryDate desc";
                     var RecommendationsContent = new Paragraph(prescription.Furtherrefferal_Recommendations);
                     RecommendationsContent.Alignment = Element.ALIGN_LEFT;
                     RecommendationsContent.SpacingBefore = 20f;
-                    document.Add(RecommendationsContent);
+					RecommendationsContent.Font.Size = 14f;
+					document.Add(RecommendationsContent);
 
                     // Create a table for doctor's name, registration number, and signature
                     var doctorInfoTable = new PdfPTable(2);
@@ -1769,7 +1903,6 @@ WHERE mpd.Id = " + Id + " order by mpd.EntryDate desc";
                     string physicalPath = System.Web.HttpContext.Current.Server.MapPath("~/" + "Images" + "/" + prescription.SignaturePic);
 
                     var signatureImage = Image.GetInstance(Server.MapPath("~/" + "Images" + "/" + prescription.SignaturePic)); // Replace with the actual path to the doctor's signature image
-                   // var signatureImage = Image.GetInstance(Server.MapPath("~/Images/PsLogo.png")); // Replace with the actual path to the doctor's signature image
 
                     if (signatureImage != null)
                     {
@@ -1777,16 +1910,16 @@ WHERE mpd.Id = " + Id + " order by mpd.EntryDate desc";
                         signatureImage.Alignment = Element.ALIGN_RIGHT; // Align the image to the right
                         signatureCell.AddElement(signatureImage);
                     }
-                    
+
                     // Create a subtable for doctor's name and registration number
                     var subtable = new PdfPTable(1);
                     subtable.DefaultCell.Border = PdfPCell.NO_BORDER;
 
 
                     // Add the doctor's name and registration number
-                    var doctorName = new Paragraph($"Dr. {prescription.DoctorName}", new Font(Font.FontFamily.HELVETICA, 10, Font.NORMAL));
+                    var doctorName = new Paragraph($"Dr. {prescription.DoctorName}", new Font(Font.FontFamily.HELVETICA, 12, Font.NORMAL));
                     doctorName.Alignment = Element.ALIGN_RIGHT;
-                    var regNumber = new Paragraph($"Reg No.: {prescription.RegistrationNumber}", new Font(Font.FontFamily.HELVETICA, 10, Font.NORMAL));
+                    var regNumber = new Paragraph($"Reg No.: {prescription.RegistrationNumber}", new Font(Font.FontFamily.HELVETICA, 12, Font.NORMAL));
 
                     subtable.AddCell(doctorName);
                     subtable.AddCell(regNumber);
@@ -1808,10 +1941,10 @@ WHERE mpd.Id = " + Id + " order by mpd.EntryDate desc";
                     var disclaimer = new Paragraph();
 
                     // Create a smaller font for the disclaimer
-                    var smallerFont = FontFactory.GetFont(FontFactory.HELVETICA, 8f);
+                    var smallerFont = FontFactory.GetFont(FontFactory.HELVETICA, 10f);
 
                     // Create a bold font for the "Disclaimer:" label
-                    var boldFont = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 8f);
+                    var boldFont = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 10f);
 
                     // Add "Disclaimer:" in bold
                     disclaimer.Add(new Chunk("Disclaimer: ", boldFont));

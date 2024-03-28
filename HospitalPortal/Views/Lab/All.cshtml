@@ -2,6 +2,7 @@
 @{
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
     string Role = HospitalPortal.Utility.UserIdentity.UserRole;
+    int count = 1;
 }
 
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
@@ -41,23 +42,24 @@
         </div>
 
         <div class="double-scroll">
-            <table class="table table-bordered">
-                <thead>
+            <table id="myTable" class="table table-bordered">
+                <thead style="background-color:lavender;">
                     <tr>
+                        <th>Sr No.</th>
                         <th>Lab Id</th>
                         <th>Lab Name</th>
                         <th>Franchise</th>
-                        <th>Landline No</th>
+                        <th>Phone No</th>
                         <th>Mobile No</th>
                         <th>Email</th>
                         <th>Address</th>
                         <th>Licence</th>
                         <th>Licence No</th>
+                        <th>PAN</th>
                         <th>GST Number</th>
-                        @*<th>PAN</th>*@
-                        @*<th>Aadhar Doc.</th>*@
                         <th>AadharNo</th>
                         <th>Approval</th>
+                        <th>Approval for Bank Update</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -65,18 +67,20 @@
                     @foreach (var item in Model)
                     {
                         <tr>
+                            <td>@count</td>
                             <td>@item.lABId</td>
                             <td>@item.LabName</td>
                             <td>
-                                @if (item.Vendor_Id < 0 || item.Vendor_Id == null)
-                {
-                    if (Role == "admin")
-                    {
+                                @if (item.Vendor_Id == 0 || item.Vendor_Id == null)
+                                {
+                                    if (Role == "admin")
+                                    {
                                         <a href="/Admin/ShareToVendor?Id=@item.Id&Role=Lab">Share To Vendor</a>
                                     }
                                 }
                                 else
                                 {
+                                    <a href="/Admin/ShareToVendor?Id=@item.Id&Role=Lab">Change Franchise</a>
                                     @item.VendorName <span>/ @item.UniqueId</span>
                                 }
                             </td>
@@ -90,20 +94,14 @@
                                 </a>
                             </td>
                             <td>@item.LicenceNumber</td>
+                            <td>
+                                @item.PAN
+                                <a href="/Images/@item.PanImage">
+                                    <img src="/Images/@item.PanImage" style="width:100px;height:80px" />
+                                </a>
+                            </td>
                             <td>@item.GSTNumber</td>
-                            @*<td>@item.PAN</td>*@
-                            @*<td>
-                                @if (string.IsNullOrEmpty(item.AadharImage))
-                                {
-                                    <span>No image</span>
-                                }
-                                else
-                                {
-                                    <a href="/Images/@item.AadharImage">
-                                        <img src="/Images/@item.AadharImage" class="thumb" />
-                                    </a>
-                                }
-                            </td>*@
+
                             <td>@item.AadharNumber</td>
                             <td>
                                 @if (item.IsApproved)
@@ -116,11 +114,22 @@
                                 }
                             </td>
                             <td>
+                                @if (item.IsBankUpdateApproved)
+                                {
+                                    <a href="/Lab/UpdateBankUpdateStatus?id=@item.Id" class="btn btn-success">Update Bank Approved</a>
+                                }
+                                else
+                                {
+                                    <a href="/Lab/UpdateBankUpdateStatus?id=@item.Id" class="btn btn-danger">Update Bank Not Approved</a>
+                                }
+                            </td>
+                            <td>
                                 @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { onclick = "return confirm('Are sure wants to Edit?');", @class = "btn btn-info" })
                                 <a href="/Common/BankDetails?Id=@item.AdminLogin_Id" class="btn btn-primary">Bank Details</a>
                                 @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { onclick = "return confirm('Are sure wants to delete?');", @class = "btn btn-danger" })
                             </td>
                         </tr>
+                        count++;
                     }
                 </tbody>
             </table>
@@ -129,6 +138,3 @@
         </div>
 
 
-<script>
-    $('.double-scroll').doubleScroll();
-</script>

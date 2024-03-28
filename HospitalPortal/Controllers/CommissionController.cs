@@ -59,7 +59,7 @@ namespace HospitalPortal.Controllers
                 }
             }
 
-            var doctor = @"select Sum(P.Amount) as Amount, Count(P.Patient_Id) as Counts from dbo.PatientAppointment P join Doctor D ON d.Id = p.Doctor_Id  join Vendor v on v.Id = d.Vendor_Id where p.IsPaid=1 and v.Id=" + id + " and  P.AppointmentDate between DateAdd(DD,-7,GETDATE() ) and GETDATE()";
+            var doctor = @"select Sum(P.TotalFee) as Amount, Count(P.Patient_Id) as Counts from dbo.PatientAppointment P join Doctor D ON d.Id = p.Doctor_Id  join Vendor v on v.Id = d.Vendor_Id where p.IsPaid=1 and v.Id=" + id + " and  P.AppointmentDate between DateAdd(DD,-7,GETDATE() ) and GETDATE()";
             var data = ent.Database.SqlQuery<VendorCommissionReport>(doctor).ToList();
             if (data.Count() == 0)
             {

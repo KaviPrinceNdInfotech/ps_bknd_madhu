@@ -15,7 +15,6 @@ using static HospitalPortal.Models.ViewModels.ChemistDTO;
 
 namespace HospitalPortal.Controllers
 {
-
     public class LabApiController : ApiController
     {
         ILog log = LogManager.GetLogger(typeof(LabApiController));
@@ -75,7 +74,6 @@ Lab.LabName, Lab.PhoneNumber, Lab.MobileNumber, LabTest.TestAmount,
         [HttpGet]
         public IHttpActionResult LabDetails(int id)
         {
-            var model = new Lab();
             string query = @"select L.id,L.LabName,L.about,L.LabTypeName,L.year,L.Location,L.fee,L.WorkingDay,
 (select AVG(Rating1 + Rating2 + Rating3 + Rating4 + Rating5) from Review where Review.pro_Id=L.Id)as Rating 
  from Lab as L left join Review as R on R.pro_Id=L.Id 
@@ -164,9 +162,7 @@ where L.CityMaster_Id=" + model.CityMaster_Id + " and StateMaster_Id = " + model
                 return InternalServerError(ex);
             }
         }
-
-
-
+         
         //USER SECTION
         [Route("api/LabApi/Booknow")]
         [HttpPost]
@@ -255,7 +251,7 @@ where L.CityMaster_Id=" + model.CityMaster_Id + " and StateMaster_Id = " + model
         public IHttpActionResult LabAptmt(int Lab_Id, int Bookid)
         {
             double gst = ent.Database.SqlQuery<double>(@"select Amount from GSTMaster where IsDeleted=0 and Name='Lab'").FirstOrDefault();
-            string query = $"select BTL.Id,l.LabName,l.LabTypeName,l.year,LT.TestAmount as Fee,{gst} as GST,LT.TestAmount + LT.TestAmount *{gst}/100 as TotalFee,convert(date,BTL.TestDate)as TestDate,Ts.SlotTime from Lab as l left join BookTestLab as BTL on BTL.Lab_Id=l.Id left join TimeSlot as Ts on Ts.Slotid=BTL.Slotid left join LabTest as LT on LT.Id=BTL.Test_Id where l.IsDeleted=0 and BTL.Lab_Id=" + Lab_Id + " and BTL.Id=" + Bookid + "";
+            string query = $"select BTL.Id,l.LabName,l.LabTypeName,l.year,LT.TestAmount as Fee,{gst} as GST,LT.TestAmount + LT.TestAmount *{gst}/100 as TotalFee,convert(date,BTL.TestDate)as TestDate,Ts.SlotTime,al.DeviceId from Lab as l left join BookTestLab as BTL on BTL.Lab_Id=l.Id left join TimeSlot as Ts on Ts.Slotid=BTL.Slotid left join LabTest as LT on LT.Id=BTL.Test_Id left join AdminLogin as al on al.Id=l.AdminLogin_Id where l.IsDeleted=0 and BTL.Lab_Id=" + Lab_Id + " and BTL.Id=" + Bookid + "";
             var data = ent.Database.SqlQuery<LabDet>(query).FirstOrDefault();
             return Ok(data);
 
@@ -298,12 +294,9 @@ where L.CityMaster_Id=" + model.CityMaster_Id + " and StateMaster_Id = " + model
                 return Ok("Internal server error");
             }
         }
-
-
-
-
+         
         //======lab section============LabBookHistory===============================//
-        //done
+        
         [HttpGet]
         public IHttpActionResult LabBookHistory(int id)
         {
@@ -313,7 +306,7 @@ where L.CityMaster_Id=" + model.CityMaster_Id + " and StateMaster_Id = " + model
             return Ok(data);
         }
         //=============================LabPaymentHistory ==============================================
-        //done
+       
         [Route("api/LabApi/LabPayHis")]
         [HttpGet]
         public IHttpActionResult LabPayHis(int Id)
@@ -344,30 +337,29 @@ where L.CityMaster_Id=" + model.CityMaster_Id + " and StateMaster_Id = " + model
 
             return Ok(new { LabAD });
         }
-
-
-        [System.Web.Http.HttpPost]
-        [System.Web.Http.Route("api/LabApi/UpdateProfilebyLab")]
+         
+        [HttpPost]
+        [Route("api/LabApi/UpdateProfilebyLab")]
         public IHttpActionResult UpdateProfilebyLab(LabUpdate model)
-        {
-
+        { 
             try
             {
-                var data = ent.Labs.Where(a => a.Id == model.id).FirstOrDefault();
+                var data = ent.Labs.Where(a => a.Id == model.Id).FirstOrDefault();
                 data.LabName = model.LabName;
                 data.MobileNumber = model.MobileNumber;
+                data.EmailId = model.EmailId;
                 data.StateMaster_Id = model.StateMaster_Id;
                 data.CityMaster_Id = model.CityMaster_Id;
                 data.Location = model.Location;
-                data.fee = model.fee;
+                //data.fee = model.fee;
                 data.PinCode = model.PinCode;
-                var l = ent.BankDetails.Where(a => a.Login_Id == model.adminLogin_id).FirstOrDefault();
-                l.AccountNo = model.AccountNo;
-                l.BranchName = model.BranchName;
-                l.IFSCCode = model.IFSCCode;
+                //var l = ent.BankDetails.Where(a => a.Login_Id == model.adminLogin_id).FirstOrDefault();
+                //l.AccountNo = model.AccountNo;
+                //l.BranchName = model.BranchName;
+                //l.IFSCCode = model.IFSCCode;
                 ent.SaveChanges();
                 rm.Status = 1;
-                rm.Message = " lab Profile has updated.";
+                rm.Message = " Lab Profile has updated.";
             }
             catch (Exception ex)
             {
@@ -378,15 +370,16 @@ where L.CityMaster_Id=" + model.CityMaster_Id + " and StateMaster_Id = " + model
             return Ok(rm);
 
         }
-
-
-
-        [HttpGet]
-        [Route("api/LabApi/LabUpdateProfiledetail")]
+         
+        [HttpGet]//Get Lab Profile
+        [Route("api/LabApi/LabUpdateProfiledetail")] 
         public IHttpActionResult LabUpdateProfiledetail(int Id)
         {
             //var data = new Lab();
-            string query = @"select Lab.Id,Lab.LabName,Lab.EmailId,Lab.MobileNumber,Lab.Location,Lab.PinCode,CityName,StateName from Lab left join statemaster as sm with(nolock) on sm.id=stateMaster_Id left join citymaster as cm with(nolock) on cm.id= CityMaster_Id where Lab.Id=" + Id + "";
+            string query = @"select Lab.Id,Lab.LabName,Lab.EmailId,Lab.MobileNumber,Lab.Location,Lab.PinCode,cm.CityName,sm.StateName,Lab.StateMaster_Id,
+Lab.CityMaster_Id from Lab
+left join StateMaster as sm with(nolock) on sm.id=stateMaster_Id
+left join CityMaster as cm with(nolock) on cm.id= CityMaster_Id where Lab.Id=" + Id + "";
             var data1 = ent.Database.SqlQuery<labprofileDetails>(query).FirstOrDefault();
 
             return Ok(data1);
@@ -402,13 +395,11 @@ where L.CityMaster_Id=" + model.CityMaster_Id + " and StateMaster_Id = " + model
             var LabApp_History = ent.Database.SqlQuery<labAPTHISTORY>(Query).ToList();
             return Ok(new { LabApp_History });
         }
-
-
+         
         //===========LAB ABOUT=============//
-
-
-        [System.Web.Http.HttpGet]
-        [System.Web.Http.Route("api/LabApi/LabAbout")]
+         
+        [HttpGet]
+        [Route("api/LabApi/LabAbout")]
 
         public IHttpActionResult LabAbout(int Id)
         {
@@ -422,8 +413,8 @@ where L.CityMaster_Id=" + model.CityMaster_Id + " and StateMaster_Id = " + model
 
         //==========================Upload Report=======================//
 
-        [System.Web.Http.HttpPost]
-        [System.Web.Http.Route("api/LabApi/Lab_UploadReport")]
+        [HttpPost]
+        [Route("api/LabApi/Lab_UploadReport")]
         public IHttpActionResult Lab_UploadReport(upload_report model)
         {
             string[] allowedExtensions = { ".jpg", ".jpeg", ".png" };
@@ -470,9 +461,7 @@ where L.CityMaster_Id=" + model.CityMaster_Id + " and StateMaster_Id = " + model
             return Ok(rm);
 
         }
-
-
-
+         
         //=====================LabViewReport========================//
         [HttpGet]
         [Route("api/LabApi/Lab_ViewReport")]
@@ -482,8 +471,7 @@ where L.CityMaster_Id=" + model.CityMaster_Id + " and StateMaster_Id = " + model
             var LabViewReport = ent.Database.SqlQuery<Lab_View_Report>(qry).ToList();
             return Ok(new { LabViewReport });
         }
-
-
+         
         //==========================LabViewReportFile=====================//
 
         [HttpGet]
@@ -497,8 +485,8 @@ where L.CityMaster_Id=" + model.CityMaster_Id + " and StateMaster_Id = " + model
             return Ok(new { LabViewReport_file });
         } 
 
-        [System.Web.Http.HttpPost]
-        [System.Web.Http.Route("api/LabApi/LabAddTest")]
+        [HttpPost]
+        [Route("api/LabApi/LabAddTest")]
         public IHttpActionResult LabAddTest(TestInLab model)
         {
             try
@@ -526,8 +514,8 @@ where L.CityMaster_Id=" + model.CityMaster_Id + " and StateMaster_Id = " + model
            
         }
 
-        [System.Web.Http.HttpPost]
-        [System.Web.Http.Route("api/LabApi/RemoveTest")]
+        [HttpPost]
+        [Route("api/LabApi/RemoveTest")]
         public IHttpActionResult RemoveTest(int Id)
         {
             var rm = new ReturnMessage();
@@ -556,9 +544,8 @@ where L.CityMaster_Id=" + model.CityMaster_Id + " and StateMaster_Id = " + model
             var LabTest = ent.Database.SqlQuery<lablist>(qry).ToList();
             return Ok(new { LabTest });
         }
-
-
-        [System.Web.Http.HttpGet, System.Web.Http.Route("api/LabApi/LabInvoice/{Invoice}")]
+         
+        [HttpGet,Route("api/LabApi/LabInvoice/{Invoice}")]
         public IHttpActionResult LabInvoice(string Invoice)
         {
             try
@@ -632,5 +619,4 @@ where L.CityMaster_Id=" + model.CityMaster_Id + " and StateMaster_Id = " + model
 
         }
     }
-
 }

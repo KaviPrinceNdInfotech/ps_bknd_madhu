@@ -21,15 +21,11 @@
                 <h3>Update Profile</h3>
             </div>
         </div>
-
+        <a href="/Chemist/All" class="btn btn-info">Back</a>
         @Html.HiddenFor(a => a.Id)
         @Html.HiddenFor(a => a.IsDeleted)
         @Html.HiddenFor(a => a.IsApproved)
-        @Html.HiddenFor(a => a.AdminLogin_Id)
-        @Html.HiddenFor(a => a.EmailId)
-        @Html.HiddenFor(a => a.MobileNumber)
-        @Html.HiddenFor(a => a.Password)
-        @Html.HiddenFor(a => a.ConfirmPassword)
+        @Html.HiddenFor(a => a.AdminLogin_Id)   
         @Html.HiddenFor(a => a.LicenceImage)
         @Html.HiddenFor(a => a.IsCheckedTermsCondition)
         @Html.Partial("~/Views/Shared/_DisplayMessageUpdate.cshtml")
@@ -43,42 +39,30 @@
                         @Html.ValidationMessageFor(a => a.ChemistName)
                     </span>
                 </div>
-
                 <div class="form-group">
                     Shop Name * @Html.TextBoxFor(a => a.ShopName, new { @class = "form-control" })
                     <span class="red">
                         @Html.ValidationMessageFor(a => a.ShopName)
                     </span>
                 </div>
-
-                @*<div class="form-group">
+                <div class="form-group">
                     Mobile Number * @Html.TextBoxFor(a => a.MobileNumber, new { @class = "form-control" })
                     <span class="red">
                         @Html.ValidationMessageFor(a => a.MobileNumber)
                     </span>
                 </div>
-
-
                 <div class="form-group">
-                    Email Id *  @Html.TextBoxFor(a => a.EmailId, new { @class = "form-control" })
+                    Email Id * @Html.TextBoxFor(a => a.EmailId, new { @class = "form-control" })
                     <span class="red">
                         @Html.ValidationMessageFor(a => a.EmailId)
                     </span>
                 </div>
-
                 <div class="form-group">
-                    Password * @Html.PasswordFor(a => a.Password, new { @class = "form-control" })
+                    GST Number * @Html.TextBoxFor(a => a.GSTNumber, new { @class = "form-control" })
                     <span class="red">
-                        @Html.ValidationMessageFor(a => a.Password)
+                        @Html.ValidationMessageFor(a => a.GSTNumber)
                     </span>
                 </div>
-
-                <div class="form-group">
-                    Confirm Your Password * @Html.PasswordFor(a => a.ConfirmPassword, new { @class = "form-control" })
-                    <span class="red">
-                        @Html.ValidationMessageFor(a => a.ConfirmPassword)
-                    </span>
-                </div>*@
 
                 <div class="form-group">
                     State * @Html.DropDownListFor(a => a.StateMaster_Id, Model.States, "Select", new { @class = "form-control" })
@@ -89,8 +73,8 @@
 
                 <div class="form-group">
                     City * @Html.DropDownListFor(a => a.CityMaster_Id,
-  Model.Cities
-  , "Select", new { @class = "form-control" })
+Model.Cities
+, "Select", new { @class = "form-control" })
                     <span class="red">
                         @Html.ValidationMessageFor(a => a.StateMaster_Id)
                     </span>
@@ -101,25 +85,16 @@
                     <span class="red">
                         @Html.ValidationMessageFor(a => a.Location)
                     </span>
-                </div>
-
-                @*<div class="form-group">
-                    PAN * @Html.TextBoxFor(a => a.PAN, new { @class = "form-control" })
-                    <span class="red">
-                        @Html.ValidationMessageFor(a => a.PAN)
-                    </span>
-                </div>*@
-
+                </div> 
                 <div class="form-group">
-                    GST Number * @Html.TextBoxFor(a => a.GSTNumber, new { @class = "form-control" })
+                    Licence Validity * @Html.TextBoxFor(a => a.LicenseValidity, new { @class = "form-control" })
                     <span class="red">
-                        @Html.ValidationMessageFor(a => a.GSTNumber)
+                        @Html.ValidationMessageFor(a => a.LicenseValidity)
                     </span>
                 </div>
-
                 @{Html.EnableClientValidation(false);}
                 <div class="form-group">
-                    @if(!string.IsNullOrEmpty(Model.LicenceImage))
+                    @if (!string.IsNullOrEmpty(Model.LicenceImage))
                     {
                         <img src="/Images/@Model.LicenceImage" class="thumb" />
                     }
@@ -138,7 +113,7 @@
                     </span>
                 </div>
                 <div class="form-group">
-                    <input type="submit" value="Save" class="btn btn-info" />
+                    <input type="submit" value="Update" class="btn btn-info" />
                 </div>
             </div>
         </div>

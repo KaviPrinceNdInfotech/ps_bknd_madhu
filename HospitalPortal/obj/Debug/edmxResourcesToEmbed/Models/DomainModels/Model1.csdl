@@ -87,7 +87,6 @@
     <NavigationProperty Name="HealthCheckupCenters" Relationship="Model.FK__HealthChe__Admin__3587F3E0" FromRole="AdminLogin" ToRole="HealthCheckupCenter" />
     <Property Name="Confirmpassword" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="NurseComplaints" Relationship="Model.FK__NurseComp__Login__2AAB3E11" FromRole="AdminLogin" ToRole="NurseComplaint" />
-    <NavigationProperty Name="Doctors" Relationship="Model.FK__Doctor__AdminLog__2A164134" FromRole="AdminLogin" ToRole="Doctor" />
     <NavigationProperty Name="Chemists" Relationship="Model.FK__Chemist__AdminLo__236943A5" FromRole="AdminLogin" ToRole="Chemist" />
     <Property Name="DeviceId" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
   </EntityType>
@@ -301,7 +300,6 @@
     <Property Name="IsDeleted" Type="Boolean" />
     <Property Name="IsResolved" Type="Boolean" />
     <Property Name="Others" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
-    <NavigationProperty Name="Doctor" Relationship="Model.FK__DoctorCom__Login__2EDAF651" FromRole="DoctorComplaint" ToRole="Doctor" />
   </EntityType>
   <EntityType Name="DoctorDepartment">
     <Key>
@@ -326,7 +324,6 @@
     <Property Name="IsGenerated" Type="Boolean" />
     <Property Name="PaymentId" Type="Int32" />
     <Property Name="Slot_id" Type="Int32" />
-    <NavigationProperty Name="Doctor" Relationship="Model.FK__DoctorPay__Docto__2FCF1A8A" FromRole="DoctorPayOut" ToRole="Doctor" />
   </EntityType>
   <EntityType Name="DoctorReport">
     <Key>
@@ -338,7 +335,6 @@
     <Property Name="Image1" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <Property Name="UploadDate" Type="DateTime" Precision="3" />
     <NavigationProperty Name="Patient" Relationship="Model.FK__DoctorRep__Patie__31B762FC" FromRole="DoctorReport" ToRole="Patient" />
-    <NavigationProperty Name="Doctor" Relationship="Model.FK__DoctorRep__Docto__30C33EC3" FromRole="DoctorReport" ToRole="Doctor" />
   </EntityType>
   <EntityType Name="DoctorSkill">
     <Key>
@@ -703,7 +699,6 @@
     <NavigationProperty Name="Patient" Relationship="Model.FK__PatientAp__Patie__46B27FE2" FromRole="PatientAppointment" ToRole="Patient" />
     <Property Name="WorkingShift" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
     <Property Name="Slot_id" Type="Int32" />
-    <NavigationProperty Name="Doctor" Relationship="Model.FK__PatientAp__Docto__45BE5BA9" FromRole="PatientAppointment" ToRole="Doctor" />
     <Property Name="TotalFee" Type="Double" />
     <Property Name="BookingMode_Id" Type="Int32" />
     <Property Name="InvoiceNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -817,7 +812,6 @@
     <NavigationProperty Name="Vendors" Relationship="Model.FK_Vendor_State" FromRole="StateMaster" ToRole="Vendor" />
     <NavigationProperty Name="Nurses" Relationship="Model.FK__Nurse__StateMast__44CA3770" FromRole="StateMaster" ToRole="Nurse" />
     <NavigationProperty Name="HealthCheckupCenters" Relationship="Model.FK__HealthChe__State__19DFD96B" FromRole="StateMaster" ToRole="HealthCheckupCenter" />
-    <NavigationProperty Name="Doctors" Relationship="Model.FK__Doctor__StateMas__2DE6D218" FromRole="StateMaster" ToRole="Doctor" />
   </EntityType>
   <EntityType Name="TDSMaster">
     <Key>
@@ -1790,35 +1784,6 @@
       <End Role="DoctorChooseDepartment1" EntitySet="DoctorChooseDepartments" />
     </AssociationSet>
     <EntitySet Name="RWA_Complaints" EntityType="Model.RWA_Complaints" />
-    <EntitySet Name="Doctors" EntityType="Model.Doctor" />
-    <AssociationSet Name="FK__Doctor__AdminLog__2A164134" Association="Model.FK__Doctor__AdminLog__2A164134">
-      <End Role="AdminLogin" EntitySet="AdminLogins" />
-      <End Role="Doctor" EntitySet="Doctors" />
-    </AssociationSet>
-    <AssociationSet Name="FK__Cancelled__Docto__1F198FD4" Association="Model.FK__Cancelled__Docto__1F198FD4">
-      <End Role="Doctor" EntitySet="Doctors" />
-      <End Role="CancelledAppointment" EntitySet="CancelledAppointments" />
-    </AssociationSet>
-    <AssociationSet Name="FK__Doctor__StateMas__2DE6D218" Association="Model.FK__Doctor__StateMas__2DE6D218">
-      <End Role="StateMaster" EntitySet="StateMasters" />
-      <End Role="Doctor" EntitySet="Doctors" />
-    </AssociationSet>
-    <AssociationSet Name="FK__DoctorCom__Login__2EDAF651" Association="Model.FK__DoctorCom__Login__2EDAF651">
-      <End Role="Doctor" EntitySet="Doctors" />
-      <End Role="DoctorComplaint" EntitySet="DoctorComplaints" />
-    </AssociationSet>
-    <AssociationSet Name="FK__DoctorPay__Docto__2FCF1A8A" Association="Model.FK__DoctorPay__Docto__2FCF1A8A">
-      <End Role="Doctor" EntitySet="Doctors" />
-      <End Role="DoctorPayOut" EntitySet="DoctorPayOuts" />
-    </AssociationSet>
-    <AssociationSet Name="FK__DoctorRep__Docto__30C33EC3" Association="Model.FK__DoctorRep__Docto__30C33EC3">
-      <End Role="Doctor" EntitySet="Doctors" />
-      <End Role="DoctorReport" EntitySet="DoctorReports" />
-    </AssociationSet>
-    <AssociationSet Name="FK__PatientAp__Docto__45BE5BA9" Association="Model.FK__PatientAp__Docto__45BE5BA9">
-      <End Role="Doctor" EntitySet="Doctors" />
-      <End Role="PatientAppointment" EntitySet="PatientAppointments" />
-    </AssociationSet>
     <EntitySet Name="Labs" EntityType="Model.Lab" />
     <AssociationSet Name="FK__BookTestL__Lab_I__55009F39" Association="Model.FK__BookTestL__Lab_I__55009F39">
       <End Role="Lab" EntitySet="Labs" />
@@ -1913,6 +1878,14 @@
     <EntitySet Name="DriverPayOuts" EntityType="Model.DriverPayOut" />
     <EntitySet Name="DoctorTimeSlots" EntityType="Model.DoctorTimeSlot" />
     <EntitySet Name="ChemistMedicines" EntityType="Model.ChemistMedicine" />
+    <EntitySet Name="DayNames" EntityType="Model.DayName" />
+    <EntitySet Name="DurationTimes" EntityType="Model.DurationTime" />
+    <EntitySet Name="Doctors" EntityType="Model.Doctor" />
+    <AssociationSet Name="FK__Cancelled__Docto__1F198FD4" Association="Model.FK__Cancelled__Docto__1F198FD4">
+      <End Role="Doctor" EntitySet="Doctors" />
+      <End Role="CancelledAppointment" EntitySet="CancelledAppointments" />
+    </AssociationSet>
+    <EntitySet Name="TransactionFeeMasters" EntityType="Model.TransactionFeeMaster" />
   </EntityContainer>
   <ComplexType Name="sp_AppointmentHistory_Result">
     <Property Type="Int32" Name="AppointmentId" Nullable="false" />
@@ -2151,7 +2124,7 @@
     <Property Name="MobileNumber" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
     <Property Name="EmailId" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
     <Property Name="StateMaster_Id" Type="Int32" Nullable="false" />
-    <Property Name="CityMaster_Id" Type="Int32" Nullable="false" />
+    <Property Name="CityMaster_Id" Type="Int32" />
     <Property Name="Location" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
     <Property Name="DriverImage" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
     <Property Name="DlImage" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
@@ -2191,6 +2164,8 @@
     <Property Name="Lang" Type="Double" />
     <Property Name="Charge" Type="Int32" />
     <NavigationProperty Name="DriverLocations" Relationship="Model.FK__DriverLoc__Drive__6ADAD1BF" FromRole="Driver" ToRole="DriverLocation" />
+    <Property Name="IsBankUpdateApproved" Type="Boolean" />
+    <Property Name="Vehicle_Id" Type="Int32" />
   </EntityType>
   <EntityType Name="Hospital">
     <Key>
@@ -2254,6 +2229,7 @@
     <Property Name="CertificateNo" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
     <Property Name="About" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
     <Property Name="PAN" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="IsBankUpdateApproved" Type="Boolean" />
   </EntityType>
   <EntityType Name="Vendor">
     <Key>
@@ -2289,6 +2265,7 @@
     <NavigationProperty Name="Chemists" Relationship="Model.FK__Chemist__Vendor___58671BC9" FromRole="Vendor" ToRole="Chemist" />
     <Property Name="PinCode" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
     <Property Name="About" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="IsBankUpdateApproved" Type="Boolean" />
   </EntityType>
   <Association Name="FK__Hospital__AdminL__395884C4">
     <End Type="Model.AdminLogin" Role="AdminLogin" Multiplicity="1" />
@@ -3045,6 +3022,7 @@
     <Property Name="about" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
     <Property Name="ClinicName" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
     <Property Name="Location_id" Type="Int32" />
+    <Property Name="IsBankUpdateApproved" Type="Boolean" />
   </EntityType>
   <Association Name="FK__Nurse__AdminLogi__42E1EEFE">
     <End Type="Model.AdminLogin" Role="AdminLogin" Multiplicity="1" />
@@ -3426,153 +3404,6 @@
     <Property Name="IsResolved" Type="Boolean" />
     <Property Name="Others" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
   </EntityType>
-  <EntityType Name="Doctor">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
-    <Property Name="DoctorName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-    <Property Name="PhoneNumber" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-    <Property Name="MobileNumber" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
-    <Property Name="EmailId" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-    <Property Name="StateMaster_Id" Type="Int32" Nullable="false" />
-    <Property Name="CityMaster_Id" Type="Int32" Nullable="false" />
-    <Property Name="Location" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
-    <Property Name="LicenceImage" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
-    <Property Name="LicenceNumber" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-    <Property Name="ClinicName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-    <Property Name="Department_Id" Type="Int32" Nullable="false" />
-    <Property Name="Specialist_Id" Type="Int32" Nullable="false" />
-    <Property Name="Fee" Type="Double" Nullable="false" />
-    <Property Name="Password" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-    <Property Name="IsApproved" Type="Boolean" Nullable="false" />
-    <Property Name="AdminLogin_Id" Type="Int32" Nullable="false" />
-    <Property Name="PAN" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="AadharNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="AadharImage" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
-    <Property Name="Vendor_Id" Type="Int32" />
-    <Property Name="StartTime" Type="Time" Precision="7" />
-    <Property Name="EndTime" Type="Time" Precision="7" />
-    <Property Name="SlotTime" Type="Int32" />
-    <Property Name="JoiningDate" Type="DateTime" Precision="3" />
-    <Property Name="LicenseValidity" Type="DateTime" Precision="3" />
-    <Property Name="PinCode" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
-    <Property Name="AadharImage2" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
-    <Property Name="PanImage" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-    <Property Name="HospitalId" Type="Int32" />
-    <Property Name="DoctorId" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="IsCheckedTermsCondition" Type="Boolean" />
-    <Property Name="StartTime2" Type="Time" Precision="7" />
-    <Property Name="EndTime2" Type="Time" Precision="7" />
-    <Property Name="SlotTime2" Type="Int32" />
-    <Property Name="RefId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="Experience" Type="Int32" />
-    <Property Name="About" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-    <Property Name="Disease" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-    <NavigationProperty Name="AdminLogin" Relationship="Model.FK__Doctor__AdminLog__2A164134" FromRole="Doctor" ToRole="AdminLogin" />
-    <NavigationProperty Name="CancelledAppointments" Relationship="Model.FK__Cancelled__Docto__1F198FD4" FromRole="Doctor" ToRole="CancelledAppointment" />
-    <NavigationProperty Name="StateMaster" Relationship="Model.FK__Doctor__StateMas__2DE6D218" FromRole="Doctor" ToRole="StateMaster" />
-    <NavigationProperty Name="DoctorComplaints" Relationship="Model.FK__DoctorCom__Login__2EDAF651" FromRole="Doctor" ToRole="DoctorComplaint" />
-    <NavigationProperty Name="DoctorPayOuts" Relationship="Model.FK__DoctorPay__Docto__2FCF1A8A" FromRole="Doctor" ToRole="DoctorPayOut" />
-    <NavigationProperty Name="DoctorReports" Relationship="Model.FK__DoctorRep__Docto__30C33EC3" FromRole="Doctor" ToRole="DoctorReport" />
-    <NavigationProperty Name="PatientAppointments" Relationship="Model.FK__PatientAp__Docto__45BE5BA9" FromRole="Doctor" ToRole="PatientAppointment" />
-    <Property Name="Qualification" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-    <Property Name="RegistrationNumber" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-    <Property Name="SignaturePic" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-  </EntityType>
-  <Association Name="FK__Doctor__AdminLog__2A164134">
-    <End Type="Model.AdminLogin" Role="AdminLogin" Multiplicity="1" />
-    <End Type="Model.Doctor" Role="Doctor" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="AdminLogin">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="Doctor">
-        <PropertyRef Name="AdminLogin_Id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__Cancelled__Docto__1F198FD4">
-    <End Type="Model.Doctor" Role="Doctor" Multiplicity="0..1" />
-    <End Type="Model.CancelledAppointment" Role="CancelledAppointment" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Doctor">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="CancelledAppointment">
-        <PropertyRef Name="Doctor_Id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__Doctor__StateMas__2DE6D218">
-    <End Type="Model.StateMaster" Role="StateMaster" Multiplicity="1" />
-    <End Type="Model.Doctor" Role="Doctor" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="StateMaster">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="Doctor">
-        <PropertyRef Name="StateMaster_Id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__DoctorCom__Login__2EDAF651">
-    <End Type="Model.Doctor" Role="Doctor" Multiplicity="0..1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Type="Model.DoctorComplaint" Role="DoctorComplaint" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Doctor">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="DoctorComplaint">
-        <PropertyRef Name="Login_Id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__DoctorPay__Docto__2FCF1A8A">
-    <End Type="Model.Doctor" Role="Doctor" Multiplicity="1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Type="Model.DoctorPayOut" Role="DoctorPayOut" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Doctor">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="DoctorPayOut">
-        <PropertyRef Name="Doctor_Id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__DoctorRep__Docto__30C33EC3">
-    <End Type="Model.Doctor" Role="Doctor" Multiplicity="0..1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Type="Model.DoctorReport" Role="DoctorReport" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Doctor">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="DoctorReport">
-        <PropertyRef Name="Doctor_Id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__PatientAp__Docto__45BE5BA9">
-    <End Type="Model.Doctor" Role="Doctor" Multiplicity="0..1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Type="Model.PatientAppointment" Role="PatientAppointment" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Doctor">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="PatientAppointment">
-        <PropertyRef Name="Doctor_Id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <EntityType Name="Lab">
     <Key>
       <PropertyRef Name="Id" />
@@ -3617,6 +3448,7 @@
     <NavigationProperty Name="TestLabs" Relationship="Model.FK__TestLab__Lab_Id__5224328E" FromRole="Lab" ToRole="TestLab" />
     <Property Name="image" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
     <Property Name="LabTest_Id" Type="Int32" />
+    <Property Name="IsBankUpdateApproved" Type="Boolean" />
   </EntityType>
   <Association Name="FK__BookTestL__Lab_I__55009F39">
     <End Type="Model.Lab" Role="Lab" Multiplicity="0..1">
@@ -3733,6 +3565,7 @@
     <NavigationProperty Name="Vendor" Relationship="Model.FK__Chemist__Vendor___58671BC9" FromRole="Chemist" ToRole="Vendor" />
     <NavigationProperty Name="ChemistPayOuts" Relationship="Model.FK__ChemistPa__Chemi__2645B050" FromRole="Chemist" ToRole="ChemistPayOut" />
     <Property Name="About" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="IsBankUpdateApproved" Type="Boolean" />
   </EntityType>
   <Association Name="FK__Chemist__AdminLo__236943A5">
     <End Type="Model.AdminLogin" Role="AdminLogin" Multiplicity="1">
@@ -3941,6 +3774,7 @@
     <NavigationProperty Name="Driver" Relationship="Model.FK__DriverLoc__Drive__6ADAD1BF" FromRole="DriverLocation" ToRole="Driver" />
     <NavigationProperty Name="Patient" Relationship="Model.FK__DriverLoc__Patie__7C055DC1" FromRole="DriverLocation" ToRole="Patient" />
     <Property Name="RejectedStatus" Type="Boolean" />
+    <Property Name="PaymentStatus" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
   </EntityType>
   <Association Name="FK__DriverLoc__Drive__6ADAD1BF">
     <End Type="Model.Driver" Role="Driver" Multiplicity="0..1" />
@@ -4177,6 +4011,9 @@
     <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="StartTime" Type="Time" Precision="7" />
     <Property Name="EndTime" Type="Time" Precision="7" />
+    <Property Name="Doctor_Id" Type="Int32" />
+    <Property Name="IsActive" Type="Boolean" />
+    <Property Name="EntryDate" Type="DateTime" Precision="3" />
   </EntityType>
   <EntityType Name="ChemistMedicine">
     <Key>
@@ -4187,5 +4024,91 @@
     <Property Name="Medicine_Id" Type="Int32" />
     <Property Name="IsDeleted" Type="Boolean" />
     <Property Name="EntryDate" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="DayName">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="DurationTime">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Duration" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="Doctor">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+    <Property Name="DoctorName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="PhoneNumber" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+    <Property Name="MobileNumber" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="EmailId" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="StateMaster_Id" Type="Int32" Nullable="false" />
+    <Property Name="CityMaster_Id" Type="Int32" Nullable="false" />
+    <Property Name="Location" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="LicenceImage" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="LicenceNumber" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="ClinicName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Department_Id" Type="Int32" Nullable="false" />
+    <Property Name="Specialist_Id" Type="Int32" Nullable="false" />
+    <Property Name="Fee" Type="Double" Nullable="false" />
+    <Property Name="Password" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="IsApproved" Type="Boolean" Nullable="false" />
+    <Property Name="AdminLogin_Id" Type="Int32" Nullable="false" />
+    <Property Name="PAN" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="AadharNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="AadharImage" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+    <Property Name="Vendor_Id" Type="Int32" />
+    <Property Name="StartTime" Type="Time" Precision="7" />
+    <Property Name="EndTime" Type="Time" Precision="7" />
+    <Property Name="SlotTime" Type="Int32" />
+    <Property Name="JoiningDate" Type="DateTime" Precision="3" />
+    <Property Name="LicenseValidity" Type="DateTime" Precision="3" />
+    <Property Name="PinCode" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+    <Property Name="AadharImage2" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+    <Property Name="PanImage" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="HospitalId" Type="Int32" />
+    <Property Name="DoctorId" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="IsCheckedTermsCondition" Type="Boolean" />
+    <Property Name="StartTime2" Type="Time" Precision="7" />
+    <Property Name="EndTime2" Type="Time" Precision="7" />
+    <Property Name="SlotTime2" Type="Int32" />
+    <Property Name="RefId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Experience" Type="Int32" />
+    <Property Name="About" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Disease" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Qualification" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="RegistrationNumber" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="SignaturePic" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="VirtualFee" Type="Double" />
+    <Property Name="Day_Id" Type="Int32" />
+    <Property Name="IsBankUpdateApproved" Type="Boolean" />
+    <NavigationProperty Name="CancelledAppointments" Relationship="Model.FK__Cancelled__Docto__1F198FD4" FromRole="Doctor" ToRole="CancelledAppointment" />
+  </EntityType>
+  <Association Name="FK__Cancelled__Docto__1F198FD4">
+    <End Type="Model.Doctor" Role="Doctor" Multiplicity="0..1" />
+    <End Type="Model.CancelledAppointment" Role="CancelledAppointment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Doctor">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CancelledAppointment">
+        <PropertyRef Name="Doctor_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="TransactionFeeMaster">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Fee" Type="Double" />
+    <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
   </EntityType>
 </Schema>

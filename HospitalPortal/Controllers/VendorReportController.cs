@@ -102,39 +102,43 @@ namespace HospitalPortal.Controllers
         {
             var model = new ReportDetails();
             double payment = ent.Database.SqlQuery<double>(@"select Commission from CommissionMaster where IsDeleted=0 and Name='" + term + "'").FirstOrDefault();
-            var qry = @"select Sum(pa.TotalFee) as Counts, v.VendorName as Name, v.CompanyName as Name1 from Doctor d join Vendor v on d.Vendor_Id = v.Id join dbo.PatientAppointment pa on pa.Doctor_Id = d.Id  where pa.AppointmentDate  between DATEADD(day,-7,GETDATE()) and GetDate()  and pa.IsPaid=1 group by v.VendorName, v.CompanyName";
-            var data = ent.Database.SqlQuery<Vendorses>(qry).ToList();
-            if (date == null)
+           
+            if (date != null)
             {
-                if (data.Count() == 0)
-                {
-                    TempData["msg"] = "No Record of Current Date";
-                }
-                else
-                {
-                    model.Vendors = data;
-                    ViewBag.Payment = payment;
-                    //ViewBag.Total = model.LabList.Sum(a => a.Amount);
-                }
-            }
-            else { 
-                DateTime dateCriteria = date.Value.AddDays(-7);
-                string Tarikh = dateCriteria.ToString("dd/MM/yyyy");
-                var qry1 = @"select Sum(pa.Amount) as Counts, v.VendorName as Name, v.CompanyName as Name1 from Doctor d join Vendor v on d.Vendor_Id = v.Id join dbo.PatientAppointment pa on pa.Doctor_Id = d.Id  where pa.AppointmentDate between '" + dateCriteria + "' and '" + Tarikh + "'  and pa.IsPaid=1 group by v.VendorName, v.CompanyName";
-                var data1 = ent.Database.SqlQuery<Vendorses>(qry1).ToList();
-                if (data1.Count() == 0)
-                {
-                    TempData["msg"] = "Your Selected Date Doesn't Contain any Information.";
-                }
-                else
-                {
-                    ViewBag.Payment = payment;
-                    model.Vendors = data1;
-                    //ViewBag.Total = model.LabList.Sum(a => a.Amount);
-                    return View(model);
-                }
-            }
-            return View(model);
+				DateTime dateCriteria = date.Value.AddDays(-7);
+				string Tarikh = dateCriteria.ToString("dd/MM/yyyy");
+				var qry1 = @"select Sum(pa.TotalFee) as Counts, v.VendorName as Name, v.CompanyName as Name1 from Doctor d join Vendor v on d.Vendor_Id = v.Id join dbo.PatientAppointment pa on pa.Doctor_Id = d.Id  where pa.AppointmentDate between '" + dateCriteria + "' and '" + Tarikh + "'  and pa.IsPaid=1 group by v.VendorName, v.CompanyName";
+				var data1 = ent.Database.SqlQuery<Vendorses>(qry1).ToList();
+				if (data1.Count() == 0)
+				{
+					TempData["msg"] = "Your Selected Date Doesn't Contain any Information.";
+				}
+				else
+				{
+					ViewBag.Payment = payment;
+					model.Vendors = data1; 
+					
+				}
+				return View(model);
+			}
+            else {
+				var qry = @"select Sum(pa.TotalFee) as Counts, v.VendorName as Name, v.CompanyName as Name1 from Doctor d join Vendor v on d.Vendor_Id = v.Id join dbo.PatientAppointment pa on pa.Doctor_Id = d.Id  where pa.AppointmentDate  between DATEADD(day,-7,GETDATE()) and GetDate()  and pa.IsPaid=1 group by v.VendorName, v.CompanyName";
+				var data = ent.Database.SqlQuery<Vendorses>(qry).ToList();
+				
+
+				if (data.Count() == 0)
+				{
+					TempData["msg"] = "No Record of Current Date";
+				}
+				else
+				{
+					model.Vendors = data;
+					ViewBag.Payment = payment;
+					//ViewBag.Total = model.LabList.Sum(a => a.Amount);
+				}
+				return View(model);
+			}
+			
         }
 
         public ActionResult MonthlyDoc(string term, DateTime? sdate, DateTime? edate)

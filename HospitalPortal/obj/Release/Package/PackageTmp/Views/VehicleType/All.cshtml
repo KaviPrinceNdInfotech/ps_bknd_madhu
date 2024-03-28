@@ -30,7 +30,7 @@
         {
             <div class="row" style="margin-bottom:2%;">
                 <div class="col-md-6">
-                    Select Vehicle Category:  @Html.DropDownListFor(a => a.CategoryId, Model.CategoryList, "Select", new { @class = "form-control" })
+                    Select Vehicle Category:  @Html.DropDownListFor(a => a.CategoryId, Model.CategoryList, "--Select Category--", new { @class = "form-control" })
                 </div>
                 <div class="col-md-3">
                     <input type="submit" class="btn btn-primary" value="Search" style="margin-top: 8.5%;" />

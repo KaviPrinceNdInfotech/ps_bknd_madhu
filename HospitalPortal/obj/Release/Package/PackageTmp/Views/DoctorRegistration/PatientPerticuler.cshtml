@@ -588,24 +588,25 @@
         </div>
     </div>
     <div class=" row" style=" text-align: center; margin-top:10px;">
+         <a href="/DoctorRegistration/Prescription" class="btn btn-info">Preview Prescription</a> 
+            @*<input type="button" value="Preview Prescription" class="btn btn-info" />*@
+         
         <input type="submit" value="Submit" class="btn btn-info" />
 
     </div>
-    <div class=" col-md-4" style="background-color: cyan; border: solid; " id="smsEmailSection">
+    <div class=" col-md-4" style="background-color: cyan; border: solid; display:none; " id="smsEmailSection">
         <form class="row">
             <div class="col-md-12">
                 <div class="form-group row" style="margin-top :5px;">
                     <table style="width:100%;">
                         <tr>
-                            <th style="text-align:center ;">SMS/Email</th>
-                            @*<th>Last Sent Date</th>*@
+                            <th style="text-align:center ;">SMS/Email</th> 
                         </tr>
                         <tr>
                             @*<td><input type="button" value="Send E-Mail" class="btn btn-warning" style="width :260px;" /></td>*@
                             <td>
                                 <a id="sendemail" class="btn btn-warning" style="width :260px;">Send E-Mail</a>
-                            </td>
-                            @*<td></td>*@
+                            </td> 
                         </tr>
                         <tr>
                             <td><input type="button" value="Send SMS:Prescription Link" class="btn btn-warning  " style="width :260px;" /></td>

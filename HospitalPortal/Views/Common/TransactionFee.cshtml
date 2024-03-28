@@ -1,0 +1,114 @@
+﻿@model HospitalPortal.Models.ViewModels.TransactionFeeDTO
+
+@{
+    ViewBag.Title = "TransactionFee";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Add Transaction Fee</h2>
+
+<div style="margin:auto; width:90%">
+    @using (Html.BeginForm("TransactionFee", "Common", FormMethod.Post))
+    {
+        <div class="row" style="margin-bottom:3%">
+            <div class="col-md-3">
+                <select name="Name" id="Name" class="form-control" required>
+                    <option value="">
+                        Select Any
+                    </option>
+                    <option value="Doctor">
+                        Doctor
+                    </option>
+                    <option value="Ambulance">
+                        Ambulance
+                    </option>
+                    <option value="Driver">
+                        Driver
+                    </option>
+                    <option value="Vehicle">
+                        Vehicle
+                    </option>
+                    <option value="Health">
+                        Health CheckUp
+                    </option>
+                    <option value="Lab">
+                        Lab
+                    </option>
+                    <option value="Chemist">
+                        Chemist
+                    </option>
+                    <option value="Nurse">
+                        Nurse
+                    </option>
+                    <option value="Hospital">
+                        Hospital
+                    </option>
+                    <option value="Medicine">
+                        Medicine
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <input type="text" name="Fee" id="Fee" placeholder="Enter the Transaction in %" class="form-control" required />
+            </div>
+            <div class="col-md-3">
+                <input type="submit" value="Submit" class="btn btn-primary" />
+            </div>
+        </div>
+        if (TempData["msg"] != null)
+        {
+            string msg = TempData["msg"].ToString();
+            <div class="row">
+                <div class="col-md-12">
+                    @if (msg == "ok")
+                    {
+                        <div class="alert alert-success">
+                            Saved Successfully.
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-danger">
+                            @msg
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+
+    }
+
+    @if (Model.TransactionList.Count() <= 0)
+    {
+        <h2>No Records</h2>
+    }
+    else
+    {
+        <table class="table table-bordered">
+            <tr>
+
+                <th>
+                    Amount (in %)
+                </th>
+                <th>
+                    Action
+                </th>
+            </tr>
+            <tbody>
+                @foreach (var item in Model.TransactionList)
+                {
+                    <tr>
+                        <td>@item.Name</td>
+                        <td>@item.Fee %</td>
+                        <td>
+                            @*<a href="/Common/UpdatePayment?Id=@item.Id" class="btn btn-danger">Delete</a>*@
+                            @Html.ActionLink("Delete", "DeleteTransactionFee", new { id = item.Id },
+    new { onclick = "return confirm('Are sure wants to delete?');", @class = "btn btn-danger" })
+                            <a href="/Common/EditTransactionFee?Id=@item.Id" class="btn btn-info" onclick="return confirm('Are You Sure to Edit?')">Edit</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

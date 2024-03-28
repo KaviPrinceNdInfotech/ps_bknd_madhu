@@ -5,7 +5,7 @@
     ViewBag.Title = "Doctor";
     Layout = null;
 
-
+}
 @using (Html.BeginForm("DoctorTDS", "Vendor", FormMethod.Post))
 {
     <div class="row" style="margin-bottom:2%;">
@@ -53,7 +53,7 @@ else
                     <td>@item.CompanyName</td>
                     <td>@item.Counts</td>
                     @{
-                        double amt = item.Counts * ViewBag.tds;
+                        double amt = item.Counts * @ViewBag.tds;
                     }
                     <td>
                         @amt

@@ -34,6 +34,7 @@ namespace HospitalPortal.Models.DomainModels
         public Nullable<int> ToatlDistance { get; set; }
         public Nullable<System.DateTime> PaymentDate { get; set; }
         public Nullable<bool> RejectedStatus { get; set; }
+        public string PaymentStatus { get; set; }
     
         public virtual Driver Driver { get; set; }
         public virtual Patient Patient { get; set; }

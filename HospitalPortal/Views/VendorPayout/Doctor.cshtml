@@ -3,55 +3,47 @@
     ViewBag.Title = "VendorReport";
     Layout = null;
 }
-
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<link rel="stylesheet" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
 <h2>Franchise's Doctor Payout</h2>
 @if (Model.Vendorses != null)
 {
-    <table class="table table-bordered">
-        <thead>
+    <table id="myTable" class="table table-bordered">
+        <thead style="background-color: lavender;">
             <tr>
+
+                <th>
+                    Franchise Name & Id
+                </th>
                 <th>
                     User Id
                 </th>
                 <th>
-                    Vendor Name
-                </th>
-                <th>
                     Company's Name
                 </th>
-                @*<th>
-            Total Amount
-        </th>
-        <th>Total Commission</th>
-        <th>
-            Payable Amount
-        </th>
-        <th>Franchise Commission</th>
-        <th>
-            Action
-        </th>*@
                 <th>
                     Basic Amount
                 </th>
                 <th>
-                    Transaction Fee
+                    Transaction Fee 2%
                 </th>
                 <th>
                     GST in %
                 </th>
-                <th>
+                <th style="display:none;">
                     Total Amount
                 </th>
-
-                @*<th>Deducted Amout</th>*@
                 <th>
-                    Commission in %
+                    @ViewBag.VendorCommission % Commission paid to PS Wellness
                 </th>
                 <th>
-                    TDS in %
+                    TDS
                 </th>
                 <th>
-                    Payable Amount
+                    Amount paid to concerned service provider
+                </th>
+                <th>
+                    3% Commission to franchise payable
                 </th>
                 <th>
                     Action
@@ -62,31 +54,10 @@
             @foreach (var item in Model.Vendorses)
             {
                 <tr>
-                    <td>@item.UniqueId</td>
-                    <td>@item.VendorName</td>
+
+                    <td>@item.VendorName @item.UniqueId</td>
+                    <td>@item.DoctorId</td>
                     <td>@item.CompanyName</td>
-                    @*<td>@item.Amount</td>
-        @{
-            //Calculate The Amount for Doctor Commission
-            double amt = (Math.Round(item.Amount * ViewBag.Commission) / 100);
-            //Total Amount for Doctor
-            double Value = (double)item.Amount - amt;
-            //Vendor Declare Amount for Doctor
-            //double Percent = (Math.Round(Value * ViewBag.paymentPercent) / 100);
-            //Commission Amount of Vendor
-            double vendorCut = (Math.Round(Value * ViewBag.VendorCommission) / 100);
-            //double asd = Math.Round(vendorCut, 0, MidpointRounding.AwayFromZero);
-            double asd = (Math.Round(Value * ViewBag.VendorCommission) / 100);
-        }
-        <td>
-            @amt
-        </td>
-        <td>
-            @Value
-        </td>
-        <td>
-            @asd
-        </td>*@
                     <td>
                         @item.Amount
                     </td>
@@ -105,39 +76,40 @@
                         //decimal? WithGSTAmt = (decimal)item.Amount + GSTAmt;
                         decimal? WithGSTAmt = (decimal)item.Amount + razarfeeamt - (GSTAmt);
 
+                        decimal? CommiAmt = ((decimal)item.Amount * ViewBag.VendorCommission) / 100;
+                        decimal? tdsAmt = ((decimal)item.Amount * ViewBag.tds) / 100;
+
                     }
-                    <td>@WithGSTAmt</td>
-                    <td>@ViewBag.VendorCommission</td>
-                    <td>@ViewBag.tds</td>
+                    <td style="display:none;">@WithGSTAmt</td> 
+                    <td>@CommiAmt</td>
+                    <td>@tdsAmt</td> 
                     @{
 
                         decimal? commAmt = ((decimal)item.Amount * ViewBag.vendorCommission) / 100;
                         decimal? tdsamt = ((decimal)item.Amount * ViewBag.tds) / 100;
-                        decimal? Value = (decimal)item.Amount - (commAmt + tdsamt);
+                        decimal? Value = (decimal)item.Amount - (commAmt + tdsamt + razarfeeamt);
 
                     }
 
                     <td>@Value</td>
+                    <td>@item.FraPaidableamt</td>
                     <td>
                         <a href="/VendorPayout/Pay?Vendor_Id=@item.Id&Amount=@Value" class="btn btn-primary">Generate</a>
 
                         <a href="/VendorPayout/VendorPayoutHistory?Id=@item.Id" class="btn btn-primary">View Payout History</a>
                     </td>
                 </tr>
-                        }
+            }
         </tbody>
     </table>
-                        }
-                        else
-                        {
-                            <span style="text-align:center">No Record Present</span>
-                        }
-<script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
-@*<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>*@
-<script src="https://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
-<link rel="stylesheet" href="https://cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css">
+}
+else
+{
+    <span style="text-align:center">No Record Present</span>
+}
 
-<script type="text/javascript">
-    $('#table_id').DataTable();
+<script src="/js/jquery-1.11.1.min.js"></script>
+<script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script>
+    $('#myTable').DataTable();
 </script>
-

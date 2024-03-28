@@ -59,6 +59,7 @@ namespace HospitalPortal.Models.DomainModels
         public string PinCode { get; set; }
         public string image { get; set; }
         public Nullable<int> LabTest_Id { get; set; }
+        public Nullable<bool> IsBankUpdateApproved { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<BookTestLab> BookTestLabs { get; set; }

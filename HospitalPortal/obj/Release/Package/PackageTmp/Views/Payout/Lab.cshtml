@@ -35,50 +35,51 @@
     </fieldset>
 </div>
 }
-@if (Model.LabHistory == null)
-{
-        <h2 style="color:blueviolet">
+
+<table id="myTable" class="table table-responsive">
+    <thead style="background-color:lavender;">
+        <tr>
+            <th>
+                User Id
+            </th>
+            <th>
+                Lab Name
+            </th>
+            <th>
+                Basic Amount
+            </th>
+            <th>
+                Transaction Fee
+            </th>
+            <th>
+                GST in %
+            </th>
+            <th>
+                Total Amount
+            </th>
+            @*<th>Deducted Amout</th>*@
+            <th>
+                Commission in %
+            </th>
+            <th>
+                TDS in %
+            </th>
+            <th>
+                Payable Amount
+            </th>
+            <th>
+                Action
+            </th>
+        </tr>
+    </thead>
+    @if (Model.LabHistory == null)
+    {
+        <div class="alert alert-danger">
             @TempData["msg"]
-        </h2>
-}
-else
-{
-    <table id="tables" class="table table-responsive">
-        <thead>
-            <tr>
-                <th>
-                    User Id
-                </th>
-                <th>
-                    Lab Name
-                </th>
-                <th>
-                    Basic Amount
-                </th>
-                <th>
-                    Transaction Fee
-                </th>
-                <th>
-                    GST in %
-                </th>
-                <th>
-                    Total Amount
-                </th>
-                @*<th>Deducted Amout</th>*@
-                <th>
-                    Commission in %
-                </th>
-                <th>
-                    TDS in %
-                </th>
-                <th>
-                    Payable Amount
-                </th>
-                <th>
-                    Action
-                </th>
-            </tr>
-        </thead>
+        </div>
+    }
+    else
+    {
         <tbody>
             @foreach (var item in Model.LabHistory)
             {
@@ -98,7 +99,7 @@ else
                         double? razarfeeamt = razorpaycomm - basicamt;
 
                     }
-                    <td>@razarfeeamt</td>
+                    <td>@String.Format("{0:F2}", razarfeeamt) </td>
                     <td>
                         @ViewBag.gstAmount
                     </td>
@@ -115,10 +116,7 @@ else
                     <td>@ViewBag.Amount</td>
                     <td>@ViewBag.tdsAmount</td>
                     @{
-
-                        //double? commAmt = (item.Amount * ViewBag.Amount) / 100;
-                        //double? tdsamt = (item.Amount * ViewBag.tdsAmount) / 100;
-                        //double? Value = item.Amount - (commAmt + tdsamt);
+                         
                         double? commAmt = (item.Amount * ViewBag.Amount) / 100;
                         double? tdsamt = (item.Amount * ViewBag.tdsAmount) / 100;
                         double? Value = item.Amount - (commAmt + tdsamt);
@@ -135,8 +133,9 @@ else
                 </tr>
             }
         </tbody>
+                        }
     </table>
-}
+
 
 <script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
 <link href="~/css/jquery-ui.css" rel="stylesheet" />

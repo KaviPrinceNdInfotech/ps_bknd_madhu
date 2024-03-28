@@ -8,6 +8,7 @@
     {
         Layout = null;
     }
+    
 }
 
 <link href="~/css/component.css" rel="stylesheet" />
@@ -97,10 +98,13 @@
 }
 @if (User.IsInRole("Franchise"))
 {
+    int loginId = Convert.ToInt32(User.Identity.Name);
+    int vendorId = new HospitalPortal.Models.DomainModels.DbEntities().Vendors.FirstOrDefault(a => a.AdminLogin_Id == loginId).Id;
+
     <div class="agile_top_w3_grids">
         <ul class="ca-menu">
             <li>
-                <a href="/Gallery/Gallery">
+                <a href="/Gallery/Gallery?id=@vendorId">
                     <i class="fa fa-image" aria-hidden="true"></i>
                     <div class="ca-content">
                         <h4 class="ca-main six1">Gallery</h4>
@@ -109,7 +113,7 @@
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a href="/Vehicle/UpdateVehicle">
                     <i class="fa fa-ambulance" aria-hidden="true"></i>
                     <div class="ca-content">
                         <h4 class="ca-main one">Allot Vehicle</h4>
@@ -189,8 +193,6 @@
                     </div>
                 </a>
             </li>
-
-
         </ul>
     </div>
 }
@@ -226,9 +228,6 @@
                     </div>
                 </a>
             </li>
-            
-
-
         </ul>
     </div>
 }

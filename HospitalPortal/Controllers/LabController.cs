@@ -8,6 +8,7 @@ using log4net;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Validation;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -150,9 +151,9 @@ namespace HospitalPortal.Controllers
                     domainModel.PinCode = model.PinCode;
                     domainModel.JoiningDate = DateTime.Now;
                     domainModel.PAN = model.PAN;
-                    //domainModel.Location = model.Location;
-                    // domainModel.ChooseDate = model.ChooseDate;
+                    domainModel.Location_Id = (int)model.Location_Id;                   
                     domainModel.AdminLogin_Id = admin.Id;
+                    domainModel.IsBankUpdateApproved = false;
                     domainModel.lABId = bk.GenerateLabId();
 
                     admin.UserID = domainModel.lABId;
@@ -211,67 +212,75 @@ namespace HospitalPortal.Controllers
             return View(model);
         }
 
-        //[HttpPost]
-        //public ActionResult Edit(LabDTO model)
-        //{
-        //    using (var tran = ent.Database.BeginTransaction())
-        //    {
-        //        try
-        //        {
-        //            ModelState.Remove("EmailId");
-        //            ModelState.Remove("MobileNumber");
-        //            ModelState.Remove("Password");
-        //            ModelState.Remove("ConfirmPassword");
-        //            if (!string.IsNullOrEmpty(model.LicenceImage))
-        //                ModelState.Remove("LicenceImageFile");
-        //            ModelState.Remove("IsCheckedTermsCondition");
-        //            model.States = new SelectList(repos.GetAllStates(), "Id", "StateName", model.StateMaster_Id);
-        //            model.Cities = new SelectList(repos.GetCitiesByState(model.StateMaster_Id), "Id", "CityName", model.CityMaster_Id);
-        //            model.Locations = new SelectList(repos.GetLocationByCity(model.CityMaster_Id), "Id", "LocationName", model.Location_Id);
-        //            if (!ModelState.IsValid)
-        //                return View(model);
+        [HttpPost]
+        public ActionResult Edit(LabDTO model)
+        { 
+                try
+                {
+                    var existinglab = ent.Labs.Find(model.Id); // Assuming 'Id' is the primary key
+                    if (existinglab == null)
+                    {
+                        TempData["msg"] = "Lab not found";
+                        return RedirectToAction("Edit", new { id = model.Id });
+                    }
+                    //licence Picture Section
+                    if (model.LicenceImageFile != null)
+                    {
 
-        //            licence Picture Section
-        //            if (model.LicenceImageFile != null)
-        //            {
+                        var limg = FileOperation.UploadImage(model.LicenceImageFile, "Images");
+                        if (limg == "not allowed")
+                        {
+                            TempData["msg"] = "Only png,jpg,jpeg files are allowed.";
+                            
+                            return View(model);
+                        }
+                        model.LicenceImage = limg;
+                    }
+                    // Pan doc upload
+                    if (model.PanImageFile != null)
+                    {
+                        var PanImg = FileOperation.UploadImage(model.PanImageFile, "Images");
+                        if (PanImg == "not allowed")
+                        {
+                            TempData["msg"] = "Only png,jpg,jpeg files are allowed as Aadhar card document";
+                            
+                            return View(model);
+                        }
+                        model.PanImage = PanImg;
+                    }
+                   // var domainModel = Mapper.Map<Lab>(model);
+                    existinglab.LabName = model.LabName;
+                    existinglab.MobileNumber = model.MobileNumber;
+                    existinglab.PhoneNumber = model.PhoneNumber;
+                    existinglab.GSTNumber = model.GSTNumber;
+                    existinglab.PhoneNumber = model.PhoneNumber;
+                    existinglab.EmailId = model.EmailId;
+                    existinglab.StateMaster_Id = model.StateMaster_Id;
+                    existinglab.CityMaster_Id = model.CityMaster_Id;
+                    existinglab.Location = model.Location;
+                    existinglab.Location_Id = (int)model.Location_Id;
+                    existinglab.PinCode = model.PinCode;
+                    existinglab.AadharNumber = model.AadharNumber;
+                    existinglab.PanImage = model.PanImage;
+                    existinglab.LicenceImage = model.LicenceImage;
+                    existinglab.LicenceNumber = model.LicenceNumber; 
+                    existinglab.PAN = model.PAN; 
+                    existinglab.StartTime = model.StartTime;
+                    existinglab.EndTime = model.EndTime; 
+                    ent.SaveChanges();
+                    TempData["msg"] = "ok";
+                     
+                }
+                catch (Exception ex)
+                {
+                    log.Error(ex.Message);
+                    TempData["msg"] = "Server Error";
+                     
+                }
+            
 
-        //                var img = FileOperation.UploadImage(model.LicenceImage, "Images");
-        //                if (img == "not allowed")
-        //                {
-        //                    TempData["msg"] = "Only png,jpg,jpeg files are allowed.";
-        //                    tran.Rollback();
-        //                    return View(model);
-        //                }
-        //                model.LicenceImage = img;
-        //            }
-        //            // aadhar doc upload
-        //            if (model.PanImage != null)
-        //            {
-        //                var PanImg = FileOperation.UploadImage(model.PanImage, "Images");
-        //                if (PanImg == "not allowed")
-        //                {
-        //                    TempData["msg"] = "Only png,jpg,jpeg files are allowed as Aadhar card document";
-        //                    tran.Rollback();
-        //                    return View(model);
-        //                }
-        //                model.PanImage = PanImg;
-        //            }
-        //            var domainModel = Mapper.Map<Lab>(model);
-        //            ent.Entry(domainModel).State = System.Data.Entity.EntityState.Modified;
-        //            ent.SaveChanges();
-        //            TempData["msg"] = "ok";
-        //            tran.Commit();
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            log.Error(ex.Message);
-        //            TempData["msg"] = "Server Error";
-        //            tran.Rollback();
-        //        }
-        //    }
-
-        //    return RedirectToAction("Edit", new { id = model.Id });
-        //}
+            return RedirectToAction("Edit", new { id = model.Id });
+        }
 
         public ActionResult All(int? vendorId, string term = null)
         {
@@ -301,7 +310,35 @@ where v.IsDeleted=0  order by v.Id desc";
             Message.SendSms(mobile, msg);
             return RedirectToAction("All");
         }
+        public ActionResult UpdateBankUpdateStatus(int id)
+        {
+            string q = @"update Lab set IsBankUpdateApproved = case when IsBankUpdateApproved=1 then 0 else 1 end where id=" + id;
+            ent.Database.ExecuteSqlCommand(q);
 
+            string mobile = ent.Database.SqlQuery<string>("select MobileNumber from Lab where Id=" + id).FirstOrDefault();
+            string Email = ent.Database.SqlQuery<string>(@"select EmailId from Lab where Id=" + id).FirstOrDefault();
+            string Name = ent.Database.SqlQuery<string>(@"select LabName from Lab where Id=" + id).FirstOrDefault();
+            //var msg = "Dear " + Name + ", Now you Can Upadate your bank details.";
+            //Message.SendSms(mobile, msg);
+            var query = "SELECT IsBankUpdateApproved FROM Lab WHERE Id = @Id";
+            var parameters = new SqlParameter("@Id", id);
+            bool isApproved = ent.Database.SqlQuery<bool>(query, parameters).FirstOrDefault();
+
+            var mailmsg = "Dear " + Name + ", Now you Can Update your bank details.";
+
+            if (isApproved == true)
+            {
+                EmailEF ef = new EmailEF()
+                {
+                    EmailAddress = Email,
+                    Message = mailmsg,
+                    Subject = "PS Wellness Approval Status."
+                };
+                EmailOperations.SendEmainew(ef);
+
+            }
+            return RedirectToAction("All");
+        }
         public ActionResult Delete(int id)
         {
             var data = ent.Labs.Find(id);

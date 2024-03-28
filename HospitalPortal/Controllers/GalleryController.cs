@@ -13,25 +13,40 @@ namespace HospitalPortal.Controllers
     public class GalleryController : Controller
     {
         DbEntities ent = new DbEntities();
+
+        private int GetVendorId()
+        {
+            int loginId = Convert.ToInt32(User.Identity.Name);
+            int FranchiseId = ent.Database.SqlQuery<int>("select Id from Vendor where AdminLogin_Id=" + loginId).FirstOrDefault();
+            return FranchiseId;
+        }
+
         [HttpGet]
-        public ActionResult Gallery()
+        public ActionResult Gallery(int? id)
         {
             var model = new GallertDTO();
-            string q = @"select * from Gallery where IsDeleted=0 order by Id desc";
-            var data = ent.Database.SqlQuery<GalleryList>(q).ToList();
-            if(data.Count() == 0)
+            if(id==null || id==0)
             {
-                TempData["msg"] = "No Records";
+                string q = @"select * from Gallery where IsDeleted=0  order by Id desc";
+                var data = ent.Database.SqlQuery<GalleryList>(q).ToList();
+                model.GalleryList = data;
                 return View(model);
             }
-            model.GalleryList = data;
-            return View(model);
+            else
+            {
+                string q = @"select * from Gallery where IsDeleted=0 and Franchise_Id=" + id + " order by Id desc";
+                var data = ent.Database.SqlQuery<GalleryList>(q).ToList();
+                model.GalleryList = data;
+                return View(model);
+            } 
+            
         }
 
         [HttpPost]
         public ActionResult Gallery(GallertDTO model)
         {
-            var Img = FileOperation.UploadImage(model.Image, "Gallery");
+            //var Img = FileOperation.UploadImage(model.Image, "Gallery");
+            var Img = FileOperation.UploadImage(model.Image, "Images");
             if (Img == "not allowed")
             {
                 TempData["msg"] = "Only png,jpg,jpeg files are allowed.";
@@ -40,12 +55,13 @@ namespace HospitalPortal.Controllers
             model.Images = Img;
             var domain = new Gallery();
             domain.ImageName = model.ImageName;
+            domain.Franchise_Id = GetVendorId();
             domain.Images = model.Images;
             domain.IsDeleted = false;
             ent.Galleries.Add(domain);
             ent.SaveChanges();
             TempData["msg"] = "Successfully Inserted";
-            return RedirectToAction("Gallery");
+            return RedirectToAction("Gallery", new {id= GetVendorId() });
         }
 
         public ActionResult Delete(int id)
@@ -61,7 +77,16 @@ namespace HospitalPortal.Controllers
                 string msg = ex.ToString();
                 TempData["msg"] = "Server Error!";
             }
-            return RedirectToAction("Gallery");
+            
+            if (GetVendorId()!=null)
+            {
+                return RedirectToAction("Gallery", new { id = GetVendorId() });
+            }
+            else
+            {
+                return RedirectToAction("Gallery");
+            }
+            
         }
     }
 }

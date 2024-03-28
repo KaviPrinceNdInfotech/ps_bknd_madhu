@@ -60,16 +60,18 @@ namespace HospitalPortal.Utilities
         }
 
         public static int SendSmsUserIdPass(string mobileNumber)
-        {
-            string var = "12345";
-           string dltid = "1407169054660166033";
-              mobileNumber = "6398161629";
-            string m = $"Dear  {var}, Thank You for Joining PS Wellness \r\nNow you Can Login With Your Registered User Id: {var} and Password: {var}";
+        {  
+           string dltid = "1207171048570054443";
+              mobileNumber = "";
+            string dear = "madhu";
+            string userid = "33";
+            string password = "3434";
+            string m = $"Dear {dear}, Thank You for Joining PS Wellness Now you Can Login With Your Registered User Id: {userid} and Password: {password}";
 
             string authKey = "153995AnO2vKHdOPk59294dd7";
             //Multiple mobiles numbers separated by comma
             //Sender ID,While using route4 sender id should be 6 characters long.
-            string senderId = "CHEIND";
+            string senderId = "PSWLEN";
             //Your message to send, Add URL encoding here.
             string message = HttpUtility.UrlEncode(m);
 
@@ -112,9 +114,7 @@ namespace HospitalPortal.Utilities
             catch
             {
                 return 0;
-            }
-
-            return 1;
+            } 
         }
     }
 }

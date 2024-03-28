@@ -1292,6 +1292,7 @@ v.VehicleNumber, tm.StatusKey, tm.Lat_Driver, tm.Lang_Driver, pr.VehicelType_Id 
             public string DriverImage { get; set; }
             public string DlNumber { get; set; }
             public Nullable<int> TotalPrice { get; set; }
+            public Nullable<int> PayableAmount { get; set; }
             public string VehicleNumber { get; set; }
             public string VehicleTypeName { get; set; }
             public Nullable<int> ToatlDistance { get; set; }
@@ -1329,6 +1330,12 @@ v.VehicleNumber, tm.StatusKey, tm.Lat_Driver, tm.Lang_Driver, pr.VehicelType_Id 
             public double ExpectedTime { get; set; }
             public Nullable<System.DateTime> PaymentDate { get; set; }
 
+        }
+
+        public class Days
+        {
+            public int Id { get; set; }
+            public string Name { get; set; }
         }
     }
 }

@@ -2,6 +2,7 @@
 @{
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
     string role = HospitalPortal.Utility.UserIdentity.UserRole;
+    int count = 1;
 }
 
 
@@ -47,7 +48,7 @@
         }
         else
         {
-        <div class="row " style="overflow-y:scroll;" >
+        <div class="row" >
                 <div class="col-md-12 ">
                     <div class="row" style="text-align:center">
                         <ul class="pagination">
@@ -66,24 +67,24 @@
                         </ul>
                     </div>
                     <div class="double-scroll">
-                        <table class="table table-bordered ">
-                            <thead>
+                        <table id="myTable" class="table table-bordered ">
+                            <thead style="background-color:lavender;">
                                 <tr id="myHeader" class="header">
+                                    <th>Sr. No</th>
                                     <th>Doctor Id</th>
                                     <th>Name</th>
-                                    <th>Fee</th>
+                                    <th>Fee / Virtual Fee</th>
                                     <th>Franchise</th>
                                     <th>Department</th>
                                     <th>Specialist In</th>
                                     <th>Mobile & Phone No</th>
                                     <th>Email </th>
                                     <th>Address</th>
-                                    <th>Licence</th>
-                                    @*<th>PAN No.</th>
-                                    <th>Aadhar No.</th>*@
+                                    <th>Licence</th> 
                                     @if (role == "admin")
                                 {
                                         <th>Approval</th>
+                                        <th>Approval for Bank Update</th>
                                         <th>Action</th>
                                 }
                                 </tr>
@@ -92,21 +93,23 @@
                                 @foreach (var item in Model)
                             {
                                     <tr>
+                                        <td>@count</td>
                                         <td>@item.DoctorId</td>
                                         <td>Dr. @item.DoctorName</td>
-                                        <td>Rs. @item.Fee </td>
+                                        <td>Rs. @item.Fee / Rs.@item.VirtualFee </td>
                                         <td>
-                                            @if (item.Vendor_Id < 0 || item.Vendor_Id == null)
-                                        {
-                                            if (role == "admin")
+                                            @if (item.Vendor_Id == 0 || item.Vendor_Id == null)
                                             {
+                                                if (role == "admin")
+                                                {
                                                     <a href="/Admin/ShareToVendor?Id=@item.Id&Role=Doctor">Share To Vendor</a>
+                                                }
                                             }
-                                        }
-                                        else
-                                        {
+                                            else
+                                            {
+                                                <a href="/Admin/ShareToVendor?Id=@item.Id&Role=Doctor">Change Franchise</a>
                                                 @item.VendorName <span>/ @item.UniqueId</span>
-                                        }
+                                            }
                                         </td>
                                         <td>@item.DepartmentName</td>
                                         <td>@item.SpecialistName</td>
@@ -122,48 +125,39 @@
                                                 <img src="/Images/@item.LicenceImage" style="width:100px;height:80px" />
                                             </a>
                                         </td>
-                                        @*<td>
-                                            @item.PAN<br />
-                                        @if (string.IsNullOrEmpty(item.AadharImage) && string.IsNullOrEmpty(item.AadharImage2))
-                                        {
-                                            <a href="/Images/@item.PanImage">
-                                                <img src="/Images/@item.PanImage" class="thumb" />
-                                            </a>
-                                        }
-                                    </td>*@
-                                    @*<td>
-                                        @item.AadharNumber
-                                        @if (string.IsNullOrEmpty(item.PanImage))
-                                        {
-                                            <a href="/Images/@item.AadharImage">
-                                                <img src="/Images/@item.AadharImage" class="thumb" />
-                                            </a>
-                                            <a href="/Images/@item.AadharImage2">
-                                                <img src="/Images/@item.AadharImage2" class="thumb" />
-                                            </a>
-                                        }
-                                    </td>*@
 
-                                    @if (role == "admin")
-                                    {
-                                        <td>
-                                            @if (item.IsApproved)
-                                            {
-                                                @Html.ActionLink("Approved", "UpdateStatus", new { id = item.Id }, new { @class = "btn btn-success" })
-                                            }
-                                            else
-                                            {
-                                                @Html.ActionLink("Not Approved", "UpdateStatus", new { id = item.Id }, new { @class = "btn btn-danger" })
-                                            }
-                                        </td>
-                                        <td>
-                                            @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { onclick = "return confirm('Are sure wants to Edit?');", @class = "btn btn-info" })
-                                            <a href="/Common/BankDetails?Id=@item.AdminLogin_Id" class="btn btn-primary">Bank Details</a>
-                                            @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { onclick = "return confirm('Are sure wants to delete?');", @class = "btn btn-danger" })
-                                        </td>
-                                    }
-                                </tr>
-                            }
+
+                                        @if (role == "admin")
+                                        {
+                                            <td>
+                                                @if (item.IsApproved)
+                                                {
+                                                    @Html.ActionLink("Approved", "UpdateStatus", new { id = item.Id }, new { @class = "btn btn-success" })
+                                                }
+                                                else
+                                                {
+                                                    @Html.ActionLink("Not Approved", "UpdateStatus", new { id = item.Id }, new { @class = "btn btn-danger" })
+                                                }
+                                            </td>
+                                            <td>
+                                                @if (item.IsBankUpdateApproved)
+                                                {
+                                                    <a href="/DoctorRegistration/UpdateBankUpdateStatus?id=@item.Id" class="btn btn-success">Update Bank Approved</a>
+                                                }
+                                                else
+                                                {
+                                                    <a href="/DoctorRegistration/UpdateBankUpdateStatus?id=@item.Id" class="btn btn-danger">Update Bank Not Approved</a>
+                                                }
+                                            </td>
+                                            <td>
+                                                @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { onclick = "return confirm('Are sure wants to Edit?');", @class = "btn btn-info" })
+                                                <a href="/Common/BankDetails?Id=@item.AdminLogin_Id" class="btn btn-primary">Bank Details</a>
+                                                @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { onclick = "return confirm('Are sure wants to delete?');", @class = "btn btn-danger" })
+                                            </td>
+                                        }
+                                    </tr>
+                                    count++;
+                                }
                             </tbody>
                         </table>
                     </div>
@@ -171,8 +165,5 @@
                 
 </div>
         }
-    </div>
-@*<script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>*@
-<script>
-    $('.double-scroll').doubleScroll();
-</script>
+    </div> 
+ 

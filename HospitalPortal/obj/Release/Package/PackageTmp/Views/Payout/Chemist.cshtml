@@ -26,55 +26,56 @@
 </div>
 
 
-@if (Model.ChemistHistory == null)
-{
-    if (TempData["msg"] != null)
+
+
+<table id="myTable" class="table table-responsive">
+    <thead style="background-color:lavender;">
+        <tr>
+            <th>
+                User Id
+            </th>
+            <th>
+                Chemist Name
+            </th>
+            <th>
+                Basic Amount
+            </th>
+            <th>
+                Transaction Fee
+            </th>
+            <th>
+                GST in %
+            </th>
+            <th>
+                Total Amount
+            </th>
+
+            @*<th>Deducted Amout</th>*@
+            <th>
+                Commission in %
+            </th>
+            <th>
+                TDS in %
+            </th>
+            <th>
+                Payable Amount
+            </th>
+            <th>
+                Action
+            </th>
+        </tr>
+    </thead>
+    @if (Model.ChemistHistory == null)
     {
-        <h2 style="color:blueviolet">
-            @TempData["msg"]
-        </h2>
+        if (TempData["msg"] != null)
+        {
+            <div class="alert alert-danger">
+                @TempData["msg"]
+            </div>
+        }
     }
-}
-else
-{
-
-    <table id="tables" class="table table-responsive">
-        <thead>
-            <tr>
-                <th>
-                    User Id
-                </th>
-                <th>
-                    Chemist Name
-                </th>
-                <th>
-                    Basic Amount
-                </th>
-                <th>
-                    Transaction Fee
-                </th>
-                <th>
-                    GST in %
-                </th>
-                <th>
-                    Total Amount
-                </th>
-
-                @*<th>Deducted Amout</th>*@
-                <th>
-                    Commission in %
-                </th>
-                <th>
-                    TDS in %
-                </th>
-                <th>
-                    Payable Amount
-                </th>
-                <th>
-                    Action
-                </th>
-            </tr>
-        </thead>
+    else
+    {
         <tbody>
             @foreach (var item in Model.ChemistHistory)
             {
@@ -94,7 +95,7 @@ else
                         double? razarfeeamt = razorpaycomm - basicamt;
 
                     }
-                    <td>@razarfeeamt</td>
+                    <td>@String.Format("{0:F2}", razarfeeamt) </td>
 
                     <td>
                         @ViewBag.gstAmount
@@ -129,8 +130,9 @@ else
                 </tr>
             }
         </tbody>
+                        }
     </table>
-}
+
 
 <script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
 <link href="~/css/jquery-ui.css" rel="stylesheet" />

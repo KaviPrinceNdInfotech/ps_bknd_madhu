@@ -20,7 +20,7 @@
             {
                 <div class="row">
                     <div class="col-md-3">
-                        @Html.TextBoxFor(a=> a.ImageName, new {@class="form-control", placeholder="Enter the Image Name"})
+                        @Html.TextBoxFor(a=> a.ImageName, new {@class="form-control", placeholder="Enter the Image Name", required="" })
                     </div>
                     <div class="col-md-3">
                         @Html.TextBoxFor(a=> a.Image, new { @class = "form-control", type = "file" })
@@ -58,8 +58,19 @@
                 {
                     <tr>
                         <td>@item.ImageName</td>
-                        <td><img src="~/Gallery/@item.Images" width="200px" height="200px" /></td>
-                        <td><a href="/Gallery/Delete?Id=@item.Id" onclick="return confirm('Are you sure to Delete?')">Delete</a></td>
+                        <td>
+                            @if (item.Images != null)
+                            {
+                                <a href="/Images/@item.Images"> <img src="/Images/@item.Images" style="width:100px;height:100px" /></a>
+
+                            }
+                            else
+                            {
+                                <text>No Image</text>
+                            }
+
+                        </td>
+                        <td><a href="/Gallery/Delete?Id=@item.Id" class="btn btn-danger" onclick="return confirm('Are you sure to Delete?')">Delete</a></td>
                     </tr>
                 }
             </tbody>

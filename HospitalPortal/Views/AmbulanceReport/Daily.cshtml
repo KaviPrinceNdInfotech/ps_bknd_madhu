@@ -12,19 +12,7 @@
 <link href="/css/bootstrap.min.css" rel="stylesheet" />
 <div id="main">
 
-    @using (Html.BeginForm("Daily", "AmbulanceReport", FormMethod.Get))
-    {
-        <div class="row">
-            <div class="col-md-4">
-                Select Date
-                @Html.TextBoxFor(a => a.sdate, new { @class = "datepicker form-control", required = "required" })
-            </div>
-            <div class="col-md-4">
-                <input type="submit" id="test" value="Search" class="btn btn-primary" />
-            </div>
-        </div>
-    }
-
+     
     @if (Model.Ambulance == null)
     {
         if (TempData["msg"] != null)
