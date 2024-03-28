@@ -10,8 +10,9 @@ namespace HospitalPortal.Models.ViewModels
 {
     public class AmbulancesReport
     {
-        public DateTime? sdate { get; set; }
-        public DateTime? edate { get; set; }
+		public DateTime startdate { get; set; }
+		public DateTime enddate { get; set; }
+		 
         public double? PayAmt { get; set;}
         public IEnumerable<Ambulance> Ambulance { get; set; }
     }
@@ -25,7 +26,8 @@ namespace HospitalPortal.Models.ViewModels
         public string VehicleNumber { get; set; }
         public string VehicleName { get; set; }
         public decimal? Amount { get; set; }
-        public double? Amountwithrazorpaycomm { get; set; }
+		public int TotalPrice { get; set; }
+		public double? Amountwithrazorpaycomm { get; set; }
         public int? Distance { get; set; }
         public string PatientName { get; set; }
         public string DriverId { get; set; }

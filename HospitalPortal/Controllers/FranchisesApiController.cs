@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Common.Logging;
+using DocumentFormat.OpenXml.EMMA;
 using DocumentFormat.OpenXml.Wordprocessing;
 using HospitalPortal.BL;
 using HospitalPortal.Models.APIModels;
@@ -14,7 +15,8 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Runtime.Remoting.Messaging;
-using System.Web.Http;
+using System.Threading.Tasks;
+using System.Web.Http; 
 using static HospitalPortal.Controllers.TestApiController;
 using static HospitalPortal.Models.ViewModels.ChemistDTO;
 using static HospitalPortal.Models.ViewModels.VendorDTO;
@@ -106,7 +108,7 @@ namespace HospitalPortal.Controllers
                         tran.Rollback();
                         return Ok(rm);
                     }
-                    var img = FileOperation.UploadFileWithBase64("Images", model.Images, model.Imagesbase64, allowedExtensions);
+                    var img = FileOperation.UploadFileWithBase64("Gallery", model.Images, model.Imagesbase64, allowedExtensions);
                     if (img == "not allowed")
                     {
                         rm.Message = "Only png,jpg,jpeg,pdf files are allowed.";
@@ -313,7 +315,7 @@ ModelState.Values
 
         public IHttpActionResult Fra_ProfileDetail(int Id)
         {
-            string qry = @"select V.Id,V.VendorName,V.EmailId,V.MobileNumber,V.Location,sm.StateName,cm.cityname,V.PinCode,V.CompanyName,V.GSTNumber,V.AadharOrPANImage,V.AadharOrPANNumber,V.StateMaster_Id,V.City_ID from Vendor as V with(nolock) left join citymaster as cm with(nolock) on cm.id=V.City_Id left join statemaster as sm with(nolock) on sm.id=V.StateMaster_Id where V.Id=" + Id + "";
+            string qry = @"select V.Id,V.UniqueId,V.VendorName,V.EmailId,V.MobileNumber,V.Location,sm.StateName,cm.cityname,V.PinCode,V.CompanyName,V.GSTNumber,V.AadharOrPANImage,V.AadharOrPANNumber,V.StateMaster_Id,V.City_ID from Vendor as V with(nolock) left join citymaster as cm with(nolock) on cm.id=V.City_Id left join statemaster as sm with(nolock) on sm.id=V.StateMaster_Id where V.Id=" + Id + "";
             var FrancjiseProfile = ent.Database.SqlQuery<Fra_ProDetail>(qry).FirstOrDefault();
             return Ok(FrancjiseProfile);
 
@@ -2096,7 +2098,7 @@ ModelState.Values
 
         public IHttpActionResult GetOldDriverList()
         {
-            string qry = @"select D.Id,V.VehicleNumber,D.DriverName from Driver as D inner join Vehicle as V on V.Driver_Id=D.Id where D.IsDeleted=0 and V.IsDeleted=0";
+            string qry = @"select V.Id,V.VehicleNumber,D.DriverName from Driver as D inner join Vehicle as V on V.Driver_Id=D.Id where D.IsDeleted=0 and V.IsDeleted=0";
             var GetOldDriver = ent.Database.SqlQuery<Get_oldDriver>(qry).ToList();
             return Ok(new { GetOldDriver });
 
@@ -2928,5 +2930,118 @@ where Veh.IsDeleted=0 and Veh.RegistrationDate > DATEADD(year,-1,GETDATE())";
             }
             return Ok(rm);
         }
-    }
+
+
+
+		[HttpPost, Route("api/FranchisesApi/VehicleAllotment")]		 
+
+		public IHttpActionResult VehicleAllotment(VehicleAllotmentDTO model)
+		{
+			if (!ModelState.IsValid)
+			{
+				return BadRequest(ModelState);
+			}
+
+			try
+			{ 
+				var list = ent.Vehicles.Where(a => a.Id == model.VehicleNumberId).ToList();
+				var vehicle = list.FirstOrDefault();
+                var getexistVehicle = ent.Drivers.Where(d => d.Vehicle_Id == model.VehicleNumberId && d.IsDeleted==false).FirstOrDefault();
+				
+				if (getexistVehicle!=null)
+                {
+					string ExistdriverName = ent.Database.SqlQuery<string>("select DriverName from Driver where Vehicle_Id=" + model.VehicleNumberId).FirstOrDefault();
+					rm.Message= "The Selected Vehicle is Already Running on " + ExistdriverName;
+
+				}
+                else
+                {
+					if (vehicle == null)
+					{
+						return BadRequest("Vehicle not found");
+					} 
+
+					var vehicleId = vehicle.Id;
+					var vehicleNumber = vehicle.VehicleNumber;
+
+
+					string updateVehicleQuery = $"update Vehicle set Driver_Id = {model.DriverId} where Id = {vehicleId}";
+					ent.Database.ExecuteSqlCommand(updateVehicleQuery);
+
+					string updateDriverQuery = $"update Driver set VehicleType_Id = {model.VehicleTypeId},Vehicle_Id={model.VehicleNumberId} where Id = {model.DriverId}";
+					ent.Database.ExecuteSqlCommand(updateDriverQuery);
+					string driverName = ent.Database.SqlQuery<string>($"select DriverName from Driver where Id = {model.DriverId}").FirstOrDefault();
+
+					rm.Message = $"The Vehicle Number {vehicleNumber} has been Replaced to {driverName}";
+                    rm.Status = 1;
+
+				}
+
+
+				return Ok(rm);
+			}
+			catch (Exception ex)
+			{ 
+				return InternalServerError(ex);
+			}
+		}
+
+		[HttpGet, Route("api/FranchisesApi/GetDriverVehicleId")]
+		public IHttpActionResult GetDriverVehicleId(int VehicleNumberId)
+		{
+			string qry = @"Select d.Id,v.VehicleNumber,d.DriverName from Driver as d
+join Vehicle as v on v.Id=d.Vehicle_Id where d.Vehicle_Id="+ VehicleNumberId + "";
+			var VehicleNumberdetail = ent.Database.SqlQuery<VehicleNumbers>(qry).ToList();
+			return Ok(new { VehicleNumberdetail });
+		}
+		[HttpGet, Route("api/FranchisesApi/GetDriverForUpdate")]
+		public IHttpActionResult GetDriverForUpdate()
+		{
+			string qry = @"Select Id,DriverName from Driver";
+			var Drivers = ent.Database.SqlQuery<DriversName>(qry).ToList();
+			return Ok(new { Drivers });
+		}
+
+		[HttpPost, Route("api/FranchisesApi/SwapDriver")]
+		public IHttpActionResult SwapDriver(VehicleAllotmentDTO model)
+		{
+			var list = ent.Drivers.Where(a => a.Id == model.DriverId).ToList();
+			if (list.Count == 0)
+			{
+				return Content(HttpStatusCode.NotFound, "Driver not found");
+			}
+
+			var driverId = list.First().Id;
+			var name = list.First().DriverName;
+
+			var vehicle = ent.Vehicles.Find(model.Id);
+			if (vehicle == null)
+			{
+				return Content(HttpStatusCode.NotFound, "Vehicle not found");
+			}
+
+			var vehicleTypeId = vehicle.VehicleType_Id;
+
+			if (ent.Vehicles.Any(a => a.Driver_Id == driverId))
+			{
+				string vehicleNumber = ent.Database.SqlQuery<string>("select VehicleNumber from Vehicle where Driver_Id = "+driverId+"").FirstOrDefault();
+				return Content(HttpStatusCode.BadRequest, "The Selected Driver is Already Running on " + vehicleNumber);
+			}
+
+			vehicle.Driver_Id = driverId;
+			ent.SaveChanges();
+
+			var driver = ent.Drivers.Find(driverId);
+			if (driver != null)
+			{
+				driver.VehicleType_Id = vehicleTypeId;
+				driver.Vehicle_Id = model.Id;
+				ent.SaveChanges();
+			}
+
+			string newVehicleNumber = ent.Database.SqlQuery<string>("select VehicleNumber from Vehicle where Driver_Id = "+ driverId + "").FirstOrDefault();
+			return Content(HttpStatusCode.OK, "The Vehicle Number " + newVehicleNumber + " has been Replaced to " + name);
+
+		}
+	}
 }

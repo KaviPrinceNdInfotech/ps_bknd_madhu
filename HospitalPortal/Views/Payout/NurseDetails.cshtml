@@ -31,72 +31,54 @@
     </div>
 }
 
-@if (Model.NurseAppointmentList == null)
-{
-    if (TempData["msg"] != null)
-    {
-        <h3 style="color:red">@TempData["msg"]</h3>
-    }
-}
-else
-{
 
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Request Date</th>
-                @*<th>Total Amt</th>
-        <th>Add GST</th>
-        <th>Payable Amount</th>*@
-                <th>
-                    Basic Amount
-                </th>
-                <th>
-                    Transaction Fee
-                </th>
-                <th>
-                    GST in %
-                </th>
-                <th>
-                    Total Amount
-                </th>
-                @*<th>Deducted Amout</th>*@
-                <th>
-                    Commission in %
-                </th>
-                <th>
-                    TDS in %
-                </th>
-                <th>
-                    Payable Amount
-                </th>
-                <th>Action</th>
-            </tr>
-        </thead>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Request Date</th>
+            @*<th>Total Amt</th>
+                <th>Add GST</th>
+                <th>Payable Amount</th>*@
+            <th>
+                Basic Amount
+            </th>
+            <th>
+                Transaction Fee
+            </th>
+            <th>
+                GST in %
+            </th>
+            <th>
+                Total Amount
+            </th>
+            <th>
+                Commission in %
+            </th>
+            <th>
+                TDS in %
+            </th>
+            <th>
+                Payable Amount
+            </th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    @if (Model.NurseAppointmentList == null)
+    {
+        if (TempData["msg"] != null)
+        {
+            <h3 style="color:red">@TempData["msg"]</h3>
+        }
+    }
+    else
+    {
         <tbody>
             @foreach (var item in Model.NurseAppointmentList)
             {
                 <tr>
                     <td>@item.RequestDate</td>
-                    @*<td>Rs. @item.TotalFee</td>
-        @{
-            if(item.TotalFee == null)
-            {
-                item.TotalFee = 0;
-            }
-            else
-            {
-                item.TotalFee = item.TotalFee;
-            }
-            double? amt = (item.TotalFee * ViewBag.Amount / 100);
-            double? DeductedAmt = item.TotalFee - amt;
-        }
-        <td>
-            @amt
-        </td>
-        <td>
-            @DeductedAmt
-        </td>*@
+
                     <td>
                         Rs. @item.TotalFee
                     </td>
@@ -137,10 +119,11 @@ else
                         <a href="/Payout/ViewNursePayoutHistory?Id=@item.Nurse_Id" class="btn btn-primary">View Payout History</a>
                     </td>
                 </tr>
-                        }
+            }
         </tbody>
+                        }
     </table>
-   }
+  
 <script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
 <link href="~/css/jquery-ui.css" rel="stylesheet" />
 <script src="~/Scripts/jquery-ui.js"></script>

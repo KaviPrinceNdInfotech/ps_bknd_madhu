@@ -28,39 +28,16 @@ namespace HospitalPortal.Models.ViewModels
         public bool IsDeleted { get; set; }
        
         public string VehicleNumber { get; set; }
-        //[Required]
-        //public System.DateTime Validity { get; set; }
-        //[Required]
-       // public Nullable<System.DateTime> InsurranceDate { get; set; }
-        //[Required]
-        //public Nullable<System.DateTime> PollutionDate { get; set; }
+         
         public bool IsApproved { get; set; }
         
         public int VehicleType_Id { get; set; }
         public int? Driver_Id { get; set; }
         public string VehicleOwnerName { get; set; }
-        public Nullable<int> Vendor_Id { get; set; }
-      
-        //public System.DateTime FitnessCertificateValidity { get; set; }
-        public String FitnessCertificateValidityDate { get; set; }
-        //public string InsuranceImage { get; set; }
-        //public string PollutionImage { get; set; }
-       // public string FitnessCerficateImage { get; set; }
+        public Nullable<int> Vendor_Id { get; set; } 
+        public String FitnessCertificateValidityDate { get; set; } 
         public string VehicleTypeName { get; set; }
-        public List<SelectListItem> VehicleTypes { get; set; }
-        //public string VehicleImg { get; set; }
-        //public HttpPostedFileBase VehicleImgFile { get; set; }
-        //[Required]
-        //public HttpPostedFileBase PollutionImageFile { get; set; }
-       // [Required]
-        //public HttpPostedFileBase InsurranceImageFile { get; set; }
-        //[Required]
-        //public HttpPostedFileBase FitnessCertificateImageFile { get; set; }
-        //public string RC_Image { get; set; }
-       // [Required]
-        //public HttpPostedFileBase RC_ImageFile { get; set; }
-        //[Required]
-        //public string RC_No { get; set; }
+        public List<SelectListItem> VehicleTypes { get; set; } 
         public Nullable<double> BasePrice { get; set; }
      
         public Nullable<int> AsPerKM { get; set; }
@@ -74,16 +51,29 @@ namespace HospitalPortal.Models.ViewModels
         [RegularExpression("^[0-9]*$", ErrorMessage = "Account Number must be numeric")]
         public string VerifyAccountNo { get; set; }
         [Required(ErrorMessage = "IFSC Code Required")]
-        public string IFSCCode { get; set; }
-        //[Required(ErrorMessage = "Branch Name Required")]
-        public string BranchName { get; set; }
-        //[Required(ErrorMessage = "Branch Address Required")]
+        public string IFSCCode { get; set; } 
+        public string BranchName { get; set; } 
         public string BranchAddress { get; set; }
         [Required(ErrorMessage = "Account Holder Name Required")]
         public string HolderName { get; set; }
         public string CancelCheque { get; set; }
 
-        public HttpPostedFileBase CancelChequeFile { get; set; }
-        //public string AccountHolderName { get; set; }
+        public HttpPostedFileBase CancelChequeFile { get; set; } 
     }
+	public class VehicleTypes
+	{
+		public int Id { get; set; }
+		public string VehicleTypeName { get; set; }
+	}
+	public class VehicleNumbers
+    {
+		public int Id { get; set; }
+		public string VehicleNumber { get; set; }
+		public string DriverName { get; set; }
+	}
+    public class DriversName
+	{
+		public int Id { get; set; } 
+		public string DriverName { get; set; }
+	}
 }

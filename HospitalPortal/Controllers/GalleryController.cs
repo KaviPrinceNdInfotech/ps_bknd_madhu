@@ -45,7 +45,8 @@ namespace HospitalPortal.Controllers
         [HttpPost]
         public ActionResult Gallery(GallertDTO model)
         {
-            var Img = FileOperation.UploadImage(model.Image, "Gallery");
+            //var Img = FileOperation.UploadImage(model.Image, "Gallery");
+            var Img = FileOperation.UploadImage(model.Image, "Images");
             if (Img == "not allowed")
             {
                 TempData["msg"] = "Only png,jpg,jpeg files are allowed.";

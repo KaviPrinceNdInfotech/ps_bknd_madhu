@@ -51,10 +51,10 @@ namespace HospitalPortal.Controllers
                 //Chek if Any Vehicle Exists Before
 
                  if(ent.Vehicles.Any(a=>a.VehicleNumber == model.VehicleNumber))
-                {
+                 {
                     TempData["msg"] = "This Vehicle Number Already Registerd With Us.";
                     return View(model);
-                }
+                 }
                  
                 //Cancel Cheque Image
                 if (model.CancelChequeFile != null)
@@ -62,7 +62,7 @@ namespace HospitalPortal.Controllers
                     var ChequeImg = FileOperation.UploadImage(model.CancelChequeFile, "Images");
                     if (ChequeImg == "not allowed")
                     {
-                        TempData["msg"] = "Only png,jpg,jpeg docs with RC are allowed.";
+                        TempData["msg"] = "Only png,jpg,jpeg docs with Cancel Cheque are allowed.";
                         return View(model);
                     }
                     model.CancelCheque = ChequeImg;
@@ -271,6 +271,9 @@ where v.IsDeleted=0 order by v.Id desc";
             var list = ent.Drivers.Where(a => a.DriverName == model.DriverName).ToList();
             var DriverId = list.FirstOrDefault().Id;
             var Name = list.FirstOrDefault().DriverName;
+
+            var GetVehiletypeId=ent.Vehicles.Where(V=>V.Id== model.Id).Select(v=>v.VehicleType_Id).FirstOrDefault();
+
             if (ent.Vehicles.Any(a => a.Driver_Id == DriverId))
             {
                 string VehicleNumber1 = ent.Database.SqlQuery<string>("select VehicleNumber from Vehicle where Driver_Id=" + DriverId).FirstOrDefault();
@@ -279,7 +282,10 @@ where v.IsDeleted=0 order by v.Id desc";
             }
             string q = @"update Vehicle set Driver_Id = " + DriverId + "  where Id=" + model.Id;
             ent.Database.ExecuteSqlCommand(q);
-            string VehicleNumber = ent.Database.SqlQuery<string>("select VehicleNumber from Vehicle where Driver_Id=" + DriverId).FirstOrDefault();
+
+			string dq = @"update Driver set VehicleType_Id = " + GetVehiletypeId + " ,Vehicle_Id="+ model.Id + " where Id=" + DriverId;
+			ent.Database.ExecuteSqlCommand(dq);
+			string VehicleNumber = ent.Database.SqlQuery<string>("select VehicleNumber from Vehicle where Driver_Id=" + DriverId).FirstOrDefault();
             TempData["msg"] = "The Vehicle Number" + VehicleNumber + " has been Replaced to " + Name;
             return RedirectToAction("UpdateDriver", new { model.Id });
         }
@@ -308,8 +314,18 @@ where v.IsDeleted=0 order by v.Id desc";
             //TempData["VehicleNumber"] = VehicleList.FirstOrDefault().VehicleNumber;
             return Json(VehicleList, JsonRequestBehavior.AllowGet);
         }
+		public JsonResult GetVehicleNumberByVehicleType(int vehicleTypeId, string term)
 
-        public JsonResult GetVehicleNumberList(string term)
+		{
+			var VehicleList = (from N in ent.Vehicles
+							   where N.VehicleNumber.StartsWith(term)
+							   && N.IsDeleted == false
+							   && N.VehicleType_Id == vehicleTypeId
+							   select new { N.VehicleNumber, N.Id });
+
+			return Json(VehicleList, JsonRequestBehavior.AllowGet);
+		}
+		public JsonResult GetVehicleNumberList(string term)
         {
             var VehicleList = (from N in ent.Vehicles
                                where N.VehicleNumber.StartsWith(term)
@@ -347,10 +363,17 @@ where v.IsDeleted=0 order by v.Id desc";
             var VehileId = list.FirstOrDefault().Id;
             var Number = list.FirstOrDefault().VehicleNumber;
             int DriverId = Convert.ToInt32(TempData["Id"]);
-            string q = @"update Vehicle set Driver_Id = " + DriverId + "  where Id=" + VehileId;
+			var getexistVehicle = ent.Drivers.Where(d => d.Vehicle_Id == VehileId && d.IsDeleted == false).FirstOrDefault();
+			if (getexistVehicle != null)
+			{
+				string ExistdriverName = ent.Database.SqlQuery<string>("select DriverName from Driver where Vehicle_Id=" + VehileId).FirstOrDefault();
+				TempData["msg"] = "The Selected Vehicle is Already Running on " + ExistdriverName;
+				return RedirectToAction("UpdateVehicles", new { model.Id });
+			}
+			string q = @"update Vehicle set Driver_Id = " + DriverId + " where Id=" + VehileId;
             ent.Database.ExecuteSqlCommand(q);
             //
-            string qry = @"update Driver set VehicleType_Id = " + model.Id + "  where Id=" + DriverId;
+            string qry = @"update Driver set VehicleType_Id = " + model.Id + ",Vehicle_Id="+ VehileId + " where Id=" + DriverId;
             ent.Database.ExecuteSqlCommand(qry);
             //
             string Name = ent.Database.SqlQuery<string>("select DriverName from Driver where Id=" + DriverId).FirstOrDefault();

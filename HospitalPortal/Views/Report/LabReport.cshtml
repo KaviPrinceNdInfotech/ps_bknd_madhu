@@ -5,11 +5,7 @@
 }
 
 <h2>Lab List</h2>
-@if (Model.LabReport == null) {
 
-<span>No Records</span>}
-else
-{
 <table id="table_id" class="display">
     <thead>
         <tr>
@@ -21,17 +17,25 @@ else
             </th>
         </tr>
     </thead>
-    <tbody>
-        @foreach (var item in Model.LabReport)
-        {
-            <tr>
-                <td>@item.LabName</td>
-                <td><a href="/Report/ViewLabDetails?LabId=@item.Lab_Id" class="btn btn-primary">View Details</a></td>
-            </tr>
-        }
-    </tbody>
-</table>
+    @if (Model.LabReport == null)
+    {
+
+        <div class="alert alert-danger">No Records</div>
 }
+    else
+    {
+        <tbody>
+            @foreach (var item in Model.LabReport)
+            {
+                <tr>
+                    <td>@item.LabName</td>
+                    <td><a href="/Report/ViewLabDetails?LabId=@item.Lab_Id" class="btn btn-primary">View Details</a></td>
+                </tr>
+            }
+        </tbody>
+    }
+    </table>
+
 <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
 
 

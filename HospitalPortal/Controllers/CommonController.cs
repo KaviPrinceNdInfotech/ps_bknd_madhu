@@ -1003,5 +1003,78 @@ GROUP BY  P.PatientName,P.Id, P.PatientRegNo, L.LabName";
             TempData["msg"] = "Deleted Successfully.";
             return RedirectToAction("AddDoctorDurationTime");
         }
+
+        public ActionResult TransactionFee()
+        {
+            var model = new TransactionFeeDTO();
+            var Q = @"select * from TransactionFeeMaster order by Name asc";
+            var data = ent.Database.SqlQuery<TransactionList>(Q).ToList();
+            model.TransactionList = data;
+            return View(model);
+        }
+        [HttpPost]
+        public ActionResult TransactionFee(TransactionFeeDTO model)
+        {
+            if (!ModelState.IsValid)
+            {
+                TempData["msg"] = "Some Error";
+                return RedirectToAction("TransactionFee");
+            }
+            var existdata = ent.TransactionFeeMasters.Where(t => t.Name == model.Name).FirstOrDefault();
+            if(existdata!=null)
+            {
+                TempData["msg"] = "Already Exists!";
+            }
+            else
+            {
+                var data = new TransactionFeeMaster();
+                data.Fee = model.Fee;
+                data.Name = model.Name;
+                ent.TransactionFeeMasters.Add(data);
+                ent.SaveChanges();
+                TempData["msg"] = "ok";
+            }
+            
+            return RedirectToAction("TransactionFee");
+        }
+        public ActionResult DeleteTransactionFee(int id)
+        {
+            var data = ent.TransactionFeeMasters.Find(id);
+            ent.TransactionFeeMasters.Remove(data);
+            ent.SaveChanges();
+            TempData["msg"] = "Deleted Successfully!";
+            return RedirectToAction("TransactionFee");
+        }
+        [HttpGet]
+        public ActionResult EditTransactionFee(int id)
+        {
+            var data = ent.TransactionFeeMasters.Find(id);
+            var model = new TransactionFeeDTO()
+            {
+                Fee = data.Fee,
+                Name = data.Name,
+                Id = data.Id // Assuming there's an Id property in your model
+            };
+            return View(model);
+        }
+
+
+        [HttpPost]
+        public ActionResult EditTransactionFee(TransactionFeeDTO model)
+        {
+            var data = ent.TransactionFeeMasters.Find(model.Id);  
+            if (data != null)
+            { 
+                data.Fee = model.Fee;
+                ent.SaveChanges();
+                TempData["msg"] = "Successfully Updated";
+            }
+            else
+            {
+                TempData["msg"] = "Failed to update. Record not found.";
+            }
+            return RedirectToAction("TransactionFee");
+        }
+
     }
 }

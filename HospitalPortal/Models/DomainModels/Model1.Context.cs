@@ -157,6 +157,7 @@ namespace HospitalPortal.Models.DomainModels
         public virtual DbSet<DayName> DayNames { get; set; }
         public virtual DbSet<DurationTime> DurationTimes { get; set; }
         public virtual DbSet<Doctor> Doctors { get; set; }
+        public virtual DbSet<TransactionFeeMaster> TransactionFeeMasters { get; set; }
     
         [DbFunction("DbEntities", "udf_AppointmentSlots")]
         public virtual IQueryable<udf_AppointmentSlots_Result> udf_AppointmentSlots(Nullable<int> doctorId)

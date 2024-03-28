@@ -14,6 +14,8 @@ namespace HospitalPortal.Models.ViewModels
         public DateTime TestDate { get; set; }
         public DateTime OrderDate { get; set; }
         public DateTime AppointmentDate { get; set; }
+        public DateTime startdate { get; set; }
+        public DateTime enddate { get; set; }
         public SelectList NurseTypeList { get; set; }
         public IEnumerable<PayOutNurseHistory> NurseHistory { get; set; }
         public IEnumerable<PayOutDocHistroy> PayHistory { get; set; }
@@ -45,7 +47,8 @@ namespace HospitalPortal.Models.ViewModels
         public string NurseName { get; set; }
         public bool? IsPaid { get; set; }
         public double Amount { get; set; }
-    }
+		public double? Amountwithrazorpaycomm { get; set; }
+	}
 
 
     public class PayOutLabHistoty

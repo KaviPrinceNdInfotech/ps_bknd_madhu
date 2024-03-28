@@ -202,7 +202,7 @@ namespace HospitalPortal.Models.ViewModels
         public double Fee { get; set; }
         public Nullable<double> TotalFee { get; set; }
         public Nullable<System.DateTime> AppointmentDate { get; set; }
-        public string  SlotTime { get; set; }
+        public TimeSpan  SlotTime { get; set; }
         public string DeviceId { get; set; }
         
 

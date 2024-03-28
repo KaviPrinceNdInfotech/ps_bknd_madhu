@@ -375,7 +375,7 @@ join StateMaster s on d.StateMaster_Id=s.Id
 join CityMaster c on d.CityMaster_Id = c.Id
 left join VehicleType vt on vt.Id = d.VehicleType_Id
 left join Vendor ve on ve.Id = d.Vendor_Id
-where d.IsDeleted=0 order by d.Id desc";
+where d.IsDeleted=0 order by d.Id asc";
             var data = ent.Database.SqlQuery<DriverDTO>(q).ToList();
             if (vendorId != null)
                 data = data.Where(a => a.Vendor_Id == vendorId).ToList();

@@ -11,6 +11,7 @@ namespace HospitalPortal.Models.ViewModels
         public int Doctor_Id { get; set; }
         public string DoctorName { get; set; }
         public string DoctorId { get; set; }
+        public double Amountwithrazorpaycomm { get; set; }
         public double Amount { get; set; }
         public string MobileNumber { get; set; }
         public string ClinicName { get; set; }

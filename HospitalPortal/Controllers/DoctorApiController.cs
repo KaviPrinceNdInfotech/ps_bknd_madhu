@@ -763,7 +763,15 @@ where D.Id="+ DoctorId + " and PA.IsCancelled=0 order by PA.Id desc";
                     OrderDate = DateTime.Now,
                 };
                 ent.PatientAppointments.Add(data);
+                
+
+                var get = ent.DoctorTimeSlots.Where(d => d.Id == model.Slot_id).FirstOrDefault();
+                if(get != null)
+                {
+                    get.IsActive = true;
+                }
                 ent.SaveChanges();
+
                 return Ok(new { data.Id, Message = "Add Successfully" });
             }
             catch (Exception e)
@@ -784,13 +792,13 @@ where D.Id="+ DoctorId + " and PA.IsCancelled=0 order by PA.Id desc";
             if(getmode.BookingMode_Id==1)
             {
                 //string query = $"select PA.Id,Doctor.DoctorName,Doctor.Fee,{gst} as GST,Doctor.Fee + Doctor.Fee *{gst}/100 as TotalFee,Doctor.Experience,CONCAT(CONVERT(NVARCHAR, TS.StartTime, 8), ' To ', CONVERT(NVARCHAR, TS.EndTime, 8)) AS SlotTime,(SELECT SpecialistName FROM Specialist WHERE Id=Doctor.Specialist_Id) AS SpecialistName,PA.AppointmentDate,al.DeviceId from Doctor left join PatientAppointment as PA on  Doctor.id = PA.Doctor_Id  Left join DoctorTimeSlot as Ts on  TS.Id=PA.Slot_id join AdminLogin as al on al.Id=Doctor.AdminLogin_Id  where Doctor.id=" + Doctor_Id + " and PA.Id=" + PA_Id + " and PA.IsCancelled=0";
-                string query = $"select PA.Id,Doctor.DoctorName,Doctor.Fee,{gst} as GST,Doctor.Fee + Doctor.Fee *{gst}/100 as TotalFee,Doctor.Experience,Ts.Duration AS SlotTime,(SELECT SpecialistName FROM Specialist WHERE Id=Doctor.Specialist_Id) AS SpecialistName,PA.AppointmentDate,al.DeviceId from Doctor left join PatientAppointment as PA on  Doctor.id = PA.Doctor_Id  Left join DurationTime as Ts on  TS.Id=PA.Slot_id join AdminLogin as al on al.Id=Doctor.AdminLogin_Id  where Doctor.id=" + Doctor_Id + " and PA.Id=" + PA_Id + " and PA.IsCancelled=0";
+                string query = $"select PA.Id,Doctor.DoctorName,Doctor.Fee,{gst} as GST,Doctor.Fee + Doctor.Fee *{gst}/100 as TotalFee,Doctor.Experience,Ts.StartTime AS SlotTime,(SELECT SpecialistName FROM Specialist WHERE Id=Doctor.Specialist_Id) AS SpecialistName,PA.AppointmentDate,al.DeviceId from Doctor left join PatientAppointment as PA on  Doctor.id = PA.Doctor_Id  Left join DoctorTimeSlot as Ts on  TS.Id=PA.Slot_id join AdminLogin as al on al.Id=Doctor.AdminLogin_Id  where Doctor.id=" + Doctor_Id + " and PA.Id=" + PA_Id + " and PA.IsCancelled=0";
                 var data = ent.Database.SqlQuery<DoctorAptmt>(query).FirstOrDefault();
                 return Ok(data);
             }
             else
             {
-                string query = $"select PA.Id,Doctor.DoctorName,Doctor.VirtualFee as Fee,{gst} as GST,Doctor.VirtualFee + Doctor.VirtualFee *{gst}/100 as TotalFee,Doctor.Experience,Ts.Duration AS SlotTime,(SELECT SpecialistName FROM Specialist WHERE Id=Doctor.Specialist_Id) AS SpecialistName,PA.AppointmentDate,al.DeviceId from Doctor left join PatientAppointment as PA on  Doctor.id = PA.Doctor_Id  Left join DurationTime as Ts on  TS.Id=PA.Slot_id join AdminLogin as al on al.Id=Doctor.AdminLogin_Id  where Doctor.id=" + Doctor_Id + " and PA.Id=" + PA_Id + " and PA.IsCancelled=0";
+                string query = $"select PA.Id,Doctor.DoctorName,Doctor.VirtualFee as Fee,{gst} as GST,Doctor.VirtualFee + Doctor.VirtualFee *{gst}/100 as TotalFee,Doctor.Experience,Ts.StartTime AS SlotTime,(SELECT SpecialistName FROM Specialist WHERE Id=Doctor.Specialist_Id) AS SpecialistName,PA.AppointmentDate,al.DeviceId from Doctor left join PatientAppointment as PA on  Doctor.id = PA.Doctor_Id  Left join DoctorTimeSlot as Ts on  TS.Id=PA.Slot_id join AdminLogin as al on al.Id=Doctor.AdminLogin_Id  where Doctor.id=" + Doctor_Id + " and PA.Id=" + PA_Id + " and PA.IsCancelled=0";
                 var data = ent.Database.SqlQuery<DoctorAptmt>(query).FirstOrDefault();
                 return Ok(data);
             } 
@@ -1099,12 +1107,14 @@ where PA.Doctor_Id=" + Id + "";
                 };
                 ent.MedicinePrescriptionDetails.Add(DomailModel);
                 ent.SaveChanges();
-                EmailEF ef = new EmailEF()
+
+				 
+
+				EmailEF ef = new EmailEF()
                 {
                     EmailAddress = userdata.EmailId,
                     Message = "Medicine Prescription",
-                    Subject = "Prescription Pdf.",
-                    //id = id
+                    Subject = "Prescription Pdf.", 
                 };
 
                 EmailOperations.SendEmainewpdf(ef);
@@ -1112,12 +1122,11 @@ where PA.Doctor_Id=" + Id + "";
                 {
                     EmailAddress = doctor.EmailId,
                     Message = "Medicine Prescription",
-                    Subject = "Prescription Pdf.",
-                    //id = id
+                    Subject = "Prescription Pdf.", 
                 };
 
                 EmailOperations.SendEmainewpdf(drmail);
-                Message.SendSmsUserIdPass("Medicine Prescription");
+                 
                 rm.Status = 1;
                 rm.Message = "Prescription Add Successfully!!!";
                 return Ok(rm);
@@ -1207,12 +1216,34 @@ join Doctor as d on d.SlotTime2 =dt.Id where d.id="+ DoctorId + "";
            var slotdd= GenerateTimeSlots(Slot.StartTime,Slot.EndTime,Convert.ToInt32(Slot.Duration));
            var slotdd2= GenerateTimeSlots(Slot2.StartTime2,Slot2.EndTime2,Convert.ToInt32(Slot2.Duration));
              slotdd.AddRange(slotdd2);
-            var data = new { Id = Slot.Id,slotdd };
 
-            return Ok(new { data }) ;
+            var existRecord = ent.DoctorTimeSlots.Where(d => d.EntryDate == DateTime.Today).Where(d => d.Doctor_Id == DoctorId).ToList();
+            if(existRecord.Count==0)
+            {
+                foreach (var slot in slotdd)
+                {
+                    var domainModel = new DoctorTimeSlot()
+                    {
+                        Doctor_Id = DoctorId,
+                        StartTime = slot.StartTime,
+                        EndTime = slot.EndTime,
+                        IsActive = false,
+                        EntryDate = DateTime.Today
+                    };
+                    ent.DoctorTimeSlots.Add(domainModel);
+                    ent.SaveChanges();
+                }
+            }
+             
+
+            
+            var TimeSlot = ent.DoctorTimeSlots.Where(d => d.Doctor_Id == DoctorId && d.EntryDate==DateTime.Today && d.IsActive==false).Select(a => new { a.Id, a.StartTime}).ToList();
+            
+
+            return Ok(new { TimeSlot }) ;
         }
 
-        static List<string> GenerateTimeSlots(TimeSpan? startTime, TimeSpan? endTime, int durationMinutes)
+        static List<DoctorDuration> GenerateTimeSlots(TimeSpan? startTime, TimeSpan? endTime, int durationMinutes)
         {
             // Check if start time or end time is null
             if (!startTime.HasValue || !endTime.HasValue)
@@ -1221,7 +1252,8 @@ join Doctor as d on d.SlotTime2 =dt.Id where d.id="+ DoctorId + "";
             }
 
             // Initialize a list to store time slots
-            List<string> timeSlots = new List<string>();
+            List<DoctorDuration> timeSlots = new List<DoctorDuration>();
+           
 
             // Initialize current time to start time
             TimeSpan? currentTime = startTime;
@@ -1229,13 +1261,17 @@ join Doctor as d on d.SlotTime2 =dt.Id where d.id="+ DoctorId + "";
             // Iterate until current time exceeds or equals end time
             while (currentTime < endTime)
             {
+                DoctorDuration timeSlot = new DoctorDuration();
                 var oldtime = currentTime;
                 // Add current time to the list
                 //timeSlots.Add(currentTime.Value.ToString("HH:mm:ss\\.fff"));
 
                 // Move to the next time slot
                 currentTime = currentTime.Value.Add(new TimeSpan(0, durationMinutes, 0));
-                timeSlots.Add($"{oldtime}");
+                timeSlot.StartTime = oldtime;
+                timeSlot.EndTime=currentTime;
+                timeSlots.Add(timeSlot);
+
             }
             return timeSlots;
         }

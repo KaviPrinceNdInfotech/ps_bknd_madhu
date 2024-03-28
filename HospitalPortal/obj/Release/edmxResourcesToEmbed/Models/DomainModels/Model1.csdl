@@ -1885,6 +1885,7 @@
       <End Role="Doctor" EntitySet="Doctors" />
       <End Role="CancelledAppointment" EntitySet="CancelledAppointments" />
     </AssociationSet>
+    <EntitySet Name="TransactionFeeMasters" EntityType="Model.TransactionFeeMaster" />
   </EntityContainer>
   <ComplexType Name="sp_AppointmentHistory_Result">
     <Property Type="Int32" Name="AppointmentId" Nullable="false" />
@@ -2164,6 +2165,7 @@
     <Property Name="Charge" Type="Int32" />
     <NavigationProperty Name="DriverLocations" Relationship="Model.FK__DriverLoc__Drive__6ADAD1BF" FromRole="Driver" ToRole="DriverLocation" />
     <Property Name="IsBankUpdateApproved" Type="Boolean" />
+    <Property Name="Vehicle_Id" Type="Int32" />
   </EntityType>
   <EntityType Name="Hospital">
     <Key>
@@ -3772,6 +3774,7 @@
     <NavigationProperty Name="Driver" Relationship="Model.FK__DriverLoc__Drive__6ADAD1BF" FromRole="DriverLocation" ToRole="Driver" />
     <NavigationProperty Name="Patient" Relationship="Model.FK__DriverLoc__Patie__7C055DC1" FromRole="DriverLocation" ToRole="Patient" />
     <Property Name="RejectedStatus" Type="Boolean" />
+    <Property Name="PaymentStatus" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
   </EntityType>
   <Association Name="FK__DriverLoc__Drive__6ADAD1BF">
     <End Type="Model.Driver" Role="Driver" Multiplicity="0..1" />
@@ -4008,6 +4011,9 @@
     <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="StartTime" Type="Time" Precision="7" />
     <Property Name="EndTime" Type="Time" Precision="7" />
+    <Property Name="Doctor_Id" Type="Int32" />
+    <Property Name="IsActive" Type="Boolean" />
+    <Property Name="EntryDate" Type="DateTime" Precision="3" />
   </EntityType>
   <EntityType Name="ChemistMedicine">
     <Key>
@@ -4097,4 +4103,12 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <EntityType Name="TransactionFeeMaster">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Fee" Type="Double" />
+    <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+  </EntityType>
 </Schema>

@@ -9,13 +9,14 @@
 @if (Model.Vendorses != null)
 {
     <table id="myTable" class="table table-bordered">
-        <thead>
+        <thead style="background-color: lavender;">
             <tr>
-                <th>
-                    User Id
-                </th>
+
                 <th>
                     Franchise Name & Id
+                </th>
+                <th>
+                    User Id
                 </th>
                 <th>
                     Company's Name
@@ -39,7 +40,7 @@
                     TDS
                 </th>
                 <th>
-                    Amount paid to concerned provider
+                    Amount paid to concerned service provider
                 </th>
                 <th>
                     3% Commission to franchise payable
@@ -53,8 +54,9 @@
             @foreach (var item in Model.Vendorses)
             {
                 <tr>
-                    <td>@item.DoctorId</td>
+
                     <td>@item.VendorName @item.UniqueId</td>
+                    <td>@item.DoctorId</td>
                     <td>@item.CompanyName</td>
                     <td>
                         @item.Amount
@@ -78,11 +80,9 @@
                         decimal? tdsAmt = ((decimal)item.Amount * ViewBag.tds) / 100;
 
                     }
-                    <td style="display:none;">@WithGSTAmt</td>
-                    @*<td>@ViewBag.VendorCommission</td>*@
+                    <td style="display:none;">@WithGSTAmt</td> 
                     <td>@CommiAmt</td>
-                    <td>@tdsAmt</td>
-                    @*<td>@ViewBag.tds</td>*@
+                    <td>@tdsAmt</td> 
                     @{
 
                         decimal? commAmt = ((decimal)item.Amount * ViewBag.vendorCommission) / 100;
@@ -92,7 +92,7 @@
                     }
 
                     <td>@Value</td>
-                    <td>@ViewBag.FraPaidableamt</td>
+                    <td>@item.FraPaidableamt</td>
                     <td>
                         <a href="/VendorPayout/Pay?Vendor_Id=@item.Id&Amount=@Value" class="btn btn-primary">Generate</a>
 

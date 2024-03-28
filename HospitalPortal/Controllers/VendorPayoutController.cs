@@ -26,8 +26,8 @@ namespace HospitalPortal.Controllers
             double vendorCommission = ent.Database.SqlQuery<double>(@"select Amount from PaymentMaster where IsDeleted=0 and Department='Franchise' and Name='Doctor'").FirstOrDefault();
             decimal gst = ent.Database.SqlQuery<decimal>(@"select Amount from FranchiseGstMaster where IsDeleted=0 and Department='Franchise' and Name='Doctor'").FirstOrDefault();
             decimal tds = ent.Database.SqlQuery<decimal>(@"select Amount from FranchiseTDSMaster where IsDeleted=0 and Department='Franchise' and Name='Doctor'").FirstOrDefault();
-            //double payment = ent.Database.SqlQuery<double>(@"select Amount from PaymentMaster p where p.Department='Franchise' and Name='Doctor'").FirstOrDefault();
-            string q = @"select d.DoctorId ,Sum(pa.TotalFee) as Amount,v.VendorName,v.UniqueId, V.Id, v.CompanyName from Doctor d 
+			double Transactionfee = ent.Database.SqlQuery<double>(@"select Fee from TransactionFeeMaster where Name='Doctor'").FirstOrDefault();
+			string q = @"select d.DoctorId ,Sum(pa.TotalFee) as Amount,v.VendorName,v.UniqueId, V.Id, v.CompanyName from Doctor d 
 join Vendor v on d.Vendor_Id = v.Id join dbo.PatientAppointment pa on pa.Doctor_Id = d.Id  
 where pa.AppointmentDate  >= DATEADD(day,-7, GETDATE())   group by v.VendorName,v.CompanyName, V.Id,d.DoctorId,v.UniqueId";
             var data = ent.Database.SqlQuery<VendorList>(q).ToList();
@@ -42,12 +42,12 @@ where pa.AppointmentDate  >= DATEADD(day,-7, GETDATE())   group by v.VendorName,
             model.Vendorses = data;
             foreach (var item in data)
             {
-                var razorcomm = (item.Amount * 2) / 100;
+                var razorcomm = (item.Amount * Transactionfee) / 100;
                 // var razorcomm = item.Amount * (2.36 / 100); 
                 var totalrazorcomm = razorcomm;
                 item.Amountwithrazorpaycomm = (decimal)(item.Amount + totalrazorcomm);
                  
-                ViewBag.FraPaidableamt = (item.Amount * 3) / 100;
+                item.FraPaidableamt = (item.Amount * 3) / 100;
             }
             return View(model);
         }
@@ -76,8 +76,8 @@ where pa.AppointmentDate  >= DATEADD(day,-7, GETDATE())   group by v.VendorName,
             double vendorCommission = ent.Database.SqlQuery<double>(@"select Amount from PaymentMaster where IsDeleted=0 and Department='Franchise' and Name='Vehicle' and IsDeleted=0").FirstOrDefault();
             decimal gst = ent.Database.SqlQuery<decimal>(@"select Amount from FranchiseGstMaster where IsDeleted=0 and Department='Franchise' and Name='Vehicle'").FirstOrDefault();
             decimal tds = ent.Database.SqlQuery<decimal>(@"select Amount from FranchiseTDSMaster where IsDeleted=0 and Department='Franchise' and Name='Vehicle'").FirstOrDefault();
-            //double payment = ent.Database.SqlQuery<double>(@"select Amount from PaymentMaster p where p.Department='Franchise' and Name='Doctor'").FirstOrDefault();
-            string q = @"select Sum(trm.Amount) as AmountForVehicle, vp.IsGenerated, ve.VendorName, ve.CompanyName,ve.Id from Vehicle v 
+			double Transactionfee = ent.Database.SqlQuery<double>(@"select Fee from TransactionFeeMaster where Name='Vehicle'").FirstOrDefault();
+			string q = @"select Sum(trm.Amount) as AmountForVehicle, vp.IsGenerated, ve.VendorName, ve.CompanyName,ve.Id from Vehicle v 
 join Vendor ve on ve.Id = v.Vendor_Id 
 join Driverlocation trm on trm.Driver_Id = v.Driver_Id 
 left join VendorPayout vp on vp.Vendor_Id  = ve.Id 
@@ -96,7 +96,16 @@ and GETDATE() group by  vp.IsGenerated,ve.VendorName, ve.CompanyName, ve.Id";
             ViewBag.tds = (decimal)tds;
             //ViewBag.paymentPercent = paymentPercent;
             model.Vendorses = data;
-            return View(model);
+			foreach (var item in data)
+			{
+				var razorcomm = ((decimal)item.AmountForVehicle * (decimal)Transactionfee) / 100;
+				// var razorcomm = item.Amount * (2.36 / 100); 
+				var totalrazorcomm = razorcomm;
+				item.Amountwithrazorpaycomm = (decimal)(item.AmountForVehicle + totalrazorcomm);
+
+				item.FraPaidableamt = (double?)((item.AmountForVehicle * 3) / 100);
+			}
+			return View(model);
         }
         public ActionResult Pay(int? Vendor_Id, double Amount)
         {

@@ -3,6 +3,7 @@
 @{
     ViewBag.Title = "ViewDoctorDetails";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    int count = 1;
 }
 
 <h2 style="text-align:center; margin-bottom:2%">Vehicle Travel Report</h2>
@@ -51,7 +52,7 @@
             <div class='col-sm-5'>
                 <div class="form-group">
                     <div class='input-group date'>
-                        <input type='text' name="sdate" id="datepicker1" class="form-control" placeholder="From Date" />
+                        <input type='date' name="sdate" class="form-control" placeholder="From Date" />
                         <span class="input-group-addon">
                             <span class="glyphicon glyphicon-calendar"></span>
                         </span>
@@ -61,7 +62,7 @@
             <div class='col-sm-5'>
                 <div class="form-group">
                     <div class='input-group date' id='datetimepicker1'>
-                        <input type='text' name="edate" id="datepicker2" class="form-control" placeholder="Date To" />
+                        <input type='date' name="edate"   class="form-control" placeholder="Date To" />
                         <span class="input-group-addon">
                             <span class="glyphicon glyphicon-calendar"></span>
                         </span>
@@ -73,70 +74,67 @@
         </div>
     </div>
 }
-@if (Model.Ambulance.Count() == 0)
-{
-    <h2 style="color:red; text-align:center;">No Booking of Current Month</h2>
-}
-else
-{
-    <table id="doctor">
-        <thead>
-            <tr>
-                <th>Distance</th>
-                <th>Amount</th>
-                <th>Patient Name</th>
-                <th>Pick Up Place</th>
-                <th>Drop Place</th>
-            </tr>
-        </thead>
+
+<table id="doctor" class="tbale table-bordered">
+    <thead style="background-color:lavender;">
+        <tr>
+            <th>Sr No.</th>
+            <th>Payment Date</th>
+            <th>Distance</th>
+            <th>Amount</th>
+            <th>Patient Name / Id</th>
+            <th>Pick Up Place</th>
+            <th>Drop Place</th>
+        </tr>
+    </thead>
+    @if (Model.Ambulance.Count() == 0)
+    {
+        <h2 style="color:red; text-align:center;">Your Selected Date Doesn't Contain any Information.</h2>
+    }
+    else
+    {
         <tbody>
+            @{
+                double totalamt = 0;
+            }
             @foreach (var item in Model.Ambulance)
             {
+
                 <tr>
+                    <td>@count</td>
+                    <td>@item.PaymentDate</td>
                     <td>
-                       @Math.Round((decimal)@item.Distance) km
+                        @Math.Round((decimal)@item.Distance) km
                     </td>
                     <td>
-                        &#8377; @item.Amount
+                        &#8377; @item.TotalPrice
                     </td>
-                    <td>@item.PatientName</td>
+                    @{
+
+                        totalamt += @item.TotalPrice;
+
+                    }
+                    <td>@item.PatientName <b>(@item.PatientRegNo)</b></td>
                     <td>@item.PickUp_Place</td>
                     <td>@item.Drop_Place</td>
-                    @*<td>
-                        <a href="/Report/ViewDoctorAppointment?date=@item.AppointmentDate1" class="btn btn-primary">View More</a>
-                    </td>*@
+
                 </tr>
+                count++;
             }
 
         </tbody>
-    </table>
-                    <div class="row">
-                        <div class="col-md-3">
-                            Total Amount
-                        </div>
-                        <div class="col-md-3">
-                            <b style="color:red; font-size:medium">
-                                @if (ViewBag.Total != null)
-                                {
-
-                                    <b style="color:red">&#8377; @ViewBag.Total</b>}
-                                else
-                                {
-                                    <b style="color:red">&#8377; @ViewBag.Amount</b>
-                                }
-
-                        </div>
-                    </div>
-
-}
-<!--DatePicker-->
+        <tfoot>
+            <tr>
+                <td colspan="3" style="text-align: right;"><strong>Total:</strong></td>
+                <td style="color:red;"><strong>₹ @totalamt</strong></td>
+                <td></td>
+            </tr>
+        </tfoot>
+                        }
+    </table> 
 
 
-
-
-
-
-
+  
 
 <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>

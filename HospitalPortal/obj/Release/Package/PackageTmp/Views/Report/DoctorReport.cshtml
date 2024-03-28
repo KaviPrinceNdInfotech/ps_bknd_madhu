@@ -10,7 +10,7 @@
     <thead>
         <tr>
             <th>
-                Doctor Name
+                Doctor Name 
             </th>
             <th>
                 Action
@@ -21,7 +21,7 @@
         @foreach (var item in Model.DoctorReport)
         {
         <tr>
-            <td>@item.DoctorName</td>
+            <td>@item.DoctorName (@item.DoctorId)</td>
             <td><a href="/Report/ViewDoctorDetails?DoctorId=@item.Doctor_Id" class="btn btn-primary">View Details</a></td>
         </tr>
         }

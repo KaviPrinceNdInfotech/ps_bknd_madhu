@@ -26,28 +26,30 @@
     }
     else
     {
-        <table class="table table-bordered">
+<table id="myTable" class="table table-bordered">
+    <thead style="background-color:lavender;">
+        <tr>
+            <th>Serial No</th>
+            <th>Nurse Name</th>
+            <th>Payment Date</th>
+            <th>Amount</th>
+        </tr>
+        </thead>
+    <tbody>
+        @{int RowNo = 0;}
+        @foreach (var item in Model.HistoryOfNurse_Payout)
+        {
             <tr>
-                <th>Serial No</th>
-                <th>Nurse Name</th>
-                <th>Payment Date</th>
-                <th>Amount</th>
+                <td>
+                    @{RowNo++;} @RowNo
+                </td>
+                <td>@item.NurseName</td>
+                <td>@item.PaymentDate</td>
+                <td>@item.Amount</td>
             </tr>
-            <tbody>
-                @{int RowNo = 0;}
-                @foreach (var item in Model.HistoryOfNurse_Payout)
-                {
-                    <tr>
-                        <td>
-                            @{RowNo++;} @RowNo
-                        </td>
-                        <td>@item.NurseName</td>
-                        <td>@item.PaymentDate</td>
-                        <td>@item.Amount</td>
-                    </tr>
-                                }
-            </tbody>
-        </table>
+        }
+    </tbody>
+</table>
                                 }
 </div>
 

@@ -5,6 +5,7 @@
 }
 
 <h2>Update Driver</h2>
+<a href="/Vehicle/UpdateVehicle" class="btn btn-info">Back</a>
 @using (Html.BeginForm("UpdateVehicles", "Vehicle"))
 {
     <div class="row">
@@ -71,6 +72,46 @@
             });
         },
   });
+</script>
+
+<script>
+    $("#VehicleNumber").autocomplete({
+        source: function (request, response) {
+            // Get the selected vehicle type ID from the dropdown list
+            var vehicleTypeId = $("#Id").val();
+
+            // If the selected value is not available, you might want to handle it
+            if (!vehicleTypeId) {
+                console.log("No vehicle type selected");
+                return;
+            }
+
+            $.ajax({
+                url: '/Vehicle/GetVehicleNumberByVehicleType',
+                data: { term: request.term, vehicleTypeId: vehicleTypeId },
+                type: 'POST',
+                success: function (data) {
+                    if (!data.length) {
+                        var result = [
+                            {
+                                label: 'No Vehicle found',
+                                value: response.term
+                            }
+                        ];
+                        response(result);
+                    } else {
+                        response($.map(data, function (item) {
+                            return {
+                                label: item.VehicleNumber,
+                                value: item.VehicleNumber,
+                                id: item.Id,
+                            };
+                        }));
+                    }
+                }
+            });
+        }
+    });
 </script>
 
 

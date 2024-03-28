@@ -28,48 +28,50 @@
     }
     else
     {
-        <table class="table table-bordered">
+<table id="myTable" class="table table-bordered">
+    <thead style="background-color:lavender;">
+        <tr>
+            <th>Serial No</th>
+            <th>Lab Name</th>
+            <th>Payment Date</th>
+            <th>Amount</th>
+            @*<th>Status</th>*@
+        </tr>
+        </thead>
+    <tbody>
+        @{int RowNo = 0;}
+        @foreach (var item in Model.HistoryOfLab_Payout)
+        {
             <tr>
-                <th>Serial No</th>
-                <th>Lab Name</th>
-                <th>Payment Date</th>
-                <th>Amount</th>
-                @*<th>Status</th>*@
-            </tr>
-            <tbody>
-                @{int RowNo = 0;}
-                @foreach (var item in Model.HistoryOfLab_Payout)
-                {
-                    <tr>
-                        <td>
-                            @{RowNo++;} @RowNo
-                        </td>
-                        <td>@item.LabName</td>
-                        <td>@item.PaymentDate</td>
-                        <td>@item.Amount</td>
-                        @*<td>
-                            @if (Convert.ToInt32(item.IsGenerated) == 1)
-                            {
-                                <a href="/Payout/UpdateLabStatus?id=@item.Id" class="btn btn-primary">Generated</a>
-                            }
-                            else
-                            {
-                                <a href="/Payout/UpdateLabStatus?id=@item.Id&Amount=@item.Amount" class="btn btn-danger">Not Generated</a>
-                            }
+                <td>
+                    @{RowNo++;} @RowNo
+                </td>
+                <td>@item.LabName</td>
+                <td>@item.PaymentDate</td>
+                <td>@item.Amount</td>
+                @*<td>
+                        @if (Convert.ToInt32(item.IsGenerated) == 1)
+                        {
+                            <a href="/Payout/UpdateLabStatus?id=@item.Id" class="btn btn-primary">Generated</a>
+                        }
+                        else
+                        {
+                            <a href="/Payout/UpdateLabStatus?id=@item.Id&Amount=@item.Amount" class="btn btn-danger">Not Generated</a>
+                        }
 
-                            @if (Convert.ToInt32(item.IsPaid) == 1)
-                            {
-                                <a href="/Payout/UpdateLabPayment?id=@item.Id" class="btn btn-primary">Paid</a>
-                            }
-                            else
-                            {
-                                <a href="/Payout/UpdateLabPayment?id=@item.Id" class="btn btn-danger">Not Paid</a>
-                            }
-                        </td>*@
-                    </tr>
-                                }
-            </tbody>
-        </table>
+                        @if (Convert.ToInt32(item.IsPaid) == 1)
+                        {
+                            <a href="/Payout/UpdateLabPayment?id=@item.Id" class="btn btn-primary">Paid</a>
+                        }
+                        else
+                        {
+                            <a href="/Payout/UpdateLabPayment?id=@item.Id" class="btn btn-danger">Not Paid</a>
+                        }
+                    </td>*@
+            </tr>
+        }
+    </tbody>
+</table>
 
                                 }
 </div>

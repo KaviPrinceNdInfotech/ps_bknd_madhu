@@ -94,6 +94,9 @@
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="StartTime" Type="time" Precision="7" />
     <Property Name="EndTime" Type="time" Precision="7" />
+    <Property Name="Doctor_Id" Type="int" />
+    <Property Name="IsActive" Type="bit" />
+    <Property Name="EntryDate" Type="datetime" />
   </EntityType>
   <EntityType Name="DriverComplaint">
     <Key>
@@ -409,6 +412,14 @@ warning 6002: The table/view 'admin_Hospital.admin_Hospital.franchiseRole' does 
     </Key>
     <Property Name="Slotid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="SlotTime" Type="nvarchar" MaxLength="20" />
+  </EntityType>
+  <EntityType Name="TransactionFeeMaster">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Fee" Type="float" />
+    <Property Name="Name" Type="nvarchar" MaxLength="100" />
   </EntityType>
   <EntityType Name="UserWallet">
     <Key>
@@ -851,6 +862,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
     <Property Name="Lang" Type="float" />
     <Property Name="Charge" Type="int" />
     <Property Name="IsBankUpdateApproved" Type="bit" />
+    <Property Name="Vehicle_Id" Type="int" />
   </EntityType>
   <EntityType Name="DriverLocation">
     <Key>
@@ -876,6 +888,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
     <Property Name="ToatlDistance" Type="int" />
     <Property Name="PaymentDate" Type="datetime" />
     <Property Name="RejectedStatus" Type="bit" />
+    <Property Name="PaymentStatus" Type="nvarchar" MaxLength="10" />
   </EntityType>
   <EntityType Name="DriverPayOut">
     <Key>
@@ -2732,6 +2745,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
     <EntitySet Name="RWATDSMaster" EntityType="Self.RWATDSMaster" Schema="admin_Hospital" store:Type="Tables" />
     <EntitySet Name="TestInLab" EntityType="Self.TestInLab" Schema="admin_Hospital" store:Type="Tables" />
     <EntitySet Name="TimeSlot" EntityType="Self.TimeSlot" Schema="admin_Hospital" store:Type="Tables" />
+    <EntitySet Name="TransactionFeeMaster" EntityType="Self.TransactionFeeMaster" Schema="admin_Hospital" store:Type="Tables" />
     <EntitySet Name="UserWallet" EntityType="Self.UserWallet" Schema="admin_Hospital" store:Type="Tables" />
     <EntitySet Name="VehicleTemp" EntityType="Self.VehicleTemp" Schema="admin_Hospital" store:Type="Tables" />
     <EntitySet Name="AdminLogin" EntityType="Self.AdminLogin" Schema="dbo" store:Type="Tables" />

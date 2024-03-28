@@ -2,7 +2,7 @@
 
 @{
     ViewBag.Title = "VendorReport";
-    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    Layout = null;
 }
 
 @using (Html.BeginForm())
@@ -33,6 +33,7 @@ else
                 <th>
                     Company's Name
                 </th>
+                <th>Basic Amount</th>
                 <th>
                     TDS Amount
                 </th>
@@ -50,11 +51,11 @@ else
                 <tr>
                     <td>@item.VendorName</td>
                     <td>@item.CompanyName</td>
-                    <td>@item.Amount</td>
+                    <td>@item.TotalPrice</td>
                     @{
                         
-                        double? amt = item.Amount * ViewBag.tds / 100;
-                        double? total = (double)item.Amount - amt;
+                        double? amt = item.TotalPrice * ViewBag.tds / 100;
+                        double? total = (double)item.TotalPrice - amt;
                     }
                     <td>
                         @amt

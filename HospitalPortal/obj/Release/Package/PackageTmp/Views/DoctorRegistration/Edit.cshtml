@@ -32,7 +32,7 @@
         @Html.HiddenFor(a => a.MobileNumber)
         @Html.HiddenFor(a => a.Password) 
         @Html.HiddenFor(a => a.Vendor_Id) 
-        @Html.HiddenFor(a => a.PinCode) 
+        @Html.HiddenFor(a => a.PinCode)  
         @Html.Partial("~/Views/Shared/_DisplayMessageUpdate.cshtml")
 
 
@@ -190,9 +190,9 @@ Model.Cities
 
                 </div>
                 <div class="form-group">
-                    Evening Slot Timing * @Html.DropDownListFor(a => a.SlotTime, Model.DurationTimeList, "Select Duration slot", new { @class = "form-control" })
+                    Evening Slot Timing * @Html.DropDownListFor(a => a.SlotTime2, Model.DurationTimeList, "Select Duration slot", new { @class = "form-control" })
                     <span class="red">
-                        @Html.ValidationMessageFor(a => a.SlotTime)
+                        @Html.ValidationMessageFor(a => a.SlotTime2)
                     </span>
                 </div>
 

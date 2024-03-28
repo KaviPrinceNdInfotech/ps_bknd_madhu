@@ -269,7 +269,7 @@ namespace HospitalPortal.Controllers
             string q = @"select v.*,s.StateName,c.CityName from Vendor v 
 join StateMaster s on v.StateMaster_Id=s.Id
 join CityMaster c on v.City_Id = c.Id
-where v.IsDeleted=0 order by v.Id desc";
+where v.IsDeleted=0 order by v.Id asc";
             var data = ent.Database.SqlQuery<VendorDTO>(q).ToList();
             if (!string.IsNullOrEmpty(term))
             {

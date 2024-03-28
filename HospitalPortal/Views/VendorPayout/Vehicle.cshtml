@@ -10,11 +10,11 @@
 {
 
     <table class="table table-bordered">
-        <thead>
+        <thead style="background-color: lavender;">
             <tr>
                 @*<th>
-                    User Id
-                </th>*@
+            User Id
+        </th>*@
                 <th>
                     Vendor Name
                 </th>
@@ -25,20 +25,25 @@
                     Basic Amount
                 </th>
                 <th>
+                    Transaction Fee 2%
+                </th>
+                <th>
                     GST in %
                 </th>
-                <th>
+                <th style="display:none;">
                     Total Amount
                 </th>
-                @*<th>Deducted Amout</th>*@
                 <th>
-                    Commission in %
+                    @ViewBag.VendorCommission % Commission paid to PS Wellness
                 </th>
                 <th>
-                    TDS in %
+                    TDS
                 </th>
                 <th>
-                    Payable Amount
+                    Amount paid to concerned service provider
+                </th>
+                <th>
+                    3% Commission to franchise payable
                 </th>
                 <th>
                     Action
@@ -55,27 +60,40 @@
                     <td>
                         @item.AmountForVehicle
                     </td>
+                    @{
+                        decimal? razorpaycomm = @item.Amountwithrazorpaycomm;
+                        decimal? basicamt = (decimal)@item.AmountForVehicle;
+                        decimal? razarfeeamt = razorpaycomm - basicamt;
+
+                    }
+                    <td>@razarfeeamt</td>
                     <td>
                         @ViewBag.gst
                     </td>
                     @{
-
                         decimal? GSTAmt = ((decimal)item.AmountForVehicle * ViewBag.gst) / 100;
-                        decimal? WithGSTAmt = (decimal)item.AmountForVehicle + GSTAmt;
+                        //decimal? WithGSTAmt = (decimal)item.Amount + GSTAmt;
+                        decimal? WithGSTAmt = (decimal)item.AmountForVehicle + razarfeeamt - (GSTAmt);
+
+                        decimal? CommiAmt = ((decimal)item.AmountForVehicle * ViewBag.VendorCommission) / 100;
+                        decimal? tdsAmt = ((decimal)item.AmountForVehicle * ViewBag.tds) / 100;
 
                     }
-                    <td>@WithGSTAmt</td>
-                    <td>@ViewBag.VendorCommission</td>
-                    <td>@ViewBag.tds</td>
+                    <td style="display:none;">@WithGSTAmt</td>
+                    @*<td>@ViewBag.VendorCommission</td>*@
+                    <td>@CommiAmt</td>
+                    <td>@tdsAmt</td>
+                    @*<td>@ViewBag.tds</td>*@
                     @{
 
                         decimal? commAmt = ((decimal)item.AmountForVehicle * ViewBag.vendorCommission) / 100;
                         decimal? tdsamt = ((decimal)item.AmountForVehicle * ViewBag.tds) / 100;
-                        decimal? Value = (decimal)item.AmountForVehicle - (commAmt + tdsamt);
+                        decimal? Value = (decimal)item.AmountForVehicle - (commAmt + tdsamt + razarfeeamt);
 
                     }
 
                     <td>@Value</td>
+                    <td>@item.FraPaidableamt</td>
                     <td>
                         <a href="/VendorPayout/Pay?Vendor_Id=@item.Id&Amount=@Value" class="btn btn-primary">Generate</a>
 

@@ -143,7 +143,7 @@ v.Id,trm.Id";
             {
                 if (data.Count() == 0)
                 {
-                    TempData["msg"] = "No Record of Current Date";
+                    TempData["msg"] = "No Record of Current Week";
                 }
                 else
                 {

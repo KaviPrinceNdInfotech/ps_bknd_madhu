@@ -18,93 +18,102 @@ namespace HospitalPortal.Controllers
             return View();
         }
 
-        public ActionResult Doctor(string term, DateTime? JoiningDate, DateTime? EndDate, string name = null)
-        {
-            int Id = GetVendorId();
-            double commision = ent.Database.SqlQuery<double>(@"select Commission from CommissionMaster where IsDeleted=0 and Name='" + term + "'").FirstOrDefault();
-            decimal TDS = ent.Database.SqlQuery<decimal>(@"select Amount from FranchiseTDSMaster where IsDeleted=0 and Name='Doctor'").FirstOrDefault();
-            //double vendorCommission = ent.Database.SqlQuery<double>(@"select Commission from CommissionMaster where IsDeleted=0 and Name='Vendor'").FirstOrDefault();
-            double vendorCommission = ent.Database.SqlQuery<double>(@"select Amount from PaymentMaster where IsDeleted=0 and Department='Franchise' and Name='Doctor'").FirstOrDefault();
-            var model = new ReportDTO();
-            if (JoiningDate != null && EndDate != null)
-            {
-                DateTime dateCriteria = JoiningDate.Value.AddDays(-7);
-                string date = dateCriteria.ToString("dd/MM/yyyy");
-                var qry1 = @"select Sum(pa.TotalFee) as Amount, v.VendorName, v.CompanyName,d.DoctorName,d.DoctorId from Doctor d 
+		public ActionResult Doctor(string term, DateTime? JoiningDate, DateTime? EndDate, string name = null)
+		{
+			int Id = GetVendorId();
+			double Transactionfee = ent.Database.SqlQuery<double>(@"select Fee from TransactionFeeMaster where Name='Doctor'").FirstOrDefault();
+			double commision = ent.Database.SqlQuery<double>(@"select Commission from CommissionMaster where IsDeleted=0 and Name='" + term + "'").FirstOrDefault();
+			double tds = ent.Database.SqlQuery<double>(@"select Amount from TDSMaster where IsDeleted=0 and Name='" + term + "'").FirstOrDefault();
+			//double vendorCommission = ent.Database.SqlQuery<double>(@"select Commission from CommissionMaster where IsDeleted=0 and Name='Vendor'").FirstOrDefault();
+			double vendorCommission = ent.Database.SqlQuery<double>(@"select Amount from PaymentMaster where IsDeleted=0 and Department='Franchise' and Name='Doctor'").FirstOrDefault();
+			var model = new ReportDTO();
+			if (JoiningDate != null && EndDate != null)
+			{
+				DateTime dateCriteria = JoiningDate.Value.AddDays(-7);
+				string date = dateCriteria.ToString("dd/MM/yyyy");
+				var qry1 = @"select Sum(pa.TotalFee) as Amount, v.VendorName, v.CompanyName,d.DoctorName,d.DoctorId from Doctor d 
 join Vendor v on d.Vendor_Id = v.Id 
 join dbo.PatientAppointment pa on pa.Doctor_Id = d.Id where Convert(varchar,pa.AppointmentDate,103) between '" + JoiningDate + "' and '" + EndDate + "'  and pa.IsPaid=1 group by v.VendorName, v.CompanyName,d.DoctorName,d.DoctorId";
-                var data1 = ent.Database.SqlQuery<VendorCommissionReport>(qry1).ToList();
-                if (data1.Count() == 0)
-                {
-                    TempData["msg"] = "Your Selected Date Doesn't Contain any Information.";
-                    return View(model);
-                }
-                else
-                {
-                    ViewBag.vendorCommission = vendorCommission;
-                    ViewBag.Commission = commision;
-                    ViewBag.tds = TDS;
-                    ViewBag.DoctorAmt = model.Amount;
-                    foreach (var item in data1)
-                    {
-                        var razorcomm = (item.Amount * 2) / 100;
-                        // var razorcommafter = razorcomm * 2.36 / 100;
-                        var totalrazorcomm = razorcomm;
-                        ViewBag.Amountwithrazorpaycomm = item.Amount + totalrazorcomm;
-                        ViewBag.FraPaidableamt = (item.Amount * 3) / 100;
+				var data1 = ent.Database.SqlQuery<VendorCommissionReport>(qry1).ToList();
+				if (data1.Count() == 0)
+				{
+					TempData["msg"] = "Your Selected Date Doesn't Contain any Information.";
+					return View(model);
+				}
+				else
+				{
+					ViewBag.Commission = commision;
+					ViewBag.Transactionfee = Transactionfee;
+					ViewBag.tds = tds;
+					ViewBag.vendorCommission = vendorCommission;
 
-                    }
-                    if (name != null)
-                    {
-                        data1 = data1.Where(a => a.VendorName.ToLower().Contains(name)).ToList();
-                    }
-                    model.VendorCommissionReport = data1;
-                    return View(model);
-                }
-            }
+					foreach (var item in data1)
+					{
+						var razorcomm = (item.Amount * Transactionfee) / 100;
+						var totalrazorcomm = razorcomm;
+						item.Amountwithrazorpaycomm = item.Amount + totalrazorcomm;
+						item.FraPaidableamt = (item.Amount * 3) / 100;
 
+					}
 
-            var doctor = @"select Sum(pa.TotalFee) as Amount, v.VendorName, v.CompanyName,d.DoctorName,d.DoctorId from Doctor d 
+					if (name != null)
+					{
+						data1 = data1.Where(a => a.VendorName.ToLower().Contains(name)).ToList();
+					}
+					model.VendorCommissionReport = data1;
+					return View(model);
+				}
+			}
+
+			else
+			{
+				var doctor = @"select Sum(pa.TotalFee) as Amount, v.VendorName, v.CompanyName,d.DoctorName,d.DoctorId from Doctor d 
 join Vendor v on d.Vendor_Id = v.Id 
 join dbo.PatientAppointment pa on pa.Doctor_Id = d.Id 
 where pa.AppointmentDate  between DATEADD(day,-7,GETDATE()) and GetDate()  and pa.IsPaid=1 group by v.VendorName, v.CompanyName,d.DoctorName,d.DoctorId";
-            //var doctor = @"select COUNT(d.Id) as Counts, v.VendorName, v.CompanyName from Doctor d join Vendor v on d.Vendor_Id = v.Id where d.JoiningDate  >= DATEADD(day,-7, GETDATE()) group by v.VendorName,v.CompanyName";
-            var data = ent.Database.SqlQuery<VendorCommissionReport>(doctor).ToList();
+				//var doctor = @"select COUNT(d.Id) as Counts, v.VendorName, v.CompanyName from Doctor d join Vendor v on d.Vendor_Id = v.Id where d.JoiningDate  >= DATEADD(day,-7, GETDATE()) group by v.VendorName,v.CompanyName";
+				var data = ent.Database.SqlQuery<VendorCommissionReport>(doctor).ToList();
 
-            // Filter by search term
-            if (!string.IsNullOrEmpty(name))
-            {
-                data = data.Where(a => a.DoctorName.ToLower().Contains(name) || a.DoctorId.Contains(name)).ToList();
-                 
-            }
-            if (data.Count() == 0)
-            {
-                TempData["msg"] = "No Record.";
-                return View(model);
-            }
-            else
-            { 
-                ViewBag.Commission = commision;
-                ViewBag.vendorCommission = vendorCommission;
-                ViewBag.tds = TDS;
-                foreach (var item in data)
-                {
-                    var razorcomm = (item.Amount * 2) / 100;
-                    // var razorcommafter = razorcomm * 2.36 / 100;
-                    var totalrazorcomm = razorcomm;
-                    ViewBag.Amountwithrazorpaycomm = item.Amount + totalrazorcomm;
-                    ViewBag.FraPaidableamt = (item.Amount * 3) / 100;
+				// Filter by search term
+				if (!string.IsNullOrEmpty(name))
+				{
+					data = data.Where(a =>
+						a.DoctorName.ToLower().Contains(name.ToLower()) ||  // Ensure case-insensitive comparison for DoctorName
+						a.DoctorId.Trim().Equals(name.Trim(), StringComparison.OrdinalIgnoreCase) // Trim and compare DoctorId
+					).ToList();
+				}
 
-                }
-                
-                model.VendorCommissionReport = data;
-                return View(model);
-            }
+				if (data.Count() == 0)
+				{
+					TempData["msg"] = "No Record.";
+					return View(model);
+				}
+				else
+				{
+					ViewBag.Commission = commision;
+					ViewBag.Transactionfee = Transactionfee;
+					ViewBag.tds = tds;
+					ViewBag.vendorCommission = vendorCommission;
 
-        }
+					foreach (var item in data)
+					{
+						var razorcomm = (item.Amount * Transactionfee) / 100;
+						var totalrazorcomm = razorcomm;
+						item.Amountwithrazorpaycomm = item.Amount + totalrazorcomm;
+						item.FraPaidableamt = (item.Amount * 3) / 100;
 
-        //Lab Commission Report
-        public ActionResult Lab(string term, DateTime? JoiningDate, DateTime? EndDate, string name = null)
+					}
+
+					model.VendorCommissionReport = data;
+					
+				}
+				return View(model);
+			}
+
+		}
+
+		//Lab Commission Report
+		public ActionResult Lab(string term, DateTime? JoiningDate, DateTime? EndDate, string name = null)
         {
             double commision = ent.Database.SqlQuery<double>(@"select Commission from CommissionMaster where IsDeleted=0 and Name='" + term + "'").FirstOrDefault();
             //double vendorCommission = ent.Database.SqlQuery<double>(@"select Commission from CommissionMaster where IsDeleted=0 and Name='Vendor'").FirstOrDefault();

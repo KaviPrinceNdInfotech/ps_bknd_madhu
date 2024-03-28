@@ -462,6 +462,7 @@ namespace HospitalPortal.Controllers
                     domainModel.AdminLogin_Id = admin.Id;
                     domainModel.DriverId = UniuqId;
                     domainModel.PAN = model.PAN;
+                    domainModel.Vendor_Id = model.Vendor_Id;
                     admin.UserID = domainModel.DriverId;
                     domainModel.IsBankUpdateApproved = false;
                     ent.Drivers.Add(domainModel);

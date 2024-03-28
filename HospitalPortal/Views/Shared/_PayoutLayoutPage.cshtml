@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.css">
     <link rel="stylesheet" type="text/css" href="/lib/bootstrap/css/bootstrap.css">
 
+    <link rel="stylesheet" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
     <link rel="stylesheet" type="text/css" href="/stylesheets/theme.css">
     <link rel="stylesheet" type="text/css" href="/stylesheets/premium.css">
     <script>
@@ -99,13 +100,13 @@
                     </ul>
                 </li>
                 @*<li>
-                    <ul class="payOut-menu nav nav-list collapse">
-                        <li>
-                            <a href="/Rwa_Report/RwaPayOut" style="cursor:pointer"><span class="fa fa-history"></span> <span class="fa fa-user"></span>RWA</a>
+                        <ul class="payOut-menu nav nav-list collapse">
+                            <li>
+                                <a href="/Rwa_Report/RwaPayOut" style="cursor:pointer"><span class="fa fa-history"></span> <span class="fa fa-user"></span>RWA</a>
 
-                        </li>
-                    </ul>
-                </li>*@
+                            </li>
+                        </ul>
+                    </li>*@
                 <li>
                     <ul class="payOut-menu nav nav-list collapse">
                         <li><a href="/Payout/Lab" style="cursor:pointer"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Lab</a>
@@ -123,11 +124,11 @@
                     </ul>
                 </li>
                 @*<li>
-                    <ul class="payOut-menu nav nav-list collapse">
-                        <li>
-                            <a href="/Payout/Health" style="cursor:pointer"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Complete Health Checkup</a>
-                    </ul>
-                </li>*@
+                        <ul class="payOut-menu nav nav-list collapse">
+                            <li>
+                                <a href="/Payout/Health" style="cursor:pointer"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Complete Health Checkup</a>
+                        </ul>
+                    </li>*@
                 <li>
                     <ul class="payOut-menu nav nav-list collapse">
                         <li>
@@ -153,23 +154,23 @@
                     </ul>
                 </li>
                 @*<li>
-                    <ul class="payOutHistory-menu nav nav-list collapse">
-                        <li>
-                            <a href="/Rwa_Report/RwaPayOut" style="cursor:pointer"><span class="fa fa-history"></span> <span class="fa fa-user"></span>RWA</a>
+                        <ul class="payOutHistory-menu nav nav-list collapse">
+                            <li>
+                                <a href="/Rwa_Report/RwaPayOut" style="cursor:pointer"><span class="fa fa-history"></span> <span class="fa fa-user"></span>RWA</a>
 
-                        </li>
-                    </ul>
-                </li>*@
+                            </li>
+                        </ul>
+                    </li>*@
                 <li>
                     <ul class="payOutHistory-menu nav nav-list collapse">
                         <li><a href="/Payout/LabList" style="cursor:pointer"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Lab</a>
                     </ul>
                 </li>
                 @*<li>
-                    <ul class="payOutHistory-menu nav nav-list collapse">
-                        <li><a href="/Payout/AmbulanceList" style="cursor:pointer"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Ambulance</a>
-                    </ul>
-                </li>*@
+                        <ul class="payOutHistory-menu nav nav-list collapse">
+                            <li><a href="/Payout/AmbulanceList" style="cursor:pointer"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Ambulance</a>
+                        </ul>
+                    </li>*@
                 <li>
                     <ul class="payOutHistory-menu nav nav-list collapse">
                         <li>
@@ -177,11 +178,11 @@
                     </ul>
                 </li>
                 @*<li>
-                    <ul class="payOutHistory-menu nav nav-list collapse">
-                        <li>
-                            <a href="/Payout/HealthCheckUpList" style="cursor:pointer"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Complete Health Checkup</a>
-                    </ul>
-                </li>*@
+                        <ul class="payOutHistory-menu nav nav-list collapse">
+                            <li>
+                                <a href="/Payout/HealthCheckUpList" style="cursor:pointer"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Complete Health Checkup</a>
+                        </ul>
+                    </li>*@
                 <li>
                     <ul class="payOutHistory-menu nav nav-list collapse">
                         <li>
@@ -198,8 +199,8 @@
         </div>
     </div>
     <div class="content" id="pageContainer">
-            @RenderBody()
-        </div>
+        @RenderBody()
+    </div>
 
     @Html.Partial("~/Views/Shared/_script.cshtml")
     <script type="text/javascript">
@@ -238,5 +239,11 @@
     </script>
     <script src="/Scripts/Library/jquery.validate.min.js"></script>
     <script src="/Scripts/Library/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/Scripts/jquery-ui.js"></script>
+    <script src="/js/jquery-1.11.1.min.js"></script>
+    <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script>
+        $('#myTable').DataTable();
+    </script>
 </body>
 </html>
