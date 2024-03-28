@@ -14,7 +14,7 @@
         {
             <tr>
                 <th>Doctor Name</th>
-                <td>            @Model.DoctorReport.FirstOrDefault().DoctorName</td>
+                <td> @Model.DoctorReport.FirstOrDefault().DoctorName</td>
                 <th>Mobile No.</th>
                 <td>@Model.DoctorReport.FirstOrDefault().MobileNumber</td>
             </tr>
@@ -55,9 +55,9 @@
             <div class='col-sm-5'>
                 <div class="form-group">
                     <div class='input-group date'>
-                        <input type='text' name="sdate" id="datepicker1" class="form-control" placeholder="From Date" />
+                        <input type='date' name="sdate" class="form-control"  placeholder="From Date" />
                         <span class="input-group-addon">
-                            <span class="glyphicon glyphicon-calendar"></span>
+                            <span class=" "></span>
                         </span>
                     </div>
                 </div>
@@ -65,9 +65,9 @@
             <div class='col-sm-5'>
                 <div class="form-group">
                     <div class='input-group date' id='datetimepicker1'>
-                        <input type='text' name="edate" id="datepicker2" class="form-control" placeholder="Date To" />
+                        <input type='date' name="edate" class="form-control" placeholder="Date To" />
                         <span class="input-group-addon">
-                            <span class="glyphicon glyphicon-calendar"></span>
+                            <span class=""></span>
                         </span>
                     </div>
                 </div>
@@ -83,52 +83,53 @@
                 }
                 else
                 {
-                    <table id="doctor">
-                        <thead>
-                            <tr>
-                                <th>Appointment Date</th>
-                                <th>Total Amount</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model.DoctorReport)
-                            {
-                                <tr>
-                                    <td>
-                                        @if (item.AppointmentDate != null)
-                                        {
-                                            @item.AppointmentDate.Value.ToString("dd-MMM-yyyy");
-                                        }
-                                    </td>
-                                    <td>
-                                        &#8377; @item.Amount
-                                    </td>
-                                    <td>
-                                        <a href="/Report/ViewDoctorAppointment?date=@item.AppointmentDate1" class="btn btn-primary">View More</a>
-                                    </td>
-                                </tr>
-                            }
+<table id="doctor">
+    <thead>
+        <tr>
+            <th>Appointment Date</th>
+            <th>Total Amount</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.DoctorReport)
+        {
+            <tr>
+                <td>
+                    @if (item.AppointmentDate != null)
+                    {
+                        @item.AppointmentDate.Value.ToString("dd-MMM-yyyy");
+                    }
+                </td>
+                <td>
+                    &#8377; @item.Amount
+                </td>
+                <td>
+                    <a href="/Report/ViewDoctorAppointment?date=@item.AppointmentDate1&DoctorId=@item.Doctor_Id" class="btn btn-primary">View More</a>
+                </td>
+            </tr>
+        }
 
-                        </tbody>
-                    </table>
-                    <div class="row">
-                        <div class="col-md-3">
-                            Total Month Amount
-                        </div>
-                        <div class="col-md-3">
-                            <b style="color:red; font-size:medium">
-                                @if (ViewBag.Total != null)
-                                {
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="1" style="text-align: right;"><strong>Total Month Amount:</strong></td>
+            
+            <td><b style="color:red; font-size:medium">
+    @if (ViewBag.Total != null)
+    {
 
-                                    <b style="color:red">&#8377; @ViewBag.Total</b>}
-                                else
-                                {
-                                    <b style="color:red">&#8377; @ViewBag.Amount</b>
-                                }
-
-                        </div>
-                    </div>
+        <b style="color:red">&#8377; @ViewBag.Total</b>
+    }
+    else
+    {
+        <b style="color:red">&#8377; @ViewBag.Amount</b>
+    }
+</td>
+        </tr>
+    </tfoot>
+</table>
+                     
 
                 }
 <!--DatePicker-->

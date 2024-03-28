@@ -48,7 +48,7 @@
         }
         else
         {
-        <div class="row " style="overflow-y:scroll;" >
+        <div class="row" >
                 <div class="col-md-12 ">
                     <div class="row" style="text-align:center">
                         <ul class="pagination">
@@ -67,8 +67,8 @@
                         </ul>
                     </div>
                     <div class="double-scroll">
-                        <table class="table table-bordered ">
-                            <thead>
+                        <table id="myTable" class="table table-bordered ">
+                            <thead style="background-color:lavender;">
                                 <tr id="myHeader" class="header">
                                     <th>Sr. No</th>
                                     <th>Doctor Id</th>
@@ -166,6 +166,4 @@
 </div>
         }
     </div> 
-<script>
-    $('.double-scroll').doubleScroll();
-</script>
+ 

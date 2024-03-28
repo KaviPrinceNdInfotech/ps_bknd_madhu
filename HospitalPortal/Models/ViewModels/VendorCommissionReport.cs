@@ -8,6 +8,8 @@ namespace HospitalPortal.Models.ViewModels
     public class VendorCommissionReport
     {
         public double? Amount { get; set; }
+        public double? FraPaidableamt { get; set; }
+        public double? Amountwithrazorpaycomm { get; set; }
         public int Id { get; set; }
         public string VendorName { get; set; } 
         public string CompanyName { get; set; }

@@ -50,78 +50,118 @@
     else
     {
 
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>
-                        Sr No.
-                    </th>
-                    <th>
-                        Doctor Name/Id
-                    </th>
-                    <th>
-                        Basic Amount
-                    </th>
-                    <th>
-                        Commission to PS Wellness @ViewBag.Commission %
-                    </th>
-                    <th>
-                        Transaction Charge 2%
-                    </th>
-                    <th>
-                        TDS @ViewBag.tds %
-                    </th>
-                    <th>
-                        Payable to service provider
-                    </th>
-                    <th>
-                        Payable to franchise
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>
+                Sr No.
+            </th>
+            <th>
+                Doctor Name/Id
+            </th>
+            <th>
+                Basic Amount
+            </th>
+            <th>
+                Commission to PS Wellness @ViewBag.Commission %
+            </th>
+            <th>
+                Transaction Fee @ViewBag.Transactionfee %
+            </th>
+            <th>
+                TDS @ViewBag.tds %
+            </th>
+            <th>
+                Payable to service provider 
+            </th>
+            <th>
+                Payable to franchise 3%
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            double? totalPayableAmount = 0;
+            double? totalCommissionAmount = 0;
+            double? totalAmount = 0;
+            double? totaltdsAmount = 0;
+            double totalTransactionAmount = 0;
+            double? totalFraPaidableamt = 0;
+        }
 
-                @foreach (var item in Model.VendorCommissionReport)
-                {
-                    <tr>
-                        <td>@Count</td>
-                        <td>@item.DoctorName (@item.DoctorId)</td>
-                        <td> ₹ @item.Amount</td>
-                        @{
-                            double comm = (Math.Round(item.Amount * ViewBag.Commission) / 100);
-                        }
-                        <td>
-                            ₹ @comm
-                        </td>
-                        @{
-                            double? razorpaycomm = @ViewBag.Amountwithrazorpaycomm;
-                            double? basicamt = @item.Amount;
-                            double? razarfeeamt = razorpaycomm - basicamt;
-
-                        }
-                        <td>₹ @String.Format("{0:F2}", razarfeeamt) </td>
-                        @{
-                            decimal tds = (decimal)Math.Round((decimal)item.Amount * (decimal)ViewBag.tds / 100, 2);
-
-                        }
-                        <td>
-                            ₹ @tds
-                        </td>
-                        @{
-                            double? commAmt = ((double)item.Amount * ViewBag.Commission) / 100;
-                            double? tdsamt = ((double)item.Amount * (double)ViewBag.tds) / 100;
-                            double? Value = item.Amount - (commAmt + tdsamt + razarfeeamt);
-                        }
-
-
-                        <td>₹ @Value</td>
-                        <td> ₹ @ViewBag.FraPaidableamt</td>
-                    </tr>
-                    Count++;
+        @foreach (var item in Model.VendorCommissionReport)
+        {
+            <tr>
+                <td>@Count</td>
+                <td>@item.DoctorName (@item.DoctorId)</td>
+                <td> ₹ @item.Amount</td>
+                @{
+                    double comm = (Math.Round(item.Amount * ViewBag.Commission) / 100);
                 }
-            </tbody>
+                <td>
+                    ₹ @comm
+                </td>
+                @{
+                    double? razorpaycomm = @item.Amountwithrazorpaycomm;
+                    double? basicamt = @item.Amount;
+                    double? razarfeeamt = razorpaycomm - basicamt;
+                    totalTransactionAmount += (double)razarfeeamt;
+                }
+                <td>@String.Format("{0:F2}", razarfeeamt) </td>
+                @{
+                    decimal tds = (decimal)Math.Round((decimal)item.Amount * (decimal)ViewBag.tds / 100, 2);
 
-        </table>
+                }
+                <td>
+                    ₹ @tds
+                </td>
+                @{
+                    double? commAmt = ((double)item.Amount * ViewBag.Commission) / 100;
+                    double? tdsamt = ((double)item.Amount * (double)ViewBag.tds) / 100;
+                    double? Value = item.Amount - (commAmt + tdsamt + razarfeeamt);
+
+                    totalFraPaidableamt += item.FraPaidableamt;
+                    totalAmount += item.Amount;
+                    totalPayableAmount += @Value;
+                    totaltdsAmount += (double)tds;
+
+                    totalCommissionAmount += commAmt;
+                }
+
+
+                <td>₹ @Value</td>
+                <td> ₹ @item.FraPaidableamt</td>
+            </tr>
+            Count++;
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="2" style="text-align: right;">
+                <strong>Total:</strong>
+            </td>
+            <td>
+                <strong>₹ @totalAmount</strong>
+            </td>
+            <td>
+                <strong>₹ @totalCommissionAmount</strong>
+            </td>
+            <td>
+                <strong>₹ @String.Format("{0:F2}", @totalTransactionAmount)</strong>
+            </td>
+
+            <td>
+                <strong>₹ @totaltdsAmount</strong>
+            </td>
+            <td>
+                <strong>₹ @totalPayableAmount</strong>
+            </td>
+            <td>
+                <strong>₹ @totalFraPaidableamt</strong>
+            </td>
+        </tr>
+    </tfoot>
+</table>
     }
 
 

@@ -17,6 +17,8 @@ namespace HospitalPortal.Models.ViewModels
         public int TotalPages { get; set; }
         public int PageNumber { get; set; } 
         public DateTime AppointmentDate { get; set; }
+        public DateTime startdate { get; set; }
+        public DateTime enddate { get; set; }
         public DateTime TestDate { get; set; }
         public IEnumerable<HealthCommissionReport> HealthCommisionReport { get; set; }
         public IEnumerable<DoctorCommissionReport> DoctorCommisionReport { get; set; }

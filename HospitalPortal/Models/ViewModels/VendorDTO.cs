@@ -150,6 +150,7 @@ namespace HospitalPortal.Models.ViewModels
     public class Fra_ProDetail
     {
         public int Id { get; set; }
+        public string UniqueId { get; set; }
         public string VendorName { get; set; }
         public string MobileNumber { get; set; }
         public string EmailId { get; set; }

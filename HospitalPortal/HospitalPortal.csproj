@@ -430,6 +430,7 @@
     <Content Include="Images\blog-icon3.png" />
     <Content Include="Images\blog-icon4.png" />
     <Content Include="Images\blog-icon5.png" />
+    <Content Include="Images\Businessimg.jpg" />
     <Content Include="Images\businesslogo.jpg" />
     <Content Include="Images\BuyMedicin.png" />
     <Content Include="Images\c01.jpg" />
@@ -1306,6 +1307,9 @@
     <Compile Include="Models\DomainModels\TimeSlot.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\DomainModels\TransactionFeeMaster.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\DomainModels\TravelMaster.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -1492,6 +1496,7 @@
     <Compile Include="Models\ViewModels\TestDTO.cs" />
     <Compile Include="Models\ViewModels\TestListByLab.cs" />
     <Compile Include="Models\ViewModels\TimeSpans.cs" />
+    <Compile Include="Models\ViewModels\TransactionFeeDTO.cs" />
     <Compile Include="Models\ViewModels\TravelHistoryVM.cs" />
     <Compile Include="Models\ViewModels\UpdateBank.cs" />
     <Compile Include="Models\ViewModels\UpdateDepartment.cs" />
@@ -2150,6 +2155,9 @@
     <Content Include="Views\Chemist\MedicineList.cshtml" />
     <Content Include="Views\Common\AddDoctorDurationTime.cshtml" />
     <Content Include="Views\CommisionReport\DoctorDetails.cshtml" />
+    <Content Include="Views\Common\TransactionFee.cshtml" />
+    <Content Include="Views\Common\EditTransactionFee.cshtml" />
+    <Content Include="Views\CommisionReport\AmbulanceDetails.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

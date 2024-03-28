@@ -3,13 +3,15 @@
     ViewBag.Title = "Ambulance";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
     string role = HospitalPortal.Utility.UserIdentity.UserRole;
+    int count = 1;
 }
 
 <h2>Vehicle List</h2>
 
-<table id="table_id" class="display">
-    <thead>
+<table id="table_id" class="table table-hover">
+    <thead style="background-color:lavender;">
         <tr>
+            <th>Sr No.</th>
             <th>
                 Vehicle Number
             </th>
@@ -22,15 +24,18 @@
         </tr>
     </thead>
     <tbody>
+        
         @foreach (var item in Model.Ambulance)
         {
             <tr>
+                <td>@count</td>
                 <td>
-                    @item.DriverName
+                    @item.VehicleNumber (@item.DriverName)
                 </td>
                 <td>@item.VehicleName</td>
                 <td><a href="/AmbulancePayment/ViewDetails?id=@item.VehicleId" class="btn btn-primary">View Details</a></td>
             </tr>
+            count++;
         }
     </tbody>
 </table>

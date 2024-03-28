@@ -381,5 +381,29 @@ where BT.Lab_Id=" + Id + "";
             RM.Status = 1;
             return Ok(RM);
         }
-    }
+
+		[HttpGet, Route("api/CommonApi/GetVehicleType")]
+		public IHttpActionResult GetVehicleType()
+		{
+			string qry = @"SELECT Id,VehicleTypeName FROM VehicleType WHERE IsDeleted = 0 ORDER BY VehicleTypeName;";
+			var VehicleType = ent.Database.SqlQuery<VehicleTypes>(qry).ToList();
+			return Ok(new { VehicleType });
+		}
+
+		[HttpGet, Route("api/CommonApi/GetVehicleNumberListByVehicleType")]
+		public IHttpActionResult GetVehicleNumberListByVehicleType(int VehicleType_Id)
+		{
+            string qry = @"SELECT Id,VehicleNumber FROM Vehicle WHERE IsDeleted = 0 AND VehicleType_Id = "+ VehicleType_Id + " ORDER BY VehicleNumber;"; 
+			var VehicleNumberList = ent.Database.SqlQuery<VehicleNumbers>(qry).ToList();
+			return Ok(new { VehicleNumberList });
+		}
+
+		[HttpGet, Route("api/CommonApi/GetVehicleNumberListByVehicleType")]
+		public IHttpActionResult GetVehicleNumber()
+		{
+			string qry = @"SELECT Id,VehicleNumber FROM Vehicle WHERE IsDeleted = 0  ORDER BY VehicleNumber;";
+			var VehicleNumberList = ent.Database.SqlQuery<VehicleNumbers>(qry).ToList();
+			return Ok(new { VehicleNumberList });
+		}
+	}
 }

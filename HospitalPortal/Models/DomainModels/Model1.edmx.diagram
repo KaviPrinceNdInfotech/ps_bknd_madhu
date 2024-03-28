@@ -230,6 +230,7 @@
         <EntityTypeShape EntityType="Model.DurationTime" Width="1.5" PointX="33.375" PointY="31.75" />
         <EntityTypeShape EntityType="Model.Doctor" Width="1.5" PointX="34.375" PointY="1.375" />
         <AssociationConnector Association="Model.FK__Cancelled__Docto__1F198FD4" />
+        <EntityTypeShape EntityType="Model.TransactionFeeMaster" Width="1.5" PointX="11.375" PointY="3.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

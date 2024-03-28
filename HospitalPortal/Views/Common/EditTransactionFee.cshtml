@@ -1,0 +1,43 @@
+﻿@model HospitalPortal.Models.ViewModels.TransactionFeeDTO
+@{
+    ViewBag.Title = "EditTransactionFee";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Edit Transaction Fee</h2>
+
+<style>
+    #mainContainer {
+        width: 60%;
+        margin-left: 1%;
+        margin-top: 1%;
+    }
+</style>
+<a href="/Common/TransactionFee" class="btn btn-primary">Back</a>
+@using (Html.BeginForm("EditTransactionFee", "Common", FormMethod.Post))
+{
+    <div id="mainContainer">
+        @Html.HiddenFor(a => a.Id) 
+        <div class="row">
+            <div class="col-md-1">
+
+                <h4>Name</h4>
+            </div>
+            <div class="col-md-3">
+                <h4>@Model.Name</h4>
+            </div>
+            <div class="col-md-5">
+                @Html.TextBoxFor(a => a.Fee, new { @class = "form-control" })
+            </div>
+            <div class="col-md-3">
+                <input type="submit" value="Submit" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+}
+
+
+
+<script src="/Scripts/Library/jquery-1.7.1.min.js"></script>
+<script src="/Scripts/Library/jquery-ui-1.8.20.min.js"></script>
+

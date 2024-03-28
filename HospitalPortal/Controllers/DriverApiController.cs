@@ -427,9 +427,7 @@ namespace HospitalPortal.Controllers
                     EntryDate = DateTime.Now,
                     IsPay = "N",
                     Status = "0"
-
-                };
-                // ent.DriverLocations.Add(mod);
+                }; 
                 ent.SaveChanges();
                 return Ok(new { model.VehicleType_id, model.start_Lat, model.start_Long, Message = "Driver Booked SuccessFully " });
             }
@@ -483,7 +481,7 @@ namespace HospitalPortal.Controllers
 //INNER JOIN AdminLogin AS AL with(nolock) ON D.AdminLogin_Id = AL.Id
 //where D.Lat IS NOT NULL and D.Lang IS NOT NULL and d.VehicleType_id=" + model.VehicleType_id + " and D.IsApproved=1").ToList();
                 
-                var Driver = ent.Database.SqlQuery<UpdatelocationDriver>(@"select D.Id AS DriverId,D.Lat, D.Lang,D.DriverName,D.DlNumber,dbo.DriverCharges() as Charge,AL.DeviceId from Driver AS D with(nolock)
+                var Driver = ent.Database.SqlQuery<UpdatelocationDriver>(@"select distinct D.Id AS DriverId,D.Lat, D.Lang,D.DriverName,D.DlNumber,dbo.DriverCharges() as Charge,AL.DeviceId from Driver AS D with(nolock)
 INNER JOIN AdminLogin AS AL with(nolock) ON D.AdminLogin_Id = AL.Id
 INNER JOIN Vehicle as v on V.VehicleType_Id=d.VehicleType_id
 INNER JOIN VehicleType as vt on Vt.Id=v.VehicleType_id
@@ -578,8 +576,7 @@ where D.Lat IS NOT NULL and D.Lang IS NOT NULL and d.VehicleType_id=" + model.Ve
                 {
                      
                     Lat_Driver = DriveLat,
-                    Lang_Driver = DriveLong,
-                    //Driver_Id = model.Driver_Id,
+                    Lang_Driver = DriveLong, 
                     start_Lat = model.start_Lat,
                     start_Long = model.start_Long,
                     end_Long = model.end_Long,
@@ -690,35 +687,103 @@ WHERE D.[Status] = 0 and D.RejectedStatus=0").ToList();
         }
 
         [HttpGet, Route("api/DriverApi/GetAcceptedReqDriverDetail")]
-        public IHttpActionResult GetAcceptedReqDriverDetail(int Id)
-        {
-            string qry = @"SELECT DL.Id,D.Id AS DriverId,D.DriverName,D.MobileNumber,D.DlNumber,D.DriverImage,ND.TotalPrice,V.VehicleNumber,VT.VehicleTypeName,ND.ToatlDistance FROM Driver as D INNER JOIN NearDriver AS ND ON ND.DriverId=D.Id INNER JOIN Vehicle AS V ON V.Driver_Id=D.Id INNER JOIN DriverLocation AS DL ON D.Id=DL.Driver_Id INNER JOIN VehicleType AS VT ON VT.Id=V.VehicleType_Id WHERE ND.Id="+Id+" and DL.[Status]=1 and DL.IsPay='N' order by DL.Id desc";
-            var data = ent.Database.SqlQuery<GetAcceptedReq_DriverDetail>(qry).FirstOrDefault();
-            return Ok(data);
-        }
+		public IHttpActionResult GetAcceptedReqDriverDetail(int Id)
+		{
+			var existpayment = ent.DriverLocations.Where(d => d.PaymentStatus == "1" && d.IsPay == "Y").OrderByDescending(d => d.Id).FirstOrDefault();
+			var existpayment2 = ent.DriverLocations.Where(d => d.PaymentStatus == "2" && d.IsPay == "Y").OrderByDescending(d => d.Id).FirstOrDefault();
+			if (existpayment != null)
+			{
+				string qry2 = @"SELECT DL.Id,D.Id AS DriverId,D.DriverName,D.MobileNumber,D.DlNumber,D.DriverImage,ND.TotalPrice,V.VehicleNumber,VT.VehicleTypeName,ND.ToatlDistance,(ND.TotalPrice * 40)/100 AS PayableAmount FROM Driver as D INNER JOIN NearDriver AS ND ON ND.DriverId=D.Id INNER JOIN Vehicle AS V ON V.Driver_Id=D.Id INNER JOIN DriverLocation AS DL ON D.Id=DL.Driver_Id INNER JOIN VehicleType AS VT ON VT.Id=V.VehicleType_Id WHERE ND.Id=" + Id + " and DL.[Status]=1 and DL.IsPay='Y' and DL.PaymentStatus='1' order by DL.Id desc";
+				var data2 = ent.Database.SqlQuery<GetAcceptedReq_DriverDetail>(qry2).FirstOrDefault();
+				return Ok(data2);
+			}
+			else if (existpayment2 != null)
+			{
+				string qry3 = @"SELECT DL.Id,D.Id AS DriverId,D.DriverName,D.MobileNumber,D.DlNumber,D.DriverImage,ND.TotalPrice,V.VehicleNumber,VT.VehicleTypeName,ND.ToatlDistance,(ND.TotalPrice * 50)/100 AS PayableAmount FROM Driver as D INNER JOIN NearDriver AS ND ON ND.DriverId=D.Id INNER JOIN Vehicle AS V ON V.Driver_Id=D.Id INNER JOIN DriverLocation AS DL ON D.Id=DL.Driver_Id INNER JOIN VehicleType AS VT ON VT.Id=V.VehicleType_Id WHERE ND.Id=" + Id + " and DL.[Status]=1 and DL.IsPay='Y' and DL.PaymentStatus='2' order by DL.Id desc";
+				var data3 = ent.Database.SqlQuery<GetAcceptedReq_DriverDetail>(qry3).FirstOrDefault();
+				return Ok(data3);
+			}
+			else
+			{
 
-        [HttpPost, Route("api/DriverApi/DriverPayNow")]
+				string qry = @"SELECT DL.Id,D.Id AS DriverId,D.DriverName,D.MobileNumber,D.DlNumber,D.DriverImage,ND.TotalPrice,V.VehicleNumber,VT.VehicleTypeName,ND.ToatlDistance,(ND.TotalPrice * 10)/100 AS PayableAmount FROM Driver as D INNER JOIN NearDriver AS ND ON ND.DriverId=D.Id INNER JOIN Vehicle AS V ON V.Driver_Id=D.Id INNER JOIN DriverLocation AS DL ON D.Id=DL.Driver_Id INNER JOIN VehicleType AS VT ON VT.Id=V.VehicleType_Id WHERE ND.Id=" + Id + " and DL.[Status]=1 and DL.IsPay='N' order by DL.Id desc";
+				var data = ent.Database.SqlQuery<GetAcceptedReq_DriverDetail>(qry).FirstOrDefault();
+				return Ok(data);
+			}
+
+		}
+
+		[HttpPost, Route("api/DriverApi/DriverPayNow")]
         public IHttpActionResult DriverPayNow(Driver_PayNow DriverPayNow)
         {
-            try
-            {
-                var data = ent.DriverLocations.Where(a => a.PatientId == DriverPayNow.PatientId && a.Driver_Id == DriverPayNow.Driver_Id && a.IsPay == "N").OrderByDescending(a => a.Id).FirstOrDefault();
+			//try
+			//{
+			//    var data = ent.DriverLocations.Where(a => a.PatientId == DriverPayNow.PatientId && a.Driver_Id == DriverPayNow.Driver_Id && a.IsPay == "N").OrderByDescending(a => a.Id).FirstOrDefault();
 
-                data.Amount = DriverPayNow.Amount;
-                data.IsPay = "Y";
-                data.PaymentDate = DateTime.Now;
-                ent.SaveChanges();
-                rm.Status = 1;
-                rm.Message = "Payment Success";
-            }
-            catch (Exception ex)
-            {
-                rm.Status = 0;
-                return BadRequest("Server Error");
-            }
-            return Ok(rm);
+			//    data.Amount = DriverPayNow.Amount;
+			//    data.IsPay = "Y";
+			//    data.PaymentDate = DateTime.Now;
+			//    ent.SaveChanges();
+			//    rm.Status = 1;
+			//    rm.Message = "Payment Success";
+			//}
+			//catch (Exception ex)
+			//{
+			//    rm.Status = 0;
+			//    return BadRequest("Server Error");
+			//}
+			//return Ok(rm);
+			try
+			{
+				var data = ent.DriverLocations.Where(a => a.PatientId == DriverPayNow.PatientId && a.Driver_Id == DriverPayNow.Driver_Id && a.IsPay == "N").OrderByDescending(a => a.Id).FirstOrDefault();
+				var data2 = ent.DriverLocations.Where(a => a.PatientId == DriverPayNow.PatientId && a.Driver_Id == DriverPayNow.Driver_Id && a.IsPay == "Y" && a.PaymentStatus == "1").OrderByDescending(a => a.Id).FirstOrDefault();
+				var data3 = ent.DriverLocations.Where(a => a.PatientId == DriverPayNow.PatientId && a.Driver_Id == DriverPayNow.Driver_Id && a.IsPay == "Y" && a.PaymentStatus == "2").OrderByDescending(a => a.Id).FirstOrDefault();
+				 
+				if (data != null)
+				{
+					data.Amount = DriverPayNow.Amount;
+					data.IsPay = "Y";
+					data.PaymentStatus = "1";
+					data.PaymentDate = DateTime.Now;
 
-        }
+					ent.SaveChanges();
+					rm.Status = 1;
+					rm.Message = "First payment done,10% of total price.";
+				}
+				else if (data2 != null)
+				{
+					data2.Amount = DriverPayNow.Amount;
+					data2.IsPay = "Y";
+					data2.PaymentStatus = "2";
+					data2.PaymentDate = DateTime.Now;
+					ent.SaveChanges();
+					rm.Status = 1;
+					rm.Message = "Second Payment done, 50% of total price.";
+				}
+                else if (data3 != null)
+				{
+					data3.Amount = DriverPayNow.Amount;
+					data3.IsPay = "Y";
+					data3.PaymentStatus = "3";
+					data3.PaymentDate = DateTime.Now;
+					ent.SaveChanges();
+					rm.Status = 1;
+					rm.Message = "Full Payment Successfully paid.";
+				}
+				else
+				{
+					return Content(HttpStatusCode.NotFound, "Data not found");
+				}
+
+			}
+			catch (Exception ex)
+			{
+				rm.Status = 0;
+				return BadRequest("Server Error");
+			}
+			return Ok(rm);
+
+		}
 
         [System.Web.Http.HttpGet, Route("api/DriverApi/GetDriverBookingHistory")]
 

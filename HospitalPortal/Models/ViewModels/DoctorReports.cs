@@ -8,6 +8,7 @@ namespace HospitalPortal.Models.ViewModels
     public class DoctorReports
     {
         public string PatientName { get; set; }
+        public string DoctorId { get; set; }
         public int Commission { get; set; }
         public int Doctor_Id { get; set;}
         public string DoctorName { get; set; }

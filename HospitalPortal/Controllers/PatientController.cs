@@ -189,7 +189,7 @@ namespace HospitalPortal.Controllers
                               VendorName = rt.VendorName,
                               vendorId = p.vendorId,
                               UniqueId = rt.UniqueId
-                          }).OrderByDescending(x=>x.Id).ToList();
+                          }).ToList();
             if(!string.IsNullOrEmpty(term))
             {
                 result = result.Where(a => a.PatientName.Contains(term) || a.MobileNumber.StartsWith(term) || a.PatientRegNo.StartsWith(term)).ToList();
@@ -204,7 +204,7 @@ namespace HospitalPortal.Controllers
             decimal noOfPages = Math.Ceiling((decimal)total / pageSize);
             model.TotalPages = (int)noOfPages;
             model.PageNumber = (int)pageNumber;
-            result = result.OrderByDescending(a => a.Id).Skip(pageSize * ((int)pageNumber - 1)).Take(pageSize).ToList();
+            result = result.Skip(pageSize * ((int)pageNumber - 1)).Take(pageSize).ToList();
             model.Patient = result;
             return View(model);
         }

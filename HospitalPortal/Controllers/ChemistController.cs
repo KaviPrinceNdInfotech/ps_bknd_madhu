@@ -245,7 +245,7 @@ namespace HospitalPortal.Controllers
 join StateMaster s on v.StateMaster_Id=s.Id
 join CityMaster c on v.CityMaster_Id = c.Id
 left join Vendor ve on ve.Id = v.Vendor_Id 
-where v.IsDeleted=0 order by v.Id desc";
+where v.IsDeleted=0 order by v.Id asc";
             var data = ent.Database.SqlQuery<ChemistDTO>(q).ToList();
             if (vendorId != null)
                 data = data.Where(a => a.Vendor_Id == vendorId).ToList();

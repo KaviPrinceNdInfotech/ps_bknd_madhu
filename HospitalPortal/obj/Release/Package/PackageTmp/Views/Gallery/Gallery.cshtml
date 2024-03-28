@@ -58,7 +58,18 @@
                 {
                     <tr>
                         <td>@item.ImageName</td>
-                        <td><img src="~/Gallery/@item.Images" width="100px" height="100px" /></td>
+                        <td>
+                            @if (item.Images != null)
+                            {
+                                <a href="/Images/@item.Images"> <img src="/Images/@item.Images" style="width:100px;height:100px" /></a>
+
+                            }
+                            else
+                            {
+                                <text>No Image</text>
+                            }
+
+                        </td>
                         <td><a href="/Gallery/Delete?Id=@item.Id" class="btn btn-danger" onclick="return confirm('Are you sure to Delete?')">Delete</a></td>
                     </tr>
                 }

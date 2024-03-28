@@ -8,17 +8,18 @@ using System.Web.Mvc;
 namespace HospitalPortal.Models.ViewModels
 {
     public class VehicleAllotmentDTO
-    {
-        [Required]
+    { 
         public string VehicleNumber { get; set; }
         public string DriverName { get; set; }
-        [Required]
+         
         public int Id { get; set; }
         public SelectList VehicleList { get; set; }
         public IEnumerable<VehicleLists> VehicleLists {get; set;}
-        [Required]
+         
         public int VehicleTypeId { get; set; }
-    }
+        public int VehicleNumberId { get; set; }
+		public int DriverId { get; set; }
+	}
 
     public class VehicleLists
     {   

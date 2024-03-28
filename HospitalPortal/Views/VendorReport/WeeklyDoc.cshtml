@@ -16,6 +16,7 @@
         </div>
     </div>
 }
+<a href="/VendorReport/Doctor" class="btn btn-primary" style="margin-top:1%; margin-bottom:2%;">Back</a>
 @if (Model.Vendors == null)
 {
     if (TempData["msg"] != null)
@@ -28,8 +29,8 @@
 else
 {
 
-    <table id="tables" class="table table-responsive" style="margin-left: -20%;">
-        <thead>
+    <table id="tables" class="table table-responsive" >
+        <thead style="background-color:lavender;">
             <tr>
                 <th>
                     Vendor Name
@@ -38,8 +39,8 @@ else
                     Company Name
                 </th>
                 @*<th>
-                    Added Doctors!!
-                </th>*@
+                Added Doctors!!
+            </th>*@
                 <th>
                     Total Amount
                 </th>

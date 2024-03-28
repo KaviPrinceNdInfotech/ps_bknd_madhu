@@ -5,6 +5,7 @@
     string role = HospitalPortal.Utility.UserIdentity.UserRole;
 
     DbEntities db = new DbEntities();
+    int count = 1;
 }
 
 
@@ -51,8 +52,9 @@
         }
             <div class="double-scroll">
                <table id="myTable" class="table table-bordered">
-                 <thead>
+                 <thead style="background-color:lavender;">
                      <tr>
+                         <th>Sr No</th>
                          <th>Nurse Id</th>
                          <th>Name</th>
                          <th>Nurse Type</th>
@@ -73,6 +75,7 @@
                        {
                            var result = db.Nurses.Find(item.Id);
                            <tr>
+                               <td>@count</td>
                                <td>@item.NurseId</td>
                                <td>@item.NurseName</td>
                                <td>@item.NurseTypeName</td>
@@ -148,12 +151,10 @@
                                </td>
 
                            </tr>
+                           count++;
                        }
                    </tbody>
                </table>
             </div>
         </div>
-<script>
-    $('.double-scroll').doubleScroll();
-</script>
-
+ 

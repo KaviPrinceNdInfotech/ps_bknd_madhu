@@ -1191,6 +1191,7 @@
     <EntitySetMapping Name="Drivers">
       <EntityTypeMapping TypeName="Model.Driver">
         <MappingFragment StoreEntitySet="Driver">
+          <ScalarProperty Name="Vehicle_Id" ColumnName="Vehicle_Id" />
           <ScalarProperty Name="IsBankUpdateApproved" ColumnName="IsBankUpdateApproved" />
           <ScalarProperty Name="Charge" ColumnName="Charge" />
           <ScalarProperty Name="Lang" ColumnName="Lang" />
@@ -1945,6 +1946,7 @@
     <EntitySetMapping Name="DriverLocations">
       <EntityTypeMapping TypeName="Model.DriverLocation">
         <MappingFragment StoreEntitySet="DriverLocation">
+          <ScalarProperty Name="PaymentStatus" ColumnName="PaymentStatus" />
           <ScalarProperty Name="RejectedStatus" ColumnName="RejectedStatus" />
           <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
           <ScalarProperty Name="ToatlDistance" ColumnName="ToatlDistance" />
@@ -2187,6 +2189,9 @@
     <EntitySetMapping Name="DoctorTimeSlots">
       <EntityTypeMapping TypeName="Model.DoctorTimeSlot">
         <MappingFragment StoreEntitySet="DoctorTimeSlot">
+          <ScalarProperty Name="EntryDate" ColumnName="EntryDate" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="Doctor_Id" ColumnName="Doctor_Id" />
           <ScalarProperty Name="EndTime" ColumnName="EndTime" />
           <ScalarProperty Name="StartTime" ColumnName="StartTime" />
           <ScalarProperty Name="Id" ColumnName="Id" />
@@ -2268,6 +2273,15 @@
           <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
           <ScalarProperty Name="DoctorName" ColumnName="DoctorName" />
           <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TransactionFeeMasters">
+      <EntityTypeMapping TypeName="Model.TransactionFeeMaster">
+        <MappingFragment StoreEntitySet="TransactionFeeMaster">
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Fee" ColumnName="Fee" />
           <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>

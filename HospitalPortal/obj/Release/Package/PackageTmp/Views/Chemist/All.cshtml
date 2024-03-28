@@ -2,6 +2,7 @@
 @{
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
     string Role = HospitalPortal.Utility.UserIdentity.UserRole;
+    int count = 1;
 }
 
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
@@ -41,9 +42,10 @@
         }
 
             <div class="double-scroll">
-               <table class="table table-bordered">
-                 <thead>
+               <table id="myTable" class="table table-bordered">
+                 <thead style="background-color:lavender;">
                      <tr>
+                         <th>Sr No</th>
                          <th>Chemist ID</th>
                          <th>ChemistName</th>
                          <th>Franchise</th>
@@ -63,6 +65,7 @@
                        @foreach(var item in Model)
                        {
                            <tr>
+                               <td>@count</td>
                                <td>@item.ChemistId</td>
                                <td>@item.ChemistName</td>
                                <td>
@@ -112,21 +115,18 @@
                                    {
                                        <a href="/Chemist/UpdateBankUpdateStatus?id=@item.Id" class="btn btn-danger">Update Bank Not Approved</a>
                                    }
-                               </td>
-                               </td>
+                               </td> 
                                <td>
                                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { onclick = "return confirm('Are sure wants to Edit?');", @class = "btn btn-info" })
                                    <a href="/Common/BankDetails?Id=@item.AdminLogin_Id" class="btn btn-primary">Bank Details</a>
                                    @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { onclick = "return confirm('Are sure wants to delete?');", @class = "btn btn-danger" })
                                </td>
                            </tr>
+                           count++;
                        }
                    </tbody>
                </table>
             </div>
         </div>
-
-<script>
-    $('.double-scroll').doubleScroll();
-</script>
+ 
 
