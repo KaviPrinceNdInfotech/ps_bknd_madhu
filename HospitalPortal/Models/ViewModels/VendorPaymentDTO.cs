@@ -32,7 +32,7 @@ namespace HospitalPortal.Models.ViewModels
         public double? Amount { get; set; }
         public double? FraPaidableamt { get; set; }
         public decimal Amountwithrazorpaycomm { get; set; }
-        public decimal? AmountForVehicle { get; set; }
+        public int AmountForVehicle { get; set; }
         public string CompanyName { get; set; }
         public double Counts { get; set; }
       

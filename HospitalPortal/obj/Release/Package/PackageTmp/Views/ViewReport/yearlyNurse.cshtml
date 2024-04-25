@@ -1,6 +1,7 @@
 ﻿@model HospitalPortal.Models.ViewModels.ReportDetails
 @{
     ViewBag.Title = "ViewReport";
+    int count = 1;
 }
 
 @using (Html.BeginForm())
@@ -14,32 +15,37 @@
         </div>
     </div>
 }
-@if (Model.Nurses.Count() <= 0)
-{
-    if (TempData["msg"] != null)
+<table id="table_id" class="table table-bordered">
+    <thead style="background-color:lavender;">
+        <tr>
+            <th>Sr No.</th>
+            <th>Nurse Name / Id</th>
+            <th>
+                Date
+            </th>
+
+            <th>
+                Amount
+            </th>
+        </tr>
+    </thead>
+    @if (Model.Nurses == null)
     {
-        <h2 style="color:blueviolet">
-            @TempData["msg"]
-        </h2>
+        if (TempData["msg"] != null)
+        {
+            <div class="alert alert-danger">
+                @TempData["msg"]
+            </div>
+        }
     }
-}
-else
-{
-    <table id="tables" class="table table-responsive">
-        <thead>
-            <tr>
-                <th>
-                   By Month (Date)
-                </th>
-                <th>
-                    Amount
-                </th>
-            </tr>
-        </thead>
+    else
+    {
         <tbody>
             @foreach (var item in Model.Nurses)
             {
                 <tr>
+                    <td>@count</td>
+                    <td>@item.NurseName (@item.NurseId)</td>
                     <td>
                         @item.ServiceAcceptanceDate.ToString("dd-MMM-yyyy")
                     </td>
@@ -48,19 +54,30 @@ else
                     </td>
                 </tr>
             }
+        </tbody>
+        <tfoot>
             <tr>
-                <td><h3>Total</h3></td>
+                <td colspan="3" style="text-align: right;">Total:</td>
                 <td>
                     @if (ViewBag.Total != null)
-                {
-                        <h3 style="color:red"> ₹ @ViewBag.Total</h3>
+                    {
+                        <strong>₹ @ViewBag.Total</strong>
                     }
                 </td>
             </tr>
-        </tbody>
-    </table>
-}
+        </tfoot>
+    }
+</table>
+
+<script src="https://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css">
+
+<script type="text/javascript">
+    $('#table_id').DataTable();
+</script>
 <script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
+<link href="~/css/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
 <script>
     $("#test").click(function () {
         debugger

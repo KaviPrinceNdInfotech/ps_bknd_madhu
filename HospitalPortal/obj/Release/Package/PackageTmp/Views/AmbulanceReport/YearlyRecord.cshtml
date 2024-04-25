@@ -3,9 +3,10 @@
 @{
     ViewBag.Title = "DailyRecord";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    int count = 1;
 }
 
-<h2>Daily Record</h2>
+<h2>Yearly Record</h2>
 
 <style>
     #main {
@@ -16,49 +17,54 @@
 
   
 
-    @if (Model.Ambulance == null)
-    {
-        if (TempData["msg"] != null)
+    
+    <table id="table_id" class="table table-bordered">
+        <thead style="background-color:lavender;">
+            <tr>
+                <th>Sr No.</th>
+                <th>
+                    Patient Name / Id
+                </th>
+                <th>
+                    Driver Name / Id
+                </th>
+                <th>
+                    Distance
+                </th>
+                <th>
+                    PickUp Location
+                </th>
+                <th>Drop Location</th>
+                <th>
+                    Amount
+                </th>
+            </tr>
+
+        </thead>
+        @if (Model.Ambulance == null)
         {
-            <h2 style="color:blueviolet">
-                @TempData["msg"]
-            </h2>
+            if (TempData["msg"] != null)
+            {
+                <div class="alert alert-danger">
+                    @TempData["msg"]
+                </div>
+            }
         }
-    }
-    else
-    {
-        <table id="tables" class="table table-responsive">
-            <thead>
-                <tr>
-                    <th>
-                        Patient Name
-                    </th>
-                    <th>
-                        Driver Name
-                    </th>
-                    <th>
-                        Distance
-                    </th>
-                    <th>
-                        PickUp Address
-                    </th>
-                    <th>
-                        Drop Address
-                    </th>
-                    <th>
-                        Amount
-                    </th>
-                </tr>
-            </thead>
+        else
+        {
             <tbody>
+                @{
+                    decimal? TotalAmount = 0;
+                }
                 @foreach (var item in Model.Ambulance)
                 {
                     <tr>
+                        <td>@count</td>
                         <td>
-                            @item.PatientName
+                            @item.PatientName / @item.UniqueId
                         </td>
                         <td>
-                            @item.DriverName
+                            @item.DriverName / @item.DriverId
                         </td>
                         <td>
                             @Math.Round((double)item.Distance)
@@ -69,12 +75,23 @@
                         <td>
                             @item.ReverseEndLatLong_To_Location
                         </td>
-                        <td>@Math.Round((decimal)item.Amount) Rs.</td>
+                        @{
+                            TotalAmount += item.Amount;
+                        }
+                        <td>@item.Amount Rs.</td>
                     </tr>
-                }
+                                count++;
+                            }
             </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="6" style="text-align: right;"><strong>Total:</strong></td>
+                    <td><strong>₹ @TotalAmount</strong></td>
+                </tr>
+            </tfoot>
+                            }
         </table>
-    }
+ 
 </div>
 <script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
 <link href="~/css/jquery-ui.css" rel="stylesheet" />

@@ -760,6 +760,7 @@ where D.Id="+ DoctorId + " and PA.IsCancelled=0 order by PA.Id desc";
                     OrderId = NextOrderId,
                     IsPaid = false,
                     IsCancelled = false,
+                    IsPayoutPaid = false,
                     OrderDate = DateTime.Now,
                 };
                 ent.PatientAppointments.Add(data);

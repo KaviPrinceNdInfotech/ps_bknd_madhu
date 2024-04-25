@@ -33,7 +33,8 @@
         @foreach (var item in Model.test)
         {
             <tr>
-                <td><a href="~/Doc_Report/@item.Image1" target="_blank" class="btn btn-default">View Test Report</a></td>
+                @*Doc_Report*@
+                <td><a href="~/Images/@item.Image1" target="_blank" class="btn btn-default">View Test Report</a></td>
                 <td>@item.UploadDate.Date.ToShortDateString()</td>
             </tr>
         }

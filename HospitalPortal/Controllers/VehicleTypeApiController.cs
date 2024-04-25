@@ -99,12 +99,26 @@ namespace HospitalPortal.Controllers
         public IHttpActionResult Vehicle(int id)
         {
             var model = new VehicelCategory();
-            var query = @"select Mcy.id, Mcy.CategoryName from   MainCategory as Mcy With(nolock)
+            if (id == 2)
+            {
+                var query = @"select Mcy.id, Mcy.CategoryName from   MainCategory as Mcy With(nolock)
+Inner join AmbulanceType as amt with(nolock) on Mcy.AmbulanceType_id=amt.id
+where Mcy.IsDeleted=0 and Mcy.AmbulanceType_id=1 ";
+                var data = ent.Database.SqlQuery<VehicleList>(query).ToList();
+                model.Vehicle = data;
+                return Ok(model);
+            }
+            else
+            {
+                var query = @"select Mcy.id, Mcy.CategoryName from   MainCategory as Mcy With(nolock)
 Inner join AmbulanceType as amt with(nolock) on Mcy.AmbulanceType_id=amt.id
 where Mcy.IsDeleted=0 and Mcy.AmbulanceType_id= " + id;
-            var data = ent.Database.SqlQuery<VehicleList>(query).ToList();
-            model.Vehicle = data;
-            return Ok(model);
+                var data = ent.Database.SqlQuery<VehicleList>(query).ToList();
+                model.Vehicle = data;
+                return Ok(model);
+            }
+            
+            
         }
 
         [System.Web.Http.HttpGet]

@@ -9,6 +9,7 @@ namespace HospitalPortal.Models.ViewModels
     {
         public int Lab_Id { get; set; }
         public string LabName { get; set; }
+        public string lABId { get; set; }
         public double Amount { get; set; }
         public string MobileNumber { get; set; }
         public string StateName { get; set; }

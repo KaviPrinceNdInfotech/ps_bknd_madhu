@@ -10,6 +10,7 @@ namespace HospitalPortal.Models.ViewModels
 {
     public class AmbulancesReport
     {
+		public DateTime sdate { get; set; }
 		public DateTime startdate { get; set; }
 		public DateTime enddate { get; set; }
 		 
@@ -30,6 +31,7 @@ namespace HospitalPortal.Models.ViewModels
 		public double? Amountwithrazorpaycomm { get; set; }
         public int? Distance { get; set; }
         public string PatientName { get; set; }
+        public string UniqueId { get; set; }
         public string DriverId { get; set; }
         public string DriverName { get; set; }
         public string PickUp_Place { get; set; }
@@ -38,6 +40,9 @@ namespace HospitalPortal.Models.ViewModels
         public double end_Long { get; set; }
         public double start_Lat { get; set; }
         public double start_Long { get; set; }
+        public DateTime? AllocateDate { get; set; }
+        public bool? IsActive { get; set; }
+        public int? RunDay { get; set; }
 
         //CODE FOR LAT LONG TO LOCATION 
         public string ReverseStartLatLong_To_Location

@@ -88,6 +88,7 @@
     <EntitySetMapping Name="BookTestLabs">
       <EntityTypeMapping TypeName="Model.BookTestLab">
         <MappingFragment StoreEntitySet="BookTestLab">
+          <ScalarProperty Name="IsPayoutPaid" ColumnName="IsPayoutPaid" />
           <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
           <ScalarProperty Name="OrderId" ColumnName="OrderId" />
           <ScalarProperty Name="InvoiceNumber" ColumnName="InvoiceNumber" />
@@ -646,6 +647,7 @@
     <EntitySetMapping Name="PatientAppointments">
       <EntityTypeMapping TypeName="Model.PatientAppointment">
         <MappingFragment StoreEntitySet="PatientAppointment">
+          <ScalarProperty Name="IsPayoutPaid" ColumnName="IsPayoutPaid" />
           <ScalarProperty Name="AppointmentIsDone" ColumnName="AppointmentIsDone" />
           <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
           <ScalarProperty Name="OrderId" ColumnName="OrderId" />
@@ -859,6 +861,7 @@
     <EntitySetMapping Name="VehicleTypes">
       <EntityTypeMapping TypeName="Model.VehicleType">
         <MappingFragment StoreEntitySet="VehicleType">
+          <ScalarProperty Name="DriverCharge" ColumnName="DriverCharge" />
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="VehicleTypeName" ColumnName="VehicleTypeName" />
           <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
@@ -1191,6 +1194,7 @@
     <EntitySetMapping Name="Drivers">
       <EntityTypeMapping TypeName="Model.Driver">
         <MappingFragment StoreEntitySet="Driver">
+          <ScalarProperty Name="IsBooked" ColumnName="IsBooked" />
           <ScalarProperty Name="Vehicle_Id" ColumnName="Vehicle_Id" />
           <ScalarProperty Name="IsBankUpdateApproved" ColumnName="IsBankUpdateApproved" />
           <ScalarProperty Name="Charge" ColumnName="Charge" />
@@ -1946,6 +1950,9 @@
     <EntitySetMapping Name="DriverLocations">
       <EntityTypeMapping TypeName="Model.DriverLocation">
         <MappingFragment StoreEntitySet="DriverLocation">
+          <ScalarProperty Name="IsPayoutPaid" ColumnName="IsPayoutPaid" />
+          <ScalarProperty Name="IsBooked" ColumnName="IsBooked" />
+          <ScalarProperty Name="RideComplete" ColumnName="RideComplete" />
           <ScalarProperty Name="PaymentStatus" ColumnName="PaymentStatus" />
           <ScalarProperty Name="RejectedStatus" ColumnName="RejectedStatus" />
           <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
@@ -2010,6 +2017,7 @@
     <EntitySetMapping Name="NurseServices">
       <EntityTypeMapping TypeName="Model.NurseService">
         <MappingFragment StoreEntitySet="NurseService">
+          <ScalarProperty Name="IsPayoutPaid" ColumnName="IsPayoutPaid" />
           <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
           <ScalarProperty Name="OrderId" ColumnName="OrderId" />
           <ScalarProperty Name="InvoiceNumber" ColumnName="InvoiceNumber" />
@@ -2282,6 +2290,48 @@
         <MappingFragment StoreEntitySet="TransactionFeeMaster">
           <ScalarProperty Name="Name" ColumnName="Name" />
           <ScalarProperty Name="Fee" ColumnName="Fee" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="VehicleAllotHistories">
+      <EntityTypeMapping TypeName="Model.VehicleAllotHistory">
+        <MappingFragment StoreEntitySet="VehicleAllotHistory">
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="AllocateDate" ColumnName="AllocateDate" />
+          <ScalarProperty Name="Vehicle_Id" ColumnName="Vehicle_Id" />
+          <ScalarProperty Name="Driver_Id" ColumnName="Driver_Id" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AmbulancePayouts">
+      <EntityTypeMapping TypeName="Model.AmbulancePayout">
+        <MappingFragment StoreEntitySet="AmbulancePayout">
+          <ScalarProperty Name="IsGenerated" ColumnName="IsGenerated" />
+          <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
+          <ScalarProperty Name="IsPaid" ColumnName="IsPaid" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="Vehicle_Id" ColumnName="Vehicle_Id" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Roles">
+      <EntityTypeMapping TypeName="Model.Role">
+        <MappingFragment StoreEntitySet="Role">
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DriverBookings">
+      <EntityTypeMapping TypeName="Model.DriverBooking">
+        <MappingFragment StoreEntitySet="DriverBooking">
+          <ScalarProperty Name="RideComplete" ColumnName="RideComplete" />
+          <ScalarProperty Name="BookingDate" ColumnName="BookingDate" />
+          <ScalarProperty Name="Patient_Id" ColumnName="Patient_Id" />
+          <ScalarProperty Name="Driver_Id" ColumnName="Driver_Id" />
           <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ExcelDataReader;
 using HospitalPortal.Models.DomainModels;
+using HospitalPortal.Models.RequestModel;
 using HospitalPortal.Models.ViewModels;
 using HospitalPortal.Repositories;
 using iTextSharp.text.pdf.qrcode;
@@ -1074,6 +1075,13 @@ GROUP BY  P.PatientName,P.Id, P.PatientRegNo, L.LabName";
                 TempData["msg"] = "Failed to update. Record not found.";
             }
             return RedirectToAction("TransactionFee");
+        }
+         
+        public ActionResult GetVehicleTypes(int categoryId)
+        {
+            var VehicleTypeList = repos.GetVehicleTypeByCategory(categoryId);
+            var c = Mapper.Map<IEnumerable<VehicleTypeDTO>>(VehicleTypeList);
+            return Json(c, JsonRequestBehavior.AllowGet);
         }
 
     }

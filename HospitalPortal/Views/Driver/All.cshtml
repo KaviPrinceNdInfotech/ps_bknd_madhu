@@ -61,6 +61,7 @@
                     <th>Pic</th>
                     <th>DL / No</th>
                     <th>Aadhar / No</th> 
+                    <th>Vehicle Type & Category Name</th> 
                     @if (role == "admin")
                     {
                         <th>Approval</th>
@@ -102,28 +103,46 @@
                         <td>@item.Location , @item.CityName, @item.StateName</td>
                         <td>@item.Paidamount</td>
                         <td>
-                            <a href="/Images/@item.DriverImage">
-                                <img src="/Images/@item.DriverImage" style="width:100px;height:80px" />
-                            </a>
+
+                            @if (item.DriverImage != null && item.DriverImage != "")
+                            {
+                                <a href="/Images/@item.DriverImage">
+                                    <img id="driverImage" src="/Images/@item.DriverImage" style="width:100px;height:80px" />
+                                </a>
+                                    }
+                                    else
+                                    {
+                                    <text>NA</text>
+                                    }
+                               
+                            </td>
                         <td>
-                            @item.DlNumber/
-                            <a href="/Images/@item.DlImage1">
-                                <img src="/Images/@item.DlImage1" style="width:100px;height:80px" />
-                            </a>
-                            <a href="/Images/@item.DlImage2">
-                                <img src="/Images/@item.DlImage2" style="width:100px;height:80px" />
-                            </a>
+                        @item.DlNumber/
+                        <a href="/Images/@item.DlImage1">
+                            <img src="/Images/@item.DlImage1" style="width:100px;height:80px" />
+                        </a>
+                        <a href="/Images/@item.DlImage2">
+                            <img src="/Images/@item.DlImage2" style="width:100px;height:80px" />
+                        </a>
                         </td>
                         <td>
                             @item.AadharNumber
-                            <a href="/Images/@item.AadharImage">
-                                <img src="/Images/@item.AadharImage" style="width:100px;height:80px" />
-                            </a>
-                            <a href="/Images/@item.AadharImage2">
-                                <img src="/Images/@item.AadharImage2" style="width:100px;height:80px" />
-                            </a>
-                        </td>
+                            @if (item.AadharImage != null || item.AadharImage2 != null)
+                            {
+                                <a href="/Images/@item.AadharImage">
+                                    <img src="/Images/@item.AadharImage" style="width:100px;height:80px" />
+                                </a>
+                                <a href="/Images/@item.AadharImage2">
+                                    <img src="/Images/@item.AadharImage2" style="width:100px;height:80px" />
+                                </a>
+                            }
+else
+                    {
+                        <text>NA</text>
+                    }
 
+                        </td>
+                        <td>@item.VehicleTypeName / @item.CategoryName</td> 
                         @if (role == "admin")
                         {
                             <td>
@@ -136,7 +155,8 @@
                                 {
                                     <a href="/Driver/UpdateStatus?id=@item.Id" class="btn btn-danger">Not Approved</a>
                                 }
-                            </td> 
+                            </td>
+
                             <td>
                                 @if (item.IsBankUpdateApproved)
                                 {

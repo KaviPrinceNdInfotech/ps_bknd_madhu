@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using HospitalPortal.BL;
+using HospitalPortal.Models;
 using HospitalPortal.Models.APIModels;
 using HospitalPortal.Models.DomainModels;
 using HospitalPortal.Models.RequestModel;
@@ -32,6 +33,8 @@ namespace HospitalPortal.Controllers
         ILog log = LogManager.GetLogger(typeof(SignupApiController));
         returnMessage rm = new returnMessage();
         GenerateBookingId bk = new GenerateBookingId();
+
+        private readonly Random _random = new Random();
 
         public IHttpActionResult GetStates()
         {
@@ -463,6 +466,7 @@ namespace HospitalPortal.Controllers
                     domainModel.DriverId = UniuqId;
                     domainModel.PAN = model.PAN;
                     domainModel.Vendor_Id = model.Vendor_Id;
+                    domainModel.Paidamount = model.Paidamount;
                     admin.UserID = domainModel.DriverId;
                     domainModel.IsBankUpdateApproved = false;
                     ent.Drivers.Add(domainModel);
@@ -1942,6 +1946,60 @@ ModelState.Values
                 rm.Status = 1;
             }
             return Ok(rm);
+        }
+
+        [HttpPost]
+        [Route("api/SignupApi/ForgotPassword")]
+        public IHttpActionResult ForgotPassword(ForgotPasswordDTO model)
+        {
+            var user = ent.AdminLogins.Where(a => a.Username == model.EmailId).FirstOrDefault();
+
+            if (user == null)
+            {
+                return BadRequest("Please enter your valid Email Id.");    
+            }
+
+            // Generate  an OTP
+            var otp = GenerateRandomOtp(); 
+
+
+            if (user == null)
+            {
+                rm.Status = 0;
+                rm.Message = "No record found";
+                return Ok(rm);
+            }
+            user.Password = otp;
+            ent.SaveChanges();
+
+            
+            EmailEF ef = new EmailEF()
+            {
+                EmailAddress = model.EmailId,
+                Subject = "Change password", 
+                Message = @"<!DOCTYPE html>
+<html>
+<head>
+    <title>Change password request.</title>
+</head>
+<body> 
+    
+    <ul>
+        <li><strong>Your new password is:</strong> " + otp + @"</li> 
+    </ul>
+    <p>You can now login with your new password.</p>
+</body>
+</html>"
+            };
+
+            EmailOperations.SendEmainew(ef); 
+
+            return Ok("New Password sent to your Email Id.");  
+        }
+        private string GenerateRandomOtp()
+        { 
+            const string chars = "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz0123456789";
+            return new string(Enumerable.Repeat(chars, 6).Select(s => s[_random.Next(s.Length)]).ToArray());
         }
     }    
 }

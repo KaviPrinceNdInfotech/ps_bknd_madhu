@@ -18,143 +18,156 @@
         </div>
     </div>
 </div>
- 
 
-    <div class="row" style="margin-bottom: 3%;">
-        <div class="col-md-2">
-            @Html.TextBoxFor(a => a.startdate, new { @class = "form-control", required = "required", type = "date" })
-        </div>
-        <div class="col-md-2">
-            @Html.TextBoxFor(a => a.enddate, new { @class = "form-control", required = "required", type = "date" })
-        </div>
-        <div class="col-md-2">
-            <input type="button" id="test" value="Search" class="btn btn-primary" />
-        </div>
-        <div class="col-md-4">
-            @Html.TextBoxFor(a => a.DoctorName, new { @class = "form-control", required = "required", placeholder = "Search by Name & Unique Id" })
-        </div>
-        <div class="col-md-2">
-            <input type="button" id="test2" value="Search" class="btn btn-primary" />
-        </div>
+
+<div class="row" style="margin-bottom: 3%;">
+    <div class="col-md-2">
+        @Html.TextBoxFor(a => a.startdate, new { @class = "form-control", required = "required", type = "date" })
     </div>
+    <div class="col-md-2">
+        @Html.TextBoxFor(a => a.enddate, new { @class = "form-control", required = "required", type = "date" })
+    </div>
+    <div class="col-md-2">
+        <input type="button" id="test" value="Search" class="btn btn-primary" />
+    </div>
+    <div class="col-md-4">
+        @Html.TextBoxFor(a => a.DoctorName, new { @class = "form-control", required = "required", placeholder = "Search by Name & Unique Id" })
+    </div>
+    <div class="col-md-2">
+        <input type="button" id="test2" value="Search" class="btn btn-primary" />
+    </div>
+</div>
 
+
+
+<table id="table_id" class="table table-bordered">
+    <thead style="background-color:lavender;">
+        <tr>
+            <th>
+                Sr No.
+            </th>
+            <th>
+                Doctor Name
+            </th>
+            <th>
+                Total Amount
+            </th>
+            <th>
+                Transaction Fee @ViewBag.Transactionfee %
+            </th>
+            <th>
+                Commission Amount @ViewBag.commission %
+            </th>
+            <th>
+                TDS Amount  @ViewBag.tds %
+            </th>
+            <th>
+                Payable Amount
+            </th>
+            <th>
+                Action
+            </th>
+        </tr>
+    </thead>
     @if (Model.DoctorCommisionReport == null)
     {
         if (TempData["msg"] != null)
         {
-            @TempData["msg"];
+            <div class="alert alert-danger">
+                @TempData["msg"]
+            </div>
         }
     }
     else
     {
-
-        <table id="myTable" class="table table-bordered">
-            <thead>
+        <tbody>
+            @{
+                double totalPayableAmount = 0;
+                double totalCommissionAmount = 0;
+                double totalAmount = 0;
+                double totaltdsAmount = 0;
+                double totalTransactionAmount = 0;
+            }
+            @foreach (var item in Model.DoctorCommisionReport)
+            {
                 <tr>
-                    <th>
-                        Sr No.
-                    </th>
-                    <th>
-                        Doctor Name
-                    </th>
-                    <th>
-                        Total Amount
-                    </th>
-                    <th>
-                        Transaction Fee @ViewBag.Transactionfee %
-                    </th>
-                    <th>
-                        Commission Amount @ViewBag.commission %
-                    </th>
-                    <th>
-                        TDS Amount  @ViewBag.tds %
-                    </th>
-                    <th>
-                        Payable Amount
-                    </th>
-                    <th>
-                        Action
-                    </th>
+                    <td>@count</td>
+                    <td>@item.DoctorName (@item.DoctorId)</td>
+                    <td> ₹ @item.Amount</td>
+                    @{
+                        double? razorpaycomm = @item.Amountwithrazorpaycomm;
+                        double? basicamt = @item.Amount;
+                        double? razarfeeamt = razorpaycomm - basicamt;
+                        totalTransactionAmount += (double)razarfeeamt;
+                    }
+                    <td>@String.Format("{0:F2}", razarfeeamt) </td>
+
+
+                    @{
+                        double amt = (Math.Round(item.Amount * ViewBag.Commission) / 100);
+
+                        totalAmount += item.Amount;
+                        totalCommissionAmount += amt;
+                        double tds = (Math.Round((double)item.Amount * ViewBag.tds) / 100);
+                        double payableAmount = item.Amount - (amt + tds + (double)razarfeeamt);
+                        totalPayableAmount += payableAmount;
+                        totaltdsAmount += tds;
+                    }
+                    <td>₹ @amt</td>
+                    <td>₹ @tds</td>
+                    <td>₹ @payableAmount</td>
+                    <td><a href="DoctorDetails?DoctorId=@item.Doctor_Id" class="btn btn-primary">View Details</a></td>
+
                 </tr>
-            </thead>
-            <tbody>
-                @{
-                    double totalPayableAmount = 0;
-                    double totalCommissionAmount = 0;  
-                    double totalAmount = 0; 
-                    double totaltdsAmount = 0;  
-                    double totalTransactionAmount = 0;  
-                }
-                @foreach (var item in Model.DoctorCommisionReport)
-                {
-                    <tr>
-                        <td>@count</td>
-                        <td>@item.DoctorName (@item.DoctorId)</td>
-                        <td> ₹ @item.Amount</td>
-                        @{
-                            double? razorpaycomm = @item.Amountwithrazorpaycomm;
-                            double? basicamt = @item.Amount;
-                            double? razarfeeamt = razorpaycomm - basicamt;
-                            totalTransactionAmount += (double)razarfeeamt;
-                        }
-                        <td>@String.Format("{0:F2}", razarfeeamt) </td>
+                count++;
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="2" style="text-align: right;">
+                    <strong>Total:</strong>
+                </td>
+                <td>
+                    <strong>₹ @totalAmount</strong>
+                </td>
 
-
-                        @{
-                            double amt = (Math.Round(item.Amount * ViewBag.Commission) / 100);
-
-                            totalAmount += item.Amount;  
-                            totalCommissionAmount += amt;                        
-                            double tds = (Math.Round((double)item.Amount * ViewBag.tds) / 100);
-                            double payableAmount = item.Amount - (amt+tds+ (double)razarfeeamt);
-                            totalPayableAmount += payableAmount;
-                            totaltdsAmount += tds;
-                        }
-                        <td>₹ @amt</td>
-                        <td>₹ @tds</td>
-                        <td>₹ @payableAmount</td>
-                        <td><a href="DoctorDetails?DoctorId=@item.Doctor_Id" class="btn btn-primary">View Details</a></td>
-                    </tr>
-                                count++;
-                            }
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td colspan="2" style="text-align: right;">
-                        <strong>Total:</strong>
-                    </td>
-                    <td>
-                        <strong>₹ @totalAmount</strong>
-                    </td>
-                     
-                    <td>
-                        <strong>₹ @String.Format("{0:F2}", @totalTransactionAmount)</strong>
-                    </td>
-                    <td>
-                        <strong>₹ @totalCommissionAmount</strong>
-                    </td>
-                    <td>
-                        <strong>₹ @totaltdsAmount</strong>
-                    </td>
-                    <td>
-                        <strong>₹ @totalPayableAmount</strong>
-                    </td>
-                </tr>
-            </tfoot>
-        </table>
-
-
-
+                <td>
+                    <strong>₹ @String.Format("{0:F2}", @totalTransactionAmount)</strong>
+                </td>
+                <td>
+                    <strong>₹ @totalCommissionAmount</strong>
+                </td>
+                <td>
+                    <strong>₹ @totaltdsAmount</strong>
+                </td>
+                <td>
+                    <strong>₹ @totalPayableAmount</strong>
+                </td>
+            </tr>
+        </tfoot>
     }
+</table>
+<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
 
- 
 
- 
+<script src="https://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css">
+
+<script type="text/javascript">
+    $('#table_id').DataTable();
+</script>
+
+
+
+
+
+
+
 <script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
 <link href="~/css/jquery-ui.css" rel="stylesheet" />
-<script src="~/Scripts/jquery-ui.js"></script> 
+<script src="~/Scripts/jquery-ui.js"></script>
 <script>
- $(".datepicker").datepicker().datepicker('setdate','today');
+    $(".datepicker").datepicker().datepicker('setdate', 'today');
 
     $("#test").click(function () {
         var startDate = $("#startdate").val();
@@ -176,10 +189,10 @@
                 console.log(error.responseText);
             }
         });
-    
 
 
- });
+
+    });
 
 
     $("#test2").click(function () {
@@ -200,4 +213,4 @@
         });
     });
 
-</script>          
+</script>

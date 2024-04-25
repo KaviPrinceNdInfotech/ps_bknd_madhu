@@ -385,23 +385,29 @@ where BT.Lab_Id=" + Id + "";
 		[HttpGet, Route("api/CommonApi/GetVehicleType")]
 		public IHttpActionResult GetVehicleType()
 		{
-			string qry = @"SELECT Id,VehicleTypeName FROM VehicleType WHERE IsDeleted = 0 ORDER BY VehicleTypeName;";
+			string qry = @"select * from VehicleType vt 
+join MainCategory mc on mc.Id = vt.Category_Id 
+where vt.IsDeleted=0 and mc.IsDeleted=0 order by CategoryName asc,VehicleTypeName asc";
 			var VehicleType = ent.Database.SqlQuery<VehicleTypes>(qry).ToList();
 			return Ok(new { VehicleType });
 		}
 
 		[HttpGet, Route("api/CommonApi/GetVehicleNumberListByVehicleType")]
-		public IHttpActionResult GetVehicleNumberListByVehicleType(int VehicleType_Id)
+		public IHttpActionResult GetVehicleNumberListByVehicleType(int VehicleType_Id,int Vendor_Id)
 		{
-            string qry = @"SELECT Id,VehicleNumber FROM Vehicle WHERE IsDeleted = 0 AND VehicleType_Id = "+ VehicleType_Id + " ORDER BY VehicleNumber;"; 
+            string qry = @"SELECT v.Id,VehicleNumber FROM Vehicle as v
+JOIN Vendor as ve on ve.Id=v.Vendor_Id
+WHERE v.IsDeleted = 0 AND VehicleType_Id = "+ VehicleType_Id + " AND ve.Id="+ Vendor_Id + " ORDER BY VehicleNumber;"; 
 			var VehicleNumberList = ent.Database.SqlQuery<VehicleNumbers>(qry).ToList();
 			return Ok(new { VehicleNumberList });
 		}
 
-		[HttpGet, Route("api/CommonApi/GetVehicleNumberListByVehicleType")]
-		public IHttpActionResult GetVehicleNumber()
+		[HttpGet, Route("api/CommonApi/GetVehicleNumber")]
+		public IHttpActionResult GetVehicleNumber(int VendorId)
 		{
-			string qry = @"SELECT Id,VehicleNumber FROM Vehicle WHERE IsDeleted = 0  ORDER BY VehicleNumber;";
+			string qry = @"SELECT ve.Id,ve.VehicleNumber FROM Vehicle as ve
+join Vendor as v on v.Id=ve.Vendor_Id
+WHERE ve.IsDeleted = 0 and v.Id="+ VendorId + " ORDER BY VehicleNumber;";
 			var VehicleNumberList = ent.Database.SqlQuery<VehicleNumbers>(qry).ToList();
 			return Ok(new { VehicleNumberList });
 		}

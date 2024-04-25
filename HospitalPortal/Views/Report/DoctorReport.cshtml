@@ -2,30 +2,50 @@
 @{
     ViewBag.Title = "DoctorReport";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    int count = 1;
 }
 
 <h2>Doctor List</h2>
-
+<div class=" row">
+    <div class="col-md-3">
+        <div class=" form-group">
+            <a href="@Url.Action("DownloadDoctorExcelForBank", "Report")">
+                <img src="https://www.pinclipart.com/picdir/big/178-1780962_download-105-free-excel-icons-here-excel-download.png" alt="List View" style="width: 55px;">
+            </a>
+        </div>
+    </div>
+</div>
 <table id="table_id" class="display">
-    <thead>
+    <thead style="background-color:lavender;">
         <tr>
+            <th>Sr No.</th>
             <th>
-                Doctor Name 
+                Doctor Name (Id)
             </th>
             <th>
                 Action
             </th>
         </tr>
     </thead>
-    <tbody>
-        @foreach (var item in Model.DoctorReport)
-        {
-        <tr>
-            <td>@item.DoctorName (@item.DoctorId)</td>
-            <td><a href="/Report/ViewDoctorDetails?DoctorId=@item.Doctor_Id" class="btn btn-primary">View Details</a></td>
-        </tr>
-        }
-    </tbody>
+    @if (Model.DoctorReport == null)
+    {
+        <div class="alert alert-danger">No Record Available.</div>
+    }
+    else
+    {
+        <tbody>
+            @foreach (var item in Model.DoctorReport)
+            {
+                <tr>
+                    <td>@count</td>
+                    <td>@item.DoctorName (@item.DoctorId)</td>
+                    <td><a href="/Report/ViewDoctorDetails?DoctorId=@item.Doctor_Id" class="btn btn-primary">View Details</a></td>
+                </tr>
+                count++;
+            }
+        </tbody>
+    }
+
 </table>
 <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
 

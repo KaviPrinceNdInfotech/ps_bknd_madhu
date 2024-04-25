@@ -1,0 +1,251 @@
+﻿@model HospitalPortal.Models.ViewModels.AmbulancesReport
+@{
+    ViewBag.Title = "Driver";
+    Layout = "~/Views/Shared/_PayoutLayoutPage.cshtml";
+    int count = 1;
+}
+
+<h2>Ambulance</h2>
+
+@*<div class=" row">
+        <div class="col-md-3">
+            <div class=" form-group">
+                <a href="@Url.Action("AdminAmbulanceExcel", "Payout")">
+                    <img src="https://www.pinclipart.com/picdir/big/178-1780962_download-105-free-excel-icons-here-excel-download.png" alt="List View" style="width: 55px;">
+                </a>
+            </div>
+        </div>
+    </div>*@
+
+<style>
+    #main {
+        margin: 6%;
+        margin-left: 6%;
+    }
+</style>
+
+
+<div class="row" style="margin-bottom: 2%;">
+
+
+    <form method="get" action="/Payout/Driver">
+        <div class="col-md-2">
+            @Html.TextBoxFor(a => a.startdate, new { @class = "form-control", required = "required", type = "date" })
+        </div>
+        <div class="col-md-2">
+            @Html.TextBoxFor(a => a.enddate, new { @class = "form-control", required = "required", type = "date" })
+        </div>
+        <div class="col-md-2">
+            <input type="submit" id="test" value="Search" class="btn btn-primary" />
+        </div>
+        <div class="col-md-2">
+            <a href="/Payout/Driver" class="btn btn-primary">Show All</a>
+        </div>
+
+    </form>
+
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <table id="myTable" class="table table-responsive">
+            <thead style="background-color:lavender;">
+                <tr>
+                    <th>
+                        <input type="checkbox" id="selectAll" /> Select All
+                    </th>
+                    <th>Sr No.</th>
+                    <th>
+                        User Id
+                    </th>
+                    <th>
+                        Driver Name
+                    </th>
+                    <th>
+                        Vehicle Number
+                    </th>
+                    <th>
+                        Vehicle Name
+                    </th>
+                    <th>Day</th>
+                    <th>
+                        Basic Amount
+                    </th>
+                    <th>
+                        Transaction Fee @ViewBag.Transactionfee %
+                    </th>
+                    @*<th>
+            GST in %
+        </th>*@
+                    @*<th>
+            Total Amount
+        </th>*@
+                    <th>
+                        Commission Amount @ViewBag.Amount %
+                    </th>
+                    <th>
+                        TDS Amount @ViewBag.tdsAmount %
+                    </th>
+                    <th>
+                        Payable Amount
+                    </th>
+                    <th>Action</th>
+
+                </tr>
+            </thead>
+            @if (Model.Ambulance == null)
+            {
+                if (TempData["msg"] != null)
+                {
+                    <h3 class="alert alert-danger">@TempData["msg"]</h3>
+                }
+            }
+            else
+            {
+                <tbody>
+                    @{
+                        double totalPayableAmount = 0;
+                        double totalCommissionAmount = 0;
+                        double totalAmount = 0;
+                        double TotalBasicAmount = 0;
+                        double totaltdsAmount = 0;
+                        double totalTransactionAmount = 0;
+                        double? Value = 0;
+                    }
+                    @foreach (var item in Model.Ambulance)
+                    {
+                        <tr>
+                            <td>
+                                <input type="checkbox" id="@item.Driver_Id" class="checkBoxClass" value="@item.Driver_Id,@Value" />
+                            </td>
+                            <td>@count</td>
+                            <td>
+                                @item.DriverId
+                            </td>
+                            <td>
+                                @item.DriverName
+                            </td>
+                            <td>
+                                @item.VehicleNumber
+                            </td>
+                            <td>
+                                @item.VehicleName
+                            </td> 
+                            <td>@item.RunDay</td>
+                            <td>
+                                @item.TotalPrice
+                            </td>
+
+                            @{
+                                double? razorpaycomm = @item.Amountwithrazorpaycomm;
+                                double? basicamt = (double?)@item.TotalPrice;
+                                double? razarfeeamt = razorpaycomm - basicamt;
+
+                            }
+                            <td>@String.Format("{0:F2}", razarfeeamt) </td>
+
+                            @*<td>
+            @ViewBag.gstAmount
+        </td>*@
+                            @{
+
+                                //double? GSTAmt = ((double?)item.Amount * ViewBag.gstAmount) / 100;
+                                //double? WithGSTAmt = (double?)item.Amount - razarfeeamt - (GSTAmt);
+                                //totalAmount += WithGSTAmt ?? 0;
+
+
+
+                                double? commAmt = ((double)item.TotalPrice * ViewBag.Amount) / 100;
+                                double? tdsamt = ((double)item.TotalPrice * ViewBag.tdsAmount) / 100;
+                                Value = (double?)item.TotalPrice - (commAmt + tdsamt + razarfeeamt);
+
+                                totalPayableAmount += (double)Value;
+                                TotalBasicAmount += (double)item.TotalPrice;
+                                totalTransactionAmount += (double)razarfeeamt;
+                                totaltdsAmount += (double)tdsamt;
+                                totalCommissionAmount += (double)commAmt;
+                                <script>
+
+              document.getElementById('@item.Driver_Id').value = "@item.Driver_Id,@Value";
+
+                                </script>
+
+                            }
+                            @*<td>@WithGSTAmt</td>*@
+
+
+                            <td>@commAmt</td>
+                            <td>@tdsamt</td>
+
+
+                            <td>@Value</td>
+                            @*<td>
+            <a href="/Payout/WeeklyReport?Id=@item.VehicleId">View Record</a>
+        </td>*@
+                            <td>
+                                <a href="/Payout/PayAmbulance_Driver?Driver_Id=@item.Driver_Id&Amount=@Value" class="btn btn-primary" style="display:none;">Pay</a>
+                                <a href="/Payout/ViewDriver_AmbulancePayoutHistory?Id=@item.Driver_Id" class="btn btn-primary">View Payout History</a>
+                            </td>
+
+                        </tr>
+                        count++;
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="6" style="text-align: right;"><strong>Total:</strong></td>
+                        <td><strong>₹ @TotalBasicAmount</strong></td>
+                        <td><strong>₹ @String.Format("{0:F2}", @totalTransactionAmount)</strong></td>
+                        <td><strong>₹ @totalCommissionAmount</strong></td>
+                        <td><strong>₹@totaltdsAmount</strong></td>
+                        <td><strong>₹ @totalPayableAmount</strong></td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+            }
+        </table>
+    </div>
+
+</div>
+
+<a id="payLink" class="btn btn-primary" style="display:none;">Pay</a>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        //var docmulty = document.getElementById("multydocid").value;
+        //var payLink = document.getElementById("payLink");
+        //payLink.href = "/Payout/PayDoctor?multydocid=" + docmulty;
+    });
+</script>
+
+
+<script src="/Scripts/Library/jquery-1.7.1.min.js"></script>
+<link href="~/css/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
+<script>
+    $(".datepicker").datepicker().datepicker('setDate', 'today');
+</script>
+
+<script>
+    // JavaScript for "Select All" functionality
+    document.getElementById("selectAll").addEventListener("change", function () {
+        var checkboxes = document.getElementsByClassName("checkBoxClass");
+        for (var i = 0; i < checkboxes.length; i++) {
+            checkboxes[i].checked = this.checked;
+        }
+    });
+    document.getElementById("payLink").addEventListener("click", function () {
+        multyid = "";
+
+        // Iterate through each checked checkbox
+        $(".checkBoxClass:checked").each(function () {
+            // Append the value of the checked checkbox to selectedValues
+            multyid += $(this).val() + "-";
+        });
+
+        // Remove the trailing comma, if any
+        multyid = multyid.replace(/,$/, "");
+        //  var docmulty = document.getElementById("multydocid").value;
+        var payLink = document.getElementById("payLink");
+        payLink.href = "/Payout/PayAmbulance_Driver?multyid=" + multyid;
+    });
+</script>

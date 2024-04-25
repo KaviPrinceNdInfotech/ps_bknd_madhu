@@ -11,6 +11,7 @@ namespace HospitalPortal.Models.ViewModels
     {
         public string Type { get; set; }
         public double? DriverCharges { get; set; }
+        public double? DriverCharge { get; set; }
         public string UniqueId { get; set; }
         public int? Page { get; set; }
         public int? NumberOfPages { get; set; }

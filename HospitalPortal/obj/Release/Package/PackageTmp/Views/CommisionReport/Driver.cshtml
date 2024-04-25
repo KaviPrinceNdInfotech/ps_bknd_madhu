@@ -32,132 +32,140 @@
 
     </div>
 </div>
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>
-                    Vehicle Number
-                </th>
-                <th>
-                    Driver Name
-                </th>
-                <th>
-                    Total Amount
-                </th>
-                <th>
-                    Transaction Fee @ViewBag.Transactionfee %
-                </th>
-                <th>
-                    Commission Amount @ViewBag.commission %
-                </th>
-                <th>
-                    TDS Amount  @ViewBag.tds %
-                </th>
-                <th>
-                    Payable Amount
-                </th>
-                <th>
-                    Action
-                </th>
-            </tr>
-        </thead>
-        @if (Model.Ambulance == null)
+<table class="table table-bordered">
+    <thead style="background-color:lavender;">
+        <tr>
+            <th>
+                Vehicle Number
+            </th>
+            <th>
+                Driver Name
+            </th>
+            <th>
+                Total Amount
+            </th>
+            <th>
+                Transaction Fee @ViewBag.Transactionfee %
+            </th>
+            <th>
+                Commission Amount @ViewBag.commission %
+            </th>
+            <th>
+                TDS Amount  @ViewBag.tds %
+            </th>
+            <th>
+                Payable Amount
+            </th>
+            <th>
+                Action
+            </th>
+        </tr>
+    </thead>
+    @if (Model.Ambulance == null)
+    {
+        if (TempData["msg"] != null)
         {
-            if (TempData["msg"] != null)
-            {
-                <div class="alert alert-danger">
-                    @TempData["msg"];
-                </div>
-                
-            }
+            <div class="alert alert-danger">
+                @TempData["msg"]
+            </div>
+
         }
-        else
-        {
-            <tbody>
-                @{
-                    double totalPayableAmount = 0;
-                    double totalCommissionAmount = 0;
-                    double totalAmount = 0;
-                    double totaltdsAmount = 0;
-                    double totalTransactionAmount = 0;
-                }
-                @foreach (var item in Model.Ambulance)
-                {
-                    <tr>
-                        <td>@item.VehicleNumber</td>
-                        <td>
-                            @item.DriverName (@item.DriverId)
-                        </td>
-                        <td> ₹ @item.TotalPrice </td>
-                        @{
-                            double? razorpaycomm = @item.Amountwithrazorpaycomm;
-                            double? basicamt = (double)@item.TotalPrice;
-                            double? razarfeeamt = razorpaycomm - basicamt;
-                            totalTransactionAmount += (double)razarfeeamt;
-                        }
-                        <td>@String.Format("{0:F2}", razarfeeamt) </td>
-
-                        @{
-                            double amt = (Math.Round((double)item.TotalPrice * ViewBag.Commission) / 100);
-
-                            totalAmount += (double)item.TotalPrice;
-                            totalCommissionAmount += amt;
-                            double tds = (Math.Round((double)item.TotalPrice * ViewBag.tds) / 100);
-                            double payableAmount = (double)item.TotalPrice - (amt + tds + (double)razarfeeamt);
-                            totalPayableAmount += payableAmount;
-                            totaltdsAmount += tds;
-                        }
-                        <td>₹ @amt</td>
-                        <td>₹ @tds</td>
-                        <td>₹ @payableAmount</td>
-                        <td><a href="AmbulanceDetails?VehicleId=@item.VehicleId" class="btn btn-primary">View Details</a></td>
-                    </tr>
-                }
-            </tbody>
-            <tfoot>
+    }
+    else
+    {
+        <tbody>
+            @{
+                double totalPayableAmount = 0;
+                double totalCommissionAmount = 0;
+                double totalAmount = 0;
+                double totaltdsAmount = 0;
+                double totalTransactionAmount = 0;
+            }
+            @foreach (var item in Model.Ambulance)
+            {
                 <tr>
-                    <td colspan="2" style="text-align: right;">
-                        <strong>Total:</strong>
-                    </td>
+                    <td>@item.VehicleNumber</td>
                     <td>
-                        <strong>₹ @totalAmount</strong>
+                        @item.DriverName (@item.DriverId)
                     </td>
+                    <td> ₹ @item.TotalPrice </td>
+                    @{
+                        double? razorpaycomm = @item.Amountwithrazorpaycomm;
+                        double? basicamt = (double)@item.TotalPrice;
+                        double? razarfeeamt = razorpaycomm - basicamt;
+                        totalTransactionAmount += (double)razarfeeamt;
+                    }
+                    <td>@String.Format("{0:F2}", razarfeeamt) </td>
 
-                    <td>
-                        <strong>₹ @String.Format("{0:F2}", @totalTransactionAmount)</strong>
-                    </td>
-                    <td>
-                        <strong>₹ @totalCommissionAmount</strong>
-                    </td>
-                    <td>
-                        <strong>₹ @totaltdsAmount</strong>
-                    </td>
-                    <td>
-                        <strong>₹ @totalPayableAmount</strong>
-                    </td>
+                    @{
+                        double amt = (Math.Round((double)item.TotalPrice * ViewBag.Commission) / 100);
+
+                        totalAmount += (double)item.TotalPrice;
+                        totalCommissionAmount += amt;
+                        double tds = (Math.Round((double)item.TotalPrice * ViewBag.tds) / 100);
+                        double payableAmount = (double)item.TotalPrice - (amt + tds + (double)razarfeeamt);
+                        totalPayableAmount += payableAmount;
+                        totaltdsAmount += tds;
+                    }
+                    <td>₹ @amt</td>
+                    <td>₹ @tds</td>
+                    <td>₹ @payableAmount</td>
+                    <td><a href="AmbulanceDetails?VehicleId=@item.VehicleId" class="btn btn-primary">View Details</a></td>
                 </tr>
-            </tfoot>
-        }
-    </table>
-
-    <nav aria-label="Page navigation example">
-        <ul class="pagination">
-            <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-            @for (int i = 1; i <= Model.TotalPages; i++)
-            {
-                if (i == Model.PageNumber)
-                {
-                    <li class="page-item active"><a class="page-link" href="/CommisionReport/Driver?pageNumber=@i">@i</a></li>
-                }
-                else
-                {
-                    <li class="page-item"><a class="page-link" href="/CommisionReport/Driver?pageNumber=@i">@i</a></li>
-                }
             }
-            <li class="page-item"><a class="page-link" href="#">Next</a></li>
-        </ul>
-    </nav>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="2" style="text-align: right;">
+                    <strong>Total:</strong>
+                </td>
+                <td>
+                    <strong>₹ @totalAmount</strong>
+                </td>
 
+                <td>
+                    <strong>₹ @String.Format("{0:F2}", @totalTransactionAmount)</strong>
+                </td>
+                <td>
+                    <strong>₹ @totalCommissionAmount</strong>
+                </td>
+                <td>
+                    <strong>₹ @totaltdsAmount</strong>
+                </td>
+                <td>
+                    <strong>₹ @totalPayableAmount</strong>
+                </td>
+            </tr>
+        </tfoot>
+    }
+</table>
+
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+        <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+        @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+            if (i == Model.PageNumber)
+            {
+                <li class="page-item active"><a class="page-link" href="/CommisionReport/Driver?pageNumber=@i">@i</a></li>
+            }
+            else
+            {
+                <li class="page-item"><a class="page-link" href="/CommisionReport/Driver?pageNumber=@i">@i</a></li>
+            }
+        }
+        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+    </ul>
+</nav>
+<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+
+
+<script src="https://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css">
+
+<script type="text/javascript">
+    $('#table_id').DataTable();
+</script>
 
 <script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
 <link href="~/css/jquery-ui.css" rel="stylesheet" />

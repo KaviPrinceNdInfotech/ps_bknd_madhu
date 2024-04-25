@@ -21,8 +21,10 @@ using System.Security.AccessControl;
 using System.Security.Cryptography;
 using System.Web.Http; 
 using System.Xml.Linq;
+using static HospitalPortal.Controllers.TestApiController;
 using static HospitalPortal.Utilities.EmailOperations;
-using static iTextSharp.text.pdf.AcroFields;
+using DriverDetail = HospitalPortal.Controllers.TestApiController.DriverDetail;
+using ReturnMessage = HospitalPortal.Controllers.TestApiController.ReturnMessage;
 
 namespace HospitalPortal.Controllers
 {
@@ -37,7 +39,7 @@ namespace HospitalPortal.Controllers
         [HttpPost]
         public IHttpActionResult UpdateProfile(PatientUpdateReq model)
         {
-            var rm = new ReturnMessage();
+            
             try
             { 
                 var data = ent.Patients.Find(model.Id);
@@ -514,7 +516,7 @@ join Lab on Lab.Id = BookTestLab.Lab_Id join LabTest on LabTest.Id = BookTestLab
                 var Wallet = new PenaltyAmount
                 {
                     Patient_Id = Pateintid,
-                    Amount = ((decimal?)Amount * 10) / 100,
+                    Amount = ((decimal?)Amount * 0) / 100,
                     UserWalletAmount = (decimal?)Amount,
                     CancelDate = DateTime.Now,
                     Pro_Id = model.Pro_Id,
@@ -825,8 +827,7 @@ left join AdminLogin as AL on AL.Id=Nurse.AdminLogin_Id
         
         [HttpPost, Route("api/PatientApi/AddPatient")]
         public IHttpActionResult AddPatient(PatientDTO model)
-        {
-            var rm = new ReturnMessage();
+        { 
             GenerateBookingId Patient = new GenerateBookingId();
             using (var tran = ent.Database.BeginTransaction())
             {
@@ -930,8 +931,7 @@ left join AdminLogin as AL on AL.Id=Nurse.AdminLogin_Id
        
         [HttpPost, Route("api/PatientApi/UpdateRWA_Data")]
         public IHttpActionResult UpdateRWA_Data(RWA_Registration model)
-        {
-            var rm = new ReturnMessage();
+        { 
             string[] allowedExtensions = { ".jpg", ".png", ".jpeg" };
              
                 try
@@ -973,8 +973,7 @@ left join AdminLogin as AL on AL.Id=Nurse.AdminLogin_Id
         [HttpGet]
         [Route("api/PatientApi/GetRWA_ProfileDetails")]
         public IHttpActionResult GetRWA_ProfileDetails(int RWA_Id)
-        {
-            var rm = new ReturnMessage();
+        { 
             try
             {
                 var RWALogin = ent.RWAs.FirstOrDefault(a => a.Id == RWA_Id);
@@ -1005,8 +1004,7 @@ left join AdminLogin as AL on AL.Id=Nurse.AdminLogin_Id
         [HttpGet]
         [Route("api/PatientApi/GetPatientList")]
         public IHttpActionResult GetPatientList(int RWA_Id)
-        {
-            var rm = new ReturnMessage();
+        { 
             try
             {
                 var RWALogin = ent.RWAs.FirstOrDefault(a => a.Id == RWA_Id);
@@ -1037,8 +1035,7 @@ left join AdminLogin as AL on AL.Id=Nurse.AdminLogin_Id
         [HttpGet]
         [Route("api/PatientApi/GetRWA_PayoutList")]
         public IHttpActionResult GetRWA_PayoutList(int RWA_Id)
-        {
-            var rm = new ReturnMessage();
+        { 
             try
             {
                 var RWALogin = ent.RWAs.FirstOrDefault(a => a.Id == RWA_Id);
@@ -1073,9 +1070,7 @@ left join AdminLogin as AL on AL.Id=Nurse.AdminLogin_Id
         [HttpGet]
         [Route("api/PatientApi/GetRWA_PaymentReport")]
         public IHttpActionResult GetRWA_PaymentReport(int RWA_Id)
-        {
-            {
-                var rm = new ReturnMessage();
+        { 
                 try
                 {
                     var RWALogin = ent.RWAs.FirstOrDefault(a => a.Id == RWA_Id);
@@ -1104,7 +1099,7 @@ left join AdminLogin as AL on AL.Id=Nurse.AdminLogin_Id
                     log.Error(ex.Message);
                     return InternalServerError(ex);
                 }
-            }
+           
         }
 
         
@@ -1161,8 +1156,7 @@ left join AdminLogin as AL on AL.Id=Nurse.AdminLogin_Id
         [HttpPost]
         [Route("api/PatientApi/DoctorRatingReview")]
         public IHttpActionResult DoctorRatingReview(getRating model)
-        {
-           var rm = new ReturnMessage();
+        { 
 
 
             try
@@ -1225,17 +1219,13 @@ left join AdminLogin as AL on AL.Id=Nurse.AdminLogin_Id
                     rm.Message = "data save successfully";
                     rm.Status = 200;
                     return Ok(rm);
-                }
-
-
-
+                } 
                 else 
                 {
                     rm.Message = "Not Found.";
                     rm.Status = 404;
                     return Ok(rm);
-                }
-                return Ok(rm);
+                } 
 
             }
 
@@ -1370,6 +1360,74 @@ left join AdminLogin as AL on AL.Id=Nurse.AdminLogin_Id
             var Driver_Detail = ent.Database.SqlQuery<DriverDetail>(qry).FirstOrDefault();
             return Ok( Driver_Detail );
         }
+        //Post Api send request single driver
+        [HttpPost, Route("api/PatientApi/BookDriver")]
+
+        public IHttpActionResult BookDriver(DriverLocationDT model)
+        {
+            try
+            {
+                var data=ent.DriverLocations.Where(d=>d.PatientId==model.Patient_Id).OrderByDescending(d=>d.Id).FirstOrDefault();
+                data.IsBooked = true;
+                ent.SaveChanges();
+
+                var booking = new DriverBooking
+                {
+                    Driver_Id = model.Driver_Id,
+                    Patient_Id = model.Patient_Id,
+                    BookingDate = DateTime.Now,
+                    RideComplete=false
+                };
+
+                ent.DriverBookings.Add(booking);
+                ent.SaveChanges();
+
+                return Ok(new { Message = "Driver booked successfully" });
+
+            }
+            catch (Exception)
+            {
+                return BadRequest("Server Error");
+            }
+        }
+
+        //Post Api send request all driver//
+        [HttpPost, Route("api/PatientApi/RequestToAll")]
+        public IHttpActionResult RequestToAll(DriverLocationDT model)
+        {
+            try
+            {
+                List<DriverListNearByUser> driverListNearByUser = new List<DriverListNearByUser>();
+
+                var Driver = ent.Database.SqlQuery<DriverLocationDT>(@"select Id, DriverId as Driver_Id from NearDriver with(nolock) where KM <= 100 order by KM asc").ToList();
+                var data = ent.DriverLocations.Where(d => d.PatientId == model.Patient_Id).OrderByDescending(d => d.Id).FirstOrDefault();
+                data.IsBooked = true;
+                ent.SaveChanges();
+
+                foreach (var item in Driver)
+                {
+                    var booking = new DriverBooking
+                    {
+                        Driver_Id = item.Driver_Id,
+                        Patient_Id = model.Patient_Id,
+                        BookingDate = DateTime.Now,
+                        RideComplete=false
+                    };
+
+                    ent.DriverBookings.Add(booking);
+                    ent.SaveChanges();
+                }
+                rm.Status = 1;
+                rm.Message = "Request send successfully.";
+                return Ok(rm);
+
+            }
+            catch (Exception)
+            {
+                return BadRequest("Server Error");
+            }
+        }
+
 
     }
     

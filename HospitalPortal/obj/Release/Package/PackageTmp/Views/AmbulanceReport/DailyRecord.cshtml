@@ -3,6 +3,7 @@
 @{
     ViewBag.Title = "DailyRecord";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    int count = 1;
 }
 
 <h2>Daily Record</h2>
@@ -12,65 +13,58 @@
         margin: 6%;
     }
 </style>
-<div id="main">
+<link href="/Styles/bootstrap.min.css" rel="stylesheet" />
+<div id="main"> 
 
-    @using (Html.BeginForm("DailyRecord", "AmbulanceReport", FormMethod.Get))
-    {
-        <div class="row">
-            <div class="col-md-4">
-                Start Date
-                @Html.TextBoxFor(a => a.sdate, new { @class = "datepicker form-control", required = "required" })
-            </div>
-            <div class="col-md-4">
-                End Date
-                @Html.TextBoxFor(a => a.edate, new { @class = "datepicker form-control", required = "required" })
-            </div>
-            <div class="col-md-4">
-                <input type="submit" id="test" value="Search" class="btn btn-primary" />
-            </div>
-        </div>
-    }
-
-    @if (Model.Ambulance == null)
-    {
-        if (TempData["msg"] != null)
+   
+    <table id="table_id" class="table table-bordered">
+        <thead style="background-color:lavender;">
+            <tr>
+                <th>Sr No.</th>
+                <th>
+                    Patient Name / Id
+                </th>
+                <th>
+                    Driver Name / Id
+                </th>
+                <th>
+                    Distance
+                </th>
+                <th>
+                    PickUp Location
+                </th>
+                <th>
+                    Drop Location
+                </th>
+                <th>
+                    Amount
+                </th>
+            </tr>
+        </thead>
+        @if (Model.Ambulance == null)
         {
-            <h2 style="color:blueviolet">
-                @TempData["msg"]
-            </h2>
+            if (TempData["msg"] != null)
+            {
+                <div class="alert alert-danger">
+                    @TempData["msg"]
+                </div>
+            }
         }
-    }
-    else
-    {
-        <table id="tables" class="table table-responsive">
-            <thead>
-                <tr>
-                    <th>
-                        Patient Name
-                    </th>
-                    <th>
-                        Driver Name
-                    </th>
-                    <th>
-                        Distance
-                    </th>
-                    <th>
-                        PickUp / Drop
-                    </th>
-                    <th>
-                        Amount
-                    </th>
-                </tr>
-            </thead>
+        else
+        {
             <tbody>
+                @{
+                    decimal? totalAmount = 0;
+                }
                 @foreach (var item in Model.Ambulance)
                 {
                     <tr>
+                        <td>@count</td>
                         <td>
-                            @item.PatientName
+                            @item.PatientName / @item.UniqueId
                         </td>
                         <td>
-                            @item.DriverName
+                            @item.DriverName / @item.DriverId
                         </td>
                         <td>
                             @Math.Round((double)item.Distance)
@@ -81,13 +75,30 @@
                         <td>
                             @item.ReverseEndLatLong_To_Location
                         </td>
+                        @{
+                            totalAmount += item.Amount;
+                        }
                         <td>@Math.Round((decimal)item.Amount) Rs.</td>
                     </tr>
-                }
+                                count++;
+                            }
             </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="6" style="text-align: right;"><strong>Total:</strong></td>
+                    <td><strong>₹ @totalAmount</strong></td>
+                </tr>
+            </tfoot>
+                            }
         </table>
-    }
+  
 </div>
+<script src="https://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css">
+
+<script type="text/javascript">
+    $('#table_id').DataTable();
+</script> 
 <script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
 <link href="~/css/jquery-ui.css" rel="stylesheet" />
 <script src="~/Scripts/jquery-ui.js"></script>

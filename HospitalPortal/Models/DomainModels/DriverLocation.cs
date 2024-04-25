@@ -35,6 +35,9 @@ namespace HospitalPortal.Models.DomainModels
         public Nullable<System.DateTime> PaymentDate { get; set; }
         public Nullable<bool> RejectedStatus { get; set; }
         public string PaymentStatus { get; set; }
+        public Nullable<bool> RideComplete { get; set; }
+        public Nullable<bool> IsBooked { get; set; }
+        public Nullable<bool> IsPayoutPaid { get; set; }
     
         public virtual Driver Driver { get; set; }
         public virtual Patient Patient { get; set; }

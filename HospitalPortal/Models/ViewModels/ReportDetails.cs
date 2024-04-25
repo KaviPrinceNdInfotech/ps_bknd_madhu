@@ -14,6 +14,7 @@ namespace HospitalPortal.Models.ViewModels
         public DateTime sdate { get; set;}
         public DateTime ServiceAcceptanceDate { get; set; }
         public DateTime edate { get; set; }
+        public DateTime week { get; set; }
         public DateTime AppointmentDate { get; set; }
         public DateTime TestDate { get; set; }
         public DateTime OrderDate { get; set; }
@@ -31,6 +32,7 @@ namespace HospitalPortal.Models.ViewModels
         public string Year { get; set; }
         public string Weeks { get; set; }
         public string DoctorName { get; set; }
+        public string DoctorId { get; set; }
         
         public double? PayoutAmt { get; set; }
 
@@ -71,6 +73,9 @@ namespace HospitalPortal.Models.ViewModels
         public DateTime ServiceAcceptanceDate { get; set; }
         public DateTime RequestDate { get; set; }
         public double? TotalFee { get; set; }
+        public string NurseName { get; set; }
+        public string NurseId { get; set; }
+
     }
 
     public class Vendorses
@@ -78,8 +83,14 @@ namespace HospitalPortal.Models.ViewModels
         public double? Counts { get; set; }
         public int Id { get; set; }
         public string Name { get; set; }
+        public string UniqueId { get; set; }
+        public string VendorId { get; set; }
+        public string UserName { get; set; }
         public string Name1 { get; set; }
+        public string VehicleName { get; set; }
+        public string VehicleNumber { get; set; }
         public int commission { get; set; }
         public double? payment { get; set; }
+        public decimal? Amount { get; set; }
     }
 }

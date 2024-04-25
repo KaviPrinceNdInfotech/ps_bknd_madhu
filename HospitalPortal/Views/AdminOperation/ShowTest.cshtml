@@ -2,6 +2,7 @@
 @{
     ViewBag.Title = "ShowTest";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    int count = 1;
 }
 
 <h2>Show Test List</h2>
@@ -24,10 +25,10 @@
     }
     else
     {
-        <table class="table table-bordered">
-            <thead>
+        <table id="myTable" class="table table-bordered">
+            <thead style="background-color:lavender;">
                 <tr>
-
+                    <th>Sr No.</th>
                     <th>Test Category</th>
                     <th>Test Amount</th>
                     <th>Test Name / Description</th>
@@ -38,6 +39,7 @@
             @foreach (var item in Model.TestsList)
             {
                 <tr>
+                    <td>@count</td>
                     <td><input type="hidden" value="@item.Id" />@item.TestName</td>
                     <td>&#8377; @item.TestAmount</td>
                     <td>@item.TestDesc</td>
@@ -53,6 +55,7 @@
                         }
                     </td>
                 </tr>
+                count++;
             }
 
         </table>

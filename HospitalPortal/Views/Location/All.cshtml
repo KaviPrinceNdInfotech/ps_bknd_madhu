@@ -1,11 +1,11 @@
 ﻿@model IEnumerable<HospitalPortal.Models.ViewModels.LocationDTO>
 @{
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    int count = 1;
 }
      
 <style>
-    #mainContainer {
-        width: 60%;
+    #mainContainer { 
         margin-top: 1%;
         margin-left: 1%;
     }
@@ -28,8 +28,9 @@
         <div class="row">
             <div class="col-md-12">
                <table id="myTable" class="table table-bordered">
-                 <thead>
+                 <thead style="background-color:lavender;">
                      <tr>
+                         <th>Sr No.</th>
                          <th>Address</th>
                          <th>District</th>
                          <th>State</th>
@@ -40,6 +41,7 @@
                        @foreach(var item in Model)
                        {
                            <tr>
+                               <td>@count</td>
                                <td>@item.LocationName</td>
                                <td>@item.CityName</td>
                                <td>@item.StateName</td>
@@ -51,6 +53,7 @@
     new { onclick = "return confirm('Are sure wants to delete?');", @class = "btn btn-danger" })
                                </td>
                            </tr>
+                           count++;
                        }
                    </tbody>
                </table>

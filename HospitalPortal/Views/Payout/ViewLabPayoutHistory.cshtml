@@ -18,26 +18,35 @@
 }
 else
 {
-    <table class="table table-bordered">
+<table class="table table-hover">
+    <thead style="background-color:lavender;">
         <tr>
             <th>Serial No</th>
+            <th>Patient Name/Id</th>
+            <th>Mobile Number</th>
+            <th>Email Id</th>
+            <th>Test Date</th>
             <th>Payment Date</th>
-            <th>Amount</th>
-            <th>Status</th>
+            <th>Paid Amount</th>
         </tr>
-        <tbody>
-            @{int RowNo = 0;}
-            @foreach (var item in Model.HistoryOfLab_Payout)
-            {
-                <tr>
-                    <td>
-                        @{RowNo++;} @RowNo
-                    </td>
+        </thead>
+    <tbody>
+        @{int RowNo = 0;}
+        @foreach (var item in Model.HistoryOfLab_Payout)
+        {
+            <tr>
+                <td>
+                    @{RowNo++;} @RowNo
+                </td>
 
-                    <td>@item.PaymentDate</td>
-                    <td>@item.Amount</td>
-                    <td>
-                       
+                <td>@item.PatientName (@item.PatientRegNo)</td>
+                <td>@item.MobileNumber</td>
+                <td>@item.EmailId</td>
+                <td>@item.TestDate.Value.ToShortDateString()</td>
+                <td>@item.PaymentDate.Value.ToShortDateString()</td>
+                <td>@item.Amount</td>
+                @*<td>
+
 
                         @if (Convert.ToInt32(item.IsGenerated) == 1)
                         {
@@ -56,11 +65,11 @@ else
                         {
                             <a href="/Payout/UpdateLabPayment?id=@item.Id" class="btn btn-danger">Not Paid</a>
                         }
-                    </td>
-                </tr>
-                            }
-        </tbody>
-    </table>
+                    </td>*@
+            </tr>
+        }
+    </tbody>
+</table>
 
                             }
 </div>

@@ -66,6 +66,7 @@ namespace HospitalPortal.Models.DomainModels
         public Nullable<int> Charge { get; set; }
         public Nullable<bool> IsBankUpdateApproved { get; set; }
         public Nullable<int> Vehicle_Id { get; set; }
+        public Nullable<bool> IsBooked { get; set; }
     
         public virtual Vehicle Vehicle { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

@@ -1,103 +1,109 @@
 ﻿@model HospitalPortal.Models.ViewModels.ReportDetails
 @{
     ViewBag.Title = "ViewReport";
+    int count = 1;
 }
 <link href="/css/bootstrap.min.css" rel="stylesheet" />
 
-
-@using (Html.BeginForm())
+@using (Html.BeginForm("WeeklyVeh", "VendorReport", FormMethod.Get))
 {
     <div class="row">
         <div class="col-md-4">
-            @Html.TextBoxFor(a => a.RegistrationDate, new { @class = "datepicker form-control", required = "required" })
+            @Html.TextBoxFor(a => a.week, new { @class = "form-control", required = "required", type = "date" })
         </div>
         <div class="col-md-4">
-            <input type="button" id="test" value="Search" class="btn btn-primary" />
+            <input type="submit" id="test" value="Search" class="btn btn-primary" />
         </div>
     </div>
 
 
 }
-@if (Model.Vendors == null)
-{
-    if (TempData["msg"] != null)
+<table id="table_id" class="table table-bordered">
+    <thead style="background-color:lavender;">
+        <tr>
+            <th>Sr No.</th>
+            <th>
+                Vendor Name (Id)
+            </th>
+            <th>
+                Company Name
+            </th>
+            <th>Vehicle Number</th>
+            <th>Vehicle Name</th>
+            <th>
+                Total Amount
+            </th>
+        </tr>
+    </thead>
+    @if (Model.Vendors == null)
     {
-        <h2 style="color:blueviolet">
-            @TempData["msg"]
-        </h2>
+        if (TempData["msg"] != null)
+        {
+            <div class="alert alert-danger">
+                @TempData["msg"]
+            </div>
+        }
     }
-}
-else
-{
-
-    <table id="tables" class="table table-responsive" style="margin-left: -20%;">
-        <thead>
-            <tr>
-                <th>
-                    Vendor Name
-                </th>
-                <th>
-                    Company Name
-                </th>
-                @*<th>
-                    Added Vehicles!!
-                </th>*@
-                <th>
-                    Total Amount
-                </th>
-            </tr>
-        </thead>
+    else
+    {
         <tbody>
             @foreach (var item in Model.Vendors)
             {
                 <tr>
+                    <td>@count</td>
                     <td>
-                        @item.Name
+                        @item.Name (@item.UniqueId)
                     </td>
                     <td>
                         @item.Name1
                     </td>
+                    <td>
+                        @item.VehicleNumber
+                    </td>
+                    <td>
+                        @item.VehicleName
+                    </td>
+
                     @{
 
                     }
                     <td>
-                        @item.Counts
+                        @item.Amount
                     </td>
-                    @*@{
-                        double amt = item.Counts * ViewBag.Payment;
-                    }
-                    <td>
-                        @amt
-                    </td>*@
                 </tr>
-                        }
+                count++;
+            }
 
         </tbody>
-    </table>
-                        }
+    }
+</table>
+<script src="https://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css">
 
-
+<script type="text/javascript">
+    $('#table_id').DataTable();
+</script>
+<script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
 <link href="~/css/jquery-ui.css" rel="stylesheet" />
 <script src="~/Scripts/jquery-ui.js"></script>
-<script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
 <script>
     $(".datepicker").datepicker().datepicker('setdate', 'today');
 
-        $("#test").click(function () {
-            debugger
-            var date = $("#RegistrationDate").val();
-            $.ajax({
-                url: "/VendorReport/WeeklyVeh?week=" + date + "",
-                type: "get",
-                success: function (response) {
-                    console.log(response);
-                    $("#prevAtt").html(response);
-                },
-                error: function (error) {
-                    console.log(error.responseText);
+    $("#test").click(function () {
+        debugger
+        var date = $("#week").val();
+        $.ajax({
+            url: "/VendorReport/WeeklyVeh?week=" + date + "",
+            type: "get",
+            success: function (response) {
+                console.log(response);
+                $("#prevAtt").html(response);
+            },
+            error: function (error) {
+                console.log(error.responseText);
 
-                }
-            });
-
+            }
         });
+
+    });
 </script>

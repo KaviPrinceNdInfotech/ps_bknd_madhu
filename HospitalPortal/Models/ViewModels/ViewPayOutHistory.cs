@@ -30,6 +30,7 @@ namespace HospitalPortal.Models.ViewModels
 
         public int Id { get; set; }
         public int Driver_Id { get; set; }
+        public string DriverId { get; set; }
         public string DriverName { get; set; }
         public string VehicleName { get; set; }
         public string VehicleNumber { get; set; }
@@ -51,9 +52,12 @@ namespace HospitalPortal.Models.ViewModels
         public int Id { get; set; }
         public int Doctor_Id { get; set; }
         public string DoctorName { get; set; }
-        public Nullable<System.DateTime> AppointmentDate { get; set; }
+        public string PatientName { get; set; }
+        public string PatientRegNo { get; set; }
+        public string AppointmentDate { get; set; }
         public string DoctorId { get; set; }
         public string EmailId { get; set; }
+        public string MobileNumber { get; set; }
         public string Location { get; set; }
         public string PinCode { get; set; }
         public string LicenceNumber { get; set; }
@@ -97,6 +101,9 @@ namespace HospitalPortal.Models.ViewModels
         public int Id { get; set; }
         public int Lab_Id { get; set; }
         public string lABId { get; set; }
+        public string MobileNumber { get; set; }
+        public string PatientName { get; set; }
+        public string PatientRegNo { get; set; }
         public string LabName { get; set; }
         public Nullable<System.DateTime> TestDate { get; set; }
         public string EmailId { get; set; }

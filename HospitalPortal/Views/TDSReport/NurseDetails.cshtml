@@ -2,15 +2,16 @@
 @{
     ViewBag.Title = "NurseDetails";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    int count = 1;
 }
 
 <link href="/Styles/bootstrap.min.css" rel="stylesheet" />
 <h2>Details of <span style="color:red">@Model.NurseName</span></h2>
 <a href="/TDSReport/TDS" class="btn btn-info">Back</a>
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("NurseDetails", "TDSReport", FormMethod.Post))
 {
-    <div class="row">
+    <div class="row" style="display:none;">
         <div class="col-md-3">
             <input type="hidden" name="NurseId" id="NurseId" value="@Model.NurseId" />
             @Html.TextBoxFor(a => a.ServiceAcceptanceDate, new { @class = "form-control", required = "required",type="date" })
@@ -21,55 +22,49 @@
     </div>
 }
 
-@if (Model.NurseAppointmentList == null)
-{
-    if (TempData["msg"] != null)
-    {
-        <h3 style="color:red">@TempData["msg"]</h3>
-    }
-}
-else
-{
 
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Request Date</th>
-                @*<th>Name</th>
-                    <th>Correspondance Contact No.</th>
-                    <th>Registered Contact No</th>*@
-                <th>Service Schedule</th>
-                <th>Status</th>
-                <th>Total Days</th>
-                <th>Total Amt.</th>
-                <th>Paid At</th>
-                <th>
-                    TDS Amount(in %)
-                </th>
-                <th>
-                    After Deduction
-                </th>
-                <th>
-                    Payable Amount
-                </th>
-            </tr>
-        </thead>
+
+<table id="myTable" class="table table-bordered">
+    <thead style="background-color:lavender;">
+        <tr>
+            <th>Sr No.</th>
+            <th>Request Date</th>
+            <th>Service Schedule</th>
+            <th>Status</th>
+            <th>Total Days</th>
+            <th>Total Amt.</th>
+            <th>Paid At</th>
+            <th>
+                TDS Amount @ViewBag.TDS %
+            </th>
+
+            <th>
+                Payable Amount
+            </th>
+        </tr>
+    </thead>
+    @if (Model.NurseAppointmentList == null)
+    {
+        if (TempData["msg"] != null)
+        {
+            <h6 class="alert alert-danger">@TempData["msg"]</h6>
+        }
+    }
+    else
+    {
         <tbody>
             @foreach (var item in Model.NurseAppointmentList)
             {
                 <tr>
+                    <td>@count</td>
                     <td>@item.RequestDate</td>
-                    @*<td>@item.PatientName</td>
-                        <td>@item.ContactNumber</td>
-                        <td>@item.RegisteredMobileNumber</td>*@
                     <td>@item.ServiceTiming</td>
                     <td>@item.ServiceStatus</td>
                     <td>@item.TotalDays</td>
                     <td>Rs. @item.TotalFee</td>
                     <td>@item.PaymentDate</td>
-                    <td>@ViewBag.TDS</td>
                     @{
-                        if(item.TotalFee == null)
+                        if (item.TotalFee == null)
                         {
                             item.TotalFee = 0;
                         }
@@ -87,10 +82,12 @@ else
                         @Value
                     </td>
                 </tr>
-                        }
+                count++;
+            }
         </tbody>
-    </table>
                         }
+    </table>
+                        
 <script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
 <link href="~/css/jquery-ui.css" rel="stylesheet" />
 <script src="~/Scripts/jquery-ui.js"></script>

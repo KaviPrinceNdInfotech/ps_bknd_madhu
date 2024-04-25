@@ -2,15 +2,26 @@
 @{
     ViewBag.Title = "LabReport";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    int count = 1;
 }
 
 <h2>Lab List</h2>
+<div class=" row">
+    <div class="col-md-3">
+        <div class=" form-group">
+            <a href="@Url.Action("DownloadLabDetailExcelForBank", "Report")">
+                <img src="https://www.pinclipart.com/picdir/big/178-1780962_download-105-free-excel-icons-here-excel-download.png" alt="List View" style="width: 55px;">
+            </a>
+        </div>
+    </div>
+</div>
 
 <table id="table_id" class="display">
     <thead>
         <tr>
+            <th> Sr No.</th>
             <th>
-                Lab Name
+                Lab Name (Id)
             </th>
             <th>
                 Action
@@ -18,19 +29,20 @@
         </tr>
     </thead>
     @if (Model.LabReport == null)
-    {
-
+     { 
         <div class="alert alert-danger">No Records</div>
-}
+     }
     else
     {
         <tbody>
             @foreach (var item in Model.LabReport)
             {
                 <tr>
-                    <td>@item.LabName</td>
+                    <td>@count</td>
+                    <td>@item.LabName (@item.lABId)</td>
                     <td><a href="/Report/ViewLabDetails?LabId=@item.Lab_Id" class="btn btn-primary">View Details</a></td>
                 </tr>
+                count++;
             }
         </tbody>
     }

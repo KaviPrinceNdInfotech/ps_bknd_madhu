@@ -158,6 +158,10 @@ namespace HospitalPortal.Models.DomainModels
         public virtual DbSet<DurationTime> DurationTimes { get; set; }
         public virtual DbSet<Doctor> Doctors { get; set; }
         public virtual DbSet<TransactionFeeMaster> TransactionFeeMasters { get; set; }
+        public virtual DbSet<VehicleAllotHistory> VehicleAllotHistories { get; set; }
+        public virtual DbSet<AmbulancePayout> AmbulancePayouts { get; set; }
+        public virtual DbSet<Role> Roles { get; set; }
+        public virtual DbSet<DriverBooking> DriverBookings { get; set; }
     
         [DbFunction("DbEntities", "udf_AppointmentSlots")]
         public virtual IQueryable<udf_AppointmentSlots_Result> udf_AppointmentSlots(Nullable<int> doctorId)

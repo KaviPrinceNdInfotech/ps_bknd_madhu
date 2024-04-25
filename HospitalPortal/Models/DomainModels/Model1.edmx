@@ -103,6 +103,16 @@
           <Property Name="IsActive" Type="bit" />
           <Property Name="EntryDate" Type="datetime" />
         </EntityType>
+        <EntityType Name="DriverBooking">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Driver_Id" Type="int" />
+          <Property Name="Patient_Id" Type="int" />
+          <Property Name="BookingDate" Type="datetime" />
+          <Property Name="RideComplete" Type="bit" />
+        </EntityType>
         <EntityType Name="DriverComplaint">
           <Key>
             <PropertyRef Name="Id" />
@@ -359,6 +369,13 @@ warning 6002: The table/view 'admin_Hospital.admin_Hospital.franchiseRole' does 
           <Property Name="Professional" Type="varchar" MaxLength="250" />
           <Property Name="Patient_Id" Type="int" />
         </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" />
+        </EntityType>
         <EntityType Name="RWA_PaymentReport">
           <Key>
             <PropertyRef Name="Id" />
@@ -437,6 +454,16 @@ warning 6002: The table/view 'admin_Hospital.admin_Hospital.franchiseRole' does 
           <Property Name="TransactionType" Type="nvarchar" MaxLength="10" />
           <Property Name="walletAmount" Type="decimal" Precision="18" Scale="0" />
         </EntityType>
+        <EntityType Name="VehicleAllotHistory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Driver_Id" Type="int" />
+          <Property Name="Vehicle_Id" Type="int" />
+          <Property Name="AllocateDate" Type="datetime" />
+          <Property Name="IsActive" Type="bit" />
+        </EntityType>
         <EntityType Name="VehicleTemp">
           <Key>
             <PropertyRef Name="Id" />
@@ -479,6 +506,21 @@ warning 6002: The table/view 'admin_Hospital.admin_Hospital.franchiseRole' does 
           <Property Name="UserID" Type="nvarchar" MaxLength="50" />
           <Property Name="Confirmpassword" Type="nvarchar" MaxLength="100" />
           <Property Name="DeviceId" Type="nvarchar" MaxLength="500" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'admin_Hospital.dbo.AmbulancePayout' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="AmbulancePayout">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Vehicle_Id" />
+            <PropertyRef Name="Amount" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Vehicle_Id" Type="int" Nullable="false" />
+          <Property Name="Amount" Type="float" Nullable="false" />
+          <Property Name="IsPaid" Type="bit" />
+          <Property Name="PaymentDate" Type="datetime" />
+          <Property Name="IsGenerated" Type="bit" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -533,6 +575,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <Property Name="InvoiceNumber" Type="nvarchar" MaxLength="100" />
           <Property Name="OrderId" Type="nvarchar" MaxLength="100" />
           <Property Name="OrderDate" Type="datetime" />
+          <Property Name="IsPayoutPaid" Type="bit" />
         </EntityType>
         <EntityType Name="CancelledAppointment">
           <Key>
@@ -868,6 +911,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <Property Name="Charge" Type="int" />
           <Property Name="IsBankUpdateApproved" Type="bit" />
           <Property Name="Vehicle_Id" Type="int" />
+          <Property Name="IsBooked" Type="bit" />
         </EntityType>
         <EntityType Name="DriverLocation">
           <Key>
@@ -894,6 +938,9 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <Property Name="PaymentDate" Type="datetime" />
           <Property Name="RejectedStatus" Type="bit" />
           <Property Name="PaymentStatus" Type="nvarchar" MaxLength="10" />
+          <Property Name="RideComplete" Type="bit" />
+          <Property Name="IsBooked" Type="bit" />
+          <Property Name="IsPayoutPaid" Type="bit" />
         </EntityType>
         <EntityType Name="DriverPayOut">
           <Key>
@@ -1474,6 +1521,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <Property Name="InvoiceNumber" Type="nvarchar" MaxLength="50" />
           <Property Name="OrderId" Type="nvarchar" MaxLength="50" />
           <Property Name="OrderDate" Type="datetime" />
+          <Property Name="IsPayoutPaid" Type="bit" />
         </EntityType>
         <EntityType Name="NurseServiceRequest">
           <Key>
@@ -1552,6 +1600,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <Property Name="OrderId" Type="nvarchar" MaxLength="50" />
           <Property Name="OrderDate" Type="datetime" />
           <Property Name="AppointmentIsDone" Type="bit" />
+          <Property Name="IsPayoutPaid" Type="bit" />
         </EntityType>
         <EntityType Name="PatientComplaints">
           <Key>
@@ -1828,6 +1877,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <Property Name="under451_500KM" Type="float" />
           <Property Name="Above500KM" Type="float" />
           <Property Name="Category_Id" Type="int" />
+          <Property Name="DriverCharge" Type="float" />
         </EntityType>
         <EntityType Name="Vendor">
           <Key>
@@ -2057,20 +2107,6 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
             </Principal>
             <Dependent Role="CmpltCheckUp">
               <PropertyRef Name="Test_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__DriverCom__Login__2EDAF651">
-          <End Role="Driver" Type="Self.Driver" Multiplicity="0..1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="DriverComplaint" Type="Self.DriverComplaint" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Driver">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="DriverComplaint">
-              <PropertyRef Name="Login_Id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2378,136 +2414,6 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__TravelMas__Drive__2077C861">
-          <End Role="Driver" Type="Self.Driver" Multiplicity="0..1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="TravelMaster" Type="Self.TravelMaster" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Driver">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="TravelMaster">
-              <PropertyRef Name="Driver_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__TravelMas__Patie__1F83A428">
-          <End Role="Patient" Type="Self.Patient" Multiplicity="0..1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="TravelMaster" Type="Self.TravelMaster" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Patient">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="TravelMaster">
-              <PropertyRef Name="Patient_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__TravelMas__Vehic__1E8F7FEF">
-          <End Role="VehicleType" Type="Self.VehicleType" Multiplicity="0..1" />
-          <End Role="TravelMaster" Type="Self.TravelMaster" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="VehicleType">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="TravelMaster">
-              <PropertyRef Name="VehicleType_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__TravelMas__Vehic__216BEC9A">
-          <End Role="Vehicle" Type="Self.Vehicle" Multiplicity="0..1" />
-          <End Role="TravelMaster" Type="Self.TravelMaster" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Vehicle">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="TravelMaster">
-              <PropertyRef Name="Vehicle_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__TravelRec__Drive__338A9CD5">
-          <End Role="Driver" Type="Self.Driver" Multiplicity="0..1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="TravelRecordMaster" Type="Self.TravelRecordMaster" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Driver">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="TravelRecordMaster">
-              <PropertyRef Name="Driver_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__TravelRec__Patie__3296789C">
-          <End Role="Patient" Type="Self.Patient" Multiplicity="0..1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="TravelRecordMaster" Type="Self.TravelRecordMaster" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Patient">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="TravelRecordMaster">
-              <PropertyRef Name="Patient_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__TravelRec__Vehic__347EC10E">
-          <End Role="Vehicle" Type="Self.Vehicle" Multiplicity="0..1" />
-          <End Role="TravelRecordMaster" Type="Self.TravelRecordMaster" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Vehicle">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="TravelRecordMaster">
-              <PropertyRef Name="Vehicle_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__VehicleCh__Categ__0D99FE17">
-          <End Role="MainCategory" Type="Self.MainCategory" Multiplicity="0..1" />
-          <End Role="VehicleCharges" Type="Self.VehicleCharges" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="MainCategory">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="VehicleCharges">
-              <PropertyRef Name="Category_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__VehicleCh__TypeI__0E8E2250">
-          <End Role="VehicleType" Type="Self.VehicleType" Multiplicity="0..1" />
-          <End Role="VehicleCharges" Type="Self.VehicleCharges" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="VehicleType">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="VehicleCharges">
-              <PropertyRef Name="TypeId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__VehicleTy__Categ__5FD33367">
-          <End Role="MainCategory" Type="Self.MainCategory" Multiplicity="0..1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="VehicleType" Type="Self.VehicleType" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="MainCategory">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="VehicleType">
-              <PropertyRef Name="Category_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK__Vendor__AdminLog__51300E55">
           <End Role="AdminLogin" Type="Self.AdminLogin" Multiplicity="1" />
           <End Role="Vendor" Type="Self.Vendor" Multiplicity="*" />
@@ -2725,6 +2631,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <EntitySet Name="DoctorBookingMode" EntityType="Self.DoctorBookingMode" Schema="admin_Hospital" store:Type="Tables" />
           <EntitySet Name="DoctorChooseDepartment" EntityType="Self.DoctorChooseDepartment" Schema="admin_Hospital" store:Type="Tables" />
           <EntitySet Name="DoctorTimeSlot" EntityType="Self.DoctorTimeSlot" Schema="admin_Hospital" store:Type="Tables" />
+          <EntitySet Name="DriverBooking" EntityType="Self.DriverBooking" Schema="admin_Hospital" store:Type="Tables" />
           <EntitySet Name="DriverComplaint" EntityType="Self.DriverComplaint" Schema="admin_Hospital" store:Type="Tables" />
           <EntitySet Name="DurationTime" EntityType="Self.DurationTime" Schema="admin_Hospital" store:Type="Tables" />
           <EntitySet Name="FraAddVehicleType" EntityType="Self.FraAddVehicleType" Schema="admin_Hospital" store:Type="Tables" />
@@ -2744,6 +2651,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <EntitySet Name="PFMaster" EntityType="Self.PFMaster" Schema="admin_Hospital" store:Type="Tables" />
           <EntitySet Name="PrescriptionAppointments" EntityType="Self.PrescriptionAppointments" Schema="admin_Hospital" store:Type="Tables" />
           <EntitySet Name="Review" EntityType="Self.Review" Schema="admin_Hospital" store:Type="Tables" />
+          <EntitySet Name="Role" EntityType="Self.Role" Schema="admin_Hospital" store:Type="Tables" />
           <EntitySet Name="RWA_PaymentReport" EntityType="Self.RWA_PaymentReport" Schema="admin_Hospital" store:Type="Tables" />
           <EntitySet Name="RWAGstMaster" EntityType="Self.RWAGstMaster" Schema="admin_Hospital" store:Type="Tables" />
           <EntitySet Name="RWAPayment" EntityType="Self.RWAPayment" Schema="admin_Hospital" store:Type="Tables" />
@@ -2752,6 +2660,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <EntitySet Name="TimeSlot" EntityType="Self.TimeSlot" Schema="admin_Hospital" store:Type="Tables" />
           <EntitySet Name="TransactionFeeMaster" EntityType="Self.TransactionFeeMaster" Schema="admin_Hospital" store:Type="Tables" />
           <EntitySet Name="UserWallet" EntityType="Self.UserWallet" Schema="admin_Hospital" store:Type="Tables" />
+          <EntitySet Name="VehicleAllotHistory" EntityType="Self.VehicleAllotHistory" Schema="admin_Hospital" store:Type="Tables" />
           <EntitySet Name="VehicleTemp" EntityType="Self.VehicleTemp" Schema="admin_Hospital" store:Type="Tables" />
           <EntitySet Name="AdminLogin" EntityType="Self.AdminLogin" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BankDetails" EntityType="Self.BankDetails" Schema="dbo" store:Type="Tables" />
@@ -2849,6 +2758,16 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
     [franchiseRole].[RoleName] AS [RoleName]
     FROM [admin_Hospital].[franchiseRole] AS [franchiseRole]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="AmbulancePayout" EntityType="Self.AmbulancePayout" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [AmbulancePayout].[Id] AS [Id], 
+    [AmbulancePayout].[Vehicle_Id] AS [Vehicle_Id], 
+    [AmbulancePayout].[Amount] AS [Amount], 
+    [AmbulancePayout].[IsPaid] AS [IsPaid], 
+    [AmbulancePayout].[PaymentDate] AS [PaymentDate], 
+    [AmbulancePayout].[IsGenerated] AS [IsGenerated]
+    FROM [dbo].[AmbulancePayout] AS [AmbulancePayout]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="AppLog" EntityType="Self.AppLog" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [AppLog].[Date] AS [Date], 
@@ -2918,10 +2837,6 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <AssociationSet Name="FK__CmpltChec__Test___3D491139" Association="Self.FK__CmpltChec__Test___3D491139">
             <End Role="HealthCheckUp" EntitySet="HealthCheckUp" />
             <End Role="CmpltCheckUp" EntitySet="CmpltCheckUp" />
-          </AssociationSet>
-          <AssociationSet Name="FK__DriverCom__Login__2EDAF651" Association="Self.FK__DriverCom__Login__2EDAF651">
-            <End Role="Driver" EntitySet="Driver" />
-            <End Role="DriverComplaint" EntitySet="DriverComplaint" />
           </AssociationSet>
           <AssociationSet Name="FK__HealthBoo__Patie__43F60EC8" Association="Self.FK__HealthBoo__Patie__43F60EC8">
             <End Role="Patient" EntitySet="Patient" />
@@ -3018,46 +2933,6 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <AssociationSet Name="FK__Specialis__Depar__4C6B5938" Association="Self.FK__Specialis__Depar__4C6B5938">
             <End Role="Department" EntitySet="Department" />
             <End Role="Specialist" EntitySet="Specialist" />
-          </AssociationSet>
-          <AssociationSet Name="FK__TravelMas__Drive__2077C861" Association="Self.FK__TravelMas__Drive__2077C861">
-            <End Role="Driver" EntitySet="Driver" />
-            <End Role="TravelMaster" EntitySet="TravelMaster" />
-          </AssociationSet>
-          <AssociationSet Name="FK__TravelMas__Patie__1F83A428" Association="Self.FK__TravelMas__Patie__1F83A428">
-            <End Role="Patient" EntitySet="Patient" />
-            <End Role="TravelMaster" EntitySet="TravelMaster" />
-          </AssociationSet>
-          <AssociationSet Name="FK__TravelMas__Vehic__1E8F7FEF" Association="Self.FK__TravelMas__Vehic__1E8F7FEF">
-            <End Role="VehicleType" EntitySet="VehicleType" />
-            <End Role="TravelMaster" EntitySet="TravelMaster" />
-          </AssociationSet>
-          <AssociationSet Name="FK__TravelMas__Vehic__216BEC9A" Association="Self.FK__TravelMas__Vehic__216BEC9A">
-            <End Role="Vehicle" EntitySet="Vehicle" />
-            <End Role="TravelMaster" EntitySet="TravelMaster" />
-          </AssociationSet>
-          <AssociationSet Name="FK__TravelRec__Drive__338A9CD5" Association="Self.FK__TravelRec__Drive__338A9CD5">
-            <End Role="Driver" EntitySet="Driver" />
-            <End Role="TravelRecordMaster" EntitySet="TravelRecordMaster" />
-          </AssociationSet>
-          <AssociationSet Name="FK__TravelRec__Patie__3296789C" Association="Self.FK__TravelRec__Patie__3296789C">
-            <End Role="Patient" EntitySet="Patient" />
-            <End Role="TravelRecordMaster" EntitySet="TravelRecordMaster" />
-          </AssociationSet>
-          <AssociationSet Name="FK__TravelRec__Vehic__347EC10E" Association="Self.FK__TravelRec__Vehic__347EC10E">
-            <End Role="Vehicle" EntitySet="Vehicle" />
-            <End Role="TravelRecordMaster" EntitySet="TravelRecordMaster" />
-          </AssociationSet>
-          <AssociationSet Name="FK__VehicleCh__Categ__0D99FE17" Association="Self.FK__VehicleCh__Categ__0D99FE17">
-            <End Role="MainCategory" EntitySet="MainCategory" />
-            <End Role="VehicleCharges" EntitySet="VehicleCharges" />
-          </AssociationSet>
-          <AssociationSet Name="FK__VehicleCh__TypeI__0E8E2250" Association="Self.FK__VehicleCh__TypeI__0E8E2250">
-            <End Role="VehicleType" EntitySet="VehicleType" />
-            <End Role="VehicleCharges" EntitySet="VehicleCharges" />
-          </AssociationSet>
-          <AssociationSet Name="FK__VehicleTy__Categ__5FD33367" Association="Self.FK__VehicleTy__Categ__5FD33367">
-            <End Role="MainCategory" EntitySet="MainCategory" />
-            <End Role="VehicleType" EntitySet="VehicleType" />
           </AssociationSet>
           <AssociationSet Name="FK__Vendor__AdminLog__51300E55" Association="Self.FK__Vendor__AdminLog__51300E55">
             <End Role="AdminLogin" EntitySet="AdminLogin" />
@@ -3215,6 +3090,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <Property Name="InvoiceNumber" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="OrderId" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="OrderDate" Type="DateTime" Precision="3" />
+          <Property Name="IsPayoutPaid" Type="Boolean" />
         </EntityType>
         <EntityType Name="CancelledAppointment">
           <Key>
@@ -3785,6 +3661,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <Property Name="OrderId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="OrderDate" Type="DateTime" Precision="3" />
           <Property Name="AppointmentIsDone" Type="Boolean" />
+          <Property Name="IsPayoutPaid" Type="Boolean" />
         </EntityType>
         <EntityType Name="PatientComplaint">
           <Key>
@@ -4014,6 +3891,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <NavigationProperty Name="PatientRequests" Relationship="Self.FK__PatientRe__Vehic__0E591826" FromRole="VehicleType" ToRole="PatientRequest" />
           <NavigationProperty Name="TravelMasters" Relationship="Self.FK__TravelMas__Vehic__1E8F7FEF" FromRole="VehicleType" ToRole="TravelMaster" />
           <NavigationProperty Name="VehicleCharges" Relationship="Model.FK__VehicleCh__TypeI__0E8E2250" FromRole="VehicleType" ToRole="VehicleCharge" />
+          <Property Name="DriverCharge" Type="Double" />
         </EntityType>
         <EntityType Name="VendorPayOut">
           <Key>
@@ -4966,6 +4844,10 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
             <End Role="CancelledAppointment" EntitySet="CancelledAppointments" />
           </AssociationSet>
           <EntitySet Name="TransactionFeeMasters" EntityType="Model.TransactionFeeMaster" />
+          <EntitySet Name="VehicleAllotHistories" EntityType="Model.VehicleAllotHistory" />
+          <EntitySet Name="AmbulancePayouts" EntityType="Model.AmbulancePayout" />
+          <EntitySet Name="Roles" EntityType="Model.Role" />
+          <EntitySet Name="DriverBookings" EntityType="Model.DriverBooking" />
           </EntityContainer>
         <ComplexType Name="sp_AppointmentHistory_Result">
           <Property Type="Int32" Name="AppointmentId" Nullable="false" />
@@ -5246,6 +5128,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <NavigationProperty Name="DriverLocations" Relationship="Model.FK__DriverLoc__Drive__6ADAD1BF" FromRole="Driver" ToRole="DriverLocation" />
           <Property Name="IsBankUpdateApproved" Type="Boolean" />
           <Property Name="Vehicle_Id" Type="Int32" />
+          <Property Name="IsBooked" Type="Boolean" />
         </EntityType>
         <EntityType Name="Hospital">
           <Key>
@@ -6855,6 +6738,9 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <NavigationProperty Name="Patient" Relationship="Model.FK__DriverLoc__Patie__7C055DC1" FromRole="DriverLocation" ToRole="Patient" />
           <Property Name="RejectedStatus" Type="Boolean" />
           <Property Name="PaymentStatus" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="RideComplete" Type="Boolean" />
+          <Property Name="IsBooked" Type="Boolean" />
+          <Property Name="IsPayoutPaid" Type="Boolean" />
         </EntityType>
         <Association Name="FK__DriverLoc__Drive__6ADAD1BF">
           <End Type="Model.Driver" Role="Driver" Multiplicity="0..1" />
@@ -6944,6 +6830,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <Property Name="InvoiceNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="OrderId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="OrderDate" Type="DateTime" Precision="3" />
+          <Property Name="IsPayoutPaid" Type="Boolean" />
         </EntityType>
         <EntityType Name="PenaltyAmount">
           <Key>
@@ -7191,6 +7078,46 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <Property Name="Fee" Type="Double" />
           <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="VehicleAllotHistory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Driver_Id" Type="Int32" />
+          <Property Name="Vehicle_Id" Type="Int32" />
+          <Property Name="AllocateDate" Type="DateTime" Precision="3" />
+          <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="AmbulancePayout">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Vehicle_Id" />
+            <PropertyRef Name="Amount" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Vehicle_Id" Type="Int32" Nullable="false" />
+          <Property Name="Amount" Type="Double" Nullable="false" />
+          <Property Name="IsPaid" Type="Boolean" />
+          <Property Name="PaymentDate" Type="DateTime" Precision="3" />
+          <Property Name="IsGenerated" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="DriverBooking">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Driver_Id" Type="Int32" />
+          <Property Name="Patient_Id" Type="Int32" />
+          <Property Name="BookingDate" Type="DateTime" Precision="3" />
+          <Property Name="RideComplete" Type="Boolean" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -7284,6 +7211,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <EntitySetMapping Name="BookTestLabs">
             <EntityTypeMapping TypeName="Model.BookTestLab">
               <MappingFragment StoreEntitySet="BookTestLab">
+                <ScalarProperty Name="IsPayoutPaid" ColumnName="IsPayoutPaid" />
                 <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
                 <ScalarProperty Name="OrderId" ColumnName="OrderId" />
                 <ScalarProperty Name="InvoiceNumber" ColumnName="InvoiceNumber" />
@@ -7842,6 +7770,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <EntitySetMapping Name="PatientAppointments">
             <EntityTypeMapping TypeName="Model.PatientAppointment">
               <MappingFragment StoreEntitySet="PatientAppointment">
+                <ScalarProperty Name="IsPayoutPaid" ColumnName="IsPayoutPaid" />
                 <ScalarProperty Name="AppointmentIsDone" ColumnName="AppointmentIsDone" />
                 <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
                 <ScalarProperty Name="OrderId" ColumnName="OrderId" />
@@ -8055,6 +7984,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <EntitySetMapping Name="VehicleTypes">
             <EntityTypeMapping TypeName="Model.VehicleType">
               <MappingFragment StoreEntitySet="VehicleType">
+                <ScalarProperty Name="DriverCharge" ColumnName="DriverCharge" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="VehicleTypeName" ColumnName="VehicleTypeName" />
                 <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
@@ -8387,6 +8317,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <EntitySetMapping Name="Drivers">
             <EntityTypeMapping TypeName="Model.Driver">
               <MappingFragment StoreEntitySet="Driver">
+                <ScalarProperty Name="IsBooked" ColumnName="IsBooked" />
                 <ScalarProperty Name="Vehicle_Id" ColumnName="Vehicle_Id" />
                 <ScalarProperty Name="IsBankUpdateApproved" ColumnName="IsBankUpdateApproved" />
                 <ScalarProperty Name="Charge" ColumnName="Charge" />
@@ -9142,6 +9073,9 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <EntitySetMapping Name="DriverLocations">
             <EntityTypeMapping TypeName="Model.DriverLocation">
               <MappingFragment StoreEntitySet="DriverLocation">
+                <ScalarProperty Name="IsPayoutPaid" ColumnName="IsPayoutPaid" />
+                <ScalarProperty Name="IsBooked" ColumnName="IsBooked" />
+                <ScalarProperty Name="RideComplete" ColumnName="RideComplete" />
                 <ScalarProperty Name="PaymentStatus" ColumnName="PaymentStatus" />
                 <ScalarProperty Name="RejectedStatus" ColumnName="RejectedStatus" />
                 <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
@@ -9206,6 +9140,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
           <EntitySetMapping Name="NurseServices">
             <EntityTypeMapping TypeName="Model.NurseService">
               <MappingFragment StoreEntitySet="NurseService">
+                <ScalarProperty Name="IsPayoutPaid" ColumnName="IsPayoutPaid" />
                 <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
                 <ScalarProperty Name="OrderId" ColumnName="OrderId" />
                 <ScalarProperty Name="InvoiceNumber" ColumnName="InvoiceNumber" />
@@ -9478,6 +9413,48 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
               <MappingFragment StoreEntitySet="TransactionFeeMaster">
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Fee" ColumnName="Fee" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VehicleAllotHistories">
+            <EntityTypeMapping TypeName="Model.VehicleAllotHistory">
+              <MappingFragment StoreEntitySet="VehicleAllotHistory">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="AllocateDate" ColumnName="AllocateDate" />
+                <ScalarProperty Name="Vehicle_Id" ColumnName="Vehicle_Id" />
+                <ScalarProperty Name="Driver_Id" ColumnName="Driver_Id" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AmbulancePayouts">
+            <EntityTypeMapping TypeName="Model.AmbulancePayout">
+              <MappingFragment StoreEntitySet="AmbulancePayout">
+                <ScalarProperty Name="IsGenerated" ColumnName="IsGenerated" />
+                <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
+                <ScalarProperty Name="IsPaid" ColumnName="IsPaid" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Vehicle_Id" ColumnName="Vehicle_Id" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Roles">
+            <EntityTypeMapping TypeName="Model.Role">
+              <MappingFragment StoreEntitySet="Role">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DriverBookings">
+            <EntityTypeMapping TypeName="Model.DriverBooking">
+              <MappingFragment StoreEntitySet="DriverBooking">
+                <ScalarProperty Name="RideComplete" ColumnName="RideComplete" />
+                <ScalarProperty Name="BookingDate" ColumnName="BookingDate" />
+                <ScalarProperty Name="Patient_Id" ColumnName="Patient_Id" />
+                <ScalarProperty Name="Driver_Id" ColumnName="Driver_Id" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

@@ -2,6 +2,7 @@
 @{
     ViewBag.Title = "VehicleAllotment";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    int count = 1;
 }
 
 <h2>Vehicle Allotment to New Driver</h2>
@@ -21,7 +22,7 @@
     }*@
 
 
-<div style="margin-top:2%; width: 60%;">
+<div style="margin-top:2%; ">
     @if (Model.VehicleLists == null)
     {
 
@@ -29,9 +30,10 @@
     else
     { <div class="row">
         <div class="col-md-12">
-            <table id="myTable">
-                <thead>
+            <table id="myTable" class="table table-hover">
+                <thead style="background-color:lavender;">
                     <tr>
+                        <th>Sr No.</th>
                         <th>Driver Name</th>
                         <th>Action</th>
                     </tr>
@@ -40,9 +42,11 @@
                     @foreach (var item in Model.VehicleLists)
                 {
                         <tr>
+                            <td>@count</td>
                             <td>@item.DriverName</td>
                             <td><a href="/Vehicle/UpdateVehicles?Id=@item.Id" class="btn btn-primary">Update</a></td>
                         </tr>
+                        count++;
                     }
                 </tbody>
             </table>

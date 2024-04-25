@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="e51b3189a163499fbe410e26adb1305b" Name="Diagram1" ZoomLevel="74">
+      <Diagram DiagramId="e51b3189a163499fbe410e26adb1305b" Name="Diagram1" ZoomLevel="63">
         <EntityTypeShape EntityType="Model.RWAPayment" Width="1.5" PointX="5" PointY="0.875" IsExpanded="true" />
         <EntityTypeShape EntityType="Model.UserWallet" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="Model.VehicleTemp" Width="1.5" PointX="12.75" PointY="13.25" IsExpanded="true" />
@@ -231,6 +231,10 @@
         <EntityTypeShape EntityType="Model.Doctor" Width="1.5" PointX="34.375" PointY="1.375" />
         <AssociationConnector Association="Model.FK__Cancelled__Docto__1F198FD4" />
         <EntityTypeShape EntityType="Model.TransactionFeeMaster" Width="1.5" PointX="11.375" PointY="3.75" />
+        <EntityTypeShape EntityType="Model.VehicleAllotHistory" Width="1.5" PointX="34.375" PointY="12.75" />
+        <EntityTypeShape EntityType="Model.AmbulancePayout" Width="1.5" PointX="34.375" PointY="15.75" />
+        <EntityTypeShape EntityType="Model.Role" Width="1.5" PointX="34.375" PointY="18.75" />
+        <EntityTypeShape EntityType="Model.DriverBooking" Width="1.5" PointX="34.375" PointY="21.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

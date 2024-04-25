@@ -331,6 +331,8 @@ where ns.Patient_Id="+patientId+ " and ns.ServiceStatus='Approved' order by ns.I
                     data1.ServiceDate = model.ServiceDate;
                     data1.MobileNumber = data1.MobileNumber;
                     data1.ServiceStatus = "Approved";
+                    data1.IsPayoutPaid = false;
+                    data1.IsPaid = false;
                     data1.InvoiceNumber  = nextInvoiceNumber;
                     data1.OrderId = NextOrderId;
                     data1.OrderDate = DateTime.Now;

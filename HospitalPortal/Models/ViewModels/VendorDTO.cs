@@ -261,11 +261,16 @@ namespace HospitalPortal.Models.ViewModels
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public Nullable<double> PaidFees { get; set; }
+        public string UniqueId { get; set; }
+        public double PaidFees { get; set; }
+        public double transactionamt { get; set; }
+        public double PayableAmount { get; set; }
+        public double commamt { get; set; }
+        public double tdsamt { get; set; }
+        public double Amountwithrazorpaycomm { get; set; }
         public int? PaymentId { get; set; }
 
-        public string Location { get; set; }
-        //public Nullable<System.DateTime> PaymentDate { get; set; }
+        public string Location { get; set; } 
         public string PaymentDate { get; set; }
         public string PaymentTime { get; set; }
     }
@@ -273,11 +278,13 @@ namespace HospitalPortal.Models.ViewModels
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public string UniqueId { get; set; }
         public Nullable<double> PaidFees { get; set; }
+        public Nullable<double> tdsamt { get; set; }
+        public Nullable<double> PayableAmount { get; set; }
         public int? PaymentId { get; set; }
 
         public string Location { get; set; }
-        //public Nullable<System.DateTime> PaymentDate { get; set; }
         public string PaymentDate { get; set; }
         public string PaymentTime { get; set; }
         public double TDS { get; set; }
@@ -287,15 +294,21 @@ namespace HospitalPortal.Models.ViewModels
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public Nullable<double> PaidFees { get; set; }
+        public double PaidFees { get; set; }
         public int? PaymentId { get; set; }
 
-        public string Location { get; set; }
-        //public Nullable<System.DateTime> PaymentDate { get; set; }
+        public string Location { get; set; } 
         public string PaymentDate { get; set; }
         public string PaymentTime { get; set; }
         public double Commission { get; set; }
-        public double PayAmount { get; set; }
+        public double PayAmount { get; set; } 
+        public string UniqueId { get; set; } 
+        public double transactionamt { get; set; }
+        public double PayableAmount { get; set; }
+        public double commamt { get; set; }
+        public double tdsamt { get; set; }
+        public double Amountwithrazorpaycomm { get; set; }
+      
     }
     public class Vehiclecat
     {
@@ -555,19 +568,18 @@ namespace HospitalPortal.Models.ViewModels
 
         [Required]
         public string DriverName { get; set; }
-        //[Required]
-        // [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Not a valid phone number")]
+        
         public string MobileNumber { get; set; }
 
         public string EmailId { get; set; }
-        [Required]
+       
         public int StateMaster_Id { get; set; }
-        [Required]
+       
         public int CityMaster_Id { get; set; }
-        [Required]
+        
         public string Location { get; set; }
 
-
+        public Nullable<System.DateTime> DlValidity { get; set; }
         public string DlNumber { get; set; }
         public string DlImage1 { get; set; }
         public string DlImage1Base64 { get; set; }
@@ -575,10 +587,10 @@ namespace HospitalPortal.Models.ViewModels
 
         public string DlImage2Base64 { get; set; }
 
-        [Required]
+         
         public string Password { get; set; }
-        [Required]
-        [System.ComponentModel.DataAnnotations.Compare("Password")]
+       
+      
         public string ConfirmPassword { get; set; }
 
         public string AadharImage { get; set; }
@@ -587,7 +599,9 @@ namespace HospitalPortal.Models.ViewModels
         public string AadharImage64Image1 { get; set; }
         public string PAN { get; set; }
         public int Vendor_Id { get; set; }
-
+		public string Paidamount { get; set; }
+        public string DriverImage { get; set; }
+        public string DriverImageBase64 { get; set; }
 
     }
 
@@ -732,8 +746,10 @@ namespace HospitalPortal.Models.ViewModels
     public class FraDriverRegDetail
     {
         public int Id { get; set; }
+        public string DriverId { get; set; }
         public string DriverName { get; set; }
         public string MobileNumber { get; set; }
+        public string EmailId { get; set; }
         public string Location { get; set; }
         public string VehicleTypeName { get; set; }
         public string DlNumber { get; set; }
@@ -778,6 +794,7 @@ namespace HospitalPortal.Models.ViewModels
     public class FraPatientRegDetail
     {
         public int Id { get; set; }
+        public string PatientRegNo { get; set; }
         public string PatientName { get; set; }
         public string VendorName { get; set; }
         public string MobileNumber { get; set; }

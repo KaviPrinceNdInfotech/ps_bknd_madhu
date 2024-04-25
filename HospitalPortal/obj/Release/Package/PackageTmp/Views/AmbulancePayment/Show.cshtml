@@ -7,17 +7,28 @@
 }
 
 <h2>Vehicle List</h2>
+<div class=" row">
+    <div class="col-md-3">
+        <div class=" form-group">
+            <a href="@Url.Action("DownloadAmbulanceExcelForBank", "AmbulancePayment")">
+                <img src="https://www.pinclipart.com/picdir/big/178-1780962_download-105-free-excel-icons-here-excel-download.png" alt="List View" style="width: 55px;">
+            </a>
+        </div>
+    </div>
+</div>
 
-<table id="table_id" class="table table-hover">
+<table id="table_id" class="display">
     <thead style="background-color:lavender;">
         <tr>
             <th>Sr No.</th>
             <th>
                 Vehicle Number
             </th>
+            <th>Driver (Id)</th>
             <th>
                 Vehicle Name
             </th>
+
             <th>
                 Action
             </th>
@@ -30,8 +41,9 @@
             <tr>
                 <td>@count</td>
                 <td>
-                    @item.VehicleNumber (@item.DriverName)
+                    @item.VehicleNumber  
                 </td>
+                <td>@item.DriverName (@item.DriverId)</td>
                 <td>@item.VehicleName</td>
                 <td><a href="/AmbulancePayment/ViewDetails?id=@item.VehicleId" class="btn btn-primary">View Details</a></td>
             </tr>

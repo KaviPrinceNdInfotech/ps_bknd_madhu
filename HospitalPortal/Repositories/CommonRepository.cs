@@ -24,7 +24,7 @@ namespace HospitalPortal.Repositories
         }
         public IEnumerable<Driver> GetAllDrivers()
         {
-            var data = ent.Drivers.Where(a => !a.IsDeleted).OrderBy(a => new { a.DriverName }).ToList();
+            var data = ent.Drivers.Where(a => a.IsDeleted==false).OrderBy(a => new { a.DriverName }).ToList();
             return data;
         }
 
@@ -80,6 +80,11 @@ namespace HospitalPortal.Repositories
         public IEnumerable<MainCategory> GetCategory()
         {
             var data = ent.MainCategories.Where(a=>a.IsDeleted == false).OrderBy(a => new { a.CategoryName }).ToList();
+            return data;
+        }
+        public IEnumerable<VehicleType> GetVehicleTypeByCategory(int? Cat_Id)
+        {
+            var data = ent.VehicleTypes.Where(a => a.Category_Id == Cat_Id && a.IsDeleted == false).OrderBy(a => new { a.VehicleTypeName }).ToList();
             return data;
         }
         public IEnumerable<Driver> GetDriver()

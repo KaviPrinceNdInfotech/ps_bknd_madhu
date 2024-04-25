@@ -1,6 +1,7 @@
 ﻿@model HospitalPortal.Models.ViewModels.ReportDetails
 @{
     ViewBag.Title = "ViewReport";
+    int count = 1;
 }
 <link href="/css/bootstrap.min.css" rel="stylesheet" />
 
@@ -9,7 +10,8 @@
 {
     <div class="row">
         <div class="col-md-4">
-            @Html.TextBoxFor(a => a.ServiceAcceptanceDate, new { @class = "dp form-control", required = "required" })
+            @Html.TextBoxFor(a => a.ServiceAcceptanceDate, new { @class = "form-control", required = "required", type = "date" })
+            @*@Html.TextBoxFor(a => a.week, new { @class = "form-control", required = "required", type = "date" })*@
         </div>
         <div class="col-md-4">
             <input type="button" id="test" value="Search" class="btn btn-primary" />
@@ -18,33 +20,38 @@
 
 
 }
-@if (Model.Nurses == null)
-{
-    if (TempData["msg"] != null)
-    {
-        <h2 style="color:blueviolet">
-            @TempData["msg"]
-        </h2>
-    }
-}
-else
-{
 
-    <table id="tables" class="table table-responsive">
-        <thead>
-            <tr>
-                <th>
-                    Date
-                </th>
-                <th>
-                    Amount
-                </th>
-            </tr>
-        </thead>
+<table id="table_id" class="table table-bordered">
+    <thead style="background-color:lavender;">
+        <tr>
+            <th>Sr No.</th>
+            <th>Nurse Name / Id</th>
+            <th>
+                Date
+            </th>
+
+            <th>
+                Amount
+            </th>
+        </tr>
+    </thead>
+    @if (Model.Nurses == null)
+    {
+        if (TempData["msg"] != null)
+        {
+            <div class="alert alert-danger">
+                @TempData["msg"]
+            </div>
+        }
+    }
+    else
+    {
         <tbody>
             @foreach (var item in Model.Nurses)
             {
                 <tr>
+                    <td>@count</td>
+                    <td>@item.NurseName (@item.NurseId)</td>
                     <td>
                         @item.ServiceAcceptanceDate.ToString("dd-MMM-yyyy")
                     </td>
@@ -53,47 +60,53 @@ else
                     </td>
                 </tr>
             }
+        </tbody>
+        <tfoot>
             <tr>
-                <td><h3>Total</h3></td>
+                <td colspan="3" style="text-align: right;">Total:</td>
                 <td>
                     @if (ViewBag.Total != null)
-                {
-                        <h3 style="color:red"> ₹ @ViewBag.Total</h3>
+                    {
+                        <strong>₹ @ViewBag.Total</strong>
                     }
                 </td>
             </tr>
-        </tbody>
-    </table>
-}
+        </tfoot>
+    }
+</table>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css">
+
+<script type="text/javascript">
+    $('#table_id').DataTable();
+</script>
+<script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
+<link href="~/css/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
 
 <script>
-    $('.dp').datepicker({
-        format: 'mm-dd-yyyy',
-        orientation: 'auto top',
-        todayHighlight: true,
-        autoclose: true
-    });
 
-    $('.dp').datepicker('setDate', today);
 
-        $("#test").click(function () {
-            debugger
-            var date = $("#AppointmentDate").val();
-            $.ajax({
-                url: "/ViewReport/WeeklyNurse?week=" + date + "",
-                type: "get",
-                success: function (response) {
-                    console.log(response);
-                    $("#prevAtt").html(response);
-                },
-                error: function (error) {
-                    console.log(error.responseText);
+    $(".datepicker").datepicker().datepicker('setdate', 'today');
 
-                }
-            });
 
+
+    $("#test").click(function () {
+        debugger
+        var date = $("#ServiceAcceptanceDate").val();
+        $.ajax({
+            url: "/ViewReport/WeeklyNurse?week=" + date + "",
+            type: "get",
+            success: function (response) {
+                console.log(response);
+                $("#prevAtt").html(response);
+            },
+            error: function (error) {
+                console.log(error.responseText);
+
+            }
         });
+
+    });
 </script>

@@ -33,5 +33,6 @@ namespace HospitalPortal.Models.ViewModels
         public Nullable<double> under401_450KM { get; set; }
         public Nullable<double> under451_500KM { get; set; }
         public Nullable<double> Above500KM { get; set; }
+        public Nullable<double> DriverCharge { get; set; }
     }
 }

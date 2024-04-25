@@ -42,6 +42,7 @@ namespace HospitalPortal.Models.DomainModels
         public Nullable<double> under451_500KM { get; set; }
         public Nullable<double> Above500KM { get; set; }
         public Nullable<int> Category_Id { get; set; }
+        public Nullable<double> DriverCharge { get; set; }
     
         public virtual MainCategory MainCategory { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

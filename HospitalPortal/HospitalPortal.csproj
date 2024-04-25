@@ -896,6 +896,9 @@
     <Compile Include="Models\DomainModels\AdminLogin.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\DomainModels\AmbulancePayout.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\DomainModels\AmbulanceType.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -996,6 +999,9 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DomainModels\Driver.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomainModels\DriverBooking.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DomainModels\DriverComplaint.cs">
@@ -1235,6 +1241,9 @@
     <Compile Include="Models\DomainModels\Review.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\DomainModels\Role.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\DomainModels\RWA.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -1337,6 +1346,9 @@
     <Compile Include="Models\DomainModels\Vehicle.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\DomainModels\VehicleAllotHistory.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\DomainModels\VehicleCharge.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -1353,6 +1365,7 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\driverlogin.cs" />
+    <Compile Include="Models\ForgotPasswordDTO.cs" />
     <Compile Include="Models\HospitalList.cs" />
     <Compile Include="Models\RequestModel\AddCityLocationReq.cs" />
     <Compile Include="Models\RequestModel\AddClinicDTO.cs" />
@@ -2158,6 +2171,7 @@
     <Content Include="Views\Common\TransactionFee.cshtml" />
     <Content Include="Views\Common\EditTransactionFee.cshtml" />
     <Content Include="Views\CommisionReport\AmbulanceDetails.cshtml" />
+    <Content Include="Views\Payout\Driver.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

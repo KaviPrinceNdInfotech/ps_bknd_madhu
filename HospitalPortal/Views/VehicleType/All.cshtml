@@ -1,6 +1,7 @@
 ﻿@model HospitalPortal.Models.ViewModels.VehicleTypeLISTvm
 @{
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    int count = 1;
 }
 
 
@@ -50,10 +51,11 @@
                 }
                 else
                 {
-               <table class="table table-bordered">
-                 <thead>
+               <table id="myTable" class="table table-bordered">
+                 <thead style="background-color:lavender;">
                      <tr>
-                         <th>Vehicle Type</th>
+                         <th>Sr No.</th>
+                         <th>Vehicle Type Name</th>
                          <th>Category Name</th>
                          <th>Action</th>
                      </tr>
@@ -62,6 +64,7 @@
                        @foreach (var item in Model.ListVehicleType)
                        {
                            <tr>
+                               <td>@count</td>
                                <td>@item.VehicleTypeName</td>
                                <td>@item.CategoryName</td>
                                <td>
@@ -73,6 +76,7 @@
                                    @*@Html.ActionLink("Delete", "VehicleType", new { id = item.Id }, new { @class = "btn btn-danger" })*@
                                </td>
                            </tr>
+                           count++;
                        }
                    </tbody>
                </table>

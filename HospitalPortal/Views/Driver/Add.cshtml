@@ -50,13 +50,19 @@
                     <span class="red">
                         @Html.ValidationMessageFor(a => a.DriverName)
                     </span>
-                </div> 
+                </div>
+                <div class="form-group">
+                    Driver Image * : @Html.TextBoxFor(a => a.DriverImageFile, new { @class = "form-control", type = "file", required = "required" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.DriverImageFile)
+                    </span>
+                </div>
                 <div class="form-group">
                     Mobile Number * @Html.TextBoxFor(a => a.MobileNumber, new { @class = "form-control" })
                     <span class="red">
                         @Html.ValidationMessageFor(a => a.MobileNumber)
                     </span>
-                </div> 
+                </div>
                 <div class="form-group">
                     Email Id  @Html.TextBoxFor(a => a.EmailId, new { @class = "form-control", AutoComplete = "off" })
                     <span class="red">
@@ -134,11 +140,11 @@ Enumerable.Empty<SelectListItem>()
                     </div>
                 }
                 @*<div class="form-group">
-                    Franchise ID * @Html.TextBoxFor(a => a.RefId, new { @class = "form-control" })
-                    <span class="red">
-                        @Html.ValidationMessageFor(a => a.RefId)
-                    </span>
-                </div>*@
+            Franchise ID * @Html.TextBoxFor(a => a.RefId, new { @class = "form-control" })
+            <span class="red">
+                @Html.ValidationMessageFor(a => a.RefId)
+            </span>
+        </div>*@
 
                 <fieldset style="margin-top:3%; margin-bottom:3%;">
                     <legend><b>Driver's Licence Images: </b></legend>
@@ -169,7 +175,25 @@ Enumerable.Empty<SelectListItem>()
                         @Html.ValidationMessageFor(a => a.PAN)
                     </span>
                 </div>
+                <div class="form-group">
+                    Pan Number * @Html.TextBoxFor(a => a.PAN, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.PAN)
+                    </span>
+                </div>
+                <div class="form-group">
+                    Adhar Image 1* : @Html.TextBoxFor(a => a.AadharImageFile, new { @class = "form-control", type = "file", required = "required" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.AadharImageFile)
+                    </span>
+                </div>
 
+                <div class="form-group">
+                    Adhar Image 2* : @Html.TextBoxFor(a => a.AadharImageFile2, new { @class = "form-control", type = "file", required = "required" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.AadharImageFile2)
+                    </span>
+                </div>
                 <div class="form-group">
                     <input type="submit" value="Save" class="btn btn-info" />
                 </div>

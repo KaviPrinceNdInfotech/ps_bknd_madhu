@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h2>Vehicle Cancellation Charges</h2>
+<h2>Driver Charges</h2>
 
 <div style="margin:auto; width:50%">
     @using (Html.BeginForm())
@@ -18,7 +18,7 @@
                         Enumerable.Empty<SelectListItem>()
                         , "--Select Type--", new { @class = "form-control", required = "required" })
         </div>
-        <div class="form-group">
+        @*<div class="form-group">
             Charges Apllied for*:
             <select class="form-control" id="AppliedFor" name="AppliedFor" required="required">
                 <option value="">
@@ -31,9 +31,9 @@
                     Patient
                 </option>
             </select>
-        </div>
+        </div>*@
         <div class="form-group">
-            @Html.TextBoxFor(a => a.Amount, new { @class = "form-control", required= "required" })
+            @Html.TextBoxFor(a => a.Amount, new { @class = "form-control", required= "required",placeholder="Enter Amount" })
         </div>
         <div class="form-group">
             <input type="submit" value="Submit" class="btn btn-primary" />
@@ -54,8 +54,8 @@
                         <tr>
                             <th>Vehicle Type</th>
                             <th>Category Name</th>
-                            <th>Charges Applied For</th>
-                            <th>Charges (in %)</th>
+                            @*<th>Charges Applied For</th>*@
+                            <th>Charges</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -65,8 +65,8 @@
                             <tr>
                                 <td>@item.VehicleTypeName</td>
                                 <td>@item.CategoryName</td>
-                                <td>@item.AppliedFor</td>
-                                <td>@item.Amount %</td>
+                                @*<td>@item.AppliedFor</td>*@
+                                <td>@item.Amount </td>
                                 <td>
                                     <a href="/Charges/EditCharges?id=@item.Id" class="btn btn-primary" onclick="return confirm('Are You Sure to Edit?')">Edit</a>
                                 </td>

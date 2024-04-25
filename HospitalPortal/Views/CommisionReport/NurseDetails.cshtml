@@ -37,20 +37,21 @@ else
         <thead>
             <tr>
                 <th>Request Date</th>
-                @*<th>Name</th>
-                    <th>Correspondance Contact No.</th>
-                    <th>Registered Contact No</th>*@
-                <th>Service Schedule</th>
-                <th>Status</th>
+                <th>Service Schedule</th> 
+                <th>Fee</th>
                 <th>Total Days</th>
-                <th>Total Amt.</th>
+                <th>Total Amount.</th>
                 <th>Paid At</th>
                 <th>
-                    Commission Amount(in %)
+                    Transaction Fee @ViewBag.transaction %
                 </th>
                 <th>
-                    Commission Amount
+                    Commission Amount @ViewBag.Commission %
                 </th>
+                <th>
+                    TDS Amount @ViewBag.tds %
+                </th>
+                
                 <th>
                     Payable Amount
                 </th>
@@ -60,31 +61,30 @@ else
             @foreach (var item in Model.NurseAppointmentList)
             {
                 <tr>
-                    <td>@item.RequestDate</td> 
-                    <td>@item.ServiceTiming</td>
-                    <td>@item.ServiceStatus</td>
+                    <td>@item.RequestDate</td>
+                    <td>@item.ServiceTiming</td> 
+                    <td>@item.Fee</td>
                     <td>@item.TotalDays</td>
                     <td>Rs. @item.TotalFee</td>
                     <td>@item.PaymentDate</td>
-                    <td>@ViewBag.Commission</td>
                     @{
-                        if (item.TotalFee == null)
-                        {
-                            item.TotalFee = 0;
-                        }
-                        else
-                        {
-                            item.TotalFee = item.TotalFee;
-                        }
-                        double? amt = (Math.Round(item.TotalFee * ViewBag.Commission) / 100);
-                        double? Value = item.TotalFee - amt;
+                        double? razorpaycomm = @item.Amountwithrazorpaycomm;
+                        double? basicamt = @item.TotalFee;
+                        double? razarfeeamt = razorpaycomm - basicamt;
                     }
-                    <td>
-                        @amt
-                    </td>
-                    <td>
-                        @Value
-                    </td>
+                    <td>@String.Format("{0:F2}", razarfeeamt) </td>
+                    @{
+                        double amt = (Math.Round(item.TotalFee * ViewBag.Commission) / 100);
+
+
+
+                        double tds = (Math.Round((double)item.TotalFee * (double)ViewBag.tds) / 100);
+                        double payableAmount = (double)item.TotalFee - (amt + tds + (double)razarfeeamt);
+
+                    }
+                    <td>₹ @amt</td>
+                    <td>₹ @tds</td> 
+                    <td>₹ @payableAmount</td>
                 </tr>
             }
         </tbody>

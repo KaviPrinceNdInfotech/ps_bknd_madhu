@@ -226,6 +226,7 @@ where L.CityMaster_Id=" + model.CityMaster_Id + " and StateMaster_Id = " + model
                     TestDate = model.TestDate,
                     Test_Id = data1.Test_Id,
                     IsPaid = false,
+                    IsPayoutPaid = false,
                     InvoiceNumber = nextInvoiceNumber,
                     OrderId = NextOrderId,
                     OrderDate = DateTime.Now,

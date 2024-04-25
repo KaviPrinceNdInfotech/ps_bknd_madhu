@@ -2,6 +2,7 @@
 @{
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
     string role = HospitalPortal.Utility.UserIdentity.UserRole;
+
 }
 
 <style>
@@ -17,10 +18,10 @@
     <div id="mainContainer">
 
         @*<div class="row">
-           <div class="col-md-6">
-              @Html.ActionLink("Show All", "All", null, new { @class="btn btn-info"})
-           </div>
-        </div>*@
+               <div class="col-md-6">
+                  @Html.ActionLink("Show All", "All", null, new { @class="btn btn-info"})
+               </div>
+            </div>*@
 
         <div class="row">
             <div class="col-md-6">
@@ -31,13 +32,14 @@
         {
             <a href="/Vendor/All" class="btn btn-info">Back</a>
         }
-         
+
         @Html.HiddenFor(a => a.Id)
         @Html.HiddenFor(a => a.IsDeleted)
         @Html.HiddenFor(a => a.AdminLogin_Id)
         @Html.HiddenFor(a => a.EmailId)
         @Html.HiddenFor(a => a.MobileNumber)
         @Html.HiddenFor(a => a.AadharOrPANImage)
+        @Html.HiddenFor(a => a.PanImage)
         @Html.HiddenFor(a => a.Password)
         @Html.HiddenFor(a => a.UniqueId)
         @Html.HiddenFor(a => a.IsCheckedTermsCondition)
@@ -60,60 +62,26 @@
                         @Html.ValidationMessageFor(a => a.CompanyName)
                     </span>
                 </div>
-
-                @*<div class="form-group">
-                    Mobile Number * @Html.TextBoxFor(a => a.MobileNumber, new { @class = "form-control" })
-                    <span class="red">
-                        @Html.ValidationMessageFor(a => a.MobileNumber)
-                    </span>
-                </div>
-
-
                 <div class="form-group">
-                    Email Id * @Html.TextBoxFor(a => a.EmailId, new { @class = "form-control" })
-                    <span class="red">
-                        @Html.ValidationMessageFor(a => a.EmailId)
-                    </span>
-                </div>
-
-                <div class="form-group">
-                    Password * @Html.PasswordFor(a => a.Password, new { @class = "form-control" })
-                    <span class="red">
-                        @Html.ValidationMessageFor(a => a.Password)
-                    </span>
-                </div>
-
-                <div class="form-group">
-                    Confirm Your Password * @Html.PasswordFor(a => a.ConfirmPassword, new { @class = "form-control" })
-                    <span class="red">
-                        @Html.ValidationMessageFor(a => a.ConfirmPassword)
-                    </span>
-                </div>*@
-
-                <div class="form-group">
-                    State * @Html.DropDownListFor(a => a.StateMaster_Id, Model.States, "Select", new { @class = "form-control" })
+                    State * @Html.DropDownListFor(a => a.StateMaster_Id, Model.States, "Select State", new { @class = "form-control" })
                     <span class="red">
                         @Html.ValidationMessageFor(a => a.StateMaster_Id)
                     </span>
                 </div>
 
                 <div class="form-group">
-                    @{ Html.EnableClientValidation(false);}
-                    City * @Html.DropDownListFor(a => a.City_Id,
-Model.Cities
-, "Select", new { @class = "form-control" })
+                    District * @Html.DropDownListFor(a => a.City_Id, Model.Cities, "Select District", new { @class = "form-control" })
                     <span class="red">
                         @Html.ValidationMessageFor(a => a.City_Id)
                     </span>
-                    @{ Html.EnableClientValidation(true);}
                 </div>
                 <div class="form-group">
-                    Other City (If you are not able to find it above )
-                    @Html.TextBoxFor(a => a.OtherCity, new { @class = "form-control" })
-                    <span class="red">
-                        @Html.ValidationMessageFor(a => a.OtherCity)
-                    </span>
-                </div>
+            Other City (If you are not able to find it above )
+            @Html.TextBoxFor(a => a.OtherCity, new { @class = "form-control" })
+            <span class="red">
+                @Html.ValidationMessageFor(a => a.OtherCity)
+            </span>
+        </div>
 
                 <div class="form-group">
                     Address * @Html.TextAreaFor(a => a.Location, new { @class = "form-control" })
@@ -130,21 +98,21 @@ Model.Cities
                 </div>
 
                 <div class="form-group">
-                    PAN/Aadhar Number @Html.TextBoxFor(a => a.AadharOrPANNumber, new { @class = "form-control" })
+                    PAN Number @Html.TextBoxFor(a => a.PanNumber, new { @class = "form-control" })
                     <span class="red">
-                        @Html.ValidationMessageFor(a => a.AadharOrPANNumber)
+                        @Html.ValidationMessageFor(a => a.PanNumber)
                     </span>
                 </div>
 
                 <div class="form-group">
                     @{ Html.EnableClientValidation(false); }
-                    @if (!string.IsNullOrEmpty(Model.AadharOrPANImage))
+                    @if (!string.IsNullOrEmpty(Model.PanImage))
                     {
-                        <img class="thumb" src="/Images/@Model.AadharOrPANImage" />
+                        <img class="thumb" src="/Images/@Model.PanImage" />
                     }
-                    PAN/Aadhar doc. @Html.TextBoxFor(a => a.AadharOrImageFile, new { @class = "form-control", type = "file" })
+                    PAN/Aadhar doc. @Html.TextBoxFor(a => a.PanFile, new { @class = "form-control", type = "file" })
                     <span class="red">
-                        @Html.ValidationMessageFor(a => a.AadharOrImageFile)
+                        @Html.ValidationMessageFor(a => a.PanFile)
                     </span>
                     @{ Html.EnableClientValidation(true); }
                 </div>
@@ -160,7 +128,45 @@ Model.Cities
 
 <script src="/Scripts/Library/jquery-1.7.1.min.js"></script>
 <script src="/Scripts/Library/jquery-ui-1.8.20.min.js"></script>
+<script>
+    $("#StateMaster_Id").change(function () {
+        var stateId = $(this).val();
+        var city = $("#City_Id");
+        city.empty();
+        city.append("<option value=''>Select</option>");
+        $.ajax({
+            url: '/Common/GetCitiesByState?stateId=' + stateId,
+            type: 'get',
+            success: function (response) {
+                $.each(response, function (key, val) {
+                    city.append("<option value='" + val.Id + "'>" + val.CityName + "</option>");
+                });
+            },
+            error: function (error) {
+                console.log(error.responseText);
+            }
+        });
+    });
+    $("#IsVerifiedByPolice").click(function () {
+        $("#verificationDiv").toggle();
 
+    });
+
+    $('input:radio[id="Image1"]').change(function () {
+        if ($(this).val() == 'Aadhar') {
+            $("#PanimageDiv").css("display", "none");
+            $("#AadharimageDiv").toggle();
+        }
+    });
+
+    $('input:radio[id="Image2"]').change(function () {
+        if ($(this).val() == 'Pan') {
+            $("#AadharimageDiv").css("display", "none");
+            $("#PanimageDiv").toggle();
+        }
+
+    });
+</script>
 @Html.Partial("~/Views/Shared/_StateCityLocCascading.cshtml")
 
 @if (Model.IsApproved == false)

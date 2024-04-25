@@ -77,7 +77,7 @@ where pa.AppointmentDate  >= DATEADD(day,-7, GETDATE())   group by v.VendorName,
             decimal gst = ent.Database.SqlQuery<decimal>(@"select Amount from FranchiseGstMaster where IsDeleted=0 and Department='Franchise' and Name='Vehicle'").FirstOrDefault();
             decimal tds = ent.Database.SqlQuery<decimal>(@"select Amount from FranchiseTDSMaster where IsDeleted=0 and Department='Franchise' and Name='Vehicle'").FirstOrDefault();
 			double Transactionfee = ent.Database.SqlQuery<double>(@"select Fee from TransactionFeeMaster where Name='Vehicle'").FirstOrDefault();
-			string q = @"select Sum(trm.Amount) as AmountForVehicle, vp.IsGenerated, ve.VendorName, ve.CompanyName,ve.Id from Vehicle v 
+			string q = @"select Sum(trm.TotalPrice) as AmountForVehicle, vp.IsGenerated, ve.VendorName, ve.CompanyName,ve.Id from Vehicle v 
 join Vendor ve on ve.Id = v.Vendor_Id 
 join Driverlocation trm on trm.Driver_Id = v.Driver_Id 
 left join VendorPayout vp on vp.Vendor_Id  = ve.Id 
@@ -107,17 +107,42 @@ and GETDATE() group by  vp.IsGenerated,ve.VendorName, ve.CompanyName, ve.Id";
 			}
 			return View(model);
         }
-        public ActionResult Pay(int? Vendor_Id, double Amount)
+        public ActionResult Pay(int? Vendor_Id, double? Amount,string multyid)
         {
-            var model = new VendorPayOut();
-            model.Vendor_Id = Vendor_Id;
-            model.Amount = Amount;
-            model.IsPaid = false;
-            model.IsGenerated = true;
-            model.PaymentDate = DateTime.Now.Date;
-            ent.VendorPayOuts.Add(model);
-            ent.SaveChanges();
-            return RedirectToAction("VendorPayoutHistory", new { Id = Vendor_Id });
+           
+            if (!string.IsNullOrEmpty(multyid))
+            {
+                string[] mulidoc = multyid == null ? null : multyid.Split('-');
+                for (int i = 0; i < mulidoc.Length - 1; i++)
+                {
+                    string[] perdoc = mulidoc[i].Split(',');
+                    int vendorid = Convert.ToInt32(perdoc[0]);
+                    double amount = Convert.ToDouble(perdoc[1]);
+                    var model1 = new VendorPayOut();
+                    model1.Amount = amount;
+                    model1.IsPaid = true;
+                    model1.IsGenerated = true;
+                    model1.PaymentDate = DateTime.Now.Date;
+                    model1.Vendor_Id = vendorid;
+                    ent.VendorPayOuts.Add(model1);
+                    ent.SaveChanges();
+
+
+                }
+                return RedirectToAction("DoctorList");
+            }
+            else
+            {
+                var model = new VendorPayOut();
+                model.Vendor_Id = Vendor_Id;
+                model.Amount = Amount;
+                model.IsPaid = false;
+                model.IsGenerated = true;
+                model.PaymentDate = DateTime.Now.Date;
+                ent.VendorPayOuts.Add(model);
+                ent.SaveChanges();
+                return RedirectToAction("VendorPayoutHistory", new { Id = Vendor_Id });
+            }
         }
 
         public ActionResult VendorPayoutHistory(int Id)

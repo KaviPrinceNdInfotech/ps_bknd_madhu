@@ -2,6 +2,7 @@
 @{
     ViewBag.Title = "Nurse";
     Layout = null;
+    int count = 1;
 }
 
 <h2>Nurse</h2>
@@ -14,27 +15,98 @@
 }
 else
 {
-    <table id="table_id" class="table table-bordered">
-        <thead>
+<table id="table_id" class="table table-bordered">
+    <thead style="background-color:lavender;">
+        <tr>
+            <th>Sr No.</th>
+            <th>
+                Nurse Name
+            </th>
+            <th>Nurse Id</th>
+            <th>
+                Total Amount
+            </th>
+            <th>
+                Transaction Fee @ViewBag.Transactionfee %
+            </th>
+            <th>
+                Commission Amount @ViewBag.commission %
+            </th>
+            <th>
+                TDS Amount  @ViewBag.tds %
+            </th>
+            <th>
+                Payable Amount
+            </th>
+            <th>
+                Action
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            double totalPayableAmount = 0;
+            double totalCommissionAmount = 0;
+            double totalAmount = 0;
+            double totaltdsAmount = 0;
+            double totalTransactionAmount = 0;
+        }
+        @foreach (var item in Model.Nurse4Commission)
+        {
             <tr>
-                <th>
-                    Nurse Name
-                </th>
-                <th>
-                    Action
-                </th>
+                <td>@count</td>
+                <td>@item.NurseId</td>
+                <td>@item.NurseName</td>
+                <td>@item.Fee</td>
+                @{
+                    double? razorpaycomm = @item.Amountwithrazorpaycomm;
+                    double? basicamt = @item.Fee;
+                    double? razarfeeamt = razorpaycomm - basicamt;
+                    totalTransactionAmount += (double)razarfeeamt;
+                }
+                <td>@String.Format("{0:F2}", razarfeeamt) </td>
+                @{
+                    double amt = (Math.Round(item.Fee * ViewBag.Commission) / 100);
+
+                    totalAmount += item.Fee;
+                    totalCommissionAmount += amt;
+                    double tds = (Math.Round((double)item.Fee * ViewBag.tds) / 100);
+                    double payableAmount = item.Fee - (amt + tds + (double)razarfeeamt);
+                    totalPayableAmount += payableAmount;
+                    totaltdsAmount += tds;
+                }
+                <td>₹ @amt</td>
+                <td>₹ @tds</td>
+                <td>₹ @payableAmount</td>
+                <td><a href="NurseDetails?NurseId=@item.Nurse_Id" class="btn btn-primary">View Details</a></td>
             </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.Nurse4Commission)
-            {
-                <tr>
-                    <td>@item.NurseName</td>
-                    <td><a href="NurseDetails?NurseId=@item.Nurse_Id" class="btn btn-primary">View Details</a></td>
-                </tr>
-            }
-        </tbody>
-    </table>
+            count++;
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="3" style="text-align: right;">
+                <strong>Total:</strong>
+            </td>
+            <td>
+                <strong>₹ @totalAmount</strong>
+            </td>
+
+            <td>
+                <strong>₹ @String.Format("{0:F2}", @totalTransactionAmount)</strong>
+            </td>
+            <td>
+                <strong>₹ @totalCommissionAmount</strong>
+            </td>
+            <td>
+                <strong>₹ @totaltdsAmount</strong>
+            </td>
+            <td>
+                <strong>₹ @totalPayableAmount</strong>
+            </td>
+        </tr>
+    </tfoot>
+</table>
 }
 <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
 

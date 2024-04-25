@@ -1,6 +1,7 @@
 ﻿@model HospitalPortal.Models.ViewModels.ReportDetails
 @{
     ViewBag.Title = "ViewReport";
+    int count = 1;
 }
 <link href="/css/bootstrap.min.css" rel="stylesheet" />
 
@@ -9,7 +10,7 @@
 {
     <div class="row">
         <div class="col-md-4">
-            @Html.TextBoxFor(a => a.AppointmentDate, new { @class = "form-control", required = "required",type="date" })
+            @Html.TextBoxFor(a => a.AppointmentDate, new { @class = "form-control", required = "required", type = "date" })
         </div>
         <div class="col-md-4">
             <input type="button" id="test" value="Search" class="btn btn-primary" />
@@ -22,20 +23,22 @@
 {
     if (TempData["msg"] != null)
     {
-        <h2 style="color:blueviolet">
+        <div class="alert alert-danger">
             @TempData["msg"]
-        </h2>
+        </div>
     }
 }
 else
 {
 
-<table id="tables" class="table table-responsive">
-    <thead>
+<table id="table_id" class="table table-bordered">
+    <thead style="background-color:lavender;">
         <tr>
+            <th>Sr No.</th>
             <th>
                 Date
             </th>
+            <th>DoctorName / Id</th>
             <th>
                 Amount
             </th>
@@ -45,52 +48,65 @@ else
         @foreach (var item in Model.doctorList)
         {
             <tr>
+                <td>@count</td>
                 <td>
                     @item.Weeks, @item.Year
                 </td>
+                <td>@item.DoctorName (@item.DoctorId)</td>
                 <td>
                     @item.Amount
                 </td>
             </tr>
+            count++;
         }
+    </tbody>
+    <tfoot>
         <tr>
-            <td><h3>Total</h3></td>
+            <td colspan="3" style="text-align: right;">Total:</td>
             <td>
                 @if (ViewBag.Total != null)
                 {
-                <h3 style="color:red"> ₹ @ViewBag.Total</h3>
+                    <strong>₹ @ViewBag.Total</strong>
                 }
-        </td>
-    </tr>
-</tbody>
+            </td>
+        </tr>
+    <tfoot>
+        
 </table>
 }
 
+<script src="https://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css">
+
+<script type="text/javascript">
+    $('#table_id').DataTable();
+</script>
+<script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
 <link href="~/css/jquery-ui.css" rel="stylesheet" />
 <script src="~/Scripts/jquery-ui.js"></script>
 
 <script>
-    
-    
+
+
     $(".datepicker").datepicker().datepicker('setdate', 'today');
 
 
 
-        $("#test").click(function () {
-            debugger
-            var date = $("#AppointmentDate").val();
-            $.ajax({
-                url: "/ViewReport/WeeklyDoctor?week=" + date + "",
-                type: "get",
-                success: function (response) {
-                    console.log(response);
-                    $("#prevAtt").html(response);
-                },
-                error: function (error) {
-                    console.log(error.responseText);
+    $("#test").click(function () {
+        debugger
+        var date = $("#AppointmentDate").val();
+        $.ajax({
+            url: "/ViewReport/WeeklyDoctor?week=" + date + "",
+            type: "get",
+            success: function (response) {
+                console.log(response);
+                $("#prevAtt").html(response);
+            },
+            error: function (error) {
+                console.log(error.responseText);
 
-                }
-            });
-
+            }
         });
+
+    });
 </script>

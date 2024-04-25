@@ -69,6 +69,8 @@ namespace HospitalPortal.Controllers
                 }
                 var domainModel = Mapper.Map<Vehicle>(model);
                 domainModel.RegistrationDate = DateTime.Now;
+                domainModel.VehicleCat_Id = model.Cat_Id;
+                domainModel.VehicleType_Id = model.VehicleType_Id;
                 if (model.Vendor_Id == 0)
                 {
                     domainModel.Vendor_Id = null;
@@ -93,6 +95,8 @@ namespace HospitalPortal.Controllers
         {
             var data = ent.Vehicles.Find(id);
             var model = Mapper.Map<VehicleEditDto>(data);
+            model.CategoryList = new SelectList(repos.GetCategory(), "Id", "CategoryName", data.VehicleCat_Id);
+            model.VehicleTypeList = new SelectList(repos.GetVehicleTypeByCategory(model.VehicleCat_Id), "Id", "VehicleTypeName", data.VehicleType_Id);
             return View(model);
         }
 
@@ -101,10 +105,8 @@ namespace HospitalPortal.Controllers
         {
             try
             {
-                if (!ModelState.IsValid)
-                {
-                    return View(model);
-                }
+                var existingdata = ent.Vehicles.Find(model.Id);
+                
                 // fitness certificate image upload
                 if (model.FitnessCertificateImageFile != null)
                 {
@@ -152,10 +154,18 @@ namespace HospitalPortal.Controllers
                 }
                 var domainModel = Mapper.Map<Vehicle>(model);
                 //domainModel.InsurranceDate = model.InsurranceDate.Value.Date;
-                domainModel.RegistrationDate = model.RegistrationDate ?? domainModel.RegistrationDate;
-                ent.Entry(domainModel).State = System.Data.Entity.EntityState.Modified;
+                existingdata.VehicleName = model.VehicleName;
+                existingdata.VehicleNumber = model.VehicleNumber;
+                existingdata.VehicleCat_Id = model.VehicleCat_Id;
+                existingdata.VehicleType_Id = model.VehicleType_Id;
+                existingdata.VehicleOwnerName = model.VehicleOwnerName;
+                existingdata.HolderName = model.HolderName;
+                existingdata.IFSCCode = model.IFSCCode;
+                existingdata.AccountNo = model.AccountNo;
+                existingdata.BranchAddress = model.BranchAddress;
+                existingdata.BranchName = model.BranchName; 
                 ent.SaveChanges();
-                TempData["msg"] = "Successfully Updated";
+                TempData["msg"] = "ok";
                 return RedirectToAction("Edit", model.Id);
             }
             catch (Exception ex)
@@ -169,11 +179,11 @@ namespace HospitalPortal.Controllers
         public ActionResult All(int? vendorId, string term = null, int? page = 0)
         {
             var model = new VehicleDTO();
-            string q = @"select v.*,IsNull(ve.UniqueId,'N/A') as UniqueId,vt.VehicleTypeName, IsNull(ve.VendorName,'NA') AS VendorName , IsNull(ve.CompanyName,'NA') as CompanyName, mc.* from Vehicle v 
+            string q = @"select v.*,IsNull(ve.UniqueId,'N/A') as UniqueId,v.IsApproved,vt.VehicleTypeName, IsNull(ve.VendorName,'NA') AS VendorName , IsNull(ve.CompanyName,'NA') as CompanyName,vt.DriverCharge,mc.* from Vehicle v 
 join VehicleType vt on v.VehicleType_Id = vt.Id
 left join Vendor ve on ve.Id = v.Vendor_Id
 join MainCategory mc on mc.Id = vt.Category_Id
-where v.IsDeleted=0 order by v.Id desc";
+where v.IsDeleted=0 and mc.IsDeleted=0 and vt.IsDeleted=0 order by v.Id desc";
             var data = ent.Database.SqlQuery<VehicleDTO>(q).ToList();
             if (vendorId != null)
             {
@@ -215,6 +225,7 @@ where v.IsDeleted=0 order by v.Id desc";
             ent.Database.ExecuteSqlCommand(q);
             return RedirectToAction("All");
         }
+       
 
         public ActionResult Delete(int id)
         {
@@ -272,18 +283,52 @@ where v.IsDeleted=0 order by v.Id desc";
             var DriverId = list.FirstOrDefault().Id;
             var Name = list.FirstOrDefault().DriverName;
 
-            var GetVehiletypeId=ent.Vehicles.Where(V=>V.Id== model.Id).Select(v=>v.VehicleType_Id).FirstOrDefault();
+			//var GetVehiletypeId=ent.Vehicles.Where(V=>V.Id== model.Id).Select(v=>v.VehicleType_Id).FirstOrDefault();
+			var vehicleInfo = ent.Vehicles
+	.Where(V => V.Id == model.Id)
+	.Select(v => new { VehicleTypeId = v.VehicleType_Id, DriverId = v.Driver_Id })
+	.ToList();
+            var GetVehiletypeId = vehicleInfo.FirstOrDefault().VehicleTypeId;
+            var GetDriverId = vehicleInfo.FirstOrDefault().DriverId;
 
-            if (ent.Vehicles.Any(a => a.Driver_Id == DriverId))
-            {
-                string VehicleNumber1 = ent.Database.SqlQuery<string>("select VehicleNumber from Vehicle where Driver_Id=" + DriverId).FirstOrDefault();
-                TempData["msg"] = "The Selected Driver is Already Running on " + VehicleNumber1;
-                return RedirectToAction("UpdateDriver", new { model.Id });
-            }
+            //==========driver already exist validation============
+
+            //if (ent.Vehicles.Any(a => a.Driver_Id == DriverId))
+            //         {
+            //             string VehicleNumber1 = ent.Database.SqlQuery<string>("select VehicleNumber from Vehicle where Driver_Id=" + DriverId).FirstOrDefault();
+            //             TempData["msg"] = "The Selected Driver is Already Running on " + VehicleNumber1;
+            //             return RedirectToAction("UpdateDriver", new { model.Id });
+            //         }
+
+            string updateexistdriver = @"update Driver set VehicleType_Id = null,Vehicle_Id=null where Id=" + GetDriverId;
+			ent.Database.ExecuteSqlCommand(updateexistdriver);
+
             string q = @"update Vehicle set Driver_Id = " + DriverId + "  where Id=" + model.Id;
             ent.Database.ExecuteSqlCommand(q);
 
-			string dq = @"update Driver set VehicleType_Id = " + GetVehiletypeId + " ,Vehicle_Id="+ model.Id + " where Id=" + DriverId;
+            var domainmodel1 = new VehicleAllotHistory();
+            domainmodel1.Driver_Id = GetDriverId;
+            domainmodel1.Vehicle_Id = model.Id;
+            domainmodel1.AllocateDate = DateTime.Now;
+            domainmodel1.IsActive = false;
+            ent.VehicleAllotHistories.Add(domainmodel1);
+            ent.SaveChanges();
+
+            string updateactivestatus = @"update VehicleAllotHistory set IsActive = 0  where Vehicle_Id=" + model.Id;
+            ent.Database.ExecuteSqlCommand(updateactivestatus);
+            // Vehicle with driver history
+            //
+            var domainmodel = new VehicleAllotHistory();
+            domainmodel.Driver_Id = DriverId;
+            domainmodel.Vehicle_Id = model.Id;
+            domainmodel.AllocateDate = DateTime.Now;
+            domainmodel.IsActive = true;
+            ent.VehicleAllotHistories.Add(domainmodel);
+            ent.SaveChanges();
+
+
+
+            string dq = @"update Driver set VehicleType_Id = " + GetVehiletypeId + " ,Vehicle_Id="+ model.Id + " where Id=" + DriverId;
 			ent.Database.ExecuteSqlCommand(dq);
 			string VehicleNumber = ent.Database.SqlQuery<string>("select VehicleNumber from Vehicle where Driver_Id=" + DriverId).FirstOrDefault();
             TempData["msg"] = "The Vehicle Number" + VehicleNumber + " has been Replaced to " + Name;
@@ -328,6 +373,7 @@ where v.IsDeleted=0 order by v.Id desc";
 		public JsonResult GetVehicleNumberList(string term)
         {
             var VehicleList = (from N in ent.Vehicles
+                               join d in ent.Drivers on N.Id equals d.Vehicle_Id
                                where N.VehicleNumber.StartsWith(term)
                                && N.IsDeleted == false
                                select new { N.VehicleNumber, N.Id });
@@ -363,6 +409,9 @@ where v.IsDeleted=0 order by v.Id desc";
             var VehileId = list.FirstOrDefault().Id;
             var Number = list.FirstOrDefault().VehicleNumber;
             int DriverId = Convert.ToInt32(TempData["Id"]);
+
+			
+
 			var getexistVehicle = ent.Drivers.Where(d => d.Vehicle_Id == VehileId && d.IsDeleted == false).FirstOrDefault();
 			if (getexistVehicle != null)
 			{
@@ -375,11 +424,27 @@ where v.IsDeleted=0 order by v.Id desc";
             //
             string qry = @"update Driver set VehicleType_Id = " + model.Id + ",Vehicle_Id="+ VehileId + " where Id=" + DriverId;
             ent.Database.ExecuteSqlCommand(qry);
-            //
-            string Name = ent.Database.SqlQuery<string>("select DriverName from Driver where Id=" + DriverId).FirstOrDefault();
+			//
+			var domainmodel = new VehicleAllotHistory();
+			domainmodel.Driver_Id= DriverId;
+			domainmodel.Vehicle_Id= VehileId;
+			domainmodel.AllocateDate= DateTime.Now; 
+			domainmodel.IsActive= true; 
+            ent.VehicleAllotHistories.Add(domainmodel);
+            ent.SaveChanges();
+
+
+			string Name = ent.Database.SqlQuery<string>("select DriverName from Driver where Id=" + DriverId).FirstOrDefault();
             string VehicleNumber = ent.Database.SqlQuery<string>("select VehicleNumber from Vehicle where Id=" + VehileId).FirstOrDefault();
             TempData["msg"] = "The Vehicle Number" + VehicleNumber + " has been Replaced to " + Name;
             return RedirectToAction("UpdateVehicles", new { model.Id });
         }
+
+        [HttpPost]
+        public ActionResult CalculateDriverTimepWithVehicle()
+        {
+            return View();  
+        }
+
     }
 }

@@ -39,5 +39,6 @@ namespace HospitalPortal.Models.DomainModels
         public string InvoiceNumber { get; set; }
         public string OrderId { get; set; }
         public Nullable<System.DateTime> OrderDate { get; set; }
+        public Nullable<bool> IsPayoutPaid { get; set; }
     }
 }

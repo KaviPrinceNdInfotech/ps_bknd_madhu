@@ -3,6 +3,7 @@
 @{
     ViewBag.Title = "Vehicle";
     Layout = null;
+    int count = 1;
 }
 <link href="/Styles/bootstrap.min.css" rel="stylesheet" />
 
@@ -10,74 +11,169 @@
 <div style="margin:auto; width:85%">
 
     <div class="row" style="margin-bottom: 3%;">
-            <div class="col-md-3">
-                @Html.TextBoxFor(a => a.JoiningDate, new { @class = "datepicker form-control", required = "required" })
-            </div>
-            <div class="col-md-3">
-                <input type="button" id="test" value="Search" class="btn btn-primary" />
-            </div>
-            <div class="col-md-3">
-                @Html.TextBoxFor(a => a.VendorName, new { @class = "form-control", required = "required", placeholder = "Search by Name" })
-            </div>
-            <div class="col-md-3">
-                <input type="button" id="test2" value="Search" class="btn btn-primary" />
-            </div>
+        <div class="col-md-3">
+            From
+            @Html.TextBoxFor(a => a.JoiningDate, new { @class = "form-control", required = "required", type = "date" })
         </div>
-
-    @if (Model.VendorCommissionReport == null)
-    {
-        if (TempData["msg"] != null)
+        <div class="col-md-3">
+            To
+            <input type="date" class="form-control" name="EndDate" id="EndDate" , required="required" />
+        </div>
+        <div class="col-md-1">
+            <input type="button" id="test" value="Search" class="btn btn-primary" />
+        </div>
+         
+        @using (Html.BeginForm("Vehicle", "VendorCommission", FormMethod.Get))
         {
-            @TempData["msg"];
+            <div class="col-md-4">
+                @*<input type="text" class="form-control" id="name" name="name" placeholder="Serach by Name & Id" />*@
+                <input type="text" class="form-control" id="VendorName" placeholder="Enter VendorName's Name & Id">
+            </div>
+            <div class="col-md-1">
+                <input type="button" id="test2" value="Search" class="btn btn-primary" />
+                @*<input type="submit" value="Search" class="btn btn-primary" />*@
+            </div>
         }
-    }
-    else
-    {
+    </div>
+    </div>
 
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>
-                        Franchise Name
-                    </th>
-                    <th>
-                        Company Name
-                    </th>
-                    <th>
-                        Commission Amount(in %)
-                    </th>
-                    <th>
-                        Total Added
-                    </th>
-                    <th>
-                        After Deduction
-                    </th>
-                    <th>
-                        Payable Amount
-                    </th>
-                </tr>
-            </thead>
+   
+
+    <table class="table table-bordered">
+        <thead style="background-color:lavender;">
+            <tr>
+                <th>Sr No.</th>
+                <th>
+                    Franchise Name/Id
+                </th>
+                <th>
+                    Company Name
+                </th>
+                <th>Vehicle Name</th>
+                <th>Vehicle Number</th>
+                <th>Driver Name /Id</th>
+                <th>
+                    Basic Amount
+                </th>
+                <th>
+                    Commission to PS Wellness @ViewBag.Commission %
+                </th>
+                <th>
+                    Transaction Fee @ViewBag.Transactionfee %
+                </th>
+                <th>
+                    TDS @ViewBag.tds %
+                </th>
+                <th>
+                    Payable to service provider
+                </th>
+                <th>
+                    Payable to franchise 3%
+                </th>
+            </tr>
+
+        </thead>
+        @if (Model.VendorCommissionReport == null)
+        {
+            if (TempData["msg"] != null)
+            {
+                <div class="alert alert-danger">
+                    @TempData["msg"];
+                </div>
+                
+            }
+        }
+        else
+        {
             <tbody>
+                @{
+                    double? totalPayableAmount = 0;
+                    double? totalCommissionAmount = 0;
+                    double? totalAmount = 0;
+                    double? totaltdsAmount = 0;
+                    double totalTransactionAmount = 0;
+                    double? totalFraPaidableamt = 0;
+                }
                 @foreach (var item in Model.VendorCommissionReport)
                 {
                     <tr>
-                        <td>@item.VendorName</td>
+                        <td>@count</td>
+                        <td>@item.VendorName (@item.VendorId)</td>
                         <td>@item.CompanyName</td>
+                        <td>@item.VehicleName</td>
+                        <td>@item.VehicleNumber</td>
+                        <td>@item.DriverName (@item.UniqueId)</td>
+                        <td>@item.Counts</td>
+                        @{
+                            double comm = (Math.Round(item.Counts * ViewBag.Commission) / 100);
+                        }
                         <td>
-                            @ViewBag.Commission %
+                            ₹ @comm
                         </td>
                         @{
-                            double amt = (Math.Round(ViewBag.Payment * ViewBag.Commission) / 100);
-                            double Value = amt * item.Counts;
+                            double? razorpaycomm = @item.Amountwithrazorpaycomm;
+                            double? basicamt = @item.Counts;
+                            double? razarfeeamt = razorpaycomm - basicamt;
+                            totalTransactionAmount += (double)razarfeeamt;
                         }
-                        <td>@item.Counts</td>
-                        <td>₹ @amt</td>
+                        <td>@String.Format("{0:F2}", razarfeeamt) </td>
+                        @{
+                            decimal tds = (decimal)Math.Round((decimal)item.Counts * (decimal)ViewBag.tds / 100, 2);
+
+                        }
+                        <td>
+                            ₹ @tds
+                        </td>
+                        @{
+                            double? commAmt = ((double)item.Counts * ViewBag.Commission) / 100;
+                            double? tdsamt = ((double)item.Counts * (double)ViewBag.tds) / 100;
+                            double? Value = item.Counts - (commAmt + tdsamt + razarfeeamt);
+
+                            totalFraPaidableamt += item.FraPaidableamt;
+                            totalAmount += item.Counts;
+                            totalPayableAmount += @Value;
+                            totaltdsAmount += (double)tds;
+
+                            totalCommissionAmount += commAmt;
+                        }
+
+
                         <td>₹ @Value</td>
+                        <td> ₹ @item.FraPaidableamt</td>
                     </tr>
-                            }
+                    count++;
+                }
             </tbody>
-        </table>
+                           
+            <tfoot>
+                <tr>
+                    <td colspan="6" style="text-align: right;">
+                        <strong>Total:</strong>
+                    </td>
+                    <td>
+                        <strong>₹ @totalAmount</strong>
+                    </td>
+                    <td>
+                        <strong>₹ @totalCommissionAmount</strong>
+                    </td>
+                    <td>
+                        <strong>₹ @String.Format("{0:F2}", @totalTransactionAmount)</strong>
+                    </td>
+
+                    <td>
+                        <strong>₹ @totaltdsAmount</strong>
+                    </td>
+                    <td>
+                        <strong>₹ @totalPayableAmount</strong>
+                    </td>
+                    <td>
+                        <strong>₹ @totalFraPaidableamt</strong>
+                    </td>
+                </tr>
+            </tfoot>
                             }
+        </table>
+                           
 
     <nav aria-label="Page navigation example">
         @*<ul class="pagination">
@@ -99,50 +195,54 @@
             </ul>*@
     </nav>
 
-</div>
+
 <script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
 <link href="~/css/jquery-ui.css" rel="stylesheet" />
 <script src="~/Scripts/jquery-ui.js"></script>
 <script>
     $(".datepicker").datepicker().datepicker('setdate', 'today');
 </script>
-@*<script>
-     $(".datepicker").datepicker({});
+ 
 
-     $("#test").click(function () {
-         var date = $("#AppointmentDate").val();
-         $.ajax({
-             url: "/CommisionReport/Doctor?term=Doctor&AppointmentDate=" + date + "",
-             type: "get",
-             success: function (response) {
-                 console.log(response);
-                 $("#prevAtt").html(response);
-             },
-             error: function (error) {
-                 console.log(error.responseText);
+<script>
+    $(".datepicker").datepicker({});
 
-             }
-         });
+    $("#test").click(function () {
+        debugger
+        var date = $("#JoiningDate").val();
+        var EndDate = $("#EndDate").val();
 
-     });
+        if (date == null && EndDate == null) {
+            alert("Kindly Select Date");
+        }
 
+        $.ajax({
+            url: "/VendorCommission/Vehicle?term=Vehicle&JoiningDate=" + date + "&EndDate=" + EndDate + "",
+            type: "get",
+            success: function (response) {
+                console.log(response);
+                $("#prevAtt").html(response);
+            },
+            error: function (error) {
+                console.log(error.responseText);
 
-     $("#test2").click(function () {
-         debugger
-         var name = $("#DoctorName").val();
-         var date = $("#AppointmentDate").val();
-         $.ajax({
-             url: "/VendorCommission/Doctor?term=Doctor&Name='"+name+"'&AppointmentDate=" + date + "",
-             type: "get",
-             success: function (response) {
-                 console.log(response);
-                 $("#prevAtt").html(response);
-             },
-             error: function (error) {
-                 console.log(error.responseText);
+            }
+        });
+    });
+    $("#test2").click(function () {
+        debugger;
+        var name = $("#VendorName").val();
+        $.ajax({
+            url: "/VendorCommission/Vehicle?term=Vehicle&Name=" + encodeURIComponent(name),
+            type: "get",
+            success: function (response) {
+                console.log(response);
+                $("#prevAtt").html(response);
+            },
+            error: function (error) {
+                console.log(error.responseText);
+            }
+        });
+    });
 
-             }
-         });
-
-     });
-    </script>*@
+</script>

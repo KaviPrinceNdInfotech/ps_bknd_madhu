@@ -9,8 +9,10 @@ namespace HospitalPortal.Models.ViewModels
     {
         public double Commission { get; set; }
         public int Lab_Id { get; set; }
+        public string lABId { get; set; }
         public string LabName { get; set; }
         public double Amount { get; set; }
+        public double Amountwithrazorpaycomm { get; set; }
         public string MobileNumber { get; set; }
         public string ClinicName { get; set; }
         public string LicenceNumber { get; set; }

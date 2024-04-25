@@ -1,7 +1,10 @@
-﻿using HospitalPortal.Models.DomainModels;
+﻿using DocumentFormat.OpenXml.Wordprocessing;
+using HospitalPortal.Models.DomainModels;
 using HospitalPortal.Models.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -22,7 +25,8 @@ namespace HospitalPortal.Controllers
         public ActionResult DailyDoctor(string term,DateTime? date)
         {
                 var model = new ReportDetails();
-                var qry = @"select P.AppointmentDate, Sum(P.TotalFee) as Amount from PatientAppointment P join Doctor D on D.Id = p.Doctor_Id where Convert(Date, P.AppointmentDate) = Convert(Date,GETDATE()) and P.IsPaid=1 GROUP BY P.AppointmentDate, P.TotalFee";
+                var qry = @"select P.AppointmentDate, Sum(P.TotalFee) as Amount,D.DoctorId,D.DoctorName from PatientAppointment P 
+join Doctor D on D.Id = p.Doctor_Id where Convert(Date, P.AppointmentDate) = Convert(Date,GETDATE()) and P.IsPaid=1 GROUP BY P.AppointmentDate,D.DoctorId,D.DoctorName";
                 var data = ent.Database.SqlQuery<Doctors>(qry).ToList();
                  if(data.Count() == 0)
                  {
@@ -35,7 +39,8 @@ namespace HospitalPortal.Controllers
                 }
                 if (date != null)
                 {
-                var qry1 = @"select P.AppointmentDate, Sum(P.Amount) as Amount from PatientAppointment P join Doctor D on D.Id = p.Doctor_Id where P.AppointmentDate = '"+date+ "' and P.IsPaid=1 GROUP BY P.AppointmentDate, P.Amount";
+                var qry1 = @"select P.AppointmentDate, Sum(P.TotalFee) as Amount,D.DoctorId,D.DoctorName from PatientAppointment P 
+join Doctor D on D.Id = p.Doctor_Id where P.AppointmentDate = '" + date+ "' and P.IsPaid=1 GROUP BY P.AppointmentDate";
                 var data1 = ent.Database.SqlQuery<Doctors>(qry1).ToList();
                 if (data1.Count() == 0)
                 {
@@ -58,8 +63,17 @@ namespace HospitalPortal.Controllers
             if (sdate != null && edate != null)
                 {
                //data = data.Where(A => A.AppointmentDate == sdate && A.AppointmentDate == edate).ToList();
-                var qry1 = @"SELECT  DATENAME(month, A.AppointmentDate)as  AppointmentDate1, DATENAME(yy, A.AppointmentDate) as  Year ,SUM(A.TotalFee) as Amount from PatientAppointment A where A.AppointmentDate between Convert(datetime,'" + sdate + "',103) and Convert(datetime,'" + edate + "',103) and A.IsPaid=1 GROUP BY DATENAME(month, A.AppointmentDate), DATENAME(yy, A.AppointmentDate) order by  Year('1' + DATENAME(MONTH, A.AppointmentDate) +'00')  , Year ";
-                var data1 = ent.Database.SqlQuery<Doctors>(qry1).ToList();
+                var qry1 = @"SELECT  DATENAME(month, A.AppointmentDate)as  AppointmentDate1, DATENAME(yy, A.AppointmentDate) as  Year ,SUM(A.TotalFee) as Amount,D.DoctorId,D.DoctorName from PatientAppointment A 
+join Doctor as d on d.Id=A.Doctor_Id
+where A.AppointmentDate between @StartDate and @EndDate and A.IsPaid=1 GROUP BY DATENAME(month, A.AppointmentDate), DATENAME(yy, A.AppointmentDate),D.DoctorId,D.DoctorName order by  Year('1' + DATENAME(MONTH, A.AppointmentDate) +'00')  , Year";
+                var startDateParam = new SqlParameter("@StartDate", SqlDbType.DateTime);
+                startDateParam.Value = sdate;
+                var endDateParam = new SqlParameter("@EndDate", SqlDbType.DateTime);
+                endDateParam.Value = edate;
+
+                var data1 = ent.Database.SqlQuery<Doctors>(qry1, startDateParam, endDateParam).ToList();
+
+               // var data1 = ent.Database.SqlQuery<Doctors>(qry1).ToList();
                 if (data1.Count() == 0)
                 {
                     TempData["msg"] = "Your Selected Date Doesn't Contain any Information.";
@@ -74,7 +88,9 @@ namespace HospitalPortal.Controllers
             }
             else
             {
-				var qry = @"SELECT DATENAME(month, A.AppointmentDate)as  AppointmentDate1, DATENAME(yy, A.AppointmentDate)as  Year,SUM(A.TotalFee) as Amount from PatientAppointment A Where Month(A.AppointmentDate) = Month(GetDate()) and A.IsPaid=1 GROUP BY DATENAME(month, A.AppointmentDate), DATENAME(yy, A.AppointmentDate) order by  Year('1' + DATENAME(MONTH, A.AppointmentDate) +'00')  , Year";
+				var qry = @"SELECT DATENAME(month, A.AppointmentDate)as  AppointmentDate1, DATENAME(yy, A.AppointmentDate)as  Year,SUM(A.TotalFee) as Amount,D.DoctorId,D.DoctorName from PatientAppointment A
+join Doctor as d on d.Id=A.Doctor_Id
+Where Month(A.AppointmentDate) = Month(GetDate()) and A.IsPaid=1 GROUP BY DATENAME(month, A.AppointmentDate), DATENAME(yy, A.AppointmentDate),D.DoctorId,D.DoctorName order by  Year('1' + DATENAME(MONTH, A.AppointmentDate) +'00')  , Year";
 				var data = ent.Database.SqlQuery<Doctors>(qry).ToList();
 				if (data.Count() == 0)
 				{
@@ -94,15 +110,12 @@ namespace HospitalPortal.Controllers
         public ActionResult yearlyDoctor(string term, int? year)
         {
             var model = new ReportDetails();
-            var qry = @"SELECT  DATENAME(YEAR, A.AppointmentDate)as  Year, SUM(A.TotalFee) as Amount from PatientAppointment A where YEAR(A.AppointmentDate) = YEAR(getdate()) and A.IsPaid=1 GROUP BY DATENAME(YEAR, A.AppointmentDate)";
-            var data = ent.Database.SqlQuery<Doctors>(qry).ToList();
-            if (data.Count() == 0)
+            
+            if (year != null)
             {
-                TempData["msg"] = "No Record of Current Year";
-            }
-           if (year != null)
-            {
-                var qry1 = @"SELECT  DATENAME(YEAR, A.AppointmentDate)as  Year, SUM(A.TotalFee) as Amount from PatientAppointment A where DATEPART(YY,A.AppointmentDate) = '"+year+ "' and A.IsPaid=1 GROUP BY DATENAME(YEAR, A.AppointmentDate)";
+                var qry1 = @"SELECT  DATENAME(YEAR, A.AppointmentDate)as  Year, SUM(A.TotalFee) as Amount,D.DoctorId,D.DoctorName from PatientAppointment A 
+join Doctor as d on d.Id=A.Doctor_Id
+where DATEPART(YY,A.AppointmentDate) = '" + year + "' and A.IsPaid=1 GROUP BY DATENAME(YEAR, A.AppointmentDate),D.DoctorId,D.DoctorName";
                 var data1 = ent.Database.SqlQuery<Doctors>(qry1).ToList();
                 if (data1.Count() == 0)
                 {
@@ -114,31 +127,33 @@ namespace HospitalPortal.Controllers
                     return View(model);
                
             }
-            model.doctorList = data;
-            ViewBag.Total = model.doctorList.Sum(a => a.Amount);
-            return View(model);
+            else
+            {
+                var qry = @"SELECT  DATENAME(YEAR, A.AppointmentDate)as  Year, SUM(A.TotalFee) as Amount,D.DoctorId,D.DoctorName from PatientAppointment A 
+join Doctor as d on d.Id=A.Doctor_Id
+where YEAR(A.AppointmentDate) = YEAR(getdate()) and A.IsPaid=1 GROUP BY DATENAME(YEAR, A.AppointmentDate),D.DoctorId,D.DoctorName";
+                var data = ent.Database.SqlQuery<Doctors>(qry).ToList();
+                if (data.Count() == 0)
+                {
+                    TempData["msg"] = "No Record of Current Year";
+                }
+                model.doctorList = data;
+                ViewBag.Total = model.doctorList.Sum(a => a.Amount);
+                return View(model);
+            }
+           
         }
 
         public ActionResult WeeklyDoctor(string term, DateTime? week)
         {
             var model = new ReportDetails();
-            var qry = @"SELECT 'Week'+'-'+ DATENAME(WW, A.AppointmentDate)as  Weeks, DATENAME(YY,A.AppointmentDate) as Year, SUM(A.TotalFee) as Amount from PatientAppointment AS A where datepart(ww,A.AppointmentDate) =  datepart(ww, getdate()) and A.IsPaid=1 GROUP BY DATENAME(WW, A.AppointmentDate),DATENAME(YY, A.AppointmentDate)";
-            var data = ent.Database.SqlQuery<Doctors>(qry).ToList();
-            if (data.Count() == 0)
-            {
-                TempData["msg"] = "No Record of Current Week";
-            }
-            else
-            {
-                model.doctorList = data;
-                ViewBag.Total = model.doctorList.Sum(a => a.Amount);
-            }
-
+           
                 if (week != null)
-            {
+                {
                 DateTime dateCriteria = week.Value.AddDays(-7);
                 string date = dateCriteria.ToString("dd/MM/yyyy");
-                var qry1 = @"select 'Week'+'-'+ DATENAME(WW, P.AppointmentDate)as  Weeks, DATENAME(YY, P.AppointmentDate)as  Year, Sum(P.TotalFee) as Amount from PatientAppointment P where P.AppointmentDate between Convert(datetime,'" + dateCriteria + "',103) and Convert(datetime,'"+week+"',103) GROUP BY P.AppointmentDate, P.TotalFee";
+                var qry1 = @"SELECT 'Week'+'-'+ DATENAME(WW, A.AppointmentDate)as  Weeks, DATENAME(YY,A.AppointmentDate) as Year, SUM(A.TotalFee) as Amount,d.DoctorId,d.DoctorName from PatientAppointment AS A 
+join Doctor as d on d.Id=A.Doctor_Id where A.AppointmentDate between Convert(datetime,'" + dateCriteria + "',103) and Convert(datetime,'"+week+ "',103) and A.IsPaid=1 GROUP BY A.AppointmentDate,d.DoctorId,d.DoctorName";
                 var data1 = ent.Database.SqlQuery<Doctors>(qry1).ToList();
                 if (data1.Count() == 0)
                 {
@@ -151,9 +166,28 @@ namespace HospitalPortal.Controllers
                     ViewBag.Total = model.doctorList.Sum(a => a.Amount);
                     return View(model);
                 }
+                }
+                else
+                {
+                var qry = @"SELECT 'Week'+'-'+ DATENAME(WW, A.AppointmentDate)as  Weeks, DATENAME(YY,A.AppointmentDate) as Year, SUM(A.TotalFee) as Amount,d.DoctorId,d.DoctorName from PatientAppointment AS A 
+join Doctor as d on d.Id=A.Doctor_Id
+where datepart(ww,A.AppointmentDate) =  datepart(ww, getdate()) and A.IsPaid=1 GROUP BY DATENAME(WW, A.AppointmentDate),DATENAME(YY, A.AppointmentDate),d.DoctorId,d.DoctorName";
+
+                var data = ent.Database.SqlQuery<Doctors>(qry).ToList();
+                if (data.Count() == 0)
+                {
+                    TempData["msg"] = "No Record of Current Week";
+                }
+                else
+                {
+                    model.doctorList = data;
+                    ViewBag.Total = model.doctorList.Sum(a => a.Amount);
+                   
+                }
+                return View(model);
             }
-          
-            return View(model);
+
+           
         }
 
 
@@ -202,19 +236,9 @@ GROUP BY CONVERT(DATE, P.TestDate)";
         public ActionResult MonthlyLab(string term, DateTime? sdate, DateTime? edate)
         {
             var model = new ReportDetails();
-            var qry = @"SELECT  DATENAME(month, A.TestDate)as  TestDate1, DATENAME(yy, A.TestDate)as  Year,SUM(A.Amount) as Amount from BookTestLab  A where Month(A.TestDate) = Month(GETDATE()) GROUP BY DATENAME(month, A.TestDate), DATENAME(yy, A.TestDate) order by  Year('1' + DATENAME(MONTH, A.TestDate) +'00')  , Year";
-            var data = ent.Database.SqlQuery<Labs>(qry).ToList();
-            if (data.Count() == 0)
-            {
-                TempData["msg"] = "No Record of Current Month";
-            }
-            else
-            {
-                model.LabList = data;
-                ViewBag.Total = model.LabList.Sum(a => a.Amount);
-            }
+           
                 if (sdate != null && edate != null)
-            {
+                {
                 var qry1 = @"SELECT  DATENAME(month, A.TestDate)as  TestDate1, DATENAME(yy, A.TestDate)as  Year,SUM(A.Amount) as Amount from BookTestLab  A where A.TestDate between '" + sdate + "' and '" + edate + "' GROUP BY DATENAME(month, A.TestDate), DATENAME(yy, A.TestDate)  order by  Year('1' + DATENAME(MONTH, A.TestDate) +'00')  , Year";
                 var data1 = ent.Database.SqlQuery<Labs>(qry1).ToList();
                 if (data1.Count() == 0)
@@ -226,6 +250,21 @@ GROUP BY CONVERT(DATE, P.TestDate)";
                     model.LabList = data1;
                     ViewBag.Total = model.LabList.Sum(a => a.Amount);
                     return View(model);
+                }
+            }
+            else
+            {
+
+                var qry = @"SELECT  DATENAME(month, A.TestDate)as  TestDate1, DATENAME(yy, A.TestDate)as  Year,SUM(A.Amount) as Amount from BookTestLab  A where Month(A.TestDate) = Month(GETDATE()) GROUP BY DATENAME(month, A.TestDate), DATENAME(yy, A.TestDate) order by  Year('1' + DATENAME(MONTH, A.TestDate) +'00')  , Year";
+                var data = ent.Database.SqlQuery<Labs>(qry).ToList();
+                if (data.Count() == 0)
+                {
+                    TempData["msg"] = "No Record of Current Month";
+                }
+                else
+                {
+                    model.LabList = data;
+                    ViewBag.Total = model.LabList.Sum(a => a.Amount);
                 }
             }
            
@@ -589,10 +628,10 @@ GROUP BY CONVERT(DATE, P.TestDate)";
         public ActionResult DailyNurse(string term, DateTime? date)
         {
             var model = new ReportDetails();
-            var qry = @"select P.ServiceAcceptanceDate,  P.TotalFee from NurseService P
-join Nurse D on D.Id = p.Nurse_Id 
+            var qry = @"select P.ServiceAcceptanceDate, SUM(P.TotalFee ) as TotalFee,n.NurseId,n.NurseName from NurseService P
+join Nurse n on n.Id = p.Nurse_Id 
 where CONVERT(DATE, P.ServiceAcceptanceDate) >= CAST(GETDATE() AS DATE)
-and P.IsPaid=1 GROUP BY P.ServiceAcceptanceDate, P.TotalFee";
+and P.IsPaid=1 GROUP BY P.ServiceAcceptanceDate,n.NurseId,n.NurseName";
             var data = ent.Database.SqlQuery<Nurses>(qry).ToList();
             if (data.Count() == 0)
             {
@@ -603,22 +642,7 @@ and P.IsPaid=1 GROUP BY P.ServiceAcceptanceDate, P.TotalFee";
                 model.Nurses = data;
                 ViewBag.Total = model.Nurses.Sum(a => a.TotalFee);
             }
-            if (date != null)
-            {
-                string dt = date.Value.ToString("MM/dd/yyyy");
-                  var qry1 = @"select P.ServiceAcceptanceDate,  P.TotalFee from NurseService P join Nurse D on D.Id = p.Nurse_Id where P.ServiceAcceptanceDate = '" + dt + "' and P.IsPaid = 1 GROUP BY P.ServiceAcceptanceDate, P.TotalFee";
-                var data1 = ent.Database.SqlQuery<Nurses>(qry1).ToList();
-                if (data1.Count() == 0)
-                {
-                    TempData["msg"] = "Your Selected Date Doesn't Contain any Information.";
-                }
-                else
-                {
-                    model.Nurses = data1;
-                    ViewBag.Total = model.Nurses.Sum(a => a.TotalFee);
-                    return View(model);
-                }
-            }
+            
 
             return View(model);
         }
@@ -626,22 +650,25 @@ and P.IsPaid=1 GROUP BY P.ServiceAcceptanceDate, P.TotalFee";
         public ActionResult MonthlyNurse(string term, DateTime? sdate, DateTime? edate)
         {
             var model = new ReportDetails();
-            var qry = @"select  P.ServiceAcceptanceDate,  p.TotalFee from NurseService P join Nurse D on D.Id = p.Nurse_Id where Month(p.ServiceAcceptanceDate) = Month(GetDate()) GROUP BY P.ServiceAcceptanceDate, P.TotalFee";
-            var data = ent.Database.SqlQuery<Nurses>(qry).ToList();
-            if (data.Count() == 0)
-            {
-                TempData["msg"] = "No Record of Current Month";
-            }
-            else
-            {
-                model.Nurses = data;
-                ViewBag.Total = model.Nurses.Sum(a => a.TotalFee);
-            }
+            
             if (sdate != null && edate != null)
             {
-               
-                var qry1 = @" select P.ServiceAcceptanceDate, P.TotalFee from NurseService P join Nurse D on D.Id = p.Nurse_Id where p.ServiceAcceptanceDate) between'" + sdate + "' and '" + edate + "' GROUP BY P.ServiceAcceptanceDate, P.TotalFee";
-                var data1 = ent.Database.SqlQuery<Nurses>(qry1).ToList();
+
+                var qry1 = @"SELECT P.ServiceAcceptanceDate, SUM(P.TotalFee) as TotalFee, n.NurseId, n.NurseName 
+             FROM NurseService P 
+             JOIN Nurse n ON n.Id = p.Nurse_Id 
+             WHERE P.ServiceAcceptanceDate BETWEEN @StartDate AND @EndDate 
+             AND P.IsPaid = 1 
+             GROUP BY P.ServiceAcceptanceDate, n.NurseId, n.NurseName";
+
+                var startDateParam = new SqlParameter("@StartDate", SqlDbType.DateTime);
+                startDateParam.Value = sdate;
+                var endDateParam = new SqlParameter("@EndDate", SqlDbType.DateTime);
+                endDateParam.Value = edate;
+
+                var data1 = ent.Database.SqlQuery<Nurses>(qry1, startDateParam, endDateParam).ToList();
+
+
                 if (data1.Count() == 0)
                 {
                     TempData["msg"] = "Your Selected Date Doesn't Contain any Information.";
@@ -653,22 +680,34 @@ and P.IsPaid=1 GROUP BY P.ServiceAcceptanceDate, P.TotalFee";
                     return View(model);
                 }
             }
-
+            else
+            {
+                var qry = @"SELECT P.ServiceAcceptanceDate,SUM(P.TotalFee ) as TotalFee,n.NurseId,n.NurseName from NurseService P 
+join Nurse n on n.Id = p.Nurse_Id 
+where Month(p.ServiceAcceptanceDate) = Month(GetDate()) and P.IsPaid=1 GROUP BY P.ServiceAcceptanceDate,n.NurseId,n.NurseName";
+                var data = ent.Database.SqlQuery<Nurses>(qry).ToList();
+                if (data.Count() == 0)
+                {
+                    TempData["msg"] = "No Record of Current Month";
+                }
+                else
+                {
+                    model.Nurses = data;
+                    ViewBag.Total = model.Nurses.Sum(a => a.TotalFee);
+                }
+            }
             return View(model);
         }
 
         public ActionResult yearlyNurse(string term, int? year)
         {
             var model = new ReportDetails();
-            var qry = @"select  P.ServiceAcceptanceDate, p.TotalFee from NurseService P join Nurse D on D.Id = p.Nurse_Id where Year(p.ServiceAcceptanceDate) = Year(GetDate()) GROUP BY P.ServiceAcceptanceDate, P.TotalFee";
-            var data = ent.Database.SqlQuery<Nurses>(qry).ToList();
-            if (data.Count() == 0)
-            {
-                TempData["msg"] = "No Record of Current Year";
-            }
+            
             if (year != null)
             {
-                var qry1 = @"select P.ServiceAcceptanceDate, P.TotalFee from NurseService P join Nurse D on D.Id = p.Nurse_Id where DATEPART(YY, A.ServiceAcceptanceDate) = '" + year + "' GROUP BY P.ServiceAcceptanceDate, P.TotalFee";
+                var qry1 = @"SELECT P.ServiceAcceptanceDate,SUM(P.TotalFee ) as TotalFee,n.NurseId,n.NurseName from NurseService P 
+join Nurse n on n.Id = p.Nurse_Id 
+where DATEPART(YY, P.ServiceAcceptanceDate) = '" + year + "' and P.IsPaid=1 GROUP BY P.ServiceAcceptanceDate,n.NurseId,n.NurseName";
                 var data1 = ent.Database.SqlQuery<Nurses>(qry1).ToList();
                 if (data1.Count() == 0)
                 {
@@ -678,31 +717,41 @@ and P.IsPaid=1 GROUP BY P.ServiceAcceptanceDate, P.TotalFee";
                 ViewBag.Total = model.Nurses.Sum(a => a.TotalFee);
                 return View(model);
             }
-            model.Nurses = data;
-            ViewBag.Total = model.Nurses.Sum(a => a.TotalFee);
-            return View(model);
-        }
+            else
+            {
+				var qry = @"SELECT P.ServiceAcceptanceDate,SUM(P.TotalFee ) as TotalFee,n.NurseId,n.NurseName from NurseService P 
+join Nurse n on n.Id = p.Nurse_Id 
+where Year(p.ServiceAcceptanceDate) = Year(GetDate()) and P.IsPaid=1 GROUP BY P.ServiceAcceptanceDate,n.NurseId,n.NurseName";
+				var data = ent.Database.SqlQuery<Nurses>(qry).ToList();
+				if (data.Count() == 0)
+				{
+					TempData["msg"] = "No Record of Current Year";
+				}
+				model.Nurses = data;
+				ViewBag.Total = model.Nurses.Sum(a => a.TotalFee);
+				
+			}
+			return View(model);
+		}
 
         public ActionResult WeeklyNurse(string term, DateTime? week)
         {
             var model = new ReportDetails();
-            var qry = @"SELECT P.ServiceAcceptanceDate,  P.TotalFee from NurseService P join Nurse D on D.Id = p.Nurse_Id where datepart(ww,P.ServiceAcceptanceDate) =  datepart(ww, getdate()) GROUP BY P.ServiceAcceptanceDate, P.TotalFee";
-            var data = ent.Database.SqlQuery<Nurses>(qry).ToList();
-            if (data.Count() == 0)
-            {
-                TempData["msg"] = "No Record of Current Week";
-            }
-            else
-            {
-                model.Nurses = data;
-                ViewBag.Total = model.Nurses.Sum(a => a.TotalFee);
-            }
+            
             if (week != null)
             {
                 DateTime dateCriteria = week.Value.AddDays(-7);
                 string date = dateCriteria.ToString("dd/MM/yyyy");
-                var qry1 = @"SELECT P.ServiceAcceptanceDate,  P.TotalFee from NurseService P join Nurse D on D.Id = p.Nurse_Id where P.ServiceAcceptanceDate between '" + dateCriteria+"' and '"+week+ "' GROUP BY P.ServiceAcceptanceDate, P.TotalFee";
-                var data1 = ent.Database.SqlQuery<Nurses>(qry1).ToList();
+                var qry1 = @"SELECT P.ServiceAcceptanceDate,SUM(P.TotalFee ) as TotalFee,n.NurseId,n.NurseName from NurseService P 
+join Nurse n on n.Id = p.Nurse_Id 
+where P.ServiceAcceptanceDate BETWEEN @startDate AND @endDate  and P.IsPaid=1 GROUP BY P.ServiceAcceptanceDate,n.NurseId,n.NurseName";
+                var startDateParam = new SqlParameter("@StartDate", SqlDbType.DateTime);
+                startDateParam.Value = dateCriteria;
+                var endDateParam = new SqlParameter("@EndDate", SqlDbType.DateTime);
+                endDateParam.Value = week;
+
+                var data1 = ent.Database.SqlQuery<Nurses>(qry1, startDateParam, endDateParam).ToList();
+                //var data1 = ent.Database.SqlQuery<Nurses>(qry1,new SqlParameter("week", week)).ToList();
                 if (data1.Count() == 0)
                 {
                     TempData["msg"] = "Your Selected Date Doesn't Contain any Information.";
@@ -714,6 +763,22 @@ and P.IsPaid=1 GROUP BY P.ServiceAcceptanceDate, P.TotalFee";
                     return View(model);
                 }
             }
+            else
+            {
+				var qry = @"SELECT P.ServiceAcceptanceDate,SUM(P.TotalFee ) as TotalFee,n.NurseId,n.NurseName from NurseService P 
+join Nurse n on n.Id = p.Nurse_Id 
+where datepart(ww,P.ServiceAcceptanceDate) =  datepart(ww, getdate()) and P.IsPaid=1 GROUP BY P.ServiceAcceptanceDate,n.NurseId,n.NurseName";
+				var data = ent.Database.SqlQuery<Nurses>(qry).ToList();
+				if (data.Count() == 0)
+				{
+					TempData["msg"] = "No Record of Current Week";
+				}
+				else
+				{
+					model.Nurses = data;
+					ViewBag.Total = model.Nurses.Sum(a => a.TotalFee);
+				}
+			}
             return View(model);
         }
     }

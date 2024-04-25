@@ -2,11 +2,12 @@
 
 @{
     Layout = null;
+    int count = 1;
 }
 
 <style>
     #main {
-        margin: 6%;
+        margin: 2%;
     }
 </style>
 <link href="/css/bootstrap.min.css" rel="stylesheet" />
@@ -16,7 +17,7 @@
         <div class="row">
             <div class="col-md-4">
                 Select Date
-                @Html.TextBoxFor(a => a.sdate, new { @class = "datepicker form-control", required = "required" })
+                @Html.TextBoxFor(a => a.startdate, new { @class = "form-control", required = "required", type = "date" })
             </div>
             <div class="col-md-4">
                 <input type="submit" id="test" value="Search" class="btn btn-primary" />
@@ -24,48 +25,75 @@
         </div>
     }
 
+    
+<table id="table_id" class="table table-bordered">
+    <thead style="background-color:lavender;">
+        <tr>
+            <th>Sr No.</th>
+            <th>
+                Vehicle Number
+            </th>
+            <th>
+                Vehicle Name
+            </th>
+            <th>Amount</th>
+            <th>Action</th>
+        </tr>
+    </thead>
     @if (Model.Ambulance == null)
     {
         if (TempData["msg"] != null)
         {
-            <h2 style="color:blueviolet">
+            <div class="alert alert-danger">
                 @TempData["msg"]
-            </h2>
+            </div>
         }
     }
     else
     {
-        <table id="tables" class="table table-responsive">
-            <thead>
+        <tbody>
+            @{
+                decimal? totalamount = 0;
+            }
+            @foreach (var item in Model.Ambulance)
+            {
                 <tr>
-                    <th>
-                        Vehicle Number
-                    </th>
-                    <th>
-                        Vehicle Name
-                    </th>
-                    <th>Action</th>
+                    <td>@count</td>
+                    <td>
+                        @item.VehicleNumber
+                    </td>
+                    <td>
+                        @item.VehicleName
+                    </td>
+                    @{
+                        totalamount += item.Amount;
+                    }
+                    <td>@item.Amount</td>
+                    <td>
+                        <a href="/AmbulanceReport/WeeklyReport?Id=@item.VehicleId" class="btn btn-primary">View Record</a>
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model.Ambulance)
-                {
-                    <tr>
-                        <td>
-                            @item.VehicleNumber
-                        </td>
-                        <td>
-                            @item.VehicleName
-                        </td>
-                        <td>
-                            <a href="/AmbulanceReport/WeeklyReport?Id=@item.Id">View Record</a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    }
+                            count++;
+                        }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3" style="text-align: right;">Total:</td>
+                <td>
+                    <strong>₹ @totalamount</strong>
+                </td>
+            </tr>
+        </tfoot>
+                        }
+    </table>
+    
 </div>
+<script src="https://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css">
+
+<script type="text/javascript">
+    $('#table_id').DataTable();
+</script> 
 <script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
 <link href="~/css/jquery-ui.css" rel="stylesheet" />
 <script src="~/Scripts/jquery-ui.js"></script>
@@ -87,8 +115,33 @@
             },
             error: function (error) {
                 console.log(error.responseText);
-                msg.text("");
+
             }
         });
     })
+</script>
+<script>
+
+
+    $(".datepicker").datepicker().datepicker('setdate', 'today');
+
+
+
+    $("#test").click(function () {
+        debugger
+        var date = $("#AppointmentDate").val();
+        $.ajax({
+            url: "/AmbulanceReport/Weekly?week=" + date + "",
+            type: "get",
+            success: function (response) {
+                console.log(response);
+                $("#prevAtt").html(response);
+            },
+            error: function (error) {
+                console.log(error.responseText);
+
+            }
+        });
+
+    });
 </script>

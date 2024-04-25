@@ -342,8 +342,8 @@ namespace HospitalPortal.Controllers
         [System.Web.Http.HttpGet]
         [System.Web.Http.Route("api/DriverApi/BookingHistory")]
         public IHttpActionResult BookingHistory(int DriverId)
-        { 
-            string query = @"select P.Id,P.PatientName,P.MobileNumber,sm.StateName,cm.CityName,P.PinCode,P.Location,DL.start_Lat,DL.start_Long,DL.end_Long,DL.end_Lat from DriverLocation as DL left join Patient as P on Dl.PatientId=P.Id left join citymaster as cm with(nolock) on cm.id=P.CityMaster_Id left join statemaster as sm with(nolock) on sm.id=P.StateMaster_Id left join Driver as D on D.Id=DL.Driver_Id where D.Id=" + DriverId + " and DL.IsPay='Y'";
+        {  
+            string query = @"select P.Id,P.PatientName,P.MobileNumber,sm.StateName,cm.CityName,P.PinCode,P.Location,DL.start_Lat,DL.start_Long,DL.end_Long,DL.end_Lat from DriverLocation as DL left join Patient as P on Dl.PatientId=P.Id left join citymaster as cm with(nolock) on cm.id=P.CityMaster_Id left join statemaster as sm with(nolock) on sm.id=P.StateMaster_Id left join Driver as D on D.Id=DL.Driver_Id where D.Id=" + DriverId + " and DL.IsPay='Y' order by DL.Id desc";
             var BookingHistory = ent.Database.SqlQuery<BookingOrderHistory>(query).ToList();
             return Ok(new { BookingHistory });
 
@@ -352,9 +352,8 @@ namespace HospitalPortal.Controllers
         [System.Web.Http.HttpGet]
         [Route("api/DriverApi/PaymentHistory")]
         public IHttpActionResult PaymentHistory(int Id)
-        {
-            var rm = new Driver();
-            string query = @"select P.Id,P.PatientName,P.MobileNumber,P.Location,DL.Id as PaymentId,DL.Amount,DL.PaymentDate,DL.IsPay,DL.start_Lat,DL.start_Long,DL.end_Long,DL.end_Lat from DriverLocation as DL left join Patient as P on Dl.PatientId=P.Id left join Driver as D on D.Id=DL.Driver_Id where D.Id=" + Id + " and DL.IsPay='Y'";
+        { 
+            string query = @"select P.Id,P.PatientName,P.MobileNumber,P.Location,DL.Id as PaymentId,DL.Amount,DL.PaymentDate,DL.IsPay,DL.start_Lat,DL.start_Long,DL.end_Long,DL.end_Lat from DriverLocation as DL join Patient as P on Dl.PatientId=P.Id join Driver as D on D.Id=DL.Driver_Id where D.Id=" + Id + " and DL.IsPay='Y' order by DL.Id desc";
             var Data = ent.Database.SqlQuery<payhistory>(query).ToList();
             return Ok(Data);
 
@@ -473,6 +472,8 @@ namespace HospitalPortal.Controllers
                 double DriveLong = 0.00;
                 double distance = 0.00;
                 int Charge = 0;
+                int DriverCharge = 0;
+                int totalCharge = 0;
                 ent.Database.ExecuteSqlCommand("exec DeleteNearDriver");
 
 
@@ -483,9 +484,9 @@ namespace HospitalPortal.Controllers
                 
                 var Driver = ent.Database.SqlQuery<UpdatelocationDriver>(@"select distinct D.Id AS DriverId,D.Lat, D.Lang,D.DriverName,D.DlNumber,dbo.DriverCharges() as Charge,AL.DeviceId from Driver AS D with(nolock)
 INNER JOIN AdminLogin AS AL with(nolock) ON D.AdminLogin_Id = AL.Id
-INNER JOIN Vehicle as v on V.VehicleType_Id=d.VehicleType_id
+INNER JOIN Vehicle as v on V.Id=d.Vehicle_Id
 INNER JOIN VehicleType as vt on Vt.Id=v.VehicleType_id
-where D.Lat IS NOT NULL and D.Lang IS NOT NULL and d.VehicleType_id=" + model.VehicleType_id + " and D.IsApproved=1").ToList();
+where D.Lat IS NOT NULL and D.Lang IS NOT NULL and d.VehicleType_id=" + model.VehicleType_id + " and D.IsApproved=1 and D.IsBooked=0").ToList();
                 foreach (var item in Driver)
                 {
                     //==================USER AND DRIVER DISTANCE========================
@@ -562,16 +563,143 @@ where D.Lat IS NOT NULL and D.Lang IS NOT NULL and d.VehicleType_id=" + model.Ve
                     int drivId = item.DriverId;
                     string drivName = item.DriverName;
                     string DlNumber = item.DlNumber;
-                    Charge = item.Charge ?? 0;
+                    //Charge = item.Charge ?? 0;
                     //dist1 = distance;
 
+
+
+                    
+
+                    //IF the Distance is between 0 to 5
+                    if (distance <= 5)
+                    {
+                        string Q = @"select * from VehicleType where Id=" + model.VehicleType_id;
+                        var data = ent.Database.SqlQuery<VehiclePrice>(Q).ToList();
+                        Charge = (int)data.FirstOrDefault().under5KM;
+                    }
+                    //IF the Distance is between 5 to 10
+                    else if (distance > 5 && distance < 10)
+                    {
+                        string Q = @"select * from VehicleType where Id=" + model.VehicleType_id;
+                        var data = ent.Database.SqlQuery<VehiclePrice>(Q).ToList();
+                        Charge = (int)data.FirstOrDefault().under6_10KM;
+                    }
+
+                    //IF the Distance is between 11 to 20
+                    else if (distance > 10 && distance < 20)
+                    {
+                        string Q = @"select * from VehicleType where Id=" + model.VehicleType_id;
+                        var data = ent.Database.SqlQuery<VehiclePrice>(Q).ToList();
+                        Charge = (int)data.FirstOrDefault().under11_20KM;
+                    }
+
+                    //IF the Distance is between 21 to 40
+                    else if (distance > 20 && distance < 40)
+                    {
+                        string Q = @"select * from VehicleType where Id=" + model.VehicleType_id;
+                        var data = ent.Database.SqlQuery<VehiclePrice>(Q).ToList();
+                        Charge = (int)data.FirstOrDefault().under21_40KM;
+                    }
+                    //IF the Distance is between 41 to 60
+                    else if (distance > 40 && distance < 60)
+                    {
+                        string Q = @"select * from VehicleType where Id=" + model.VehicleType_id;
+                        var data = ent.Database.SqlQuery<VehiclePrice>(Q).ToList();
+                        Charge = (int)data.FirstOrDefault().under41_60KM;
+                    }
+                    //IF the Distance is between 61 to 80
+                    else if (distance > 60 && distance < 80)
+                    {
+                        string Q = @"select * from VehicleType where Id=" + model.VehicleType_id;
+                        var data = ent.Database.SqlQuery<VehiclePrice>(Q).ToList();
+                        Charge = (int)data.FirstOrDefault().under61_80KM;
+                    }
+                    //IF the Distance is between 81 to 100
+                    else if (distance > 80 && distance < 100)
+                    {
+                        string Q = @"select * from VehicleType where Id=" + model.VehicleType_id;
+                        var data = ent.Database.SqlQuery<VehiclePrice>(Q).ToList();
+                        Charge = (int)data.FirstOrDefault().under81_100KM;
+                    }
+                    //IF the Distance is between 100 to 150
+                    else if (distance > 100 && distance < 150)
+                    {
+                        string Q = @"select * from VehicleType where Id=" + model.VehicleType_id;
+                        var data = ent.Database.SqlQuery<VehiclePrice>(Q).ToList();
+                        Charge = (int)data.FirstOrDefault().under100_150KM;
+                    }
+                    //IF the Distance is between 151 to 200
+                    else if (distance > 150 && distance < 200)
+                    {
+                        string Q = @"select * from VehicleType where Id=" + model.VehicleType_id;
+                        var data = ent.Database.SqlQuery<VehiclePrice>(Q).ToList();
+                        Charge = (int)data.FirstOrDefault().under151_200KM;
+                    }
+                    //IF the Distance is between 201 to 250
+                    else if (distance > 200 && distance < 250)
+                    {
+                        string Q = @"select * from VehicleType where Id=" + model.VehicleType_id;
+                        var data = ent.Database.SqlQuery<VehiclePrice>(Q).ToList();
+                        Charge = (int)data.FirstOrDefault().under201_250KM;
+                    }
+                    //IF the Distance is between 251 to 300
+                    else if (distance > 251 && distance < 300)
+                    {
+                        string Q = @"select * from VehicleType where Id=" + model.VehicleType_id;
+                        var data = ent.Database.SqlQuery<VehiclePrice>(Q).ToList();
+                        Charge = (int)data.FirstOrDefault().under251_300KM;
+                    }
+                    //IF the Distance is between 301 to 350
+                    else if (distance > 300 && distance < 350)
+                    {
+                        string Q = @"select * from VehicleType where Id=" + model.VehicleType_id;
+                        var data = ent.Database.SqlQuery<VehiclePrice>(Q).ToList();
+                        Charge = (int)data.FirstOrDefault().under301_350KM ;
+                    }
+                    //IF the Distance is between 351 to 400
+                    else if (distance > 350 && distance < 400)
+                    {
+                        string Q = @"select * from VehicleType where Id=" + model.VehicleType_id;
+                        var data = ent.Database.SqlQuery<VehiclePrice>(Q).ToList();
+                        Charge = (int)data.FirstOrDefault().under351_400KM ;
+                    }
+                    //IF the Distance is between 401 to 450
+                    else if (distance > 400 && distance < 450)
+                    {
+                        string Q = @"select * from VehicleType where Id=" + model.VehicleType_id;
+                        var data = ent.Database.SqlQuery<VehiclePrice>(Q).ToList();
+                        Charge = (int)data.FirstOrDefault().under401_450KM ;
+                    }
+                    //IF the Distance is between 451 to 500
+                    else if (distance > 450 && distance < 500)
+                    {
+                        string Q = @"select * from VehicleType where Id=" + model.VehicleType_id;
+                        var data = ent.Database.SqlQuery<VehiclePrice>(Q).ToList();
+                        Charge = (int)data.FirstOrDefault().under451_500KM ;
+                    }
+                    //IF the Distance is Above 500
+                    else
+                    { 
+                        string Q = @"select * from VehicleType where Id=" + model.VehicleType_id;
+                        var data = ent.Database.SqlQuery<VehiclePrice>(Q).ToList();
+                        Charge = ((int)data.FirstOrDefault().Above500KM * (int)distance);
+
+                    }
+
+                    //GET Driver Charge include driver charge
+                    string Qry = @"select * from VehicleType where Id=" + model.VehicleType_id;
+                    var drivercharge = ent.Database.SqlQuery<VehiclePrice>(Qry).ToList();
+                    DriverCharge = (int)drivercharge.FirstOrDefault().DriverCharge;
+                    totalCharge = Charge * 2 + DriverCharge;
+
                     string DeviceId = (item.DeviceId == null) ? "0000" : item.DeviceId;
-                    string query = @"exec GetNearDriver '" + drivId + "'," + dist + ",'" + drivName + "','" + DlNumber + "'," + Charge + ",'" + DeviceId + "'," + distance + "";
+                    string query = @"exec GetNearDriver '" + drivId + "'," + dist + ",'" + drivName + "','" + DlNumber + "'," + totalCharge + ",'" + DeviceId + "'," + distance + "";
 
 
                     driverListNearByUser = ent.Database.SqlQuery<DriverListNearByUser>(query).ToList();
+                    
                 }
-                
+
                 var mod = new DriverLocation()
                 {
                      
@@ -587,9 +715,12 @@ where D.Lat IS NOT NULL and D.Lang IS NOT NULL and d.VehicleType_id=" + model.Ve
                     EntryDate = DateTime.Now,
                     IsPay = "N",
                     Status = "0",
-                    RejectedStatus =false ,
+                    RejectedStatus =false,
+                    RideComplete = false,
+                    IsPayoutPaid = false,
                     ToatlDistance = Convert.ToInt32(distance),
-                    TotalPrice = Charge * Convert.ToInt32(distance)
+                    //TotalPrice = Charge * Convert.ToInt32(distance)
+                    TotalPrice = totalCharge //double charge
                 };
                 ent.DriverLocations.Add(mod);
                 ent.SaveChanges();
@@ -651,29 +782,42 @@ where D.Lat IS NOT NULL and D.Lang IS NOT NULL and d.VehicleType_id=" + model.Ve
 
         }
 
-        [HttpGet, Route("api/DriverApi/UserListForBookingAmbulance")]
-        public IHttpActionResult UserListForBookingAmbulance()
+        [HttpGet, Route("api/DriverApi/UserListForBookingAmbulance")] // Booking Request
+        public IHttpActionResult UserListForBookingAmbulance(int DriverId)
         {
-            var data = ent.Database.SqlQuery<UserListForBookingAmbulance>(@"select D.Id,D.PatientId,P.PatientName, P.MobileNumber, 
-D.end_Lat AS endLat,D.end_Long As endLong,D.start_Lat AS startLat,
-D.start_Long AS startLong,AL.DeviceId,D.TotalPrice,D.ToatlDistance
-from DriverLocation AS D with(nolock)
-INNER JOIN Patient AS P with(nolock) ON D.PatientId =P.Id
-inner join AdminLogin as AL on AL.Id=P.AdminLogin_Id 
-WHERE D.[Status] = 0 and D.RejectedStatus=0").ToList();
+//            var data = ent.Database.SqlQuery<UserListForBookingAmbulance>(@"select D.Id,D.PatientId,P.PatientName, P.MobileNumber, 
+//D.end_Lat AS endLat,D.end_Long As endLong,D.start_Lat AS startLat,
+//D.start_Long AS startLong,AL.DeviceId,D.TotalPrice,D.ToatlDistance
+//from DriverLocation AS D with(nolock)
+//INNER JOIN Patient AS P with(nolock) ON D.PatientId =P.Id
+//inner join AdminLogin as AL on AL.Id=P.AdminLogin_Id 
+//WHERE D.[Status] = 0 and D.RejectedStatus=0 order by Id.desc").ToList();
+            
+            var data = ent.Database.SqlQuery<UserListForBookingAmbulance>(@"WITH RankedResults AS (SELECT dl.Id,db.Id as BookingId,db.Driver_Id,db.Patient_Id AS PatientId,P.PatientName,P.MobileNumber,dl.end_Lat AS endLat,dl.end_Long AS endLong,dl.start_Lat AS startLat,dl.start_Long AS startLong,AL.DeviceId,dl.TotalPrice,dl.ToatlDistance,ROW_NUMBER() OVER (PARTITION BY db.Patient_Id, P.PatientName ORDER BY db.Id DESC) AS RowNum FROM DriverBooking AS db JOIN
+        DriverLocation AS dl ON dl.PatientId = db.Patient_Id
+    JOIN
+        Patient AS P WITH (NOLOCK) ON db.Patient_Id = P.Id
+    JOIN
+        AdminLogin AS AL ON AL.Id = P.AdminLogin_Id
+    WHERE
+        dl.[Status] = 0 AND dl.RejectedStatus = 0 AND db.RideComplete=0 AND dl.IsBooked=1 AND db.Driver_Id = " + DriverId + ") SELECT Id,BookingId,Driver_Id,PatientId,PatientName,MobileNumber,endLat,endLong,startLat,startLong,DeviceId,TotalPrice,ToatlDistance FROM RankedResults WHERE RowNum = 1 ORDER BY Id DESC;").ToList();
 
             return Ok(new { UserListForBookingAmbulance = data });
 
         }
 
         [HttpPost, Route("api/DriverApi/BookingAmbulanceAcceptReject")]
-        public IHttpActionResult BookingAmbulanceAcceptReject(BookingAmbulanceAcceptRejectDTO bookingAmbulanceAcceptRejectDTO)
+        public IHttpActionResult BookingAmbulanceAcceptReject(BookingAmbulanceAcceptRejectDTO model)
         {
-            var data = ent.DriverLocations.Where(a => a.Id == bookingAmbulanceAcceptRejectDTO.Id).FirstOrDefault();
-            data.Status = bookingAmbulanceAcceptRejectDTO.StatusId;
-            data.Driver_Id = bookingAmbulanceAcceptRejectDTO.DriverId;
+            var driverdetail = ent.Drivers.Where(d => d.Id == model.DriverId).FirstOrDefault();
+            driverdetail.IsBooked = true;
             ent.SaveChanges();
-            return Ok("Success");
+
+            var data = ent.DriverLocations.Where(a => a.Id == model.Id).FirstOrDefault();
+            data.Status = model.StatusId;
+            data.Driver_Id = model.DriverId;
+            ent.SaveChanges();
+            return Ok("Request accepted successfully.");
         }
 
         [HttpPost, Route("api/DriverApi/AmbulanceReject")]
@@ -689,24 +833,44 @@ WHERE D.[Status] = 0 and D.RejectedStatus=0").ToList();
         [HttpGet, Route("api/DriverApi/GetAcceptedReqDriverDetail")]
 		public IHttpActionResult GetAcceptedReqDriverDetail(int Id)
 		{
-			var existpayment = ent.DriverLocations.Where(d => d.PaymentStatus == "1" && d.IsPay == "Y").OrderByDescending(d => d.Id).FirstOrDefault();
-			var existpayment2 = ent.DriverLocations.Where(d => d.PaymentStatus == "2" && d.IsPay == "Y").OrderByDescending(d => d.Id).FirstOrDefault();
+			var existpayment = ent.DriverLocations.Where(d => d.PaymentStatus == "1" && d.IsPay == "Y" && d.PatientId==Id).OrderByDescending(d => d.Id).FirstOrDefault();
+			var existpayment2 = ent.DriverLocations.Where(d => d.PaymentStatus == "2" && d.IsPay == "Y" && d.PatientId == Id).OrderByDescending(d => d.Id).FirstOrDefault();
 			if (existpayment != null)
 			{
-				string qry2 = @"SELECT DL.Id,D.Id AS DriverId,D.DriverName,D.MobileNumber,D.DlNumber,D.DriverImage,ND.TotalPrice,V.VehicleNumber,VT.VehicleTypeName,ND.ToatlDistance,(ND.TotalPrice * 40)/100 AS PayableAmount FROM Driver as D INNER JOIN NearDriver AS ND ON ND.DriverId=D.Id INNER JOIN Vehicle AS V ON V.Driver_Id=D.Id INNER JOIN DriverLocation AS DL ON D.Id=DL.Driver_Id INNER JOIN VehicleType AS VT ON VT.Id=V.VehicleType_Id WHERE ND.Id=" + Id + " and DL.[Status]=1 and DL.IsPay='Y' and DL.PaymentStatus='1' order by DL.Id desc";
+				string qry2 = @"SELECT DL.Id,D.Id AS DriverId,D.DriverName,D.MobileNumber,D.DlNumber,D.DriverImage,DL.TotalPrice,DL.ToatlDistance,CAST(DL.TotalPrice * 40 AS DECIMAL)/100 AS PayableAmount,V.VehicleNumber,
+VT.VehicleTypeName,DL.ToatlDistance,al.DeviceId,D.Lat as Lat_Driver,D.Lang as Lang_Driver,DL.end_Lat,DL.end_Long FROM Driver as D  
+INNER JOIN Vehicle AS V ON V.Id=D.Vehicle_Id 
+INNER JOIN DriverLocation AS DL ON D.Id=DL.Driver_Id 
+INNER JOIN VehicleType AS VT ON VT.Id=V.VehicleType_Id 
+JOIN AdminLogin al on al.Id=D.AdminLogin_Id
+WHERE DL.PatientId=" + Id+ " and DL.[Status]=1 and DL.RejectedStatus=0 and DL.RideComplete=0 and DL.IsPay='Y' and DL.PaymentStatus='1' order by DL.Id desc";
 				var data2 = ent.Database.SqlQuery<GetAcceptedReq_DriverDetail>(qry2).FirstOrDefault();
 				return Ok(data2);
 			}
 			else if (existpayment2 != null)
 			{
-				string qry3 = @"SELECT DL.Id,D.Id AS DriverId,D.DriverName,D.MobileNumber,D.DlNumber,D.DriverImage,ND.TotalPrice,V.VehicleNumber,VT.VehicleTypeName,ND.ToatlDistance,(ND.TotalPrice * 50)/100 AS PayableAmount FROM Driver as D INNER JOIN NearDriver AS ND ON ND.DriverId=D.Id INNER JOIN Vehicle AS V ON V.Driver_Id=D.Id INNER JOIN DriverLocation AS DL ON D.Id=DL.Driver_Id INNER JOIN VehicleType AS VT ON VT.Id=V.VehicleType_Id WHERE ND.Id=" + Id + " and DL.[Status]=1 and DL.IsPay='Y' and DL.PaymentStatus='2' order by DL.Id desc";
+				//string qry3 = @"SELECT DL.Id,D.Id AS DriverId,D.DriverName,D.MobileNumber,D.DlNumber,D.DriverImage,ND.TotalPrice,V.VehicleNumber,VT.VehicleTypeName,ND.ToatlDistance,(ND.TotalPrice * 50)/100 AS PayableAmount FROM Driver as D INNER JOIN NearDriver AS ND ON ND.DriverId=D.Id INNER JOIN Vehicle AS V ON V.Driver_Id=D.Id INNER JOIN DriverLocation AS DL ON D.Id=DL.Driver_Id INNER JOIN VehicleType AS VT ON VT.Id=V.VehicleType_Id WHERE ND.Id=" + Id + " and DL.[Status]=1 and DL.IsPay='Y' and DL.PaymentStatus='2' order by DL.Id desc";
+				string qry3 = @"SELECT DL.Id,D.Id AS DriverId,D.DriverName,D.MobileNumber,D.DlNumber,D.DriverImage,DL.TotalPrice,DL.ToatlDistance,CAST(DL.TotalPrice * 50 AS DECIMAL)/100 AS PayableAmount,V.VehicleNumber,
+VT.VehicleTypeName,DL.ToatlDistance,al.DeviceId,D.Lat as Lat_Driver,D.Lang as Lang_Driver,DL.end_Lat,DL.end_Long FROM Driver as D  
+INNER JOIN Vehicle AS V ON V.Id=D.Vehicle_Id 
+INNER JOIN DriverLocation AS DL ON D.Id=DL.Driver_Id 
+INNER JOIN VehicleType AS VT ON VT.Id=V.VehicleType_Id 
+JOIN AdminLogin al on al.Id=D.AdminLogin_Id
+WHERE DL.PatientId=" + Id+ " and DL.[Status]=1 and DL.RejectedStatus=0 and DL.RideComplete=0 and DL.IsPay='Y' and DL.PaymentStatus='2' order by DL.Id desc";
 				var data3 = ent.Database.SqlQuery<GetAcceptedReq_DriverDetail>(qry3).FirstOrDefault();
 				return Ok(data3);
 			}
 			else
 			{
 
-				string qry = @"SELECT DL.Id,D.Id AS DriverId,D.DriverName,D.MobileNumber,D.DlNumber,D.DriverImage,ND.TotalPrice,V.VehicleNumber,VT.VehicleTypeName,ND.ToatlDistance,(ND.TotalPrice * 10)/100 AS PayableAmount FROM Driver as D INNER JOIN NearDriver AS ND ON ND.DriverId=D.Id INNER JOIN Vehicle AS V ON V.Driver_Id=D.Id INNER JOIN DriverLocation AS DL ON D.Id=DL.Driver_Id INNER JOIN VehicleType AS VT ON VT.Id=V.VehicleType_Id WHERE ND.Id=" + Id + " and DL.[Status]=1 and DL.IsPay='N' order by DL.Id desc";
+				//string qry = @"SELECT DL.Id,D.Id AS DriverId,D.DriverName,D.MobileNumber,D.DlNumber,D.DriverImage,ND.TotalPrice,V.VehicleNumber,VT.VehicleTypeName,ND.ToatlDistance,(ND.TotalPrice * 10)/100 AS PayableAmount FROM Driver as D INNER JOIN NearDriver AS ND ON ND.DriverId=D.Id INNER JOIN Vehicle AS V ON V.Driver_Id=D.Id INNER JOIN DriverLocation AS DL ON D.Id=DL.Driver_Id INNER JOIN VehicleType AS VT ON VT.Id=V.VehicleType_Id WHERE ND.Id=" + Id + " and DL.[Status]=1 and DL.IsPay='N' order by DL.Id desc";
+				string qry = @"SELECT DL.Id,D.Id AS DriverId,D.DriverName,D.MobileNumber,D.DlNumber,D.DriverImage,DL.TotalPrice,DL.ToatlDistance,CAST(DL.TotalPrice * 10 AS DECIMAL)/100 AS PayableAmount,V.VehicleNumber,
+VT.VehicleTypeName,DL.ToatlDistance,al.DeviceId,D.Lat as Lat_Driver,D.Lang as Lang_Driver,DL.end_Lat,DL.end_Long FROM Driver as D  
+INNER JOIN Vehicle AS V ON V.Id=D.Vehicle_Id 
+INNER JOIN DriverLocation AS DL ON D.Id=DL.Driver_Id 
+INNER JOIN VehicleType AS VT ON VT.Id=V.VehicleType_Id 
+JOIN AdminLogin al on al.Id=D.AdminLogin_Id
+WHERE DL.PatientId=" + Id+ " and DL.[Status]=1 and DL.RejectedStatus=0 and DL.RideComplete=0 and DL.IsPay='N' order by DL.Id desc";
 				var data = ent.Database.SqlQuery<GetAcceptedReq_DriverDetail>(qry).FirstOrDefault();
 				return Ok(data);
 			}
@@ -735,10 +899,11 @@ WHERE D.[Status] = 0 and D.RejectedStatus=0").ToList();
 			//return Ok(rm);
 			try
 			{
-				var data = ent.DriverLocations.Where(a => a.PatientId == DriverPayNow.PatientId && a.Driver_Id == DriverPayNow.Driver_Id && a.IsPay == "N").OrderByDescending(a => a.Id).FirstOrDefault();
-				var data2 = ent.DriverLocations.Where(a => a.PatientId == DriverPayNow.PatientId && a.Driver_Id == DriverPayNow.Driver_Id && a.IsPay == "Y" && a.PaymentStatus == "1").OrderByDescending(a => a.Id).FirstOrDefault();
-				var data3 = ent.DriverLocations.Where(a => a.PatientId == DriverPayNow.PatientId && a.Driver_Id == DriverPayNow.Driver_Id && a.IsPay == "Y" && a.PaymentStatus == "2").OrderByDescending(a => a.Id).FirstOrDefault();
+				var data = ent.DriverLocations.Where(a => a.PatientId == DriverPayNow.PatientId && a.Driver_Id == DriverPayNow.Driver_Id && a.IsPay == "N" && a.Status=="1" && a.RejectedStatus==false).OrderByDescending(a => a.Id).FirstOrDefault();
+				var data2 = ent.DriverLocations.Where(a => a.PatientId == DriverPayNow.PatientId && a.Driver_Id == DriverPayNow.Driver_Id && a.IsPay == "Y" && a.PaymentStatus == "1" && a.Status == "1" && a.RejectedStatus == false).OrderByDescending(a => a.Id).FirstOrDefault();
+				var data3 = ent.DriverLocations.Where(a => a.PatientId == DriverPayNow.PatientId && a.Driver_Id == DriverPayNow.Driver_Id && a.IsPay == "Y" && a.PaymentStatus == "2" && a.Status == "1" && a.RejectedStatus == false).OrderByDescending(a => a.Id).FirstOrDefault();
 				 
+                
 				if (data != null)
 				{
 					data.Amount = DriverPayNow.Amount;
@@ -752,7 +917,7 @@ WHERE D.[Status] = 0 and D.RejectedStatus=0").ToList();
 				}
 				else if (data2 != null)
 				{
-					data2.Amount = DriverPayNow.Amount;
+					data2.Amount = DriverPayNow.Amount + data2.Amount;
 					data2.IsPay = "Y";
 					data2.PaymentStatus = "2";
 					data2.PaymentDate = DateTime.Now;
@@ -762,7 +927,7 @@ WHERE D.[Status] = 0 and D.RejectedStatus=0").ToList();
 				}
                 else if (data3 != null)
 				{
-					data3.Amount = DriverPayNow.Amount;
+					data3.Amount = DriverPayNow.Amount + data3.Amount;
 					data3.IsPay = "Y";
 					data3.PaymentStatus = "3";
 					data3.PaymentDate = DateTime.Now;
@@ -792,7 +957,7 @@ WHERE D.[Status] = 0 and D.RejectedStatus=0").ToList();
         {
             var driverDetails = (from dl in ent.DriverLocations
                                  join d in ent.Drivers on dl.Driver_Id equals d.Id
-                                 join v in ent.Vehicles on dl.VehicleType_id equals v.VehicleType_Id
+                                 join v in ent.Vehicles on d.Vehicle_Id equals v.Id
                                  join vt in ent.VehicleTypes on dl.VehicleType_id equals vt.Id
                                  join p in ent.Patients on dl.PatientId equals p.Id
                                  where dl.IsPay == "Y" && p.Id == PatientId
@@ -808,7 +973,7 @@ WHERE D.[Status] = 0 and D.RejectedStatus=0").ToList();
                                      VehicleNumber = v.VehicleNumber,
                                      VehicleTypeName = vt.VehicleTypeName,
                                      ToatlDistance = dl.ToatlDistance,
-                                     PaidAmount = dl.Amount,
+                                     PaidAmount = dl.TotalPrice,
                                      TotalPrice = dl.TotalPrice,
                                      RemainingAmount = dl.TotalPrice - dl.Amount,
                                      UserLat = dl.start_Lat,
@@ -818,7 +983,7 @@ WHERE D.[Status] = 0 and D.RejectedStatus=0").ToList();
                                      //Lat_Driver = d.Lat,
                                      //Lang_Driver = d.Lang,
                                      PaymentDate = dl.PaymentDate,
-                                 }).ToList();
+                                 }).OrderByDescending(d=>d.Id).ToList();
 
             foreach (var detail in driverDetails)
             {
@@ -887,9 +1052,9 @@ WHERE D.[Status] = 0 and D.RejectedStatus=0").ToList();
         {
             var driverDetails = (from d in ent.Drivers
                                  join dl in ent.DriverLocations on d.Id equals dl.Driver_Id
-                                 join v in ent.Vehicles on dl.VehicleType_id equals v.VehicleType_Id
+                                 join v in ent.Vehicles on d.Vehicle_Id equals v.Id
                                  join vt in ent.VehicleTypes on dl.VehicleType_id equals vt.Id
-                                 where dl.PatientId == Id && dl.Status == "1" && dl.IsPay == "Y"
+                                 where dl.PatientId == Id && dl.Status == "1" && dl.IsPay == "Y" && dl.RideComplete==false
                                  orderby dl.Id descending
                                  select new getdriverbookinglist
                                  {
@@ -951,6 +1116,84 @@ WHERE D.[Status] = 0 and D.RejectedStatus=0").ToList();
             return Ok(driverDetails);
         }
 
+        [HttpGet, Route("api/DriverApi/GetOnGoingRide_UserDetail")]
+        public IHttpActionResult GetOnGoingRide_UserDetail(int DriverId)
+        {
+            var UserDetail = ent.Database.SqlQuery<UserdetailOngoingdriver>($"select DL.Id,P.Id as PatientId,P.PatientName,P.MobileNumber,sm.StateName+','+cm.CityName+','+P.Location as Location,CAST(DL.Amount as int) as TotalPrice,DL.PaymentDate,DL.IsPay,DL.Lat_Driver,DL.Lang_Driver,DL.start_Lat,DL.start_Long,DL.end_Lat,DL.end_Long,DL.ToatlDistance as TotalDistance,al.DeviceId from DriverLocation as DL left join Patient as P on Dl.PatientId=P.Id left join Driver as D on D.Id=DL.Driver_Id join StateMaster sm on sm.Id=P.StateMaster_Id join CityMaster cm on cm.Id=P.CityMaster_Id JOIN AdminLogin al on al.Id=P.AdminLogin_Id where D.Id={DriverId} and DL.IsPay='Y' and DL.RideComplete='0' order by DL.Id desc").FirstOrDefault();
+            if (UserDetail != null)
+            {
+                // Driver
+                var lat1 = (double)UserDetail.Lat_Driver;
+                var lon1 = (double)UserDetail.Lang_Driver;
 
+                // User
+                var lat2 = (double)UserDetail.start_Lat;
+                var lon2 = (double)UserDetail.start_Long;
+
+                double rlat1 = Math.PI * lat1 / 180;
+                double rlat2 = Math.PI * lat2 / 180;
+                double theta = lon1 - lon2;
+                double rtheta = Math.PI * theta / 180;
+
+                double dist = Math.Sin(rlat1) * Math.Sin(rlat2) +
+                              Math.Cos(rlat1) * Math.Cos(rlat2) * Math.Cos(rtheta);
+
+                dist = Math.Acos(dist);
+                dist = dist * 180 / Math.PI;
+                dist = dist * 60 * 1.1515;
+                dist = dist * 1.609344;   // Convert miles to kilometers
+
+                UserDetail.DriverUserDistance = (int)dist;
+
+                // Calculate expected time
+
+                double expectedTimeMinutes = dist * 4; // 2 minutes per kilometer
+
+                // Convert the expectedTimeMinutes to an integer
+                int expectedTimeMinutesInt = Convert.ToInt32(expectedTimeMinutes);
+                if (expectedTimeMinutesInt == 0)
+                {
+                    expectedTimeMinutesInt = 5;
+                }
+                UserDetail.ExpectedTime = expectedTimeMinutesInt;
+
+            }
+
+            return Ok(UserDetail);
+        }
+
+        [HttpPost, Route("api/DriverApi/CompleteRide")]
+
+        public IHttpActionResult CompleteRide(DriverLocationDT model)
+        { 
+            var data1 = ent.DriverBookings.Where(a => a.Driver_Id == model.Driver_Id).FirstOrDefault();
+           
+            var data = ent.DriverLocations.Where(a => a.Id == model.Id && a.Driver_Id == model.Driver_Id).FirstOrDefault();
+
+            var getPaymentcomp = ent.DriverLocations.Where(d => d.PaymentStatus == "3" && d.Driver_Id==model.Driver_Id).FirstOrDefault();
+            if(getPaymentcomp!=null)
+            {
+                if (data != null && data1 != null)
+                {
+                    var driverdata = ent.Drivers.Where(d => d.Id == model.Driver_Id).FirstOrDefault();
+                    driverdata.IsBooked = false;
+                     
+                    data.RideComplete = true;
+                    data1.RideComplete = true;
+                    ent.SaveChanges();
+                }
+                else
+                {
+                    return BadRequest("Data not found.");
+                }
+                
+                return Ok("Your ride completed.");
+            }
+            else
+            {
+                return BadRequest("Can't complete! Your amount is pending.");
+            }
+            
+        }
     }
 }

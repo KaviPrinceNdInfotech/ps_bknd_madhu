@@ -44,6 +44,7 @@ namespace HospitalPortal.Models.ViewModels
         public string ServiceStatus { get; set; } //nurse history
         public int? TotalDays { get; set; } //nurse history
         public double? TotalFee { get; set; }
+        public double? Fee { get; set; }
         public double? Amountwithrazorpaycomm { get; set; }
         public string ServiceType { get; set; }  //nurse history
         public string ServiceTime { get; set; }  //nurse history

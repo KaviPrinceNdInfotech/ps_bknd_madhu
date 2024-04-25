@@ -194,8 +194,8 @@ namespace HospitalPortal.Controllers
         {
             var data = ent.Vendors.Find(id);
             var model = Mapper.Map<VendorDTO>(data);
-            model.States = new SelectList(repos.GetAllStates(), "Id", "StateName", data.StateMaster_Id);
-            model.Cities = new SelectList(repos.GetCitiesByState(model.StateMaster_Id), "Id", "CityName", data.City_Id);
+            model.States = new SelectList(repos.GetAllStates(), "Id", "StateName", model.StateMaster_Id);
+            model.Cities = new SelectList(repos.GetCitiesByState(model.StateMaster_Id), "Id", "CityName", model.City_Id);
             return View(model);
         }
 
@@ -203,19 +203,9 @@ namespace HospitalPortal.Controllers
         public ActionResult Edit(VendorDTO model)
         {
             try
-            {
-                ModelState.Remove("Password");
-                ModelState.Remove("ConfirmPassword");
-                ModelState.Remove("MobileNumber");
-                ModelState.Remove("EmailId");
-                ModelState.Remove("ConfirmPassword");
-                ModelState.Remove("IsCheckedTermsCondition");
-                if (!string.IsNullOrEmpty(model.OtherCity))
-                    ModelState.Remove("City_Id");
-                model.States = new SelectList(repos.GetAllStates(), "Id", "StateName", model.StateMaster_Id);
-                model.Cities = new SelectList(repos.GetCitiesByState(model.StateMaster_Id), "Id", "CityName", model.City_Id);
-                //if (!ModelState.IsValid)
-                //    return View(model);
+            {  
+
+                var existingdata= ent.Vendors.Find(model.Id);
                 // aadhar doc upload
                 if (model.AadharOrImageFile != null)
                 {
@@ -252,7 +242,21 @@ namespace HospitalPortal.Controllers
                     model.City_Id = cityMaster.Id;
                 }
                 var domainModel = Mapper.Map<Vendor>(model);
-                ent.Entry(domainModel).State = System.Data.Entity.EntityState.Modified;
+                existingdata.VendorName = model.VendorName;
+                existingdata.EmailId = model.EmailId;
+                existingdata.StateMaster_Id = model.StateMaster_Id;
+                existingdata.City_Id = model.City_Id;
+                existingdata.Location = model.Location;
+                existingdata.EmailId = model.EmailId;
+                existingdata.MobileNumber = model.MobileNumber;
+                existingdata.Location = model.Location;
+                existingdata.PinCode = model.PinCode;
+                existingdata.CompanyName = model.CompanyName;
+                existingdata.GSTNumber = model.GSTNumber;
+                existingdata.PanImage = model.PanImage;
+                existingdata.PanNumber = model.PanNumber;
+
+                TempData["msg"] = "ok";
                 ent.SaveChanges();
 
             }

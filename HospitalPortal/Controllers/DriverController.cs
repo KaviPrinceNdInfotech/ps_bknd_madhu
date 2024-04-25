@@ -122,13 +122,54 @@ namespace HospitalPortal.Controllers
                         model.DlImage2 = dlImg1;
                     }
                      
+                    // profile Upload
+                    if (model.DriverImageFile != null)
+                    {
+                        var PanImg = FileOperation.UploadImage(model.DriverImageFile, "Images");
+                        if (PanImg == "not allowed")
+                        {
+                            TempData["msg"] = "Only png,jpg,jpeg files are allowed as Profile document";
+                            model.States = new SelectList(repos.GetAllStates(), "Id", "StateName");
+                            tran.Rollback();
+                            return View(model);
+                        }
+                        model.DriverImage = PanImg;
+                    }
+
+                    //upload adhar doc
+
+                    if (model.AadharImageFile != null)
+                    {
+                        var adImg = FileOperation.UploadImage(model.AadharImageFile, "Images");
+                        if (adImg == "not allowed")
+                        {
+
+                            TempData["msg"] = "Only png,jpg,jpeg files are allowed as adhar Image.";
+
+                            return View(model);
+                        }
+                        model.AadharImage = adImg;
+                    }
+                    if (model.AadharImageFile2 != null)
+                    {
+                        var adImg2 = FileOperation.UploadImage(model.AadharImageFile2, "Images");
+                        if (adImg2 == "not allowed")
+                        {
+
+                            TempData["msg"] = "Only png,jpg,jpeg files are allowed as adhar Image.";
+
+                            return View(model);
+                        }
+                        model.AadharImage2 = adImg2;
+                    }
+
                     //Pan Doc Upload
                     if (model.PanImageFile != null)
                     {
                         var PanImg = FileOperation.UploadImage(model.PanImageFile, "Images");
                         if (PanImg == "not allowed")
                         {
-                            TempData["msg"] = "Only png,jpg,jpeg files are allowed as Aadhar card document";
+                            TempData["msg"] = "Only png,jpg,jpeg files are allowed as Pan card document";
                             model.States = new SelectList(repos.GetAllStates(), "Id", "StateName");
                             tran.Rollback();
                             return View(model);
@@ -167,6 +208,8 @@ namespace HospitalPortal.Controllers
                     domainModel.PAN = domainModel.PAN;
                     domainModel.JoiningDate = DateTime.Now;
                     domainModel.IsBankUpdateApproved = false;
+                    domainModel.AadharImage = model.AadharImage;
+                    domainModel.AadharImage2 = model.AadharImage2;
                     ent.Drivers.Add(domainModel);
                     ent.SaveChanges();
                      
@@ -370,11 +413,12 @@ d.VerificationDoc,
 d.Vendor_Id,
 IsNull(ve.UniqueId,'N/A') as UniqueId,
 d.IsApproved,d.IsBankUpdateApproved, d.IsDeleted,
-IsNull(vt.VehicleTypeName,'na') as VehicleTypeName, s.StateName,c.CityName, IsNull(ve.VendorName,'NA') AS VendorName , IsNull(ve.CompanyName,'NA') from Driver d 
+IsNull(vt.VehicleTypeName,'na') as VehicleTypeName,IsNull(mac.CategoryName,'na') as CategoryName, s.StateName,c.CityName, IsNull(ve.VendorName,'NA') AS VendorName , IsNull(ve.CompanyName,'NA') from Driver d 
 join StateMaster s on d.StateMaster_Id=s.Id
 join CityMaster c on d.CityMaster_Id = c.Id
 left join VehicleType vt on vt.Id = d.VehicleType_Id
 left join Vendor ve on ve.Id = d.Vendor_Id
+left join MainCategory as mac on mac.Id=vt.Category_Id
 where d.IsDeleted=0 order by d.Id asc";
             var data = ent.Database.SqlQuery<DriverDTO>(q).ToList();
             if (vendorId != null)

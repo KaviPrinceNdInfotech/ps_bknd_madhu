@@ -1147,6 +1147,7 @@ v.VehicleNumber, tm.StatusKey, tm.Lat_Driver, tm.Lang_Driver, pr.VehicelType_Id 
             public Nullable<double> under401_450KM { get; set; }
             public Nullable<double> under451_500KM { get; set; }
             public Nullable<double> Above500KM { get; set; }
+            public Nullable<double> DriverCharge { get; set; }
         }
 
         public class PatientAmountRecord
@@ -1289,10 +1290,11 @@ v.VehicleNumber, tm.StatusKey, tm.Lat_Driver, tm.Lang_Driver, pr.VehicelType_Id 
             public int DriverId { get; set; }
             public string DriverName { get; set; }
             public string MobileNumber { get; set; }
+            public string DeviceId { get; set; }
             public string DriverImage { get; set; }
             public string DlNumber { get; set; }
             public Nullable<int> TotalPrice { get; set; }
-            public Nullable<int> PayableAmount { get; set; }
+            public Nullable<decimal> PayableAmount { get; set; }
             public string VehicleNumber { get; set; }
             public string VehicleTypeName { get; set; }
             public Nullable<int> ToatlDistance { get; set; }

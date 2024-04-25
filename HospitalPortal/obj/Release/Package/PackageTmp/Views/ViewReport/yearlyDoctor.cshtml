@@ -1,66 +1,84 @@
 ﻿@model HospitalPortal.Models.ViewModels.ReportDetails
 @{
     ViewBag.Title = "ViewReport";
+    int count = 1;
 }
 
 @using (Html.BeginForm())
 {
     <div class="row">
         <div class="col-md-4">
-          <input type="text" id="year" class="form-control" placeholder="Enter Any Year" />
+            <input type="text" id="year" class="form-control" placeholder="Enter Any Year" />
         </div>
         <div class="col-md-4">
             <input type="button" id="test" value="Search" class="btn btn-primary" />
         </div>
     </div>
 }
-@if (Model.doctorList.Count() <= 0)
-{
-    if (TempData["msg"] != null)
-    {
-        <h2 style="color:blueviolet">
-            @TempData["msg"]
-        </h2>
-    }
-}
-else
-{
-<table id="tables" class="table table-responsive">
-    <thead>
+
+<table id="table_id" class="table table-bordered">
+    <thead style="background-color:lavender;">
         <tr>
+            <th>Sr No.</th>
             <th>
-                Year
+                Date
             </th>
+            <th>DoctorName / Id</th>
             <th>
                 Amount
             </th>
         </tr>
     </thead>
-    <tbody>
-        @foreach (var item in Model.doctorList)
+    @if (Model.doctorList.Count() <= 0)
+    {
+        if (TempData["msg"] != null)
         {
+            <div class="alert alert-danger">
+                @TempData["msg"]
+            </div>
+        }
+    }
+    else
+    {
+        <tbody>
+            @foreach (var item in Model.doctorList)
+            {
+                <tr>
+                    <td>@count</td>
+                    <td>
+                         @item.Year
+                    </td>
+                    <td>@item.DoctorName (@item.DoctorId)</td>
+                    <td>
+                        @item.Amount
+                    </td>
+                </tr>
+                count++;
+            }
+        </tbody>
+        <tfoot>
             <tr>
+                <td colspan="3" style="text-align: right;">Total:</td>
                 <td>
-                    @item.Year
-                </td>
-                <td>
-                    @item.Amount
+                    @if (ViewBag.Total != null)
+                    {
+                        <strong>₹ @ViewBag.Total</strong>
+                    }
                 </td>
             </tr>
-        }
-        <tr>
-            <td><h3>Total</h3></td>
-            <td>
-                @if (ViewBag.Total != null)
-                {
-                    <h3 style="color:red"> ₹ @ViewBag.Total</h3>
-                }
-            </td>
-        </tr>
-    </tbody>
+        </tfoot>
+    }
 </table>
-}
+
+<script src="https://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css">
+
+<script type="text/javascript">
+    $('#table_id').DataTable();
+</script>
 <script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
+<link href="~/css/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
 <script>
     $("#test").click(function () {
         debugger

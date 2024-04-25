@@ -50,47 +50,36 @@ namespace HospitalPortal.Models.ViewModels
         public string DlNumber { get; set; }
         public string PAN { get; set; }
         public Nullable<System.DateTime> DlValidity { get; set; }
-        //[Required]
-        // public System.DateTime DlValidity { get; set; }
+        
         [Required]
-        //[DataType(DataType.Password)]
-        //[StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 8)]
-        //[Display(Name = "Password")]
-        //[RegularExpression("^((?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])|(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[^a-zA-Z0-9])|(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[^a-zA-Z0-9])|(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^a-zA-Z0-9])).{8,}$", ErrorMessage = "Passwords must be at least 8 characters and contain at 3 of 4 of the following: upper case (A-Z), lower case (a-z), number (0-9) and special character (e.g. !@#$%^&*)")]
+        
         public string Password { get; set; }
         [Required]
         [System.ComponentModel.DataAnnotations.Compare("Password")]
         public string ConfirmPassword { get; set; }
         public int AdminLogin_Id { get; set; }
         public bool IsApproved { get; set; }
-        public bool IsBankUpdateApproved { get; set; }
-        //[Required]
-        //public HttpPostedFileBase DriverImageFile { get; set; }
+        public bool IsBankUpdateApproved { get; set; } 
         [Required(ErrorMessage = "Driving Licence Can't Be Empty")]
         public HttpPostedFileBase DlFile { get; set; }
         [Required(ErrorMessage = "Driving Licence Can't Be Empty")]
-        public HttpPostedFileBase DlFile1 { get; set; }
-      
-        //public HttpPostedFileBase DlFile2 { get; set; }
-      
-        //public HttpPostedFileBase DlFile3 { get; set; }
-        //[Required(ErrorMessage = "PAN No. Can't Be Empty")]
-        //public string PAN { get; set; }
-        //[Required(ErrorMessage = "Aadhar Number Can't Be Empty")]
+        public HttpPostedFileBase DlFile1 { get; set; } 
         public string AadharNumber { get; set; }
         public string AadharImage { get; set; }
         public HttpPostedFileBase AadharImageFile { get; set; }
         public string AadharImage2 { get; set; }
         public HttpPostedFileBase AadharImageFile2 { get; set; }
         public Nullable<int> Vendor_Id { get; set; }
-        public string PanImage { get; set; }
+        public string PanImage { get; set; } 
         public HttpPostedFileBase PanImageFile { get; set; }
+        public HttpPostedFileBase DriverImageFile { get; set; }
         public HttpPostedFileBase VerificationImage { get; set; }
         public bool IsVerifiedByPolice { get; set; }
         public string VerificationDoc { get; set; }
         public int? VehicleType_Id { get; set; }
         public SelectList VehicleList { get; set; }
         public string VehicleTypeName { get; set; }
+        public string CategoryName { get; set; }
         [Required]
         [RegularExpression(@"^(\d{6,6})$", ErrorMessage = "6 Digits Required")]
         public string PinCode { get; set; }
@@ -297,6 +286,56 @@ namespace HospitalPortal.Models.ViewModels
         public string VehicleTypeName { get; set; }
         
     }
-    
+    public class UserdetailOngoingdriver
+    {
+        public int Id { get; set; }
+        public int PatientId { get; set; }
+        public string PatientName { get; set; }
+        public string MobileNumber { get; set; }
+        public Nullable<int> TotalPrice { get; set; }
+        public Nullable<double> Lat_Driver { get; set; }
+        public Nullable<double> Lang_Driver { get; set; }
+        public Nullable<double> start_Lat { get; set; }
+        public Nullable<double> start_Long { get; set; }
+        public Nullable<double> end_Lat { get; set; }
+        public Nullable<double> end_Long { get; set; }
+        public int DriverUserDistance { get; set; }
+        public int ExpectedTime { get; set; }
+        public Nullable<int> TotalDistance { get; set; }
+        public string DeviceId { get; set; }
+        //CODE FOR LAT LONG TO LOCATION 
+        public string PickupLocation
+        {
+            get { return getlocation(start_Lat.ToString(), start_Long.ToString()); }
+        }
+        public string DropLocation
+        {
+            get { return getlocation(end_Lat.ToString(), end_Long.ToString()); }
+        }
+
+        private string getlocation(string latitude, string longitude)
+        {
+            string url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + latitude + "," + longitude + "&key=AIzaSyBrbWFXlOYpaq51wteSyFS2UjdMPOWBlQw";
+
+            // Make the HTTP request.
+            WebRequest request = WebRequest.Create(url);
+            request.Method = "GET";
+            request.Timeout = 10000;
+
+            // Get the response.
+            WebResponse response = request.GetResponse();
+            string responseText = new StreamReader(response.GetResponseStream()).ReadToEnd();
+
+            // Parse the response JSON.
+            var json = JsonConvert.DeserializeObject<dynamic>(responseText);
+
+            // Get the location from the JSON.
+            var location = json.results[0].formatted_address;
+            return location;
+        }
+
+        //END CODE FOR LAT LONG TO LOCATION 
+
+    }
 
 }

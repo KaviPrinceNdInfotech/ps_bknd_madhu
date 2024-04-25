@@ -66,12 +66,12 @@ Enumerable.Empty<SelectListItem>()
                     @Html.ValidationMessageFor(a => a.VehicleOwnerName)
                 </span>
             </div>
-            <div class="form-group">
+            @*<div class="form-group">
                 Driver Charges * @Html.TextBoxFor(a => a.DriverCharges, new { @class = "form-control" })
                 <span class="red">
                     @Html.ValidationMessageFor(a => a.DriverCharges)
                 </span>
-            </div>
+            </div>*@
 
             @if (Model.Vendor_Id > 0)
             {

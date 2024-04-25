@@ -147,7 +147,7 @@ document.getElementById('@item.Nurse_Id').value = "@item.Nurse_Id,@Value";
 
                                 <td>@Value</td>
                                 <td>
-                                    <a href="/Payout/NursePay?Doctor_Id=@item.Nurse_Id&Amount=@Value" class="btn btn-primary">Pay</a>
+                                    <a href="/Payout/NursePay?Doctor_Id=@item.Nurse_Id&Amount=@Value" class="btn btn-primary" style="display:none;">Pay</a>
                                     <a href="/Payout/ViewNursePayoutHistory?Id=@item.Nurse_Id" class="btn btn-primary">View Payout History</a>
                                     <a href="/Payout/NurseDetails?NurseId=@item.Nurse_Id" style="display:none;" class="btn btn-primary">View Details</a>
                                 </td>

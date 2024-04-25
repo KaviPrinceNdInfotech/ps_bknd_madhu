@@ -1,4 +1,5 @@
-﻿using DocumentFormat.OpenXml.Wordprocessing;
+﻿using DocumentFormat.OpenXml.Bibliography;
+using DocumentFormat.OpenXml.Wordprocessing;
 using HospitalPortal.Models.DomainModels;
 using HospitalPortal.Models.ViewModels;
 using OfficeOpenXml;
@@ -180,13 +181,61 @@ namespace HospitalPortal.Controllers
         }
 
         //Nurse Commission Report
-        public ActionResult Nurse()
+        public ActionResult Nurse(string term, DateTime? startdate, DateTime? enddate,string name)
         {
             var model = new NurseDTO();
-            string q = @"select ns.Nurse_Id, n.NurseName, n.Fee from Nurse n join NurseService ns on n.Id = ns.Nurse_Id where ns.IsPaid=1 group by ns.Nurse_Id, n.NurseName,n.Fee";
-            var data = ent.Database.SqlQuery<Nurse4Commission>(q).ToList();
-            model.Nurse4Commission = data;
-            return View(model);
+            double TDS = ent.Database.SqlQuery<double>(@"select Amount from TDSMaster where IsDeleted=0 and Name='Nurse'").FirstOrDefault();
+
+            if (startdate != null && enddate != null)
+            { 
+                var qry1 = @"select ns.Nurse_Id,n.NurseId,n.NurseName, SUM(ns.TotalFee) as Fee from Nurse n 
+                join NurseService ns on n.Id = ns.Nurse_Id 
+                where ns.IsPaid=1 and Convert(varchar,ns.ServiceAcceptanceDate,23) between '" + startdate + "' and '" + enddate + "' and ServiceStatus='Approved' group by ns.Nurse_Id, n.NurseName,n.NurseId";
+                var data1 = ent.Database.SqlQuery<Nurse4Commission>(qry1).ToList();
+                if (data1.Count() == 0)
+                {
+                    TempData["msg"] = "Your Selected Date Doesn't Contain any Information.";
+                    return View(model);
+                }
+                else
+                {
+                    ViewBag.TDS = TDS;
+                     
+                    if (name != null)
+                    {
+                        data1 = data1.Where(a => a.NurseName.ToLower().Contains(name.ToLower()) || a.NurseId.ToLower().Contains(name.ToLower())).ToList();
+                    }
+                    model.Nurse4Commission = data1;
+                    return View(model);
+                }
+            }
+            else
+            {
+                string q = @"select ns.Nurse_Id,n.NurseId,n.NurseName, SUM(ns.TotalFee) as Fee from Nurse n 
+join NurseService ns on n.Id = ns.Nurse_Id 
+where ns.IsPaid=1 and ns.ServiceDate BETWEEN DATEADD(DAY, -7, GETDATE()) AND GETDATE() and ServiceStatus='Approved' group by ns.Nurse_Id, n.NurseName,n.NurseId";
+                var data = ent.Database.SqlQuery<Nurse4Commission>(q).ToList();
+
+                if (data.Count() == 0)
+                {
+                    TempData["msg"] = "No Record Of Current Week";
+                    return View(model);
+                }
+                else
+                {
+                    ViewBag.TDS = TDS;
+
+                    if (name != null)
+                    {
+                        data = data.Where(a => a.NurseName.ToLower().Contains(name.ToLower()) || a.NurseId.ToLower().Contains(name.ToLower())).ToList();
+                    }
+                    model.Nurse4Commission = data;
+                    return View(model);
+                }
+            }
+
+                
+            
         }
 
         public ActionResult NurseDetails(int? NurseId, DateTime? ServiceAcceptanceDate)
@@ -197,7 +246,7 @@ namespace HospitalPortal.Controllers
             {
                 DateTime dateCriteria = ServiceAcceptanceDate.Value.AddDays(-7);
 
-                string date = dateCriteria.ToString("dd/MM/yyyy");
+                string date = dateCriteria.ToString("yyyy/MM/dd");
                 var qry1 = @"select ns.Nurse_Id, ns.Id, ns.ServiceStatus, ns.IsPaid, case when ns.PaymentDate is null then 'N/A' else Convert(nvarchar(100),ns.PaymentDate,103) end as PaymentDate, case when ns.ServiceAcceptanceDate is null then 'N/A' else Convert(nvarchar(100),ns.ServiceAcceptanceDate,103) end as ServiceAcceptanceDate, Convert(nvarchar(100),ns.RequestDate,103) as RequestDate,'From '+ Convert(nvarchar(100),ns.StartDate,103)+' to '+Convert(nvarchar(100),ns.EndDate,103) as ServiceTiming ,IsNull(n.NurseName,'N/A') as NurseName,
 IsNull(n.MobileNumber,'N/A') as NurseMobileNumber,
 Datediff(day,ns.StartDate,ns.EndDate) as TotalDays,
@@ -205,7 +254,7 @@ IsNull(ns.PerDayAmount,0) as Fee,
 ns.TotalFee
  from NurseService ns 
 left join Nurse n on ns.Nurse_Id=n.Id
-where ns.Nurse_Id = '" + NurseId + "' and ns.IsPaid=1 and ns.ServiceAcceptanceDate between Convert(datetime,'" + dateCriteria + "',103) and Convert(datetime,'" + ServiceAcceptanceDate + "',103) order by ns.Id desc";
+where ns.Nurse_Id = '" + NurseId + "' and ns.IsPaid=1 and ns.ServiceAcceptanceDate ='" + ServiceAcceptanceDate + "' order by ns.Id desc";
                 var data1 = ent.Database.SqlQuery<NurseAppointmentList>(qry1).ToList();
                 if (data1.Count() == 0)
                 {
@@ -373,7 +422,7 @@ where A.IsPaid=1 and A.OrderDate between DATEADD(DAY, -7, GETDATE()) AND GETDATE
 v.Id as VehicleId, d.DriverName,d.DriverId, Sum(trm.Amount) as Amount
 from DriverLocation trm 
 join Driver d on d.Id = trm.Driver_Id
-join Vehicle v on v.VehicleType_Id = trm.VehicleType_Id
+join Vehicle v on v.Id = d.Vehicle_Id
 join Patient p on p.Id = trm.PatientId
 where trm.IsPay = 'Y' and trm.EntryDate between Convert(datetime,'" + startdate + "',103) and Convert(datetime,'" + enddate + "',103) group by v.VehicleNumber, v.VehicleName, v.Id,d.DriverName,d.DriverId";
                 var data1 = ent.Database.SqlQuery<AmbulanceReport>(qry1).ToList();
@@ -406,7 +455,7 @@ where trm.IsPay = 'Y' and trm.EntryDate between Convert(datetime,'" + startdate 
 v.Id as VehicleId, d.DriverName,d.DriverId, Sum(trm.Amount) as Amount
 from DriverLocation trm 
 join Driver d on d.Id = trm.Driver_Id
-join Vehicle v on v.VehicleType_Id = trm.VehicleType_Id
+join Vehicle v on v.Id = d.Vehicle_Id
 join Patient p on p.Id = trm.PatientId
 where trm.IsPay = 'Y' and trm.EntryDate between DateAdd(DD,-7,GETDATE() ) and GETDATE() group by v.VehicleNumber, v.VehicleName, v.Id,d.DriverName,d.DriverId";
 				var data = ent.Database.SqlQuery<AmbulanceReport>(doctor).ToList();

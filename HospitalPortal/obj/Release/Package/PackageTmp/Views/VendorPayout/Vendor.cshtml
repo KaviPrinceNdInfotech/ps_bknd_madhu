@@ -36,3 +36,27 @@
 
 </div>
 <script src="~/Scripts/VendorPayout.js"></script>
+<script>
+    // JavaScript for "Select All" functionality
+    document.getElementById("selectAll").addEventListener("change", function () {
+        var checkboxes = document.getElementsByClassName("checkBoxClass");
+        for (var i = 0; i < checkboxes.length; i++) {
+            checkboxes[i].checked = this.checked;
+        }
+    });
+    document.getElementById("payLink").addEventListener("click", function () {
+        multyid = "";
+
+        // Iterate through each checked checkbox
+        $(".checkBoxClass:checked").each(function () {
+            // Append the value of the checked checkbox to selectedValues
+            multyid += $(this).val() + "-";
+        });
+
+        // Remove the trailing comma, if any
+        multyid = multyid.replace(/,$/, "");
+        //  var docmulty = document.getElementById("multydocid").value;
+        var payLink = document.getElementById("payLink");
+        payLink.href = "/VendorPayout/Pay?multyid=" + multyid;
+    });
+</script>

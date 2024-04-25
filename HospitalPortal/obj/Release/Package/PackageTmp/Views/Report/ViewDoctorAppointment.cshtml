@@ -9,7 +9,7 @@
     <thead style="background-color:lavender;">
         <tr>
             <th>
-                Patient Name
+                Patient Name (Id)
             </th>
             
             <th>
@@ -25,7 +25,7 @@
         {
             <tr>
                 <td>
-                   @item.PatientName
+                   @item.PatientName (@item.PatientRegNo)
                 </td>
                 <td>
                     @if (item.AppointmentDate != null)
