@@ -861,7 +861,6 @@
     <EntitySetMapping Name="VehicleTypes">
       <EntityTypeMapping TypeName="Model.VehicleType">
         <MappingFragment StoreEntitySet="VehicleType">
-          <ScalarProperty Name="IsApproved" ColumnName="IsApproved" />
           <ScalarProperty Name="DriverCharge" ColumnName="DriverCharge" />
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="VehicleTypeName" ColumnName="VehicleTypeName" />
@@ -1328,8 +1327,6 @@
     <EntitySetMapping Name="Patients">
       <EntityTypeMapping TypeName="Model.Patient">
         <MappingFragment StoreEntitySet="Patient">
-          <ScalarProperty Name="Lang" ColumnName="Lang" />
-          <ScalarProperty Name="Lat" ColumnName="Lat" />
           <ScalarProperty Name="DOB" ColumnName="DOB" />
           <ScalarProperty Name="Gender" ColumnName="Gender" />
           <ScalarProperty Name="About" ColumnName="About" />
@@ -1904,6 +1901,21 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="NearDrivers">
+      <EntityTypeMapping TypeName="Model.NearDriver">
+        <MappingFragment StoreEntitySet="NearDriver">
+          <ScalarProperty Name="ToatlDistance" ColumnName="ToatlDistance" />
+          <ScalarProperty Name="DeviceId" ColumnName="DeviceId" />
+          <ScalarProperty Name="TotalPrice" ColumnName="TotalPrice" />
+          <ScalarProperty Name="Charge" ColumnName="Charge" />
+          <ScalarProperty Name="DL" ColumnName="DL" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="KM" ColumnName="KM" />
+          <ScalarProperty Name="DriverId" ColumnName="DriverId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <FunctionImportMapping FunctionImportName="droptable" FunctionName="Model.Store.droptable" />
     <FunctionImportMapping FunctionImportName="GEtAllMedicines" FunctionName="Model.Store.GEtAllMedicines">
       <ResultMapping>
@@ -1938,12 +1950,6 @@
     <EntitySetMapping Name="DriverLocations">
       <EntityTypeMapping TypeName="Model.DriverLocation">
         <MappingFragment StoreEntitySet="DriverLocation">
-          <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
-          <ScalarProperty Name="OrderId" ColumnName="OrderId" />
-          <ScalarProperty Name="InvoiceNumber" ColumnName="InvoiceNumber" />
-          <ScalarProperty Name="IsDriverPayoutPaid" ColumnName="IsDriverPayoutPaid" />
-          <ScalarProperty Name="CompleteRideDate" ColumnName="CompleteRideDate" />
-          <ScalarProperty Name="AcceptanceDate" ColumnName="AcceptanceDate" />
           <ScalarProperty Name="IsPayoutPaid" ColumnName="IsPayoutPaid" />
           <ScalarProperty Name="IsBooked" ColumnName="IsBooked" />
           <ScalarProperty Name="RideComplete" ColumnName="RideComplete" />
@@ -2299,6 +2305,18 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="AmbulancePayouts">
+      <EntityTypeMapping TypeName="Model.AmbulancePayout">
+        <MappingFragment StoreEntitySet="AmbulancePayout">
+          <ScalarProperty Name="IsGenerated" ColumnName="IsGenerated" />
+          <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
+          <ScalarProperty Name="IsPaid" ColumnName="IsPaid" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="Vehicle_Id" ColumnName="Vehicle_Id" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="Roles">
       <EntityTypeMapping TypeName="Model.Role">
         <MappingFragment StoreEntitySet="Role">
@@ -2314,34 +2332,6 @@
           <ScalarProperty Name="BookingDate" ColumnName="BookingDate" />
           <ScalarProperty Name="Patient_Id" ColumnName="Patient_Id" />
           <ScalarProperty Name="Driver_Id" ColumnName="Driver_Id" />
-          <ScalarProperty Name="Id" ColumnName="Id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="AmbulancePayouts">
-      <EntityTypeMapping TypeName="Model.AmbulancePayout">
-        <MappingFragment StoreEntitySet="AmbulancePayout">
-          <ScalarProperty Name="IsGenerated" ColumnName="IsGenerated" />
-          <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
-          <ScalarProperty Name="IsPaid" ColumnName="IsPaid" />
-          <ScalarProperty Name="Amount" ColumnName="Amount" />
-          <ScalarProperty Name="Driver_Id" ColumnName="Driver_Id" />
-          <ScalarProperty Name="Id" ColumnName="Id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="NearDrivers">
-      <EntityTypeMapping TypeName="Model.NearDriver">
-        <MappingFragment StoreEntitySet="NearDriver">
-          <ScalarProperty Name="MobileNumber" ColumnName="MobileNumber" />
-          <ScalarProperty Name="ToatlDistance" ColumnName="ToatlDistance" />
-          <ScalarProperty Name="DeviceId" ColumnName="DeviceId" />
-          <ScalarProperty Name="TotalPrice" ColumnName="TotalPrice" />
-          <ScalarProperty Name="Charge" ColumnName="Charge" />
-          <ScalarProperty Name="DL" ColumnName="DL" />
-          <ScalarProperty Name="Name" ColumnName="Name" />
-          <ScalarProperty Name="KM" ColumnName="KM" />
-          <ScalarProperty Name="DriverId" ColumnName="DriverId" />
           <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>

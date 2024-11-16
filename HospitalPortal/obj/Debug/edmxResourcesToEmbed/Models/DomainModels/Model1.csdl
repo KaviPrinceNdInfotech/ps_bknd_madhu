@@ -937,7 +937,6 @@
     <NavigationProperty Name="TravelMasters" Relationship="Self.FK__TravelMas__Vehic__1E8F7FEF" FromRole="VehicleType" ToRole="TravelMaster" />
     <NavigationProperty Name="VehicleCharges" Relationship="Model.FK__VehicleCh__TypeI__0E8E2250" FromRole="VehicleType" ToRole="VehicleCharge" />
     <Property Name="DriverCharge" Type="Double" />
-    <Property Name="IsApproved" Type="Boolean" />
   </EntityType>
   <EntityType Name="VendorPayOut">
     <Key>
@@ -1830,6 +1829,7 @@
     <EntitySet Name="Medicine_Pays" EntityType="Model.Medicine_Pay" />
     <EntitySet Name="Medicinedelivers" EntityType="Model.Medicinedeliver" />
     <EntitySet Name="Nurse_Rep" EntityType="Model.Nurse_Rep" />
+    <EntitySet Name="NearDrivers" EntityType="Model.NearDriver" />
     <FunctionImport Name="droptable" ReturnType="Collection(Int32)" />
     <FunctionImport Name="GEtAllMedicines" ReturnType="Collection(Model.GEtAllMedicines_Result)" />
     <FunctionImport Name="GetNearDriver" ReturnType="Collection(Model.GetNearDriver_Result)">
@@ -1840,7 +1840,6 @@
       <Parameter Name="Charge" Mode="In" Type="Int32" />
       <Parameter Name="DeviceId" Mode="In" Type="String" />
       <Parameter Name="ToatlDistance" Mode="In" Type="Int32" />
-      <Parameter Name="MobileNumber" Mode="In" Type="String" />
     </FunctionImport>
     <FunctionImport Name="AppointmentNurseFor24Hrs" ReturnType="Collection(Int32)">
       <Parameter Name="patientId" Mode="In" Type="Int32" />
@@ -1857,6 +1856,15 @@
       <Parameter Name="TestDesc" Mode="In" Type="String" />
       <Parameter Name="TestAmount" Mode="In" Type="Double" />
     </FunctionImport>
+    <EntitySet Name="DriverLocations" EntityType="Model.DriverLocation" />
+    <AssociationSet Name="FK__DriverLoc__Drive__6ADAD1BF" Association="Model.FK__DriverLoc__Drive__6ADAD1BF">
+      <End Role="Driver" EntitySet="Drivers" />
+      <End Role="DriverLocation" EntitySet="DriverLocations" />
+    </AssociationSet>
+    <AssociationSet Name="FK__DriverLoc__Patie__7C055DC1" Association="Model.FK__DriverLoc__Patie__7C055DC1">
+      <End Role="Patient" EntitySet="Patients" />
+      <End Role="DriverLocation" EntitySet="DriverLocations" />
+    </AssociationSet>
     <EntitySet Name="TestInLabs" EntityType="Model.TestInLab" />
     <EntitySet Name="DoctorBookingModes" EntityType="Model.DoctorBookingMode" />
     <EntitySet Name="PFMasters" EntityType="Model.PFMaster" />
@@ -1882,11 +1890,9 @@
     </AssociationSet>
     <EntitySet Name="TransactionFeeMasters" EntityType="Model.TransactionFeeMaster" />
     <EntitySet Name="VehicleAllotHistories" EntityType="Model.VehicleAllotHistory" />
+    <EntitySet Name="AmbulancePayouts" EntityType="Model.AmbulancePayout" />
     <EntitySet Name="Roles" EntityType="Model.Role" />
     <EntitySet Name="DriverBookings" EntityType="Model.DriverBooking" />
-    <EntitySet Name="DriverLocations" EntityType="Model.DriverLocation" />
-    <EntitySet Name="NearDrivers" EntityType="Model.NearDriver" />
-    <EntitySet Name="AmbulancePayouts" EntityType="Model.AmbulancePayout" />
   </EntityContainer>
   <ComplexType Name="sp_AppointmentHistory_Result">
     <Property Type="Int32" Name="AppointmentId" Nullable="false" />
@@ -2164,6 +2170,7 @@
     <Property Name="Lat" Type="Double" />
     <Property Name="Lang" Type="Double" />
     <Property Name="Charge" Type="Int32" />
+    <NavigationProperty Name="DriverLocations" Relationship="Model.FK__DriverLoc__Drive__6ADAD1BF" FromRole="Driver" ToRole="DriverLocation" />
     <Property Name="IsBankUpdateApproved" Type="Boolean" />
     <Property Name="Vehicle_Id" Type="Int32" />
     <Property Name="IsBooked" Type="Boolean" />
@@ -2542,10 +2549,9 @@
     <Property Name="walletAmount" Type="Decimal" Precision="18" Scale="0" />
     <Property Name="Password" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
     <Property Name="About" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="DriverLocations" Relationship="Model.FK__DriverLoc__Patie__7C055DC1" FromRole="Patient" ToRole="DriverLocation" />
     <Property Name="Gender" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
     <Property Name="DOB" Type="DateTime" Precision="0" />
-    <Property Name="Lat" Type="Double" />
-    <Property Name="Lang" Type="Double" />
   </EntityType>
   <Association Name="FK__BookTestL__Patie__56E8E7AB">
     <End Type="Model.Patient" Role="Patient" Multiplicity="0..1">
@@ -3717,6 +3723,20 @@
     <Property Name="Patient_Id" Type="Int32" />
     <Property Name="File" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
   </EntityType>
+  <EntityType Name="NearDriver">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="DriverId" Type="Int32" />
+    <Property Name="KM" Type="Int32" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="DL" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Charge" Type="Int32" />
+    <Property Name="TotalPrice" Type="Int32" />
+    <Property Name="DeviceId" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="ToatlDistance" Type="Int32" />
+  </EntityType>
   <ComplexType Name="GEtAllMedicines_Result">
     <Property Type="Int32" Name="ID" Nullable="false" />
     <Property Type="String" Name="MedicineName" Nullable="false" MaxLength="100" />
@@ -3736,6 +3756,63 @@
     <Property Type="Int32" Name="TotalPrice" Nullable="true" />
     <Property Type="String" Name="DeviceId" Nullable="true" />
   </ComplexType>
+  <EntityType Name="DriverLocation">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Driver_Id" Type="Int32" />
+    <Property Name="Lat_Driver" Type="Double" />
+    <Property Name="Lang_Driver" Type="Double" />
+    <Property Name="PatientId" Type="Int32" />
+    <Property Name="key" Type="Boolean" />
+    <Property Name="AmbulanceType_id" Type="Int32" />
+    <Property Name="VehicleType_id" Type="Int32" />
+    <Property Name="end_Lat" Type="Double" />
+    <Property Name="end_Long" Type="Double" />
+    <Property Name="start_Lat" Type="Double" />
+    <Property Name="start_Long" Type="Double" />
+    <Property Name="Status" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+    <Property Name="EntryDate" Type="DateTime" Precision="3" />
+    <Property Name="IsPay" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+    <Property Name="Amount" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="TotalPrice" Type="Int32" />
+    <Property Name="ToatlDistance" Type="Int32" />
+    <Property Name="PaymentDate" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="Driver" Relationship="Model.FK__DriverLoc__Drive__6ADAD1BF" FromRole="DriverLocation" ToRole="Driver" />
+    <NavigationProperty Name="Patient" Relationship="Model.FK__DriverLoc__Patie__7C055DC1" FromRole="DriverLocation" ToRole="Patient" />
+    <Property Name="RejectedStatus" Type="Boolean" />
+    <Property Name="PaymentStatus" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="RideComplete" Type="Boolean" />
+    <Property Name="IsBooked" Type="Boolean" />
+    <Property Name="IsPayoutPaid" Type="Boolean" />
+  </EntityType>
+  <Association Name="FK__DriverLoc__Drive__6ADAD1BF">
+    <End Type="Model.Driver" Role="Driver" Multiplicity="0..1" />
+    <End Type="Model.DriverLocation" Role="DriverLocation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Driver">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="DriverLocation">
+        <PropertyRef Name="Driver_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__DriverLoc__Patie__7C055DC1">
+    <End Type="Model.Patient" Role="Patient" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="Model.DriverLocation" Role="DriverLocation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Patient">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="DriverLocation">
+        <PropertyRef Name="PatientId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <EntityType Name="TestInLab">
     <Key>
       <PropertyRef Name="Id" />
@@ -4056,6 +4133,19 @@
     <Property Name="AllocateDate" Type="DateTime" Precision="3" />
     <Property Name="IsActive" Type="Boolean" />
   </EntityType>
+  <EntityType Name="AmbulancePayout">
+    <Key>
+      <PropertyRef Name="Id" />
+      <PropertyRef Name="Vehicle_Id" />
+      <PropertyRef Name="Amount" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Vehicle_Id" Type="Int32" Nullable="false" />
+    <Property Name="Amount" Type="Double" Nullable="false" />
+    <Property Name="IsPaid" Type="Boolean" />
+    <Property Name="PaymentDate" Type="DateTime" Precision="3" />
+    <Property Name="IsGenerated" Type="Boolean" />
+  </EntityType>
   <EntityType Name="Role">
     <Key>
       <PropertyRef Name="Id" />
@@ -4072,69 +4162,5 @@
     <Property Name="Patient_Id" Type="Int32" />
     <Property Name="BookingDate" Type="DateTime" Precision="3" />
     <Property Name="RideComplete" Type="Boolean" />
-  </EntityType>
-  <EntityType Name="DriverLocation">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="Driver_Id" Type="Int32" />
-    <Property Name="Lat_Driver" Type="Double" />
-    <Property Name="Lang_Driver" Type="Double" />
-    <Property Name="PatientId" Type="Int32" />
-    <Property Name="key" Type="Boolean" />
-    <Property Name="AmbulanceType_id" Type="Int32" />
-    <Property Name="VehicleType_id" Type="Int32" />
-    <Property Name="end_Lat" Type="Double" />
-    <Property Name="end_Long" Type="Double" />
-    <Property Name="start_Lat" Type="Double" />
-    <Property Name="start_Long" Type="Double" />
-    <Property Name="Status" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
-    <Property Name="EntryDate" Type="DateTime" Precision="3" />
-    <Property Name="IsPay" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
-    <Property Name="Amount" Type="Decimal" Precision="18" Scale="2" />
-    <Property Name="TotalPrice" Type="Int32" />
-    <Property Name="ToatlDistance" Type="Int32" />
-    <Property Name="PaymentDate" Type="DateTime" Precision="3" />
-    <Property Name="RejectedStatus" Type="Boolean" />
-    <Property Name="PaymentStatus" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-    <Property Name="RideComplete" Type="Boolean" />
-    <Property Name="IsBooked" Type="Boolean" />
-    <Property Name="IsPayoutPaid" Type="Boolean" />
-    <Property Name="IsDriverPayoutPaid" Type="Boolean" />
-    <Property Name="InvoiceNumber" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-    <Property Name="OrderId" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-    <Property Name="OrderDate" Type="DateTime" Precision="3" />
-    <Property Name="AcceptanceDate" Type="DateTime" Precision="3" />
-    <Property Name="CompleteRideDate" Type="DateTime" Precision="3" />
-  </EntityType>
-  <EntityType Name="NearDriver">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="DriverId" Type="Int32" />
-    <Property Name="KM" Type="Int32" />
-    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="DL" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="Charge" Type="Int32" />
-    <Property Name="TotalPrice" Type="Int32" />
-    <Property Name="DeviceId" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-    <Property Name="ToatlDistance" Type="Int32" />
-    <Property Name="MobileNumber" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-  </EntityType>
-  <EntityType Name="AmbulancePayout">
-    <Key>
-      <PropertyRef Name="Id" />
-      <PropertyRef Name="Vehicle_Id" />
-      <PropertyRef Name="Amount" />
-    </Key>
-    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="Vehicle_Id" Type="Int32" Nullable="false" />
-    <Property Name="Amount" Type="Double" Nullable="false" />
-    <Property Name="IsPaid" Type="Boolean" />
-    <Property Name="PaymentDate" Type="DateTime" Precision="3" />
-    <Property Name="IsGenerated" Type="Boolean" />
-    <Property Name="Driver_Id" Type="Int32" />
   </EntityType>
 </Schema>

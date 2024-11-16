@@ -217,6 +217,60 @@ where ns.Patient_Id="+patientId+ " and ns.ServiceStatus='Approved' order by ns.I
             try
             {
                 NursebookingResponse bookingResponse = new NursebookingResponse();
+                var data = new NurseService()
+                {
+                    Patient_Id = model.Patient_Id,
+                    NurseTypeId = model.NurseTypeId,
+                    ServiceType = model.ServiceType,
+                    ServiceTime = model.ServiceTime,
+                    StartDate = model.StartDate,
+                    EndDate = model.EndDate,
+                    PaymentDate = DateTime.Now,
+                    ServiceAcceptanceDate = DateTime.Now,
+                    RequestDate = DateTime.Now,
+                    ServiceDate = DateTime.Now,
+                    MobileNumber = model.MobileNumber,
+                    LocationId = model.LocationId,
+                    Location = model.Location,
+                    StateMaster_Id = model.StateMaster_Id,
+                    CityMaster_Id = model.CityMaster_Id,
+                };
+                ent.NurseServices.Add(data);
+                ent.SaveChanges();
+                TimeSpan duration = (TimeSpan)(model.EndDate - model.StartDate);
+                int NumberOfDays = duration.Days;
+
+
+                bookingResponse.Message = "Add Successfully";
+                bookingResponse.NurseBookingId = data.Id; 
+
+                var response = new
+                {
+                    BookingResponse = bookingResponse,
+                    NurseTypeId = model.NurseTypeId,
+                    StateMaster_Id = model.StateMaster_Id,
+                    CityMaster_Id = model.CityMaster_Id,
+                    StartDate = model.StartDate,
+                    EndDate = model.EndDate,
+                    NumberOfDay = NumberOfDays,
+                };
+
+                return Ok(response);
+                //return Ok(bookingResponse);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Internal server error");
+            }
+        }
+
+        [Route("api/NurseServices/NurseBookings")]
+        [HttpPost]
+        public IHttpActionResult NurseBookings(NurseBooking model)
+        {
+            try
+            {
+                NursebookingResponse bookingResponse = new NursebookingResponse();
 
                 //====GENERATE ORDER NUMBER
                 //var lastOrderIdRecord = ent.NurseServices.OrderByDescending(a => a.OrderId).FirstOrDefault();
@@ -263,66 +317,6 @@ where ns.Patient_Id="+patientId+ " and ns.ServiceStatus='Approved' order by ns.I
                 // Generate the next invoice number
                 string nextInvoiceNumber = $"N_inv_{numericPart}";
 
-                var data = new NurseService()
-                {
-                    Patient_Id = model.Patient_Id,
-                    NurseTypeId = model.NurseTypeId,
-                    ServiceType = model.ServiceType,
-                    ServiceTime = model.ServiceTime,
-                    StartDate = model.StartDate,
-                    EndDate = model.EndDate,
-                    PaymentDate = DateTime.Now,
-                    ServiceAcceptanceDate = DateTime.Now,
-                    RequestDate = DateTime.Now,
-                    ServiceDate = DateTime.Now,
-                    MobileNumber = model.MobileNumber,
-                    LocationId = model.LocationId,
-                    Location = model.Location,
-                    StateMaster_Id = model.StateMaster_Id,
-                    CityMaster_Id = model.CityMaster_Id,
-                    InvoiceNumber = nextInvoiceNumber,
-                    OrderId = NextOrderId,
-                    OrderDate = DateTime.Now,
-            };
-                ent.NurseServices.Add(data);
-                ent.SaveChanges();
-                TimeSpan duration = (TimeSpan)(model.EndDate - model.StartDate);
-                int NumberOfDays = duration.Days;
-
-
-                bookingResponse.Message = "Add Successfully";
-                bookingResponse.NurseBookingId = data.Id; 
-
-                var response = new
-                {
-                    BookingResponse = bookingResponse,
-                    NurseTypeId = model.NurseTypeId,
-                    StateMaster_Id = model.StateMaster_Id,
-                    CityMaster_Id = model.CityMaster_Id,
-                    StartDate = model.StartDate,
-                    EndDate = model.EndDate,
-                    NumberOfDay = NumberOfDays,
-                };
-
-                return Ok(response);
-                //return Ok(bookingResponse);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest("Internal server error");
-            }
-        }
-
-        [Route("api/NurseServices/NurseBookings")]
-        [HttpPost]
-        public IHttpActionResult NurseBookings(NurseBooking model)
-        {
-            try
-            {
-                NursebookingResponse bookingResponse = new NursebookingResponse();
-
-                
-
                 var data1 = ent.NurseServices.Where(a => a.Id == model.Id).FirstOrDefault();
                 if (data1 != null)
                 {
@@ -338,7 +332,10 @@ where ns.Patient_Id="+patientId+ " and ns.ServiceStatus='Approved' order by ns.I
                     data1.MobileNumber = data1.MobileNumber;
                     data1.ServiceStatus = "Approved";
                     data1.IsPayoutPaid = false;
-                    data1.IsPaid = false;                    
+                    data1.IsPaid = false;
+                    data1.InvoiceNumber  = nextInvoiceNumber;
+                    data1.OrderId = NextOrderId;
+                    data1.OrderDate = DateTime.Now;
                     ent.SaveChanges();
                     bookingResponse.Message = "Add Successfully";
                     bookingResponse.NurseBookingId = data1.Id;

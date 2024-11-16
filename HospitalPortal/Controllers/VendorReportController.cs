@@ -65,7 +65,7 @@ namespace HospitalPortal.Controllers
         {
             var model = new ReportDetails();
             double payment = ent.Database.SqlQuery<double>(@"select Commission from CommissionMaster where IsDeleted=0 and Name='" + term + "'").FirstOrDefault();
-            var qry = @"select Sum(P.TotalFee) as Counts,D.DoctorId as UniqueId,D.DoctorName as UserName,ve.VendorName as Name,ve.UniqueId as VendorId,ve.CompanyName as Name1 from PatientAppointment P 
+            var qry = @"select Sum(P.TotalFee) as Amount,D.DoctorId as UniqueId,D.DoctorName as UserName,ve.VendorName as Name,ve.UniqueId as VendorId,ve.CompanyName as Name1 from PatientAppointment P 
 join Doctor D on D.Id = p.Doctor_Id 
 join Vendor ve on ve.Id = d.Vendor_Id
 where Convert(Date, P.AppointmentDate) = Convert(Date,GETDATE()) and P.IsPaid=1 GROUP BY D.DoctorId,D.DoctorName,ve.VendorName,ve.CompanyName,ve.UniqueId";
@@ -93,7 +93,7 @@ where Convert(Date, P.AppointmentDate) = Convert(Date,GETDATE()) and P.IsPaid=1 
             {
 				DateTime dateCriteria = date.Value.AddDays(-7);
 				string Tarikh = dateCriteria.ToString("dd/MM/yyyy");
-				var qry1 = @"select Sum(P.TotalFee) as Counts,D.DoctorId as UniqueId,D.DoctorName as UserName,ve.VendorName as Name,ve.UniqueId as VendorId,ve.CompanyName as Name1 from PatientAppointment P 
+				var qry1 = @"select Sum(P.TotalFee) as Amount,D.DoctorId as UniqueId,D.DoctorName as UserName,ve.VendorName as Name,ve.UniqueId as VendorId,ve.CompanyName as Name1 from PatientAppointment P 
 join Doctor D on D.Id = p.Doctor_Id 
 join Vendor ve on ve.Id = d.Vendor_Id
 where p.AppointmentDate between '" + dateCriteria + "' and '" + Tarikh + "' and P.IsPaid=1 GROUP BY D.DoctorId,D.DoctorName,ve.VendorName,ve.CompanyName,ve.UniqueId";
@@ -111,7 +111,7 @@ where p.AppointmentDate between '" + dateCriteria + "' and '" + Tarikh + "' and 
 				return View(model);
 			}
             else {
-				var qry = @"select Sum(P.TotalFee) as Counts,D.DoctorId as UniqueId,D.DoctorName as UserName,ve.VendorName as Name,ve.UniqueId as VendorId,ve.CompanyName as Name1 from PatientAppointment P 
+				var qry = @"select Sum(P.TotalFee) as Amount,D.DoctorId as UniqueId,D.DoctorName as UserName,ve.VendorName as Name,ve.UniqueId as VendorId,ve.CompanyName as Name1 from PatientAppointment P 
 join Doctor D on D.Id = p.Doctor_Id 
 join Vendor ve on ve.Id = d.Vendor_Id
 where p.AppointmentDate  between DATEADD(day,-7,GETDATE()) and GetDate() and P.IsPaid=1 GROUP BY D.DoctorId,D.DoctorName,ve.VendorName,ve.CompanyName,ve.UniqueId";
@@ -140,7 +140,7 @@ where p.AppointmentDate  between DATEADD(day,-7,GETDATE()) and GetDate() and P.I
             
             if (sdate == null && edate == null)
             {
-                var qry = @"select Sum(P.TotalFee) as Counts,D.DoctorId as UniqueId,D.DoctorName as UserName,ve.VendorName as Name,ve.UniqueId as VendorId,ve.CompanyName as Name1 from PatientAppointment P 
+                var qry = @"select Sum(P.TotalFee) as Amount,D.DoctorId as UniqueId,D.DoctorName as UserName,ve.VendorName as Name,ve.UniqueId as VendorId,ve.CompanyName as Name1 from PatientAppointment P 
 join Doctor D on D.Id = p.Doctor_Id 
 join Vendor ve on ve.Id = d.Vendor_Id
 where Month(p.AppointmentDate) = Month(GetDate()) and P.IsPaid=1 GROUP BY D.DoctorId,D.DoctorName,ve.VendorName,ve.CompanyName,ve.UniqueId";
@@ -157,7 +157,7 @@ where Month(p.AppointmentDate) = Month(GetDate()) and P.IsPaid=1 GROUP BY D.Doct
                 return View(model);
             }
             else { 
-                var qry1 = @"select Sum(P.TotalFee) as Counts,D.DoctorId as UniqueId,D.DoctorName as UserName,ve.VendorName as Name,ve.UniqueId as VendorId,ve.CompanyName as Name1 from PatientAppointment P 
+                var qry1 = @"select Sum(P.TotalFee) as Amount,D.DoctorId as UniqueId,D.DoctorName as UserName,ve.VendorName as Name,ve.UniqueId as VendorId,ve.CompanyName as Name1 from PatientAppointment P 
 join Doctor D on D.Id = p.Doctor_Id 
 join Vendor ve on ve.Id = d.Vendor_Id
 where p.AppointmentDate between Convert(datetime,'" + sdate + "',103) and Convert(datetime,'" + edate + "',103) and P.IsPaid=1 GROUP BY D.DoctorId,D.DoctorName,ve.VendorName,ve.CompanyName,ve.UniqueId";
@@ -184,7 +184,7 @@ where p.AppointmentDate between Convert(datetime,'" + sdate + "',103) and Conver
             
             if (!year.HasValue)
             {
-                var qry = @"select Sum(P.TotalFee) as Counts,D.DoctorId as UniqueId,D.DoctorName as UserName,ve.VendorName as Name,ve.UniqueId as VendorId,ve.CompanyName as Name1 from PatientAppointment P 
+                var qry = @"select Sum(P.TotalFee) as Amount,D.DoctorId as UniqueId,D.DoctorName as UserName,ve.VendorName as Name,ve.UniqueId as VendorId,ve.CompanyName as Name1 from PatientAppointment P 
 join Doctor D on D.Id = p.Doctor_Id 
 join Vendor ve on ve.Id = d.Vendor_Id
 where Year(p.AppointmentDate) = Year(GetDate()) and P.IsPaid=1 GROUP BY D.DoctorId,D.DoctorName,ve.VendorName,ve.CompanyName,ve.UniqueId";
@@ -202,7 +202,7 @@ where Year(p.AppointmentDate) = Year(GetDate()) and P.IsPaid=1 GROUP BY D.Doctor
                 return View(model);
             }
             else {
-                var qry1 = @"select Sum(P.TotalFee) as Counts,D.DoctorId as UniqueId,D.DoctorName as UserName,ve.VendorName as Name,ve.UniqueId as VendorId,ve.CompanyName as Name1 from PatientAppointment P 
+                var qry1 = @"select Sum(P.TotalFee) as Amount,D.DoctorId as UniqueId,D.DoctorName as UserName,ve.VendorName as Name,ve.UniqueId as VendorId,ve.CompanyName as Name1 from PatientAppointment P 
 join Doctor D on D.Id = p.Doctor_Id 
 join Vendor ve on ve.Id = d.Vendor_Id
 where Year(p.AppointmentDate) = '" + year + "' and P.IsPaid=1 GROUP BY D.DoctorId,D.DoctorName,ve.VendorName,ve.CompanyName,ve.UniqueId";

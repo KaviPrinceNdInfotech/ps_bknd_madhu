@@ -602,7 +602,7 @@ d in ent.Departments on dep.Department_Id equals d.Id
         public IHttpActionResult GetAppointmentDetail(int Id)
         {
             var rm = new Doctor();
-            string query = @"select PA.Id,P.PatientName,P.MobileNumber,P.Location,CONCAT(CONVERT(NVARCHAR, TS.StartTime, 8), ' To ', CONVERT(NVARCHAR, TS.EndTime, 8)) AS SlotTime,PA.Appointmentdate,AL.DeviceId from Doctor as D inner join PatientAppointment as PA on PA.Doctor_Id=D.Id inner join DoctorTimeSlot as TS on TS.Id=PA.Slot_id inner join Patient as P on P.Id=PA.Patient_Id inner join AdminLogin as AL on AL.Id=P.AdminLogin_Id where D.Id=" + Id + " and PA.IsCancelled=0 and PA.BookingMode_Id=1 and PA.IsBooked=0 and PA.AppointmentIsDone=0 order by PA.Id desc";
+            string query = @"select PA.Id,P.PatientName,P.MobileNumber,P.Location,CONCAT(CONVERT(NVARCHAR, TS.StartTime, 8), ' To ', CONVERT(NVARCHAR, TS.EndTime, 8)) AS SlotTime,PA.Appointmentdate,AL.DeviceId from Doctor as D inner join PatientAppointment as PA on PA.Doctor_Id=D.Id inner join DoctorTimeSlot as TS on TS.Id=PA.Slot_id inner join Patient as P on P.Id=PA.Patient_Id inner join AdminLogin as AL on AL.Id=P.AdminLogin_Id where D.Id=" + Id + " and PA.IsCancelled=0 and PA.BookingMode_Id=1 and PA.AppointmentIsDone=0 order by PA.Id desc";
             var AppointmentDetail = ent.Database.SqlQuery<AppointmentDetailDoctorDTO>(query).ToList();
 
             return Ok(new { AppointmentDetail });
@@ -631,7 +631,7 @@ d in ent.Departments on dep.Department_Id equals d.Id
             var rm = new Patient(); 
             string query = @"select P.Id,P.PatientName,P.Location,PA.TotalFee as Amount,PA.PaymentDate,PA.Id as PaymentId from Doctor as D 
 inner join PatientAppointment as PA on PA.Doctor_Id=D.Id 
-inner join Patient as P on P.Id=PA.Patient_Id where D.Id=" + Id + " and PA.IsCancelled=0 and PA.IsBooked=1 order by PA.Id desc";
+inner join Patient as P on P.Id=PA.Patient_Id where D.Id=" + Id + " and PA.IsCancelled=0 order by PA.Id desc";
             var PaymentHistory = ent.Database.SqlQuery<DoctorPayment>(query).ToList();
 
             return Ok(new { PaymentHistory });
@@ -646,7 +646,7 @@ inner join PatientAppointment as PA on PA.Doctor_Id=D.Id
 inner join Patient as P on P.Id=PA.Patient_Id
 join StateMaster as sm on sm.Id=P.StateMaster_Id
 join CityMaster as cm on cm.Id=P.CityMaster_Id
-where D.Id="+ DoctorId + " and PA.IsCancelled=0 and PA.IsBooked=1 order by PA.Id desc";
+where D.Id="+ DoctorId + " and PA.IsCancelled=0 order by PA.Id desc";
             var BookingHistory = ent.Database.SqlQuery<Doctorbooking>(query).ToList();
 
             return Ok(new { BookingHistory });
@@ -760,7 +760,6 @@ where D.Id="+ DoctorId + " and PA.IsCancelled=0 and PA.IsBooked=1 order by PA.Id
                     OrderId = NextOrderId,
                     IsPaid = false,
                     IsCancelled = false,
-                    IsBooked = false,
                     IsPayoutPaid = false,
                     OrderDate = DateTime.Now,
                 };
@@ -821,8 +820,8 @@ where D.Id="+ DoctorId + " and PA.IsCancelled=0 and PA.IsBooked=1 order by PA.Id
                     data.Patient_Id = model.Patient_Id;
                     data.TotalFee = model.TotalFee;
                     data.PaymentDate = DateTime.Now;
-                    data.IsPaid = model.IsPaid; 
-                    data.IsBooked = true; 
+                    data.IsPaid = model.IsPaid;
+                    data.IsBooked = true;
                     data.AppointmentIsDone = false;
                     ent.SaveChanges();
                     return Ok(" Doctor Book Appointment Successfully ");
@@ -1278,25 +1277,5 @@ join Doctor as d on d.SlotTime2 =dt.Id where d.id="+ DoctorId + "";
             return timeSlots;
         }
 
-        [HttpPost, Route("api/DoctorApi/AcceptBooking")]
-        public IHttpActionResult AcceptBooking(CancelAppointent model)
-        {
-            var appointmentdetail = ent.PatientAppointments.Where(p => p.Id == model.Id).FirstOrDefault();
-
-            if(appointmentdetail!=null)
-            {
-                appointmentdetail.IsBooked = true;
-                ent.SaveChanges();
-                rm.Status = 1;
-                rm.Message = "Request accept successfully.";
-            }
-            else
-            {
-                rm.Status = 1;
-                rm.Message = "Data not found.";
-            }
-            
-            return Ok(rm);
-        }
     }
 }

@@ -79,13 +79,8 @@
                                     <th>Specialist In</th>
                                     <th>Mobile & Phone No</th>
                                     <th>Email </th>
-                                    <th>Registration No. </th>
-                                    <th>Qualification </th>
-                                    <th>Experience </th>
                                     <th>Address</th>
                                     <th>Licence</th> 
-                                    <th>Pan</th> 
-                                    <th>Signature</th> 
                                     @if (role == "admin")
                                 {
                                         <th>Approval</th>
@@ -123,9 +118,6 @@
                                             @item.PhoneNumber
                                         </td>
                                         <td>@item.EmailId</td>
-                                        <td>@item.RegistrationNumber</td>
-                                        <td>@item.Qualification</td>
-                                        <td>@item.Experience</td>
                                         <td>@item.Location , @item.CityName, @item.StateName</td>
                                         <td>
                                             @item.LicenceNumber
@@ -133,17 +125,7 @@
                                                 <img src="/Images/@item.LicenceImage" style="width:100px;height:80px" />
                                             </a>
                                         </td>
-                                        <td>
-                                            @item.PAN
-                                            <a href="/Images/@item.PanImage">
-                                                <img src="/Images/@item.PanImage" style="width:100px;height:80px" />
-                                            </a>
-                                        </td>
-                                        <td>
-                                            <a href="/Images/@item.SignaturePic">
-                                                <img src="/Images/@item.SignaturePic" style="width:100px;height:80px" />
-                                            </a>
-                                        </td>
+
 
                                         @if (role == "admin")
                                         {

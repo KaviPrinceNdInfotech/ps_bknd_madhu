@@ -187,7 +187,6 @@ namespace HospitalPortal.Controllers
                     };
 
                     EmailOperations.SendEmainew(ef);
-                    Message.SendSmsUserIdPass(model.MobileNumber, model.LabName, domainModel.lABId, model.Password);
                     TempData["msg"] = "ok";
                     tran.Commit();
                 }

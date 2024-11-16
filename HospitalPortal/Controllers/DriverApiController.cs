@@ -24,9 +24,6 @@ using Newtonsoft.Json;
 using System.Web.Razor.Parser.SyntaxTree;
 using System.Text.RegularExpressions;
 using DocumentFormat.OpenXml.EMMA;
-using DocumentFormat.OpenXml.Office.CustomUI;
-using DocumentFormat.OpenXml.Drawing.Charts;
-using System.Security.Cryptography;
 
 namespace HospitalPortal.Controllers
 {
@@ -346,7 +343,7 @@ namespace HospitalPortal.Controllers
         [System.Web.Http.Route("api/DriverApi/BookingHistory")]
         public IHttpActionResult BookingHistory(int DriverId)
         {  
-            string query = @"select P.Id,P.PatientName,P.MobileNumber,sm.StateName,cm.CityName,P.PinCode,P.Location,DL.start_Lat,DL.start_Long,DL.end_Long,DL.end_Lat from DriverLocation as DL join Patient as P on Dl.PatientId=P.Id left join citymaster as cm with(nolock) on cm.id=P.CityMaster_Id left join statemaster as sm with(nolock) on sm.id=P.StateMaster_Id left join Driver as D on D.Id=DL.Driver_Id where D.Id=" + DriverId + " and DL.RideComplete=1 and P.IsDeleted=0 order by DL.Id desc";
+            string query = @"select P.Id,P.PatientName,P.MobileNumber,sm.StateName,cm.CityName,P.PinCode,P.Location,DL.start_Lat,DL.start_Long,DL.end_Long,DL.end_Lat from DriverLocation as DL left join Patient as P on Dl.PatientId=P.Id left join citymaster as cm with(nolock) on cm.id=P.CityMaster_Id left join statemaster as sm with(nolock) on sm.id=P.StateMaster_Id left join Driver as D on D.Id=DL.Driver_Id where D.Id=" + DriverId + " and DL.IsPay='Y' order by DL.Id desc";
             var BookingHistory = ent.Database.SqlQuery<BookingOrderHistory>(query).ToList();
             return Ok(new { BookingHistory });
 
@@ -356,7 +353,7 @@ namespace HospitalPortal.Controllers
         [Route("api/DriverApi/PaymentHistory")]
         public IHttpActionResult PaymentHistory(int Id)
         { 
-            string query = @"select P.Id,P.PatientName,P.MobileNumber,P.Location,DL.Id as PaymentId,DL.Amount,DL.PaymentDate,DL.IsPay,DL.start_Lat,DL.start_Long,DL.end_Long,DL.end_Lat from DriverLocation as DL join Patient as P on Dl.PatientId=P.Id join Driver as D on D.Id=DL.Driver_Id where D.Id=" + Id + " and DL.IsPay='Y' and p.IsDeleted=0 order by DL.Id desc";
+            string query = @"select P.Id,P.PatientName,P.MobileNumber,P.Location,DL.Id as PaymentId,DL.Amount,DL.PaymentDate,DL.IsPay,DL.start_Lat,DL.start_Long,DL.end_Long,DL.end_Lat from DriverLocation as DL join Patient as P on Dl.PatientId=P.Id join Driver as D on D.Id=DL.Driver_Id where D.Id=" + Id + " and DL.IsPay='Y' order by DL.Id desc";
             var Data = ent.Database.SqlQuery<payhistory>(query).ToList();
             return Ok(Data);
 
@@ -405,7 +402,7 @@ namespace HospitalPortal.Controllers
         [HttpGet]
         public IHttpActionResult GetDriverProfile(int Id)
         { 
-            string query = @"select D.Id,D.DriverImage,D.DriverName,D.EmailId,D.MobileNumber,SM.StateName,CM.CityName,D.PinCode,D.Location,D.StateMaster_Id,D.CityMaster_Id from Driver as D left join StateMaster as SM with(nolock) on SM.Id=D.StateMaster_Id left join CityMaster as CM with(nolock) on CM.Id=D.CityMaster_Id where D.Id= " + Id + "";
+            string query = @"select D.Id,D.DriverName,D.EmailId,D.MobileNumber,SM.StateName,CM.CityName,D.PinCode,D.Location,D.StateMaster_Id,D.CityMaster_Id from Driver as D left join StateMaster as SM with(nolock) on SM.Id=D.StateMaster_Id left join CityMaster as CM with(nolock) on CM.Id=D.CityMaster_Id where D.Id= " + Id + "";
             var data = ent.Database.SqlQuery<GetDriverProfile>(query).FirstOrDefault();
             return Ok(data);
         }
@@ -480,53 +477,12 @@ namespace HospitalPortal.Controllers
                 ent.Database.ExecuteSqlCommand("exec DeleteNearDriver");
 
 
-                //====GENERATE ORDER NUMBER
-                 
-                dynamic lastOrderIdRecord = ent.DriverLocations.OrderByDescending(a => a.Id).Select(a => a.OrderId).FirstOrDefault();
-                string lastOrderId = lastOrderIdRecord != null ? lastOrderIdRecord : "Dvr_ord_0"; // Default to "ps_inv_0" if no records exist
-
-
-                string[] OrderIdparts = lastOrderId.Split('_');
-                int OrderIdnumericPart = 0;
-
-                if (OrderIdparts.Length == 3 && int.Parse(OrderIdparts[2]) > 0)
-                {
-                    OrderIdnumericPart = int.Parse(OrderIdparts[2]) + 1; // Increment the numeric part
-                }
-                else
-                {
-                    OrderIdnumericPart = 1;
-                }
-
-                // Generate the next NextOrderId
-                string NextOrderId = $"Dvr_ord_{OrderIdnumericPart}";
-
-                //====GENERATE INVOICE NUMBER
-
-                dynamic lastRecord = ent.DriverLocations.OrderByDescending(a => a.Id).Select(a => a.InvoiceNumber).FirstOrDefault(); 
-                string lastInvoiceNumber = lastRecord != null ? lastRecord : "Dvr_inv_0"; // Default to "ps_inv_0" if no records exist
-
-
-                string[] parts = lastInvoiceNumber.Split('_');
-                int numericPart = 0;
-
-                if (parts.Length == 3 && int.Parse(parts[2]) > 0)
-                {
-                    numericPart = int.Parse(parts[2]) + 1; // Increment the numeric part
-                }
-                else
-                {
-
-                    numericPart = 1;
-                }
-
-                // Generate the next invoice number
-                string nextInvoiceNumber = $"Dvr_inv_{numericPart}";
-
-
                 List<DriverListNearByUser> driverListNearByUser = new List<DriverListNearByUser>();
-//                
-                var Driver = ent.Database.SqlQuery<UpdatelocationDriver>(@"select distinct D.Id AS DriverId,D.Lat, D.Lang,D.DriverName,D.MobileNumber,D.DlNumber,dbo.DriverCharges() as Charge,AL.DeviceId from Driver AS D with(nolock)
+//                var Driver = ent.Database.SqlQuery<UpdatelocationDriver>(@"select D.Id AS DriverId,D.Lat, D.Lang,D.DriverName,D.DlNumber,dbo.DriverCharges() as Charge,AL.DeviceId from Driver AS D with(nolock)
+//INNER JOIN AdminLogin AS AL with(nolock) ON D.AdminLogin_Id = AL.Id
+//where D.Lat IS NOT NULL and D.Lang IS NOT NULL and d.VehicleType_id=" + model.VehicleType_id + " and D.IsApproved=1").ToList();
+                
+                var Driver = ent.Database.SqlQuery<UpdatelocationDriver>(@"select distinct D.Id AS DriverId,D.Lat, D.Lang,D.DriverName,D.DlNumber,dbo.DriverCharges() as Charge,AL.DeviceId from Driver AS D with(nolock)
 INNER JOIN AdminLogin AS AL with(nolock) ON D.AdminLogin_Id = AL.Id
 INNER JOIN Vehicle as v on V.Id=d.Vehicle_Id
 INNER JOIN VehicleType as vt on Vt.Id=v.VehicleType_id
@@ -607,10 +563,12 @@ where D.Lat IS NOT NULL and D.Lang IS NOT NULL and d.VehicleType_id=" + model.Ve
                     int drivId = item.DriverId;
                     string drivName = item.DriverName;
                     string DlNumber = item.DlNumber;
-                    string MobileNumber = item.MobileNumber;
                     //Charge = item.Charge ?? 0;
                     //dist1 = distance;
 
+
+
+                    
 
                     //IF the Distance is between 0 to 5
                     if (distance <= 5)
@@ -735,7 +693,7 @@ where D.Lat IS NOT NULL and D.Lang IS NOT NULL and d.VehicleType_id=" + model.Ve
                     totalCharge = Charge * 2 + DriverCharge;
 
                     string DeviceId = (item.DeviceId == null) ? "0000" : item.DeviceId;
-                    string query = @"exec GetNearDriver '" + drivId + "'," + dist + ",'" + drivName + "','" + DlNumber + "'," + totalCharge + ",'" + DeviceId + "'," + distance + ",'"+ MobileNumber + "'";
+                    string query = @"exec GetNearDriver '" + drivId + "'," + dist + ",'" + drivName + "','" + DlNumber + "'," + totalCharge + ",'" + DeviceId + "'," + distance + "";
 
 
                     driverListNearByUser = ent.Database.SqlQuery<DriverListNearByUser>(query).ToList();
@@ -760,209 +718,13 @@ where D.Lat IS NOT NULL and D.Lang IS NOT NULL and d.VehicleType_id=" + model.Ve
                     RejectedStatus =false,
                     RideComplete = false,
                     IsPayoutPaid = false,
-                    IsDriverPayoutPaid = false,
                     ToatlDistance = Convert.ToInt32(distance),
                     //TotalPrice = Charge * Convert.ToInt32(distance)
-                    TotalPrice = totalCharge, //double charge
-                    InvoiceNumber = nextInvoiceNumber,
-                    OrderId = NextOrderId,
-                    OrderDate = DateTime.Now,
+                    TotalPrice = totalCharge //double charge
                 };
                 ent.DriverLocations.Add(mod);
                 ent.SaveChanges();
                 return Ok(new { model.start_Lat, model.start_Long, model.end_Long, model.end_Lat, model.AmbulanceType_id, model.VehicleType_id, model.Patient_Id, Message = driverListNearByUser });
-
-            }
-            catch (Exception Ex)
-            {
-                return BadRequest("Server Error");
-            }
-        }
-
-        [HttpPost, Route("api/DriverApi/AddRoadAccidentAmbulance")]
-        public IHttpActionResult AddRoadAccidentAmbulance(DriverLocationDT model)
-        {
-            try
-            {
-                double DriveLat = 0.00;
-                double DriveLong = 0.00;
-                double distance = 0.00;
-                int Charge = 0;
-                int DriverCharge = 0;
-                int totalCharge = 0;
-                ent.Database.ExecuteSqlCommand("exec DeleteNearDriver");
-
-
-                //====GENERATE ORDER NUMBER
-
-                dynamic lastOrderIdRecord = ent.DriverLocations.OrderByDescending(a => a.Id).Select(a => a.OrderId).FirstOrDefault();
-                string lastOrderId = lastOrderIdRecord != null ? lastOrderIdRecord : "Dvr_ord_0"; // Default to "ps_inv_0" if no records exist
-
-
-                string[] OrderIdparts = lastOrderId.Split('_');
-                int OrderIdnumericPart = 0;
-
-                if (OrderIdparts.Length == 3 && int.Parse(OrderIdparts[2]) > 0)
-                {
-                    OrderIdnumericPart = int.Parse(OrderIdparts[2]) + 1; // Increment the numeric part
-                }
-                else
-                {
-                    OrderIdnumericPart = 1;
-                }
-
-                // Generate the next NextOrderId
-                string NextOrderId = $"Dvr_ord_{OrderIdnumericPart}";
-
-                //====GENERATE INVOICE NUMBER
-
-                dynamic lastRecord = ent.DriverLocations.OrderByDescending(a => a.Id).Select(a => a.InvoiceNumber).FirstOrDefault();
-                string lastInvoiceNumber = lastRecord != null ? lastRecord : "Dvr_inv_0"; // Default to "ps_inv_0" if no records exist
-
-
-                string[] parts = lastInvoiceNumber.Split('_');
-                int numericPart = 0;
-
-                if (parts.Length == 3 && int.Parse(parts[2]) > 0)
-                {
-                    numericPart = int.Parse(parts[2]) + 1; // Increment the numeric part
-                }
-                else
-                {
-
-                    numericPart = 1;
-                }
-
-                // Generate the next invoice number
-                string nextInvoiceNumber = $"Dvr_inv_{numericPart}";
-
-                var getuserdetail = ent.Patients.Where(p => p.Id == model.Patient_Id).FirstOrDefault();
-
-                List<DriverListNearByUser> driverListNearByUser = new List<DriverListNearByUser>();
-                //                
-                var Driver = ent.Database.SqlQuery<UpdatelocationDriver>(@"select distinct D.Id AS DriverId,D.Lat, D.Lang,D.MobileNumber,D.DriverName,D.DlNumber,dbo.DriverCharges() as Charge,AL.DeviceId from Driver AS D with(nolock)
-INNER JOIN AdminLogin AS AL with(nolock) ON D.AdminLogin_Id = AL.Id
-INNER JOIN Vehicle as v on V.Id=d.Vehicle_Id
-INNER JOIN VehicleType as vt on Vt.Id=v.VehicleType_id
-join MainCategory as mac on mac.Id=vt.Category_Id
-where D.Lat IS NOT NULL and D.Lang IS NOT NULL and mac.AmbulanceType_id not in(3) and D.IsApproved=1").ToList();
-                foreach (var item in Driver)
-                {
-                    //==================USER AND DRIVER DISTANCE========================
-                    // Driver
-
-                    var lat1 = item.Lat;
-                    var lon1 = item.Lang;
-
-                    //Save DriverLat and Long 
-                    DriveLat = lat1;
-                    DriveLong = lon1;
-
-                   
-                    //User
-                    var lat2 = getuserdetail.Lat;
-                    var lon2 = getuserdetail.Lang;
-
-                    double rlat1 = Math.PI * lat1 / 180;
-                    double rlat2 = (double)(Math.PI * lat2 / 180);
-                    double theta = (double)(lon1 - lon2);
-                    double rtheta = Math.PI * theta / 180;
-                    double dist =
-                        Math.Sin(rlat1) * Math.Sin(rlat2) + Math.Cos(rlat1) *
-                        Math.Cos(rlat2) * Math.Cos(rtheta);
-                    dist = Math.Acos(dist);
-                    dist = dist * 180 / Math.PI;
-                    dist = dist * 60 * 1.1515;
-
-                    // TOTAL DISTANCE (START LOCTION TO DESTINATION)
-
-                    //User
-                    var Startlat =  getuserdetail.Lat;
-                    var Startlong = getuserdetail.Lang;
-                    var Endlat = model.end_Lat;
-                    var Endlong = model.end_Long;
-
-
-                    // Create the URL for the Google Maps API.
-                    string url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + Startlat + "," + Startlong + "&destinations=" + Endlat + "," + Endlong + "&key=AIzaSyBrbWFXlOYpaq51wteSyFS2UjdMPOWBlQw";
-
-                    // Make the HTTP request to the API.
-                    WebRequest request = WebRequest.Create(url);
-                    request.Method = "GET";
-                    request.Timeout = 30000;
-                    WebResponse response = request.GetResponse();
-
-
-                    string responseText = new StreamReader(response.GetResponseStream()).ReadToEnd();
-
-                    // Parse the response JSON.
-                    var json = JsonConvert.DeserializeObject<dynamic>(responseText);
-
-
-
-                    // Get the distance between the two places.
-                    var distancetext = ExtractDecimalValue((json.rows[0].elements[0].distance.value).ToString());
-
-                    //for duration
-
-                    //var duration = ExtractDecimalValue((json.rows[0].elements[0].duration.value).ToString());
-                    //duration = json.rows[0].elements[0].duration.value / 60;
-                    //durationtime = duration;
-                    //if (durationtime > 60)
-                    //{
-                    //    durationtime = duration/60;
-                    //}
-
-                    //distance = double.Parse(json.rows[0].elements[0].distance.text);
-                    //distance=double.Parse(distancetext);
-                    distance = json.rows[0].elements[0].distance.value / 1000;
-                    // Print the distance.
-                    Console.WriteLine("The distance between the two places is " + distance + " meters.");
-
-                    ;
-                    int drivId = item.DriverId;
-                    string drivName = item.DriverName;
-                    string DlNumber = item.DlNumber;
-                    string MobileNumber = item.MobileNumber;
-                     
-
-                    string DeviceId = (item.DeviceId == null) ? "0000" : item.DeviceId;
-                    string query = @"exec GetNearDriver '" + drivId + "'," + dist + ",'" + drivName + "','" + DlNumber + "'," + totalCharge + ",'" + DeviceId + "'," + distance + ",'"+ MobileNumber + "'";
-
-
-                    driverListNearByUser = ent.Database.SqlQuery<DriverListNearByUser>(query).ToList();
-
-                }
-
-                var mod = new DriverLocation()
-                {
-
-                    Lat_Driver = DriveLat,
-                    Lang_Driver = DriveLong,
-                    start_Lat = getuserdetail.Lat,
-                    start_Long = getuserdetail.Lang,
-                    end_Long = model.end_Long,
-                    end_Lat = model.end_Lat,
-                    PatientId = model.Patient_Id,
-                    AmbulanceType_id = model.AmbulanceType_id,
-                    VehicleType_id = model.VehicleType_id,
-                    EntryDate = DateTime.Now,
-                    IsPay = "N",
-                    Status = "0",
-                    RejectedStatus = false,
-                    RideComplete = false,
-                    IsPayoutPaid = false,
-                    IsDriverPayoutPaid = false,
-                    ToatlDistance = Convert.ToInt32(distance),
-                    //TotalPrice = Charge * Convert.ToInt32(distance)
-                    TotalPrice = totalCharge, //double charge
-                    InvoiceNumber = nextInvoiceNumber,
-                    OrderId = NextOrderId,
-                    OrderDate = DateTime.Now,
-                };
-                ent.DriverLocations.Add(mod);
-                ent.SaveChanges();
-                return Ok(new { getuserdetail.Lat, getuserdetail.Lang, model.end_Long, model.end_Lat, model.AmbulanceType_id, model.VehicleType_id, model.Patient_Id, Message = driverListNearByUser });
 
             }
             catch (Exception Ex)
@@ -1038,7 +800,7 @@ where D.Lat IS NOT NULL and D.Lang IS NOT NULL and mac.AmbulanceType_id not in(3
     JOIN
         AdminLogin AS AL ON AL.Id = P.AdminLogin_Id
     WHERE
-        dl.[Status] = 0 AND dl.RejectedStatus = 0 AND db.RideComplete=0 AND dl.AmbulanceType_id not in (2) AND dl.IsBooked=1 AND db.Driver_Id = " + DriverId + ") SELECT Id,BookingId,Driver_Id,PatientId,PatientName,MobileNumber,endLat,endLong,startLat,startLong,DeviceId,TotalPrice,ToatlDistance FROM RankedResults WHERE RowNum = 1 ORDER BY Id DESC;").ToList();
+        dl.[Status] = 0 AND dl.RejectedStatus = 0 AND db.RideComplete=0 AND dl.IsBooked=1 AND db.Driver_Id = " + DriverId + ") SELECT Id,BookingId,Driver_Id,PatientId,PatientName,MobileNumber,endLat,endLong,startLat,startLong,DeviceId,TotalPrice,ToatlDistance FROM RankedResults WHERE RowNum = 1 ORDER BY Id DESC;").ToList();
 
             return Ok(new { UserListForBookingAmbulance = data });
 
@@ -1054,7 +816,6 @@ where D.Lat IS NOT NULL and D.Lang IS NOT NULL and mac.AmbulanceType_id not in(3
             var data = ent.DriverLocations.Where(a => a.Id == model.Id).FirstOrDefault();
             data.Status = model.StatusId;
             data.Driver_Id = model.DriverId;
-            data.AcceptanceDate = DateTime.Now;
             ent.SaveChanges();
             return Ok("Request accepted successfully.");
         }
@@ -1191,7 +952,7 @@ WHERE DL.PatientId=" + Id+ " and DL.[Status]=1 and DL.RejectedStatus=0 and DL.Ri
 
         [System.Web.Http.HttpGet, Route("api/DriverApi/GetDriverBookingHistory")]
 
-        //use in user section
+        //use user section
         public IHttpActionResult GetDriverBookingHistory(int PatientId)
         {
             var driverDetails = (from dl in ent.DriverLocations
@@ -1199,7 +960,7 @@ WHERE DL.PatientId=" + Id+ " and DL.[Status]=1 and DL.RejectedStatus=0 and DL.Ri
                                  join v in ent.Vehicles on d.Vehicle_Id equals v.Id
                                  join vt in ent.VehicleTypes on dl.VehicleType_id equals vt.Id
                                  join p in ent.Patients on dl.PatientId equals p.Id
-                                 where dl.RideComplete==true && d.IsDeleted==false && dl.RejectedStatus==false && p.Id == PatientId
+                                 where dl.IsPay == "Y" && p.Id == PatientId
                                  orderby dl.Id descending 
                                  select new getdriverbookinglist
                                  {
@@ -1219,7 +980,6 @@ WHERE DL.PatientId=" + Id+ " and DL.[Status]=1 and DL.RejectedStatus=0 and DL.Ri
                                      UserLong = dl.start_Long,
                                      Lat_Driver = dl.Lat_Driver,
                                      Lang_Driver = dl.Lang_Driver,
-                                     InvoiceNumber = dl.InvoiceNumber,
                                      //Lat_Driver = d.Lat,
                                      //Lang_Driver = d.Lang,
                                      PaymentDate = dl.PaymentDate,
@@ -1359,221 +1119,81 @@ WHERE DL.PatientId=" + Id+ " and DL.[Status]=1 and DL.RejectedStatus=0 and DL.Ri
         [HttpGet, Route("api/DriverApi/GetOnGoingRide_UserDetail")]
         public IHttpActionResult GetOnGoingRide_UserDetail(int DriverId)
         {
-            var checkamb = ent.DriverLocations.Where(d => d.Driver_Id == DriverId && d.AmbulanceType_id == 2 && d.RideComplete == false).FirstOrDefault();
-            if(checkamb==null)
+            var UserDetail = ent.Database.SqlQuery<UserdetailOngoingdriver>($"select DL.Id,P.Id as PatientId,P.PatientName,P.MobileNumber,sm.StateName+','+cm.CityName+','+P.Location as Location,CAST(DL.Amount as int) as TotalPrice,DL.PaymentDate,DL.IsPay,DL.Lat_Driver,DL.Lang_Driver,DL.start_Lat,DL.start_Long,DL.end_Lat,DL.end_Long,DL.ToatlDistance as TotalDistance,al.DeviceId from DriverLocation as DL left join Patient as P on Dl.PatientId=P.Id left join Driver as D on D.Id=DL.Driver_Id join StateMaster sm on sm.Id=P.StateMaster_Id join CityMaster cm on cm.Id=P.CityMaster_Id JOIN AdminLogin al on al.Id=P.AdminLogin_Id where D.Id={DriverId} and DL.IsPay='Y' and DL.RideComplete='0' order by DL.Id desc").FirstOrDefault();
+            if (UserDetail != null)
             {
-                var UserDetail = ent.Database.SqlQuery<UserdetailOngoingdriver>($"select DL.Id,P.Id as PatientId,P.PatientName,P.MobileNumber,sm.StateName+','+cm.CityName+','+P.Location as Location,CAST(DL.Amount as int) as TotalPrice,DL.PaymentDate,DL.IsPay,DL.Lat_Driver,DL.Lang_Driver,DL.start_Lat,DL.start_Long,DL.end_Lat,DL.end_Long,DL.ToatlDistance as TotalDistance,al.DeviceId from DriverLocation as DL left join Patient as P on Dl.PatientId=P.Id left join Driver as D on D.Id=DL.Driver_Id join StateMaster sm on sm.Id=P.StateMaster_Id join CityMaster cm on cm.Id=P.CityMaster_Id JOIN AdminLogin al on al.Id=P.AdminLogin_Id where D.Id={DriverId} and DL.IsPay='Y' and DL.RideComplete='0' order by DL.Id desc").FirstOrDefault();
-                if (UserDetail != null)
+                // Driver
+                var lat1 = (double)UserDetail.Lat_Driver;
+                var lon1 = (double)UserDetail.Lang_Driver;
+
+                // User
+                var lat2 = (double)UserDetail.start_Lat;
+                var lon2 = (double)UserDetail.start_Long;
+
+                double rlat1 = Math.PI * lat1 / 180;
+                double rlat2 = Math.PI * lat2 / 180;
+                double theta = lon1 - lon2;
+                double rtheta = Math.PI * theta / 180;
+
+                double dist = Math.Sin(rlat1) * Math.Sin(rlat2) +
+                              Math.Cos(rlat1) * Math.Cos(rlat2) * Math.Cos(rtheta);
+
+                dist = Math.Acos(dist);
+                dist = dist * 180 / Math.PI;
+                dist = dist * 60 * 1.1515;
+                dist = dist * 1.609344;   // Convert miles to kilometers
+
+                UserDetail.DriverUserDistance = (int)dist;
+
+                // Calculate expected time
+
+                double expectedTimeMinutes = dist * 4; // 2 minutes per kilometer
+
+                // Convert the expectedTimeMinutes to an integer
+                int expectedTimeMinutesInt = Convert.ToInt32(expectedTimeMinutes);
+                if (expectedTimeMinutesInt == 0)
                 {
-                    // Driver
-                    var lat1 = (double)UserDetail.Lat_Driver;
-                    var lon1 = (double)UserDetail.Lang_Driver;
-
-                    // User
-                    var lat2 = (double)UserDetail.start_Lat;
-                    var lon2 = (double)UserDetail.start_Long;
-
-                    double rlat1 = Math.PI * lat1 / 180;
-                    double rlat2 = Math.PI * lat2 / 180;
-                    double theta = lon1 - lon2;
-                    double rtheta = Math.PI * theta / 180;
-
-                    double dist = Math.Sin(rlat1) * Math.Sin(rlat2) +
-                                  Math.Cos(rlat1) * Math.Cos(rlat2) * Math.Cos(rtheta);
-
-                    dist = Math.Acos(dist);
-                    dist = dist * 180 / Math.PI;
-                    dist = dist * 60 * 1.1515;
-                    dist = dist * 1.609344;   // Convert miles to kilometers
-
-                    UserDetail.DriverUserDistance = (int)dist;
-
-                    // Calculate expected time
-
-                    double expectedTimeMinutes = dist * 4; // 2 minutes per kilometer
-
-                    // Convert the expectedTimeMinutes to an integer
-                    int expectedTimeMinutesInt = Convert.ToInt32(expectedTimeMinutes);
-                    if (expectedTimeMinutesInt == 0)
-                    {
-                        expectedTimeMinutesInt = 5;
-                    }
-                    UserDetail.ExpectedTime = expectedTimeMinutesInt;
-                    
+                    expectedTimeMinutesInt = 5;
                 }
-                return Ok(UserDetail);
+                UserDetail.ExpectedTime = expectedTimeMinutesInt;
+
             }
-            else
-            {
-                var UserDetail = ent.Database.SqlQuery<UserdetailOngoingdriver>($"select DL.Id,P.Id as PatientId,P.PatientName,P.MobileNumber,sm.StateName+','+cm.CityName+','+P.Location as Location,CAST(DL.Amount as int) as TotalPrice,DL.PaymentDate,DL.IsPay,DL.Lat_Driver,DL.Lang_Driver,DL.start_Lat,DL.start_Long,DL.end_Lat,DL.end_Long,DL.ToatlDistance as TotalDistance,al.DeviceId from DriverLocation as DL left join Patient as P on Dl.PatientId=P.Id left join Driver as D on D.Id=DL.Driver_Id join StateMaster sm on sm.Id=P.StateMaster_Id join CityMaster cm on cm.Id=P.CityMaster_Id JOIN AdminLogin al on al.Id=P.AdminLogin_Id where D.Id={DriverId} and DL.RideComplete='0' order by DL.Id desc").FirstOrDefault();
-                if (UserDetail != null)
-                {
-                    // Driver
-                    var lat1 = (double)UserDetail.Lat_Driver;
-                    var lon1 = (double)UserDetail.Lang_Driver;
 
-                    // User
-                    var lat2 = (double)UserDetail.start_Lat;
-                    var lon2 = (double)UserDetail.start_Long;
-
-                    double rlat1 = Math.PI * lat1 / 180;
-                    double rlat2 = Math.PI * lat2 / 180;
-                    double theta = lon1 - lon2;
-                    double rtheta = Math.PI * theta / 180;
-
-                    double dist = Math.Sin(rlat1) * Math.Sin(rlat2) +
-                                  Math.Cos(rlat1) * Math.Cos(rlat2) * Math.Cos(rtheta);
-
-                    dist = Math.Acos(dist);
-                    dist = dist * 180 / Math.PI;
-                    dist = dist * 60 * 1.1515;
-                    dist = dist * 1.609344;   // Convert miles to kilometers
-
-                    UserDetail.DriverUserDistance = (int)dist;
-
-                    // Calculate expected time
-
-                    double expectedTimeMinutes = dist * 4; // 2 minutes per kilometer
-
-                    // Convert the expectedTimeMinutes to an integer
-                    int expectedTimeMinutesInt = Convert.ToInt32(expectedTimeMinutes);
-                    if (expectedTimeMinutesInt == 0)
-                    {
-                        expectedTimeMinutesInt = 5;
-                    }
-                    UserDetail.ExpectedTime = expectedTimeMinutesInt;
-                    
-                }
-                return Ok(UserDetail);
-            }
-            
+            return Ok(UserDetail);
         }
 
         [HttpPost, Route("api/DriverApi/CompleteRide")]
 
         public IHttpActionResult CompleteRide(DriverLocationDT model)
-        {
-
-            var checkamb = ent.DriverLocations.Where(a => a.Driver_Id == model.Driver_Id && a.AmbulanceType_id==2 && a.RideComplete==false).FirstOrDefault();
+        { 
             var data1 = ent.DriverBookings.Where(a => a.Driver_Id == model.Driver_Id).FirstOrDefault();
-            var data = ent.DriverLocations.Where(a => a.Id == model.Id && a.Driver_Id == model.Driver_Id && a.Status == "1").FirstOrDefault();
-            if(checkamb==null)
+           
+            var data = ent.DriverLocations.Where(a => a.Id == model.Id && a.Driver_Id == model.Driver_Id).FirstOrDefault();
+
+            var getPaymentcomp = ent.DriverLocations.Where(d => d.PaymentStatus == "3" && d.Driver_Id==model.Driver_Id).FirstOrDefault();
+            if(getPaymentcomp!=null)
             {
-                var getPaymentcomp = ent.DriverLocations.Where(d => d.PaymentStatus == "3" && d.Driver_Id == model.Driver_Id && d.Status == "1").FirstOrDefault();
                 if (data != null && data1 != null)
                 {
-                    if (getPaymentcomp != null)
-                    {
-                        var driverdata = ent.Drivers.Where(d => d.Id == model.Driver_Id).FirstOrDefault();
-                        driverdata.IsBooked = false;
-                        data.RideComplete = true;
-                        data.CompleteRideDate = DateTime.Now;
-                        data1.RideComplete = true;
-                        ent.SaveChanges();
-                    }
-                    else
-                    {
-                        return BadRequest("Can't complete! Your amount is pending.");
-                    }
-
-                    return Ok("Your ride completed.");
+                    var driverdata = ent.Drivers.Where(d => d.Id == model.Driver_Id).FirstOrDefault();
+                    driverdata.IsBooked = false;
+                     
+                    data.RideComplete = true;
+                    data1.RideComplete = true;
+                    ent.SaveChanges();
                 }
                 else
                 {
                     return BadRequest("Data not found.");
                 }
+                
+                return Ok("Your ride completed.");
             }
             else
             {
-                var driverdata = ent.Drivers.Where(d => d.Id == model.Driver_Id).FirstOrDefault();
-                driverdata.IsBooked = false;
-
-                checkamb.RideComplete = true;
-                checkamb.CompleteRideDate = DateTime.Now;
-                data1.RideComplete = true;
-                ent.SaveChanges();
-                return Ok("Your ride completed.");
+                return BadRequest("Can't complete! Your amount is pending.");
             }
-
-            
             
         }
-
-        [HttpGet, Route("api/DriverApi/AmbulanceInvoice/{Invoice}")]
-        public IHttpActionResult AmbulanceInvoice(string Invoice)
-        {
-            try
-            {
-                var gst = ent.GSTMasters.Where(x => x.IsDeleted == false).FirstOrDefault(x => x.Name == "Ambulance");
-                var invoiceData = (from d in ent.Drivers
-                                   join dl in ent.DriverLocations on d.Id equals dl.Driver_Id
-                                   join v in ent.Vehicles on d.Vehicle_Id equals v.Id
-                                   where dl.InvoiceNumber == Invoice
-                                   select new
-                                   {
-                                       dl.PatientId,
-                                       dl.Id,
-                                       d.DriverName,
-                                       v.VehicleName,
-                                       v.VehicleNumber,
-                                       dl.Amount,
-                                       GST = gst.Amount,
-                                       dl.OrderId,
-                                       dl.InvoiceNumber,
-                                       dl.OrderDate
-                                   }).ToList();
-
-                if (invoiceData.Count > 0)
-                {
-                    decimal? totalAmountWithoutGST = invoiceData.Sum(item => item.Amount);
-                    decimal? gstAmount = (totalAmountWithoutGST * (decimal)gst.Amount) / 100;
-                    decimal? grandTotal = totalAmountWithoutGST + gstAmount;
-                    decimal? finalamount = grandTotal - gstAmount;
-
-
-                    int? patientId = invoiceData[0].PatientId;
-
-                    var patientData = ent.Patients.FirstOrDefault(x => x.Id == patientId);
-
-
-                    if (patientData != null)
-                    {
-                        return Ok(new
-                        {
-                            InvoiceData = invoiceData,
-                            Name = patientData.PatientName,
-                            Email = patientData.EmailId,
-                            PinCode = patientData.PinCode,
-                            MobileNo = patientData.MobileNumber,
-                            Address = patientData.Location,
-                            InvoiceNumber = Invoice,
-                            orderid = invoiceData[0].OrderId,
-                            orderdate = invoiceData[0].OrderDate,
-                            gst = invoiceData[0].GST,
-                            GSTAmount = gstAmount,
-                            GrandTotal = grandTotal,
-                            finalAmount = finalamount,
-                            Status = 200,
-                            Message = "Invoice"
-                        });
-                    }
-                    else
-                    {
-                        return BadRequest("Patient data not found");
-                    }
-                }
-                else
-                {
-                    return BadRequest("No Invoice data found");
-                }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest("Server Error");
-            }
-
-        }
-
-        
     }
 }

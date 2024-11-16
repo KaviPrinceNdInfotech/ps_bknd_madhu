@@ -2,11 +2,11 @@
 @{
     ViewBag.Title = "All";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
-    int count = 1;
 }
 
 <style>
-    #mainContainer { 
+    #mainContainer {
+        width: 60%;
         margin-top: 1%;
         margin-left: 1%;
     }
@@ -46,9 +46,8 @@
     <div class="row">
         <div class="col-md-12">
             <table id="myTable" class="table table-bordered">
-                <thead style="background-color:lavender;">
+                <thead>
                     <tr>
-                        <th>Sr No.</th>
                         <th>Test Name</th>
                         <th>Action</th>
                     </tr>
@@ -57,14 +56,12 @@
                     @foreach (var item in Model)
                     {
                         <tr>
-                            <td>@count</td>
                             <td>@item.TestName</td>
                             <td>
                                 @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-info" })
                                 @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-danger" })
                             </td>
                         </tr>
-                        count++;
                     }
                 </tbody>
             </table>

@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
-using DocumentFormat.OpenXml.Wordprocessing;
 using HospitalPortal.Models.DomainModels;
 using HospitalPortal.Models.ViewModels;
 using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -18,27 +16,122 @@ namespace HospitalPortal.Controllers
     {
         DbEntities ent = new DbEntities();
         // GET: Report
-        public ActionResult DoctorReport(DateTime? sdate, DateTime? edate)
+        public ActionResult DoctorReport()
         {
             var model = new ReportDTO();
-            if (sdate != null && edate != null)
-            {                
-                var doctor = @"select P.Doctor_Id,D.DoctorId, D.DoctorName from dbo.PatientAppointment P join Doctor D ON d.Id = p.Doctor_Id where p.IsPaid=1 and  P.AppointmentDate between @sdate and @edate group by Doctor_Id, DoctorName,D.DoctorId";
-                var data = ent.Database.SqlQuery<DoctorReports>(doctor, new SqlParameter("sdate", sdate),
-             new SqlParameter("edate", edate)).ToList();
-                model.DoctorReport = data;
-                return View(model);
-            }
-            else
-            { 
-                var doctor = @"select P.Doctor_Id,D.DoctorId, D.DoctorName from dbo.PatientAppointment P join Doctor D ON d.Id = p.Doctor_Id where p.IsPaid=1 and  P.AppointmentDate between DateAdd(DD,-7,GETDATE() ) and GETDATE() group by Doctor_Id, DoctorName,D.DoctorId";
-                var data1 = ent.Database.SqlQuery<DoctorReports>(doctor).ToList();
-                model.DoctorReport = data1;
-            }
+            var doctor = @"select P.Doctor_Id,D.DoctorId, D.DoctorName from dbo.PatientAppointment P join Doctor D ON d.Id = p.Doctor_Id where p.IsPaid=1 and  P.AppointmentDate between DateAdd(DD,-7,GETDATE() ) and GETDATE() and p.IsPayoutPaid=1 group by Doctor_Id, DoctorName,D.DoctorId";
+            var data = ent.Database.SqlQuery<DoctorReports>(doctor).ToList();
+            model.DoctorReport = data;
             return View(model);
         }
 
-        
+        public void DownloadDoctorExcelForBank()
+        {
+            string query = "SELECT distinct dl.Doctor_Id, d.DoctorId as UniqueId,d.DoctorName as Name,d.EmailId, sum(dl.TotalFee) as TotalFee, bd.AccountNo, bd.IFSCCode FROM PatientAppointment dl JOIN Doctor d ON d.Id = dl.Doctor_Id LEFT JOIN BankDetails as bd ON bd.Login_Id=d.AdminLogin_Id WHERE dl.IsPaid =1 AND dl.AppointmentDate BETWEEN DATEADD(DD, -7, GETDATE()) AND GETDATE() and dl.IsPayoutPaid=1 GROUP BY  dl.Doctor_Id,d.DoctorName,d.DoctorId,d.EmailId, bd.AccountNo, bd.IFSCCode";
+            List<DetailsForBank> employeeDetails = ent.Database.SqlQuery<DetailsForBank>(query, Array.Empty<object>()).ToList();
+            ExcelPackage Ep = new ExcelPackage();
+            ExcelWorksheet Sheet = Ep.Workbook.Worksheets.Add("Report");
+            Sheet.Cells["A1"].Value = "Payment Method";
+            Sheet.Cells["B1"].Value = "Payment Amount";
+            Sheet.Cells["C1"].Value = "Activation Date";
+            Sheet.Cells["D1"].Value = "Beneficiary Name";
+            Sheet.Cells["E1"].Value = "Account No in text";
+            Sheet.Cells["F1"].Value = "Email";
+            Sheet.Cells["G1"].Value = "Email Body";
+            Sheet.Cells["H1"].Value = "Debit Account No";
+            Sheet.Cells["I1"].Value = "CRN No";
+            Sheet.Cells["J1"].Value = "Receiver IFSC Code";
+            Sheet.Cells["K1"].Value = "Receiver Account";
+            Sheet.Cells["L1"].Value = "Remarks";
+            Sheet.Cells["M1"].Value = "Phone No";
+            int row = 2;
+            CRNGenerator crnGenerator = new CRNGenerator();
+            foreach (DetailsForBank item in employeeDetails)
+            {
+                string dvrId = item.UniqueId;
+                long sdds = Convert.ToInt64(item.AccountNo);
+                string crn = crnGenerator.GenerateCRN(dvrId);
+                Sheet.Cells[$"A{row}"].Value = "N";
+                Sheet.Cells[$"B{row}"].Value = item.TotalFee;
+                Sheet.Cells[$"C{row}"].Value = DateTime.Now;
+                Sheet.Cells[$"C{row}"].Style.Numberformat.Format = "yyyy-MM-dd";
+                Sheet.Cells[$"D{row}"].Value = item.Name;
+                Sheet.Cells[$"E{row}"].Value = NumberToWords(sdds);
+                Sheet.Cells[$"F{row}"].Value = item.EmailId;
+                Sheet.Cells[$"G{row}"].Value = "This is your payment report";
+                Sheet.Cells[$"H{row}"].Value = "55443333322222(fix)";
+                Sheet.Cells[$"I{row}"].Value = crn;
+                Sheet.Cells[$"J{row}"].Value = item.IFSCCode;
+                Sheet.Cells[$"K{row}"].Value = item.AccountNo;
+                Sheet.Cells[$"L{row}"].Value = "Enter your remark";
+                Sheet.Cells[$"M{row}"].Value = "9090907867(admin)";
+                row++;
+            }
+            Sheet.Cells["A:AZ"].AutoFitColumns();
+            base.Response.Clear();
+            base.Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            base.Response.AddHeader("content-disposition", "attachment; filename=Report.xlsx");
+            base.Response.BinaryWrite(Ep.GetAsByteArray());
+            base.Response.End();
+        }
+        static string NumberToWords(long number)
+        {
+            if (number == 0)
+                return "zero";
+
+            int val;
+            long next, num_digits;
+            long[] a = new long[19]; // Maximum number of digits in a long is 19
+
+            // words for every digits from 0 to 9
+            string[] digits_words = {
+        "zero",
+        "one",
+        "two",
+        "three",
+        "four",
+        "five",
+        "six",
+        "seven",
+        "eight",
+        "nine"
+    };
+
+            string words = "";
+
+            val = 0;
+            next = 0;
+            num_digits = 0;
+
+            while (number > 0)
+            {
+                next = number % 10;
+                a[val] = next;
+                val++;
+                num_digits++;
+                number = number / 10;
+            }
+
+            for (val = (int)(num_digits - 1); val >= 0; val--)
+            {
+                words += digits_words[a[val]] + " ";
+            }
+
+            return words.Trim(); // Trim any trailing whitespace
+        }
+        public class CRNGenerator
+        {
+            private int sequenceNumber = 1;
+
+            public string GenerateCRN(string dvrId)
+            {
+                string month = DateTime.Now.ToString("MMM");
+                string year = DateTime.Now.ToString("yyyy");
+                string formattedSequence = sequenceNumber.ToString().PadLeft(4, '0');
+                sequenceNumber++;
+                return $"{dvrId}/{month}/{year}/{formattedSequence}";
+            }
+        }
 
         public ActionResult ViewDoctorDetails(int DoctorId, DateTime? sdate, DateTime? edate)
         {
@@ -51,15 +144,14 @@ namespace HospitalPortal.Controllers
             model.MobileNumber = mek.FirstOrDefault().MobileNumber;
             if (sdate != null && edate != null)
             {
-                var doct = @"select CONVERT(VARCHAR(10), AppointmentDate, 111) as AppointmentDate1, P.AppointmentDate, Sum(P.TotalFee) as Amount,p.Doctor_Id, D.DoctorName, D.MobileNumber, D.ClinicName,D.LicenceNumber  from PatientAppointment P join Doctor D on D.Id = p.Doctor_Id where p.IsPaid=1 and p.Doctor_Id='" + DoctorId + "' and CONVERT(VARCHAR, P.AppointmentDate,103) between @sdate and @edate GROUP BY P.AppointmentDate, p.TotalFee, D.DoctorName, D.MobileNumber, D.ClinicName,D.LicenceNumber, p.Doctor_Id";
-                var doctor1 = ent.Database.SqlQuery<DoctorReports>(doct, new SqlParameter("sdate", sdate),
-             new SqlParameter("edate", edate)).ToList();
+                var doct = @"select CONVERT(VARCHAR(10), AppointmentDate, 111) as AppointmentDate1, P.AppointmentDate, Sum(dp.Amount) as Amount,p.Doctor_Id, D.DoctorName, D.MobileNumber, D.ClinicName,D.LicenceNumber  from PatientAppointment P join Doctor D on D.Id = p.Doctor_Id join DoctorPayout as dp on dp.Doctor_Id=D.Id where p.IsPaid=1 and p.Doctor_Id='" + DoctorId + "' and CONVERT(VARCHAR, P.AppointmentDate,103) between '" + sdate + "' and '" + edate + "' GROUP BY P.AppointmentDate, dp.Amount, D.DoctorName, D.MobileNumber, D.ClinicName,D.LicenceNumber, p.Doctor_Id";
+                var doctor1 = ent.Database.SqlQuery<DoctorReports>(doct).ToList();
                 //doctorList = doctorList.Where(a => a.AppointmentDate >= sdate && a.AppointmentDate <= edate).ToList();
                 model.DoctorReport = doctor1;
             }
             else
             {
-                var doctor1 = @"select CONVERT(VARCHAR(10), AppointmentDate, 111) as AppointmentDate1, P.AppointmentDate, Sum(P.TotalFee) as Amount,p.Doctor_Id, D.DoctorName, D.MobileNumber, D.ClinicName,D.LicenceNumber  from PatientAppointment P join Doctor D on D.Id = p.Doctor_Id where p.IsPaid=1 and p.Doctor_Id='"+ DoctorId + "' GROUP BY P.AppointmentDate, p.TotalFee, D.DoctorName, D.MobileNumber, D.ClinicName,D.LicenceNumber,p.Doctor_Id";
+                var doctor1 = @"select CONVERT(VARCHAR(10), AppointmentDate, 111) as AppointmentDate1, P.AppointmentDate, Sum(dp.Amount) as Amount,p.Doctor_Id, D.DoctorName, D.MobileNumber, D.ClinicName,D.LicenceNumber  from PatientAppointment P join Doctor D on D.Id = p.Doctor_Id join DoctorPayout as dp on dp.Doctor_Id=D.Id where p.IsPaid=1 and p.Doctor_Id='" + DoctorId + "' and P.AppointmentDate between DateAdd(DD,-7,GETDATE() ) and GETDATE()  GROUP BY P.AppointmentDate, dp.Amount, D.DoctorName, D.MobileNumber, D.ClinicName,D.LicenceNumber,p.Doctor_Id";
                 var doctorList = ent.Database.SqlQuery<DoctorReports>(doctor1).ToList();
                 model.DoctorReport = doctorList;
             }
@@ -77,7 +169,7 @@ namespace HospitalPortal.Controllers
         public ActionResult LabReport()
         {
             var model = new ReportDTO();
-            var lab = @"select P.Lab_Id, D.LabName,D.lABId from BookTestLab P join Lab D ON d.Id = p.Lab_Id where P.TestDate between DateAdd(DD,-7,GETDATE() ) and GETDATE() and  P.IsPaid=1 group by Lab_Id, LabName,D.lABId";
+            var lab = @"select P.Lab_Id, D.LabName,D.lABId from BookTestLab P join Lab D ON d.Id = p.Lab_Id where P.TestDate between DateAdd(DD,-7,GETDATE() ) and GETDATE() and  P.IsPaid=1 and P.IsPayoutPaid=1 group by Lab_Id, LabName,D.lABId";
             var data = ent.Database.SqlQuery<LabReportsVM>(lab).ToList();
             if (data.Count() == 0)
             {
@@ -91,55 +183,55 @@ namespace HospitalPortal.Controllers
             }
             return View(model);
         }
-        //public void DownloadLabDetailExcelForBank()
-        //{
-        //    string query = "select distinct l.Id,l.lABId as UniqueId,l.LabName as Name,l.EmailId, sum(btl.Amount) as TotalFee, bd.AccountNo, bd.IFSCCode from Lab l join BookTestLab btl ON l.Id = btl.Lab_Id LEFT JOIN BankDetails as bd ON bd.Login_Id=l.AdminLogin_Id where btl.TestDate between DateAdd(DD,-7,GETDATE() ) and GETDATE() and btl.IsPaid=1 and btl.IsPayoutPaid=1  group by l.LabName,l.Id,l.lABId,bd.AccountNo,bd.IFSCCode,l.EmailId";
-        //    List<DetailsForBank> employeeDetails = ent.Database.SqlQuery<DetailsForBank>(query, Array.Empty<object>()).ToList();
-        //    ExcelPackage Ep = new ExcelPackage();
-        //    ExcelWorksheet Sheet = Ep.Workbook.Worksheets.Add("Report");
-        //    Sheet.Cells["A1"].Value = "Payment Method";
-        //    Sheet.Cells["B1"].Value = "Payment Amount";
-        //    Sheet.Cells["C1"].Value = "Activation Date";
-        //    Sheet.Cells["D1"].Value = "Beneficiary Name";
-        //    Sheet.Cells["E1"].Value = "Account No in text";
-        //    Sheet.Cells["F1"].Value = "Email";
-        //    Sheet.Cells["G1"].Value = "Email Body";
-        //    Sheet.Cells["H1"].Value = "Debit Account No";
-        //    Sheet.Cells["I1"].Value = "CRN No";
-        //    Sheet.Cells["J1"].Value = "Receiver IFSC Code";
-        //    Sheet.Cells["K1"].Value = "Receiver Account";
-        //    Sheet.Cells["L1"].Value = "Remarks";
-        //    Sheet.Cells["M1"].Value = "Phone No";
-        //    int row = 2;
-        //    CRNGenerator crnGenerator = new CRNGenerator();
-        //    foreach (DetailsForBank item in employeeDetails)
-        //    {
-        //        string dvrId = item.UniqueId;
-        //        long sdds = Convert.ToInt64(item.AccountNo);
-        //        string crn = crnGenerator.GenerateCRN(dvrId);
-        //        Sheet.Cells[$"A{row}"].Value = "N";
-        //        Sheet.Cells[$"B{row}"].Value = item.TotalFee;
-        //        Sheet.Cells[$"C{row}"].Value = DateTime.Now;
-        //        Sheet.Cells[$"C{row}"].Style.Numberformat.Format = "yyyy-MM-dd";
-        //        Sheet.Cells[$"D{row}"].Value = item.Name;
-        //        Sheet.Cells[$"E{row}"].Value = NumberToWords(sdds);
-        //        Sheet.Cells[$"F{row}"].Value = item.EmailId;
-        //        Sheet.Cells[$"G{row}"].Value = "This is your payment report";
-        //        Sheet.Cells[$"H{row}"].Value = "55443333322222(fix)";
-        //        Sheet.Cells[$"I{row}"].Value = crn;
-        //        Sheet.Cells[$"J{row}"].Value = item.IFSCCode;
-        //        Sheet.Cells[$"K{row}"].Value = item.AccountNo;
-        //        Sheet.Cells[$"L{row}"].Value = "Enter your remark";
-        //        Sheet.Cells[$"M{row}"].Value = "9090907867(admin)";
-        //        row++;
-        //    }
-        //    Sheet.Cells["A:AZ"].AutoFitColumns();
-        //    base.Response.Clear();
-        //    base.Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-        //    base.Response.AddHeader("content-disposition", "attachment; filename=Report.xlsx");
-        //    base.Response.BinaryWrite(Ep.GetAsByteArray());
-        //    base.Response.End();
-        //}
+        public void DownloadLabDetailExcelForBank()
+        {
+            string query = "select distinct l.Id,l.lABId as UniqueId,l.LabName as Name,l.EmailId, sum(btl.Amount) as TotalFee, bd.AccountNo, bd.IFSCCode from Lab l join BookTestLab btl ON l.Id = btl.Lab_Id LEFT JOIN BankDetails as bd ON bd.Login_Id=l.AdminLogin_Id where btl.TestDate between DateAdd(DD,-7,GETDATE() ) and GETDATE() and btl.IsPaid=1 and btl.IsPayoutPaid=1  group by l.LabName,l.Id,l.lABId,bd.AccountNo,bd.IFSCCode,l.EmailId";
+            List<DetailsForBank> employeeDetails = ent.Database.SqlQuery<DetailsForBank>(query, Array.Empty<object>()).ToList();
+            ExcelPackage Ep = new ExcelPackage();
+            ExcelWorksheet Sheet = Ep.Workbook.Worksheets.Add("Report");
+            Sheet.Cells["A1"].Value = "Payment Method";
+            Sheet.Cells["B1"].Value = "Payment Amount";
+            Sheet.Cells["C1"].Value = "Activation Date";
+            Sheet.Cells["D1"].Value = "Beneficiary Name";
+            Sheet.Cells["E1"].Value = "Account No in text";
+            Sheet.Cells["F1"].Value = "Email";
+            Sheet.Cells["G1"].Value = "Email Body";
+            Sheet.Cells["H1"].Value = "Debit Account No";
+            Sheet.Cells["I1"].Value = "CRN No";
+            Sheet.Cells["J1"].Value = "Receiver IFSC Code";
+            Sheet.Cells["K1"].Value = "Receiver Account";
+            Sheet.Cells["L1"].Value = "Remarks";
+            Sheet.Cells["M1"].Value = "Phone No";
+            int row = 2;
+            CRNGenerator crnGenerator = new CRNGenerator();
+            foreach (DetailsForBank item in employeeDetails)
+            {
+                string dvrId = item.UniqueId;
+                long sdds = Convert.ToInt64(item.AccountNo);
+                string crn = crnGenerator.GenerateCRN(dvrId);
+                Sheet.Cells[$"A{row}"].Value = "N";
+                Sheet.Cells[$"B{row}"].Value = item.TotalFee;
+                Sheet.Cells[$"C{row}"].Value = DateTime.Now;
+                Sheet.Cells[$"C{row}"].Style.Numberformat.Format = "yyyy-MM-dd";
+                Sheet.Cells[$"D{row}"].Value = item.Name;
+                Sheet.Cells[$"E{row}"].Value = NumberToWords(sdds);
+                Sheet.Cells[$"F{row}"].Value = item.EmailId;
+                Sheet.Cells[$"G{row}"].Value = "This is your payment report";
+                Sheet.Cells[$"H{row}"].Value = "55443333322222(fix)";
+                Sheet.Cells[$"I{row}"].Value = crn;
+                Sheet.Cells[$"J{row}"].Value = item.IFSCCode;
+                Sheet.Cells[$"K{row}"].Value = item.AccountNo;
+                Sheet.Cells[$"L{row}"].Value = "Enter your remark";
+                Sheet.Cells[$"M{row}"].Value = "9090907867(admin)";
+                row++;
+            }
+            Sheet.Cells["A:AZ"].AutoFitColumns();
+            base.Response.Clear();
+            base.Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            base.Response.AddHeader("content-disposition", "attachment; filename=Report.xlsx");
+            base.Response.BinaryWrite(Ep.GetAsByteArray());
+            base.Response.End();
+        }
         public ActionResult ViewLabDetails(int LabId, DateTime? sdate, DateTime? edate)
         {
             var model = new ReportDTO();
@@ -272,28 +364,68 @@ namespace HospitalPortal.Controllers
             ViewBag.Total = model.AppointmentDetails.Sum(a => a.TotalFee);
             return View(model);
         }
-         
-        public ActionResult NurseReport(DateTime? sdate, DateTime? edate)
+
+
+        public ActionResult NurseReport(int? Id)
         {
             var model = new ReportDTO();
             model.NurseTypeList = new SelectList(ent.NurseTypes.ToList(), "Id", "NurseTypeName");
-            if (sdate != null && edate != null)
-            {
-                var Nurse = @"select P.Id,p.NurseId,P.NurseName,d.NurseTypeName from Nurse P join NurseType D ON d.Id = p.NurseType_Id join NurseService ns on ns.Nurse_Id = P.Id where ns.ServiceAcceptanceDate between @sdate and @edate and ns.IsPaid=1  group by  P.NurseName,d.NurseTypeName,P.Id,p.NurseId";
-                var data = ent.Database.SqlQuery<ViewNurseList>(Nurse, new SqlParameter("sdate", sdate),
-             new SqlParameter("edate", edate)).ToList();
-                model.NurseList = data;
-                return View(model);
-            }
-            else
-            {
-                var Nurse = @"select P.Id,p.NurseId,P.NurseName,d.NurseTypeName from Nurse P join NurseType D ON d.Id = p.NurseType_Id join NurseService ns on ns.Nurse_Id = P.Id where ns.ServiceAcceptanceDate between DateAdd(DD,-7,GETDATE() ) and GETDATE() and ns.IsPaid=1  group by  P.NurseName,d.NurseTypeName,P.Id,p.NurseId";
-                var data = ent.Database.SqlQuery<ViewNurseList>(Nurse).ToList();
-                model.NurseList = data;
-            }
+            var Nurse = @"select P.Id,p.NurseId,P.NurseName,d.NurseTypeName from Nurse P join NurseType D ON d.Id = p.NurseType_Id join NurseService ns on ns.Nurse_Id = P.Id where ns.ServiceAcceptanceDate between DateAdd(DD,-7,GETDATE() ) and GETDATE() and ns.IsPaid=1 and ns.IsPayoutPaid=1  group by  P.NurseName,d.NurseTypeName,P.Id,p.NurseId";
+            var data = ent.Database.SqlQuery<ViewNurseList>(Nurse).ToList();
+            model.NurseList = data;
             return View(model);
-        } 
-        
+        }
+        public void DownloadNurseExcelForBank()
+        {
+            string query = "select distinct P.Id,p.NurseId as UniqueId,P.NurseName as Name,d.NurseTypeName,p.EmailId, sum(ns.TotalFee) as TotalFee, bd.AccountNo, bd.IFSCCode from Nurse P join NurseType D ON d.Id = p.NurseType_Id join NurseService ns on ns.Nurse_Id = P.Id LEFT JOIN BankDetails as bd ON bd.Login_Id=p.AdminLogin_Id where ns.ServiceAcceptanceDate between DateAdd(DD,-7,GETDATE() ) and GETDATE() and ns.IsPaid=1 and ns.IsPayoutPaid=1  group by  P.NurseName,d.NurseTypeName,P.Id,p.NurseId,bd.AccountNo,bd.IFSCCode,p.EmailId";
+            List<DetailsForBank> employeeDetails = ent.Database.SqlQuery<DetailsForBank>(query, Array.Empty<object>()).ToList();
+            ExcelPackage Ep = new ExcelPackage();
+            ExcelWorksheet Sheet = Ep.Workbook.Worksheets.Add("Report");
+            Sheet.Cells["A1"].Value = "Payment Method";
+            Sheet.Cells["B1"].Value = "Payment Amount";
+            Sheet.Cells["C1"].Value = "Activation Date";
+            Sheet.Cells["D1"].Value = "Beneficiary Name";
+            Sheet.Cells["E1"].Value = "Account No in text";
+            Sheet.Cells["F1"].Value = "Email";
+            Sheet.Cells["G1"].Value = "Email Body";
+            Sheet.Cells["H1"].Value = "Debit Account No";
+            Sheet.Cells["I1"].Value = "CRN No";
+            Sheet.Cells["J1"].Value = "Receiver IFSC Code";
+            Sheet.Cells["K1"].Value = "Receiver Account";
+            Sheet.Cells["L1"].Value = "Remarks";
+            Sheet.Cells["M1"].Value = "Phone No";
+            int row = 2;
+            CRNGenerator crnGenerator = new CRNGenerator();
+            foreach (DetailsForBank item in employeeDetails)
+            {
+                string dvrId = item.UniqueId;
+                long sdds = Convert.ToInt64(item.AccountNo);
+                string crn = crnGenerator.GenerateCRN(dvrId);
+                Sheet.Cells[$"A{row}"].Value = "N";
+                Sheet.Cells[$"B{row}"].Value = item.TotalFee;
+                Sheet.Cells[$"C{row}"].Value = DateTime.Now;
+                Sheet.Cells[$"C{row}"].Style.Numberformat.Format = "yyyy-MM-dd";
+                Sheet.Cells[$"D{row}"].Value = item.Name;
+                Sheet.Cells[$"E{row}"].Value = NumberToWords(sdds);
+                Sheet.Cells[$"F{row}"].Value = item.EmailId;
+                Sheet.Cells[$"G{row}"].Value = "This is your payment report";
+                Sheet.Cells[$"H{row}"].Value = "55443333322222(fix)";
+                Sheet.Cells[$"I{row}"].Value = crn;
+                Sheet.Cells[$"J{row}"].Value = item.IFSCCode;
+                Sheet.Cells[$"K{row}"].Value = item.AccountNo;
+                Sheet.Cells[$"L{row}"].Value = "Enter your remark";
+                Sheet.Cells[$"M{row}"].Value = "9090907867(admin)";
+                row++;
+            }
+            Sheet.Cells["A:AZ"].AutoFitColumns();
+            base.Response.Clear();
+            base.Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            base.Response.AddHeader("content-disposition", "attachment; filename=Report.xlsx");
+            base.Response.BinaryWrite(Ep.GetAsByteArray());
+            base.Response.End();
+        }
+       
+
         public ActionResult ViewNurseList(int Id, DateTime? sdate, DateTime? edate)
         {
             var model = new ReportDTO();
@@ -305,21 +437,28 @@ namespace HospitalPortal.Controllers
             model.MobileNumber = mek.FirstOrDefault().MobileNumber;
             if (sdate != null && edate != null)
             {
-                var qry = @"select n.NurseName, n.Location, n.CertificateNumber, ns.IsPaid, cm.CityName, sm.StateName, case when ns.ServiceAcceptanceDate is null then 'N/A' else Convert(nvarchar(100), ns.ServiceAcceptanceDate, 103) end as ServiceAcceptanceDate, Convert(nvarchar(100), ns.RequestDate, 103) as RequestDate,ns.RequestDate as rDate,Datediff(day, ns.StartDate, ns.EndDate) as TotalDays,IsNull(ns.PerDayAmount, 0) as Fee,ns.TotalFee,p.PatientName,p.PatientRegNo from NurseService ns join nurse n on ns.Nurse_Id = n.Id join CityMaster cm on cm.Id = n.CityMaster_Id join StateMaster sm on sm.Id = n.StateMaster_Id join Patient p on p.Id = ns.Patient_Id where ns.Nurse_Id = n.Id and ns.Nurse_Id = " + Id + " and ns.IsPaid = 1 and ns.ServiceAcceptanceDate between @sdate and @edate order by ns.Id desc";
-                //var Nurses = ent.Database.SqlQuery<ViewNurseList>(qry).ToList();
-                var Nurses = ent.Database.SqlQuery<ViewNurseList>(qry,
-                new SqlParameter("sdate", sdate),
-             new SqlParameter("edate", edate)).ToList();
-
+                var qry = @"select n.NurseName, n.Location, n.CertificateNumber, ns.IsPaid, cm.CityName, sm.StateName, case when ns.ServiceAcceptanceDate is null then 'N/A' else Convert(nvarchar(100), ns.ServiceAcceptanceDate, 103) end as ServiceAcceptanceDate, Convert(nvarchar(100), ns.RequestDate, 103) as RequestDate,
+ns.RequestDate as rDate,
+Datediff(day,ns.StartDate,ns.EndDate) as TotalDays,
+IsNull(ns.PerDayAmount,0) as Fee,
+ns.TotalFee,
+p.PatientName
+from NurseService ns
+join nurse n on ns.Nurse_Id=n.Id
+join CityMaster cm on cm.Id = n.CityMaster_Id
+join StateMaster sm on sm.Id = n.StateMaster_Id
+join Patient p on p.Id = ns.Patient_Id
+where ns.Nurse_Id =n.Id
+and ns.Nurse_Id ='" + Id + "' and ns.ServiceAcceptanceDate between "+sdate+" and "+edate+"  and ns.IsPaid=1 order by ns.Id desc ";
+                var Nurses = ent.Database.SqlQuery<ViewNurseList>(qry).ToList();
+                //doctorList = doctorList.Where(a => a.AppointmentDate >= sdate && a.AppointmentDate <= edate).ToList();
                 model.NurseList = Nurses;
-                TempData["msg"] = "No Records";
             }
             else
             {
-                var doctor1 = @"select n.NurseName, n.Location, n.CertificateNumber, ns.IsPaid, cm.CityName, sm.StateName, case when ns.ServiceAcceptanceDate is null then 'N/A' else Convert(nvarchar(100), ns.ServiceAcceptanceDate, 103) end as ServiceAcceptanceDate, Convert(nvarchar(100), ns.RequestDate, 103) as RequestDate,ns.RequestDate as rDate,Datediff(day, ns.StartDate, ns.EndDate) as TotalDays,IsNull(ns.PerDayAmount, 0) as Fee,ns.TotalFee,p.PatientName,p.PatientRegNo from NurseService ns join nurse n on ns.Nurse_Id = n.Id join CityMaster cm on cm.Id = n.CityMaster_Id join StateMaster sm on sm.Id = n.StateMaster_Id join Patient p on p.Id = ns.Patient_Id where ns.Nurse_Id = n.Id and ns.Nurse_Id = " + Id+" and IsPaid = 1 order by ns.Id desc";
+                var doctor1 = @"select n.NurseName, n.Location, n.CertificateNumber, ns.IsPaid, cm.CityName, sm.StateName, case when ns.ServiceAcceptanceDate is null then 'N/A' else Convert(nvarchar(100), ns.ServiceAcceptanceDate, 103) end as ServiceAcceptanceDate, Convert(nvarchar(100), ns.RequestDate, 103) as RequestDate,ns.RequestDate as rDate,Datediff(day, ns.StartDate, ns.EndDate) as TotalDays,IsNull(ns.PerDayAmount, 0) as Fee,ns.TotalFee,p.PatientName from NurseService ns join nurse n on ns.Nurse_Id = n.Id join CityMaster cm on cm.Id = n.CityMaster_Id join StateMaster sm on sm.Id = n.StateMaster_Id join Patient p on p.Id = ns.Patient_Id where ns.Nurse_Id = n.Id and ns.Nurse_Id = " + Id+" and IsPaid = 1 and ns.ServiceAcceptanceDate between DateAdd(DD,-7,GETDATE() ) and GETDATE() order by ns.Id desc";
                 var doctorList = ent.Database.SqlQuery<ViewNurseList>(doctor1).ToList();
                 model.NurseList = doctorList;
-                TempData["msg"] = "No Records";
             }
             ViewBag.Total = model.NurseList.Sum(a => a.TotalFee);
             return View(model);
@@ -423,50 +562,23 @@ namespace HospitalPortal.Controllers
             //ViewBag.Payment = payment;
             model.Vendorses = data;
             return View(model);
-        } 
-        public ActionResult Driver(DateTime? sdate, DateTime? edate)
+        }
+       
+
+
+        public ActionResult Driver()
         {
-            //var model = new VendorPaymentDTO();
-            var model = new AmbulanceList();
+            var model = new VendorPaymentDTO();
             double payment = ent.Database.SqlQuery<double>(@"select Amount from PaymentMaster p where p.Department='Vendor' and Name='Driver'").FirstOrDefault();
-             if(sdate!=null && edate!=null)
-             {
-                string q = @"SELECT distinct d.Id,v.VehicleNumber,d.DriverId,d.DriverName,ISNULL(v.VehicleName, 'NA') AS VehicleName,CAST(SUM(vt.DriverCharge) AS int) as TotalPrice
-    FROM DriverLocation trm
-    JOIN Driver d ON d.Id = trm.Driver_Id
-    JOIN Vehicle v ON v.Id = d.Vehicle_Id  
-	JOIN VehicleType as vt on vt.Id=v.VehicleType_Id
-	join Patient p on p.Id=trm.PatientId
-    WHERE trm.IsPay = 'Y' and trm.RideComplete=1 AND trm.EntryDate BETWEEN @sdate AND @edate group by d.Id,v.VehicleNumber, d.DriverName,v.VehicleName,d.DriverId";
-                var data = ent.Database.SqlQuery<AmbulanceReport>(q, new SqlParameter("sdate", sdate),
-             new SqlParameter("edate", edate)).ToList();
-                if (data.Count() == 0)
-                {
-                    TempData["msg"] = "No Result";
-                    return View(model);
-                }
-                ViewBag.Payment = payment;
-                model.Ambulance = data;
-             }
-             else
+            string q = @"select COUNT(d.Id) as Count, v.VendorName,v.CompanyName, V.Id from Driver d join Vendor v on d.Vendor_Id = v.Id  where d.JoiningDate  >= DATEADD(day,-7, GETDATE()) group by v.VendorName,v.CompanyName, V.Id";
+            var data = ent.Database.SqlQuery<VendorList>(q).ToList();
+            if (data.Count() == 0)
             {
-                string q = @"SELECT distinct d.Id,v.VehicleNumber,d.DriverId,d.DriverName,ISNULL(v.VehicleName, 'NA') AS VehicleName,CAST(SUM(vt.DriverCharge) AS int) as TotalPrice
-    FROM DriverLocation trm
-    JOIN Driver d ON d.Id = trm.Driver_Id
-    JOIN Vehicle v ON v.Id = d.Vehicle_Id  
-	JOIN VehicleType as vt on vt.Id=v.VehicleType_Id
-	join Patient p on p.Id=trm.PatientId
-    WHERE trm.IsPay = 'Y' and trm.RideComplete=1 AND trm.EntryDate BETWEEN DATEADD(DD, -7, GETDATE()) AND GETDATE() group by d.Id,v.VehicleNumber, d.DriverName,v.VehicleName,d.DriverId";
-                var data = ent.Database.SqlQuery<AmbulanceReport>(q).ToList();
-                if (data.Count() == 0)
-                {
-                    TempData["msg"] = "No Result";
-                    return View(model);
-                }
-                ViewBag.Payment = payment;
-                model.Ambulance = data;
+                TempData["msg"] = "No Result";
+                return View(model);
             }
-            
+            ViewBag.Payment = payment;
+            model.Vendorses = data;
             return View(model);
         }
         public ActionResult Vehicle()
@@ -509,52 +621,24 @@ var data = ent.Database.SqlQuery<VendorsDoctors>(q).ToList();
             return View(model);
         }
 
-        public ActionResult DriverDetails(int id, DateTime? sdate, DateTime? edate)
+        public ActionResult DriverDetails(int id)
         {
-            var model = new AmbulanceList();
-            //string query = @"select CompanyName, VendorName from Vendor where Id=" + id;
-            //var datas = ent.Database.SqlQuery<VendorPaymentDTO>(query).ToList();
-            //model.CompanyName = datas.FirstOrDefault().CompanyName;
-            //model.VendorName = datas.FirstOrDefault().VendorName;
-            //            string q = @"select d.Id, v.VendorName, v.CompanyName, d.DriverName, c.CityName from Driver d join Vendor v on d.Vendor_Id = v.Id 
-            //join CityMaster c on c.Id = d.CityMaster_Id
-            //where v.Id=" + id + "  group by v.VendorName,v.CompanyName, d.DriverName,c.CityName,d.Id order by d.Id desc";
-            //var data = ent.Database.SqlQuery<VendorsDriver>(q).ToList();
-            if (sdate != null && edate != null)
+            var model = new VendorPaymentDTO();
+            string query = @"select CompanyName, VendorName from Vendor where Id=" + id;
+            var datas = ent.Database.SqlQuery<VendorPaymentDTO>(query).ToList();
+            model.CompanyName = datas.FirstOrDefault().CompanyName;
+            model.VendorName = datas.FirstOrDefault().VendorName;
+            string q = @"select d.Id, v.VendorName, v.CompanyName, d.DriverName, c.CityName from Driver d join Vendor v on d.Vendor_Id = v.Id 
+join CityMaster c on c.Id = d.CityMaster_Id
+where v.Id=" + id + "  group by v.VendorName,v.CompanyName, d.DriverName,c.CityName,d.Id order by d.Id desc";
+var data = ent.Database.SqlQuery<VendorsDriver>(q).ToList();
+            if (data.Count() == 0)
             {
-                var doct = @"SELECT trm.id,p.PatientName,p.PatientRegNo,CONCAT(DAY(trm.PaymentDate), ' ',UPPER(FORMAT(trm.PaymentDate, 'MMM')), ' ', YEAR(trm.PaymentDate),' ',FORMAT(trm.PaymentDate, 'hh:mm tt')) AS PaymentDate,v.VehicleNumber,ISNULL(v.VehicleName, 'NA') AS VehicleName,CAST(vt.DriverCharge as int) as TotalPrice,
-trm.ToatlDistance AS Distance,d.DriverName,trm.start_Lat,trm.start_Long,trm.end_Lat,trm.end_Long FROM DriverLocation trm
-JOIN Driver d ON d.Id = trm.Driver_Id
-JOIN Vehicle v ON v.Id = d.Vehicle_Id
-join VehicleType as vt on vt.Id=v.VehicleType_Id
-JOIN Patient p ON p.Id = trm.PatientId
-WHERE d.Id=" + id + " and trm.IsPay = 'Y' and trm.RideComplete=1 AND CONVERT(DATETIME, trm.PaymentDate, 103) BETWEEN @sdate AND @edate";
-                // var doctor1 = ent.Database.SqlQuery<AmbulanceReport>(doct).ToList();
-                var doctor1 = ent.Database.SqlQuery<AmbulanceReport>(doct,
-            new SqlParameter("sdate", sdate),
-            new SqlParameter("edate", edate)).ToList();
-                model.Ambulance = doctor1;
+                TempData["Msg"] = "No Records";
                 return View(model);
             }
-            else
-            {
-                string q = @"SELECT trm.id,p.PatientName,p.PatientRegNo,CONCAT(DAY(trm.PaymentDate), ' ',UPPER(FORMAT(trm.PaymentDate, 'MMM')), ' ', YEAR(trm.PaymentDate),' ',FORMAT(trm.PaymentDate, 'hh:mm tt')) AS PaymentDate,v.VehicleNumber,ISNULL(v.VehicleName, 'NA') AS VehicleName,CAST(vt.DriverCharge as int) as TotalPrice,
-trm.ToatlDistance AS Distance,d.DriverName,trm.start_Lat,trm.start_Long,trm.end_Lat,trm.end_Long FROM DriverLocation trm
-JOIN Driver d ON d.Id = trm.Driver_Id
-JOIN Vehicle v ON v.Id = d.Vehicle_Id
-join VehicleType as vt on vt.Id=v.VehicleType_Id
-JOIN Patient p ON p.Id = trm.PatientId
-WHERE d.Id=" + id + " and trm.IsPay = 'Y' and trm.RideComplete=1";
-                //and trm.EntryDate  >= DATEADD(day,-7, GETDATE())
-                var data = ent.Database.SqlQuery<AmbulanceReport>(q).ToList();
-                if (data.Count() == 0)
-                {
-                    TempData["Msg"] = "No Records";
-                    return View(model);
-                }
-                model.Ambulance = data;
-                return View(model);
-            }                
+            model.VendorsDriver = data;
+            return View(model);
         }
 
         public ActionResult VehicleDetails(int id)

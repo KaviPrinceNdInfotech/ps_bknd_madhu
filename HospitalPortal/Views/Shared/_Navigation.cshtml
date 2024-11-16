@@ -43,16 +43,6 @@
 
             </ul>
         </li>
-        <li style="cursor:pointer;" data-target=".invoice-menu" class="nav-header" data-toggle="collapse">
-            <i class="fa fa-user"></i> Invoice Reports<i class="fa fa-collapse"></i>
-        </li>
-        <li>
-            <ul class="invoice-menu nav nav-list collapse">
-                <li><a href="/Incvoice/DoctorInvoiceReport/" style="cursor:pointer;"><i class="fa fa-list"></i> Doctor</a></li>
-                <li><a href="/Incvoice/NurseInvoiceReport/" style="cursor:pointer;"><i class="fa fa-list"></i> Nurse</a></li>
-
-            </ul>
-        </li>
         <li style="cursor:pointer;" data-target=".account-menu" class="nav-header" data-toggle="collapse">
             <i class="fa fa-user"></i> Master Entries<i class="fa fa-collapse"></i>
         </li>
@@ -103,625 +93,624 @@
                             <a href="/Common/RWAGST" style="cursor:pointer;"><span class="fa fa-minus"></span> <span class="fa fa-user"></span>Add RWA's GST</a>
                         </li>
                     </ul>
+                    </li>
+                        <li>
+                            <a href="/Charges/MedicineDeliveryCharge" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Add Medicine Delivery Charge</a>
+                        </li>
+                        <li>
+                            <a href="/Department/All" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Add Department</a>
+                        </li>
+                        <li>
+                            <a href="/Specialist/All" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Add Specialist</a>
+                        </li>
+                        <li>
+                            <a href="/AdminOperation/AddTestCartegory" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Add Test Category</a>
+                        </li>
+                        <li>
+                            <a href="/AdminOperation/AddTestDetails" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Add Test Name</a>
+                        </li>
+                        <li>
+                            <a href="/HealthPackageMaster/All" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Add Health CheckUp Package</a>
+                        </li>
+                        <li>
+                            <a href="/AdminOperation/AddPackage" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Add Health CheckUp Package Details</a>
+                        </li>
+                        @*<li>
+                            <a href="/Common/TDS" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Add TDS</a>
+                        </li>*@
+                        @*<li>
+                            <a href="/Common/Commision" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Add Commission(Recievable Commission)</a>
+                        </li>*@
+                        @*<li>
+                            <a href="/Common/GST" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Add GST</a>
+                        </li>*@
+                        @*<li>
+                            <a href="/Common/RWATDS" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Add RWA's TDS Amt</a>
+                        </li>
+                        <li>
+                            <a href="/Common/RWAPayment" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Add RWA's Commission Amt(Payble Commission)</a>
+                        </li>
+                        <li>
+                            <a href="/Common/RWAGST" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Add RWA's GST</a>
+                        </li>*@
+                        @*<li>
+                            <a href="/Common/FranchiseTDS" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Add Frenchise's TDS</a>
+                        </li>
+                        <li>
+                            <a href="/Common/FranchiseGST" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Add Frenchise's GST</a>
+                        </li>
+                        <li>
+                            <a href="/Common/Payment" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Add Frenchise's Commission Amt(Payble Commission)</a>
+                        </li>*@
+                        <li>
+                            <a href="/Category/Add" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Add Vehicle Category</a>
+                        </li>
+
+                        <li>
+                            <a href="/VehicleType/All" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Add Vehicle Type</a>
+                        </li>
+                        <li>
+                            <a href="/MedicMaster/MedicMaster" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Add Medicine</a>
+                        </li>
+                        <li>
+                            <a href="/Charges/Common" style="cursor:pointer;"><span class="fa fa-user"></span>Nurse/Doctor Charges</a>
+                        </li>
+                        @*<li>
+                            <a href="/Charges/VehicleList" style="cursor:pointer;"><span class="fa fa-user"></span>Driver Charges</a>
+                        </li>*@
+                        <li style="display:none;">
+                            <a href="/Charges/DoctorSlot" style="cursor:pointer;"><span class="fa fa-user"></span>Add Doctor Slot</a>
+                        </li>
+                        <li>
+                            <a href="/Common/AddDoctorDurationTime" style="cursor:pointer;"><span class="fa fa-user"></span>Add Slot Timing</a>
+                        </li>
+                    </ul>
+                </li>
+
+
+                <li style="cursor:pointer;" data-target=".reg-menu" class="nav-header" data-toggle="collapse">
+                    <i class="fa fa-user"></i> Registrations <i class="fa fa-collapse"></i>
+                </li>
+                <!-- SubMenus Start-->
+                <li>
+                    <ul class="reg-menu nav nav-list collapse">
+                        <li>
+                            <a href="/Vendor/Add" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Franchise Registration</a>
+                        </li>
+
+                        <li>
+                            <a href="/Driver/Add" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Driver Registration</a>
+                        </li>
+
+                        <li>
+                            <a href="/Vehicle/Add" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Vehicle Registration</a>
+                        </li>
+
+                        <li>
+                            <a href="/Hospital/Add" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Hospital Registration</a>
+                        </li>
+
+                        <li>
+                            <a href="/Nurse/Add" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Nurse Registration</a>
+                        </li>
+
+                        <li>
+                            <a href="/Chemist/Add" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Chemist Registration</a>
+                        </li>
+
+                        <li>
+                            <a href="/Lab/Add" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Lab Registration</a>
+                        </li>
+
+                        <li>
+                            <a href="/CompletHealthCheckup/Add" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Health Checkup Center Registration</a>
+                        </li>
+
+                        <li>
+                            <a href="/Rwa/Add" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>RWA Registration</a>
+                        </li>
+
+                        <li>
+                            <a href="/Employee/Add" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Employee Registration</a>
+                        </li>
+
+                        <li>
+                            <a href="/DoctorRegistration/Add" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Doctor Registration</a>
+                        </li>
+
+                        <li>
+                    </ul>
+                </li>
+
+                <li style="cursor:pointer;" data-target=".regList-menu" class="nav-header" data-toggle="collapse">
+                    <i class="fa fa-user"></i> Registration List <i class="fa fa-collapse"></i>
+                </li>
+                <!-- SubMenus Start-->
+                <li>
+                    <ul class="regList-menu nav nav-list collapse">
+                        <li>
+                            <a href="/Vendor/All" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Franchise List</a>
+
+                    </ul>
+                </li>
+
+                <li>
+                    <ul class="regList-menu nav nav-list collapse">
+                        <li>
+                            <a href="/Driver/All" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Driver List</a>
+
+                    </ul>
+                </li>
+
+                <li>
+                    <ul class="regList-menu nav nav-list collapse">
+                        <li>
+                            <a href="/Vehicle/All" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Vehicle List</a>
+
+                    </ul>
+                </li>
+
+                <li>
+                    <ul class="regList-menu nav nav-list collapse">
+                        <li>
+                            <a href="/Hospital/All" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Hospital List</a>
+
+                    </ul>
+                </li>
+
+                <li>
+                    <ul class="regList-menu nav nav-list collapse">
+                        <li>
+                            <a href="/Nurse/All" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Nurse List</a>
+
+                    </ul>
+                </li>
+
+                <li>
+                    <ul class="regList-menu nav nav-list collapse">
+                        <li>
+                            <a href="/Chemist/All" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Chemist List</a>
+
+                    </ul>
+                </li>
+
+                <li>
+                    <ul class="regList-menu nav nav-list collapse">
+                        <li>
+                            <a href="/Lab/All" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Lab List</a>
+
+                    </ul>
+                </li>
+
+                <li>
+                    <ul class="regList-menu nav nav-list collapse">
+                        <li>
+                            <a href="/CompletHealthCheckup/All" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Health Checkup Center List</a>
+
+                    </ul>
+                </li>
+
+                <li>
+                    <ul class="regList-menu nav nav-list collapse">
+                        <li>
+                            <a href="/Rwa/All" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>RWA List</a>
+
+                    </ul>
+                </li>
+
+                <li>
+                    <ul class="regList-menu nav nav-list collapse">
+                        <li>
+                            <a href="/DoctorRegistration/All" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Doctor List</a>
+
+                    </ul>
+                </li>
+
+                <li>
+                    <ul class="regList-menu nav nav-list collapse">
+                        <li>
+                            <a href="/Patient/PatientList" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>User List</a>
+
+                    </ul>
+                </li>
+
+
+
+
+                <li style="cursor:pointer;" data-target=".report-menu" class="nav-header" data-toggle="collapse">
+                    <i class="fa fa-money"></i> Payment Report List <i class="fa fa-collapse"></i>
+                </li>
+                <!-- SubMenus Start-->
+                <li>
+                    <ul class="report-menu nav nav-list collapse">
+                        <li>
+                            <a href="/Report/DoctorReport" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Doctor Payment Report</a>
+                    </ul>
                 </li>
                 <li>
-                    <a href="/Charges/MedicineDeliveryCharge" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Add Medicine Delivery Charge</a>
+                    <ul class="report-menu nav nav-list collapse">
+                        <li>
+                            <a href="/AmbulancePayment/Show" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Ambulance Payment Report</a>
+                    </ul>
                 </li>
                 <li>
-                    <a href="/Department/All" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Add Department</a>
+                    <ul class="report-menu nav nav-list collapse">
+                        <li>
+                            <a href="/Report/LabReport" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Lab Payment Report</a>
+                    </ul>
                 </li>
                 <li>
-                    <a href="/Specialist/All" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Add Specialist</a>
+                    <ul class="report-menu nav nav-list collapse">
+                        <li>
+                            <a href="/Report/ChemistReport" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Chemist Payment Report</a>
+                    </ul>
                 </li>
                 <li>
-                    <a href="/AdminOperation/AddTestCartegory" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Add Test Category</a>
+                    <ul class="report-menu nav nav-list collapse">
+                        <li>
+                            <a href="/Report/NurseReport" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Nurse Payment Report</a>
+                    </ul>
                 </li>
                 <li>
-                    <a href="/AdminOperation/AddTestDetails" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Add Test Name</a>
+                    <ul class="report-menu nav nav-list collapse">
+                        <li>
+                            <a href="/Report/HealthCheckUp" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>HealthCheckUp Payment Report</a>
+                    </ul>
                 </li>
                 <li>
-                    <a href="/HealthPackageMaster/All" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Add Health CheckUp Package</a>
+                    <ul class="report-menu nav nav-list collapse">
+                        <li>
+                            <a href="/HospitalPayment/HospitalPayment" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Hospital Payment Report</a>
+                    </ul>
                 </li>
                 <li>
-                    <a href="/AdminOperation/AddPackage" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Add Health CheckUp Package Details</a>
+                    <ul class="report-menu nav nav-list collapse">
+                        <li>
+                            <a href="/Report/Vendor" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Franchise Payment Report</a>
+                    </ul>
+                </li>
+                <li>
+                    <ul class="report-menu nav nav-list collapse">
+                        <li>
+                            <a href="/Report/Driver" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Driver Payment Report</a>
+                    </ul>
+                </li>
+                <li>
+                    <ul class="report-menu nav nav-list collapse">
+                        <li>
+                            <a href="/Rwa_Report/RwaList" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>RWA Payment Report</a>
+                    </ul>
+                </li>
+                <li style="cursor:pointer;" data-target=".viewReport-menu" class="nav-header" data-toggle="collapse">
+                    <i class="fa fa-calendar"></i> Y/M/W/D Report<i class="fa fa-collapse"></i>
+                </li>
+                <!-- SubMenus Start-->
+                <li>
+                    <ul class="viewReport-menu nav nav-list collapse">
+                        <li>
+                            <a href="/ViewReport/Doctor" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Doctor</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <ul class="viewReport-menu nav nav-list collapse">
+                        <li>
+                            <a href="/Rwa_Report/ViewReport" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>RWA</a>
+                        </li>
+                    </ul>
+                    <ul class="viewReport-menu nav nav-list collapse">
+                        <li>
+                            <a href="/AmbulanceReport/Ambulance" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Ambulance</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <ul class="viewReport-menu nav nav-list collapse">
+                        <li>
+                            <a href="/ViewReport/Health" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Complete Health CheckUp</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <ul class="viewReport-menu nav nav-list collapse">
+                        <li>
+                            <a href="/ViewReport/Lab" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Lab</a>
+                    </ul>
+                </li>
+                <li>
+                    <ul class="viewReport-menu nav nav-list collapse">
+                        <li>
+                            <a href="/ViewReport/Chemist" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Chemist</a>
+                    </ul>
+                </li>
+                <li>
+                    <ul class="viewReport-menu nav nav-list collapse">
+                        <li>
+                            <a href="/ViewReport/Nurses" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Nurse</a>
+                    </ul>
+                </li>
+
+                <li style="cursor:pointer;" data-target=".payOut-menu" class="nav-header" data-toggle="collapse">
+                    <i class="fa fa-money"></i>Generate PayOut<i class="fa fa-collapse"></i>
+                </li>
+                <!-- SubMenus Start-->
+                <li>
+                    <ul class="payOut-menu nav nav-list collapse">
+                        <li>
+                            <a href="/Admin/TransactionLogin" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Payout</a>
+                        </li>
+                    </ul>
+                </li>
+               
+
+                <li style="cursor:pointer;" data-target=".Complaint-menu" class="nav-header" data-toggle="collapse">
+                    <i class="fa fa-comments"></i>User's Complaints<i class="fa fa-collapse"></i>
+                </li>
+                <li>
+                    <ul class="Complaint-menu nav nav-list collapse">
+                        <li>
+                            <a href="/Complaint/Complaint" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Complaints</a>
+                        </li>
+                    </ul>
+                    <ul class="Complaint-menu nav nav-list collapse">
+                        <li>
+                            <a href="/Complaint/ViewComp" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Complaints History</a>
+                        </li>
+                    </ul>
+                </li>
+
+
+                <li style="cursor:pointer;" data-target=".Commission-menu" class="nav-header" data-toggle="collapse">
+                    <i class="fa fa-money"></i>Commission Reports<i class="fa fa-collapse"></i>
+                </li>
+                <li>
+                    <ul class="Commission-menu nav nav-list collapse">
+                        <li>
+                            <a href="/CommisionReport/Commision" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Commission Reports</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <ul class="Commission-menu nav nav-list collapse">
+                        <li>
+                            <a href="/HospitalCommission/Hospital " style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Hospital Commission Report</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <ul class="Commission-menu nav nav-list collapse">
+                        <li>
+                            <a href="/Rwa_Report/RWA" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>RWA Commission Reports</a>
+                        </li>
+                    </ul>
                 </li>
                 @*<li>
-                    <a href="/Common/TDS" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Add TDS</a>
+                    <ul class="Commission-menu nav nav-list collapse">
+                        <li>
+                            <a href="/CommisionReport/Driver" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Ambulance Commission Reports</a>
+                        </li>
+                    </ul>
                 </li>*@
-                @*<li>
-                    <a href="/Common/Commision" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Add Commission(Recievable Commission)</a>
-                </li>*@
-                @*<li>
-                    <a href="/Common/GST" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Add GST</a>
-                </li>*@
-                @*<li>
-                    <a href="/Common/RWATDS" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Add RWA's TDS Amt</a>
+                <li>
+                    <ul class="Commission-menu nav nav-list collapse">
+                        <li>
+                            <a href="/VendorCommission/Vendor" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Franchise Commission Reports</a>
+                        </li>
+                    </ul>
+
+                </li>
+                <!--Scan Report Naviagtion-->
+                <li style="cursor:pointer;" data-target=".Scan-menu" class="nav-header" data-toggle="collapse">
+                    <i class="fa fa-history"></i>View Scan Reports<i class="fa fa-collapse"></i>
                 </li>
                 <li>
-                    <a href="/Common/RWAPayment" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Add RWA's Commission Amt(Payble Commission)</a>
+                    <ul class="Scan-menu nav nav-list collapse">
+                        <li>
+                            <a href="/ScanReports/Lab" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>For Lab</a>
+                        </li>
+                    </ul>
+                    <ul class="Scan-menu nav nav-list collapse">
+                        <li>
+                            <a href="/ScanReports/Hospital" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>For Hospital</a>
+                        </li>
+                    </ul>
                 </li>
                 <li>
-                    <a href="/Common/RWAGST" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Add RWA's GST</a>
-                </li>*@
-                @*<li>
-                    <a href="/Common/FranchiseTDS" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Add Frenchise's TDS</a>
-                </li>
-                <li>
-                    <a href="/Common/FranchiseGST" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Add Frenchise's GST</a>
-                </li>
-                <li>
-                    <a href="/Common/Payment" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Add Frenchise's Commission Amt(Payble Commission)</a>
-                </li>*@
-                <li>
-                    <a href="/Category/Add" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Add Vehicle Category</a>
+                    <ul class="Scan-menu nav nav-list collapse">
+                        <li>
+                            <a href="/ScanReports/Health" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>For Health</a>
+                        </li>
+                    </ul>
+                    <ul class="Scan-menu nav nav-list collapse">
+                        <li>
+                            <a href="/ScanReports/Doctor" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>For Doctor</a>
+                        </li>
+                    </ul>
                 </li>
 
-                <li>
-                    <a href="/VehicleType/All" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Add Vehicle Type</a>
+
+                <!--Vendor Report-->
+                <li style="cursor:pointer;" data-target=".Vendor-menu" class="nav-header" data-toggle="collapse">
+                    <i class="fa fa-calendar"></i>Franchise Y/M/W/D Report<i class="fa fa-collapse"></i>
                 </li>
                 <li>
-                    <a href="/MedicMaster/MedicMaster" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Add Medicine</a>
+                    <ul class="Vendor-menu nav nav-list collapse">
+                        <li>
+                            <a href="/VendorReport/Doctor" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>For Doctor</a>
+                        </li>
+                    </ul>
                 </li>
                 <li>
-                    <a href="/Charges/Common" style="cursor:pointer;"><span class="fa fa-user"></span>Nurse/Doctor Charges</a>
-                </li>
-                @*<li>
-                    <a href="/Charges/VehicleList" style="cursor:pointer;"><span class="fa fa-user"></span>Driver Charges</a>
-                </li>*@
-                <li style="display:none;">
-                    <a href="/Charges/DoctorSlot" style="cursor:pointer;"><span class="fa fa-user"></span>Add Doctor Slot</a>
-                </li>
-                <li>
-                    <a href="/Common/AddDoctorDurationTime" style="cursor:pointer;"><span class="fa fa-user"></span>Add Slot Timing</a>
-                </li>
-            </ul>
-        </li>
-
-
-        <li style="cursor:pointer;" data-target=".reg-menu" class="nav-header" data-toggle="collapse">
-            <i class="fa fa-user"></i> Registrations <i class="fa fa-collapse"></i>
-        </li>
-        <!-- SubMenus Start-->
-        <li>
-            <ul class="reg-menu nav nav-list collapse">
-                <li>
-                    <a href="/Vendor/Add" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Franchise Registration</a>
-                </li>
-
-                <li>
-                    <a href="/Driver/Add" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Driver Registration</a>
-                </li>
-
-                <li>
-                    <a href="/Vehicle/Add" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Vehicle Registration</a>
+                   
+                    <ul class="Vendor-menu nav nav-list collapse">
+                        <li>
+                            <a href="/VendorReport/Vehicle" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>For Vehicle</a>
+                        </li>
+                    </ul>
+                    <ul class="Vendor-menu nav nav-list collapse">
+                        <li>
+                            <a href="/VendorReport/Chemist" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>For Chemist</a>
+                        </li>
+                    </ul>
+                    <ul class="Vendor-menu nav nav-list collapse">
+                        <li>
+                            <a href="/VendorReport/Lab" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>For Lab</a>
+                        </li>
+                    </ul>
+                    <ul class="Vendor-menu nav nav-list collapse">
+                        <li>
+                            <a href="/VendorReport/Nurse" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>For Nurse</a>
+                        </li>
+                    </ul>
+                    <ul class="Vendor-menu nav nav-list collapse">
+                        <li>
+                            <a href="/VendorReport/HealthCheckUp" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>For Health Check Up</a>
+                        </li>
+                    </ul>
                 </li>
 
-                <li>
-                    <a href="/Hospital/Add" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Hospital Registration</a>
-                </li>
-
-                <li>
-                    <a href="/Nurse/Add" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Nurse Registration</a>
-                </li>
-
-                <li>
-                    <a href="/Chemist/Add" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Chemist Registration</a>
-                </li>
-
-                <li>
-                    <a href="/Lab/Add" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Lab Registration</a>
-                </li>
-
-                <li>
-                    <a href="/CompletHealthCheckup/Add" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Health Checkup Center Registration</a>
-                </li>
-
-                <li>
-                    <a href="/Rwa/Add" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>RWA Registration</a>
-                </li>
-
-                <li>
-                    <a href="/Employee/Add" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Employee Registration</a>
-                </li>
-
-                <li>
-                    <a href="/DoctorRegistration/Add" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Doctor Registration</a>
-                </li>
-
-                <li>
-            </ul>
-        </li>
-
-        <li style="cursor:pointer;" data-target=".regList-menu" class="nav-header" data-toggle="collapse">
-            <i class="fa fa-user"></i> Registration List <i class="fa fa-collapse"></i>
-        </li>
-        <!-- SubMenus Start-->
-        <li>
-            <ul class="regList-menu nav nav-list collapse">
-                <li>
-                    <a href="/Vendor/All" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Franchise List</a>
-
-            </ul>
-        </li>
-
-        <li>
-            <ul class="regList-menu nav nav-list collapse">
-                <li>
-                    <a href="/Driver/All" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Driver List</a>
-
-            </ul>
-        </li>
-
-        <li>
-            <ul class="regList-menu nav nav-list collapse">
-                <li>
-                    <a href="/Vehicle/All" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Vehicle List</a>
-
-            </ul>
-        </li>
-
-        <li>
-            <ul class="regList-menu nav nav-list collapse">
-                <li>
-                    <a href="/Hospital/All" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Hospital List</a>
-
-            </ul>
-        </li>
-
-        <li>
-            <ul class="regList-menu nav nav-list collapse">
-                <li>
-                    <a href="/Nurse/All" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Nurse List</a>
-
-            </ul>
-        </li>
-
-        <li>
-            <ul class="regList-menu nav nav-list collapse">
-                <li>
-                    <a href="/Chemist/All" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Chemist List</a>
-
-            </ul>
-        </li>
-
-        <li>
-            <ul class="regList-menu nav nav-list collapse">
-                <li>
-                    <a href="/Lab/All" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Lab List</a>
-
-            </ul>
-        </li>
-
-        <li>
-            <ul class="regList-menu nav nav-list collapse">
-                <li>
-                    <a href="/CompletHealthCheckup/All" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Health Checkup Center List</a>
-
-            </ul>
-        </li>
-
-        <li>
-            <ul class="regList-menu nav nav-list collapse">
-                <li>
-                    <a href="/Rwa/All" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>RWA List</a>
-
-            </ul>
-        </li>
-
-        <li>
-            <ul class="regList-menu nav nav-list collapse">
-                <li>
-                    <a href="/DoctorRegistration/All" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>Doctor List</a>
-
-            </ul>
-        </li>
-
-        <li>
-            <ul class="regList-menu nav nav-list collapse">
-                <li>
-                    <a href="/Patient/PatientList" style="cursor:pointer;"><span class="fa fa-plus"></span> <span class="fa fa-user"></span>User List</a>
-
-            </ul>
-        </li>
-
-
-
-
-        <li style="cursor:pointer;" data-target=".report-menu" class="nav-header" data-toggle="collapse">
-            <i class="fa fa-money"></i> Payment Report List <i class="fa fa-collapse"></i>
-        </li>
-        <!-- SubMenus Start-->
-        <li>
-            <ul class="report-menu nav nav-list collapse">
-                <li>
-                    <a href="/Report/DoctorReport" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Doctor Payment Report</a>
-            </ul>
-        </li>
-        <li>
-            <ul class="report-menu nav nav-list collapse">
-                <li>
-                    <a href="/AmbulancePayment/Show" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Ambulance Payment Report</a>
-            </ul>
-        </li>
-        <li>
-            <ul class="report-menu nav nav-list collapse">
-                <li>
-                    <a href="/Report/LabReport" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Lab Payment Report</a>
-            </ul>
-        </li>
-        <li>
-            <ul class="report-menu nav nav-list collapse">
-                <li>
-                    <a href="/Report/ChemistReport" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Chemist Payment Report</a>
-            </ul>
-        </li>
-        <li>
-            <ul class="report-menu nav nav-list collapse">
-                <li>
-                    <a href="/Report/NurseReport" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Nurse Payment Report</a>
-            </ul>
-        </li>
-        <li>
-            <ul class="report-menu nav nav-list collapse">
-                <li>
-                    <a href="/Report/HealthCheckUp" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>HealthCheckUp Payment Report</a>
-            </ul>
-        </li>
-        <li>
-            <ul class="report-menu nav nav-list collapse">
-                <li>
-                    <a href="/HospitalPayment/HospitalPayment" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Hospital Payment Report</a>
-            </ul>
-        </li>
-        <li>
-            <ul class="report-menu nav nav-list collapse">
-                <li>
-                    <a href="/Report/Vendor" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Franchise Payment Report</a>
-            </ul>
-        </li>
-        <li>
-            <ul class="report-menu nav nav-list collapse">
-                <li>
-                    <a href="/Report/Driver" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Driver Payment Report</a>
-            </ul>
-        </li>
-        <li>
-            <ul class="report-menu nav nav-list collapse">
-                <li>
-                    <a href="/Rwa_Report/RwaList" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>RWA Payment Report</a>
-            </ul>
-        </li>
-        <li style="cursor:pointer;" data-target=".viewReport-menu" class="nav-header" data-toggle="collapse">
-            <i class="fa fa-calendar"></i> Y/M/W/D Report<i class="fa fa-collapse"></i>
-        </li>
-        <!-- SubMenus Start-->
-        <li>
-            <ul class="viewReport-menu nav nav-list collapse">
-                <li>
-                    <a href="/ViewReport/Doctor" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Doctor</a>
-                </li>
-            </ul>
-        </li>
-        <li>
-            <ul class="viewReport-menu nav nav-list collapse">
-                <li>
-                    <a href="/Rwa_Report/ViewReport" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>RWA</a>
-                </li>
-            </ul>
-            <ul class="viewReport-menu nav nav-list collapse">
-                <li>
-                    <a href="/AmbulanceReport/Ambulance" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Ambulance</a>
-                </li>
-            </ul>
-        </li>
-        <li>
-            <ul class="viewReport-menu nav nav-list collapse">
-                <li>
-                    <a href="/ViewReport/Health" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Complete Health CheckUp</a>
-                </li>
-            </ul>
-        </li>
-        <li>
-            <ul class="viewReport-menu nav nav-list collapse">
-                <li>
-                    <a href="/ViewReport/Lab" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Lab</a>
-            </ul>
-        </li>
-        <li>
-            <ul class="viewReport-menu nav nav-list collapse">
-                <li>
-                    <a href="/ViewReport/Chemist" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Chemist</a>
-            </ul>
-        </li>
-        <li>
-            <ul class="viewReport-menu nav nav-list collapse">
-                <li>
-                    <a href="/ViewReport/Nurses" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Nurse</a>
-            </ul>
-        </li>
-
-        <li style="cursor:pointer;" data-target=".payOut-menu" class="nav-header" data-toggle="collapse">
-            <i class="fa fa-money"></i>Generate PayOut<i class="fa fa-collapse"></i>
-        </li>
-        <!-- SubMenus Start-->
-        <li>
-            <ul class="payOut-menu nav nav-list collapse">
-                <li>
-                    <a href="/Admin/TransactionLogin" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Payout</a>
-                </li>
-            </ul>
-        </li>
-
-
-        <li style="cursor:pointer;" data-target=".Complaint-menu" class="nav-header" data-toggle="collapse">
-            <i class="fa fa-comments"></i>User's Complaints<i class="fa fa-collapse"></i>
-        </li>
-        <li>
-            <ul class="Complaint-menu nav nav-list collapse">
-                <li>
-                    <a href="/Complaint/Complaint" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Complaints</a>
-                </li>
-            </ul>
-            <ul class="Complaint-menu nav nav-list collapse">
-                <li>
-                    <a href="/Complaint/ViewComp" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Complaints History</a>
-                </li>
-            </ul>
-        </li>
-
-
-        <li style="cursor:pointer;" data-target=".Commission-menu" class="nav-header" data-toggle="collapse">
-            <i class="fa fa-money"></i>Commission Reports<i class="fa fa-collapse"></i>
-        </li>
-        <li>
-            <ul class="Commission-menu nav nav-list collapse">
-                <li>
-                    <a href="/CommisionReport/Commision" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Commission Reports</a>
-                </li>
-            </ul>
-        </li>
-        <li>
-            <ul class="Commission-menu nav nav-list collapse">
-                <li>
-                    <a href="/HospitalCommission/Hospital " style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Hospital Commission Report</a>
-                </li>
-            </ul>
-        </li>
-        <li>
-            <ul class="Commission-menu nav nav-list collapse">
-                <li>
-                    <a href="/Rwa_Report/RWA" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>RWA Commission Reports</a>
-                </li>
-            </ul>
-        </li>
-        @*<li>
-            <ul class="Commission-menu nav nav-list collapse">
-                <li>
-                    <a href="/CommisionReport/Driver" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Ambulance Commission Reports</a>
-                </li>
-            </ul>
-        </li>*@
-        <li>
-            <ul class="Commission-menu nav nav-list collapse">
-                <li>
-                    <a href="/VendorCommission/Vendor" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Franchise Commission Reports</a>
-                </li>
-            </ul>
-
-        </li>
-        <!--Scan Report Naviagtion-->
-        <li style="cursor:pointer;" data-target=".Scan-menu" class="nav-header" data-toggle="collapse">
-            <i class="fa fa-history"></i>View Scan Reports<i class="fa fa-collapse"></i>
-        </li>
-        <li>
-            <ul class="Scan-menu nav nav-list collapse">
-                <li>
-                    <a href="/ScanReports/Lab" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>For Lab</a>
-                </li>
-            </ul>
-            <ul class="Scan-menu nav nav-list collapse">
-                <li>
-                    <a href="/ScanReports/Hospital" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>For Hospital</a>
-                </li>
-            </ul>
-        </li>
-        <li>
-            <ul class="Scan-menu nav nav-list collapse">
-                <li>
-                    <a href="/ScanReports/Health" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>For Health</a>
-                </li>
-            </ul>
-            <ul class="Scan-menu nav nav-list collapse">
-                <li>
-                    <a href="/ScanReports/Doctor" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>For Doctor</a>
-                </li>
-            </ul>
-        </li>
-
-
-        <!--Vendor Report-->
-        <li style="cursor:pointer;" data-target=".Vendor-menu" class="nav-header" data-toggle="collapse">
-            <i class="fa fa-calendar"></i>Franchise Y/M/W/D Report<i class="fa fa-collapse"></i>
-        </li>
-        <li>
-            <ul class="Vendor-menu nav nav-list collapse">
-                <li>
-                    <a href="/VendorReport/Doctor" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>For Doctor</a>
-                </li>
-            </ul>
-        </li>
-        <li>
-
-            <ul class="Vendor-menu nav nav-list collapse">
-                <li>
-                    <a href="/VendorReport/Vehicle" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>For Vehicle</a>
-                </li>
-            </ul>
-            <ul class="Vendor-menu nav nav-list collapse">
-                <li>
-                    <a href="/VendorReport/Chemist" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>For Chemist</a>
-                </li>
-            </ul>
-            <ul class="Vendor-menu nav nav-list collapse">
-                <li>
-                    <a href="/VendorReport/Lab" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>For Lab</a>
-                </li>
-            </ul>
-            <ul class="Vendor-menu nav nav-list collapse">
-                <li>
-                    <a href="/VendorReport/Nurse" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>For Nurse</a>
-                </li>
-            </ul>
-            <ul class="Vendor-menu nav nav-list collapse">
-                <li>
-                    <a href="/VendorReport/HealthCheckUp" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>For Health Check Up</a>
-                </li>
-            </ul>
-        </li>
-        <li class="nav-header"><a href="/AmbulanceReport/RoadAccidentReport/" style="cursor:pointer;"><i class="fa fa-ambulance"></i> Road Accident Report</a></li>
-
-        <!--TDS Report-->
-        <li style="cursor:pointer;" data-target=".Tds-menu" class="nav-header" data-toggle="collapse">
-            <i class="fa fa-calendar"></i>TDS Report<i class="fa fa-collapse"></i>
-        </li>
-        <li>
-            <ul class="Tds-menu nav nav-list collapse">
-                <li>
-                    <a href="/TDSReport/TDS" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>TDS Report</a>
-                </li>
-            </ul>
-            <ul class="Tds-menu nav nav-list collapse">
-                <li>
-                    <a href="/TDSReport/Vendortds" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Franchise TDS Report</a>
-                </li>
-            </ul>
-            <ul class="Tds-menu nav nav-list collapse">
-                <li>
-                    <a href="/HospitalTDS/TDSHospital" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Hospital TDS Report</a>
-                </li>
-            </ul>
-        </li>
-
-
-        <!--Salary Report-->
-        <li style="cursor:pointer;" data-target=".salary-menu" class="nav-header" data-toggle="collapse">
-            <i class="fa fa-money"></i>Manage Salary<i class="fa fa-collapse"></i>
-        </li>
-        <li>
-            <ul class="salary-menu nav nav-list collapse">
-                <li>
-                    <a href="/SalaryMaster/Employee" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Employee Salary</a>
-                </li>
-            </ul>
-        </li>
-
-        <!--Expense Report-->
-        <li style="cursor:pointer;" data-target=".Expense-menu" class="nav-header" data-toggle="collapse">
-            <i class="fa fa-money"></i>Manage Expenses<i class="fa fa-collapse"></i>
-        </li>
-        <li>
-            <ul class="Expense-menu nav nav-list collapse">
-                <li>
-                    <a href="/Expense/Expense" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Expenses</a>
-                </li>
-            </ul>
-        </li>
-
-
-        <!--Content Management-->
-        <li style="cursor:pointer;" data-target=".content-menu" class="nav-header" data-toggle="collapse">
-            <i class="fa fa-money"></i>Blogs<i class="fa fa-collapse"></i>
-        </li>
-        <li>
-            <ul class="content-menu nav nav-list collapse">
-                <li>
-                    <a href="/ContentManagment/Add" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Add Page Name</a>
-                </li>
-            </ul>
-        </li>
-        <li>
-            <ul class="content-menu nav nav-list collapse">
-                <li>
-                    <a href="/Admin/AddContent" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Add Content of Page</a>
+                <!--TDS Report-->
+                <li style="cursor:pointer;" data-target=".Tds-menu" class="nav-header" data-toggle="collapse">
+                    <i class="fa fa-calendar"></i>TDS Report<i class="fa fa-collapse"></i>
                 </li>
                 <li>
-                    <a href="/Admin/MediaSection" style="cursor:pointer;"><span class="fa fa-history"></span><span class="fa fa-user"></span>Add Media</a>
+                    <ul class="Tds-menu nav nav-list collapse">
+                        <li>
+                            <a href="/TDSReport/TDS" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>TDS Report</a>
+                        </li>
+                    </ul>
+                    <ul class="Tds-menu nav nav-list collapse">
+                        <li>
+                            <a href="/TDSReport/Vendortds" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Franchise TDS Report</a>
+                        </li>
+                    </ul>
+                    <ul class="Tds-menu nav nav-list collapse">
+                        <li>
+                            <a href="/HospitalTDS/TDSHospital" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Hospital TDS Report</a>
+                        </li>
+                    </ul>
                 </li>
-                <li>
-                    <a href="/Admin/ListMedia" style="cursor:pointer;"><span class="fa fa-history"></span><span class="fa fa-user"></span>View Media</a>
-                </li>
-            </ul>
-        </li>
-        <li>
-            <ul class="content-menu nav nav-list collapse">
-                <li><a href="/Gallery/Gallery/" style="cursor:pointer;"><i class="fa fa-image"></i> Add Gallery</a></li>
-            </ul>
-        </li>
-        <!--Vehicle allotment Update-->
-        <li style="cursor:pointer;" data-target=".vehicle-menu" class="nav-header" data-toggle="collapse">
-            <i class="fa fa-money"></i>Vehicle Allotment<i class="fa fa-collapse"></i>
-        </li>
-        <li>
-            <ul class="vehicle-menu nav nav-list collapse">
-                <li>
-                    <a href="/Vehicle/VehicleAllotment" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Update Old Driver</a>
-                </li>
-                <li>
-                    <a href="/Vehicle/UpdateVehicle" style="cursor:pointer;"> <span class="fa fa-user"></span>Update New Driver</a>
-                </li>
-            </ul>
-        </li>
-        <li style="cursor:pointer;" data-target=".billing" class="nav-header" data-toggle="collapse">
-            <i class="fa fa-money"></i>User Cancel Appointment Reports<i class="fa fa-collapse"></i>
-        </li>
-        <li>
-            <ul class="billing nav nav-list collapse">
-                <li>
-                    <a href="/Report/DoctorCancelReportByUser" style="cursor:pointer;"><span class="fa fa-user"></span>Doctor Report</a>
-                </li>
-                <li>
-                    <a href="/Report/NurseCancelReportByUser" style="cursor:pointer;"><span class="fa fa-user"></span>Nurse Report</a>
-                </li>
-            </ul>
-        </li>
 
 
-        <li style="cursor:pointer;" data-target=".billing-menu" class="nav-header" data-toggle="collapse">
-            <i class="fa fa-money"></i>Cancellation Reports<i class="fa fa-collapse"></i>
-        </li>
-        <li>
-            <ul class="billing-menu nav nav-list collapse">
-                @*<li>
+                <!--Salary Report-->
+                <li style="cursor:pointer;" data-target=".salary-menu" class="nav-header" data-toggle="collapse">
+                    <i class="fa fa-money"></i>Manage Salary<i class="fa fa-collapse"></i>
+                </li>
+                <li>
+                    <ul class="salary-menu nav nav-list collapse">
+                        <li>
+                            <a href="/SalaryMaster/Employee" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Employee Salary</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!--Expense Report-->
+                <li style="cursor:pointer;" data-target=".Expense-menu" class="nav-header" data-toggle="collapse">
+                    <i class="fa fa-money"></i>Manage Expenses<i class="fa fa-collapse"></i>
+                </li>
+                <li>
+                    <ul class="Expense-menu nav nav-list collapse">
+                        <li>
+                            <a href="/Expense/Expense" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Expenses</a>
+                        </li>
+                    </ul>
+                </li>
+
+
+                <!--Content Management-->
+                <li style="cursor:pointer;" data-target=".content-menu" class="nav-header" data-toggle="collapse">
+                    <i class="fa fa-money"></i>Blogs<i class="fa fa-collapse"></i>
+                </li>
+                <li>
+                    <ul class="content-menu nav nav-list collapse">
+                        <li>
+                            <a href="/ContentManagment/Add" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Add Page Name</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <ul class="content-menu nav nav-list collapse">
+                        <li>
+                            <a href="/Admin/AddContent" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Add Content of Page</a>
+                        </li>
+                        <li>
+                            <a href="/Admin/MediaSection" style="cursor:pointer;"><span class="fa fa-history"></span><span class="fa fa-user"></span>Add Media</a>
+                        </li>
+                        <li>
+                            <a href="/Admin/ListMedia" style="cursor:pointer;"><span class="fa fa-history"></span><span class="fa fa-user"></span>View Media</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <ul class="content-menu nav nav-list collapse">
+                        <li><a href="/Gallery/Gallery/" style="cursor:pointer;"><i class="fa fa-image"></i> Add Gallery</a></li>
+                    </ul>
+                </li>
+                <!--Vehicle allotment Update-->
+                <li style="cursor:pointer;" data-target=".vehicle-menu" class="nav-header" data-toggle="collapse">
+                    <i class="fa fa-money"></i>Vehicle Allotment<i class="fa fa-collapse"></i>
+                </li>
+                <li>
+                    <ul class="vehicle-menu nav nav-list collapse">
+                        <li>
+                            <a href="/Vehicle/VehicleAllotment" style="cursor:pointer;"><span class="fa fa-history"></span> <span class="fa fa-user"></span>Update Old Driver</a>
+                        </li>
+                        <li>
+                            <a href="/Vehicle/UpdateVehicle" style="cursor:pointer;"> <span class="fa fa-user"></span>Update New Driver</a>
+                        </li>
+                    </ul>
+                </li>
+                <li style="cursor:pointer;" data-target=".billing" class="nav-header" data-toggle="collapse">
+                    <i class="fa fa-money"></i>User Cancel Appointment Reports<i class="fa fa-collapse"></i>
+                </li>
+                <li>
+                    <ul class="billing nav nav-list collapse">
+                        <li>
+                            <a href="/Report/DoctorCancelReportByUser" style="cursor:pointer;"><span class="fa fa-user"></span>Doctor Report</a>
+                        </li>
+                        <li>
+                            <a href="/Report/NurseCancelReportByUser" style="cursor:pointer;"><span class="fa fa-user"></span>Nurse Report</a>
+                        </li>
+                    </ul>
+                </li>
+
+
+                <li style="cursor:pointer;" data-target=".billing-menu" class="nav-header" data-toggle="collapse">
+                    <i class="fa fa-money"></i>Cancellation Reports<i class="fa fa-collapse"></i>
+                </li>
+                <li>
+                    <ul class="billing-menu nav nav-list collapse">
+                        @*<li>
                     <a href="/Report/CancelBookingDriver" style="cursor:pointer;"><span class="fa fa-user"></span>Driver Report</a>
                 </li>
                 <li>
                     <a href="/Report/CancelBookingPatient" style="cursor:pointer;"><span class="fa fa-user"></span>Patient Report</a>
                 </li>*@
-                <li>
-                    <a href="/Report/CancelAppointmentBydoctor" style="cursor:pointer;"><span class="fa fa-user"></span>Doctor Report</a>
+                        <li>
+                            <a href="/Report/CancelAppointmentBydoctor" style="cursor:pointer;"><span class="fa fa-user"></span>Doctor Report</a>
+                        </li>
+                        <li>
+                            <a href="/Report/CancelAppointmentByNurse" style="cursor:pointer;"><span class="fa fa-user"></span>Nurse Report</a>
+                        </li>
+                    </ul>
+                </li>
+
+                 
+
+                <li style="cursor:pointer;" data-target=".Discount" class="nav-header" data-toggle="collapse">
+                    <i class="fa fa-money"></i>Discount Section<i class="fa fa-collapse"></i>
                 </li>
                 <li>
-                    <a href="/Report/CancelAppointmentByNurse" style="cursor:pointer;"><span class="fa fa-user"></span>Nurse Report</a>
+                    <ul class="Discount nav nav-list collapse">
+                        <li>
+                            <a href="/Admin/DiscountCreate" style="cursor:pointer;"><span class="fa fa-user"></span>Add Discount</a>
+                        </li>
+                        <li>
+                            <a href="/Admin/DiscountList" style="cursor:pointer;"><span class="fa fa-user"></span>View Discount</a>
+                        </li>
+                    </ul>
                 </li>
             </ul>
-        </li>
-
-
-
-        <li style="cursor:pointer;" data-target=".Discount" class="nav-header" data-toggle="collapse">
-            <i class="fa fa-money"></i>Discount Section<i class="fa fa-collapse"></i>
-        </li>
-        <li>
-            <ul class="Discount nav nav-list collapse">
-                <li>
-                    <a href="/Admin/DiscountCreate" style="cursor:pointer;"><span class="fa fa-user"></span>Add Discount</a>
-                </li>
-                <li>
-                    <a href="/Admin/DiscountList" style="cursor:pointer;"><span class="fa fa-user"></span>View Discount</a>
-                </li>
-            </ul>
-        </li>
-    </ul>
     <!--BannerSection-->
 
     <li style="cursor:pointer;" data-target=".Banner" class="nav-header" data-toggle="collapse">
@@ -737,4 +726,10 @@
             </li>
         </ul>
     </li>
+    
+
+
+
+
+
 </div>

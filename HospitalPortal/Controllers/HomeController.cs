@@ -5,8 +5,6 @@ using HospitalPortal.Utility;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -272,7 +270,6 @@ namespace HospitalPortal.Controllers
         {
             return View();
         }
-       
 
     }
 }

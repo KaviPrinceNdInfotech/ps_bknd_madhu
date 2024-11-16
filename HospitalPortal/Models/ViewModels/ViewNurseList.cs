@@ -9,7 +9,6 @@ namespace HospitalPortal.Models.ViewModels
     {
         public int Id { get; set; }
         public string PatientName { get; set; }
-        public string PatientRegNo { get; set; }
         public string NurseId { get; set; }
         public string NurseName { get; set; }
         public string NurseTypeName {get;set;}

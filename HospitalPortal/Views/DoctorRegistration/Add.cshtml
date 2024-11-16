@@ -194,28 +194,24 @@ Enumerable.Empty<SelectListItem>()
                     </span>
                 </div>
                 <div class="form-group">
-                    Licence Validity * @Html.TextBoxFor(a => a.LicenseValidity, new { @class = "form-control", type = "date" })
-                    <span class="red">
-                        @Html.ValidationMessageFor(a => a.LicenseValidity)
-                    </span>
-                </div>
-                <div class="form-group">
-                    Pan Image * @Html.TextBoxFor(a => a.PanImageFile, new { @class = "form-control", type = "file" })
-                    <span class="red">
-                        @Html.ValidationMessageFor(a => a.PanImageFile)
-                    </span>
-                </div>
-                <div class="form-group">
                     Pan Number * @Html.TextBoxFor(a => a.PAN, new { @class = "form-control" })
                     <span class="red">
                         @Html.ValidationMessageFor(a => a.PAN)
                     </span>
-                </div> 
+                </div>
+
 
                 <div class="form-group">
                     Experience * @Html.TextBoxFor(a => a.Experience, new { @class = "form-control" })
                     <span class="red">
                         @Html.ValidationMessageFor(a => a.Experience)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    Licence Validity * @Html.TextBoxFor(a => a.LicenseValidity, new { @class = "form-control", type = "date" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.LicenseValidity)
                     </span>
                 </div>
 

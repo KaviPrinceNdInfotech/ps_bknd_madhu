@@ -136,6 +136,8 @@ namespace HospitalPortal.Models.DomainModels
         public virtual DbSet<Medicine_Pay> Medicine_Pays { get; set; }
         public virtual DbSet<Medicinedeliver> Medicinedelivers { get; set; }
         public virtual DbSet<Nurse_Rep> Nurse_Rep { get; set; }
+        public virtual DbSet<NearDriver> NearDrivers { get; set; }
+        public virtual DbSet<DriverLocation> DriverLocations { get; set; }
         public virtual DbSet<TestInLab> TestInLabs { get; set; }
         public virtual DbSet<DoctorBookingMode> DoctorBookingModes { get; set; }
         public virtual DbSet<PFMaster> PFMasters { get; set; }
@@ -157,11 +159,9 @@ namespace HospitalPortal.Models.DomainModels
         public virtual DbSet<Doctor> Doctors { get; set; }
         public virtual DbSet<TransactionFeeMaster> TransactionFeeMasters { get; set; }
         public virtual DbSet<VehicleAllotHistory> VehicleAllotHistories { get; set; }
+        public virtual DbSet<AmbulancePayout> AmbulancePayouts { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<DriverBooking> DriverBookings { get; set; }
-        public virtual DbSet<DriverLocation> DriverLocations { get; set; }
-        public virtual DbSet<NearDriver> NearDrivers { get; set; }
-        public virtual DbSet<AmbulancePayout> AmbulancePayouts { get; set; }
     
         [DbFunction("DbEntities", "udf_AppointmentSlots")]
         public virtual IQueryable<udf_AppointmentSlots_Result> udf_AppointmentSlots(Nullable<int> doctorId)
@@ -514,7 +514,7 @@ namespace HospitalPortal.Models.DomainModels
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GEtAllMedicines_Result>("GEtAllMedicines");
         }
     
-        public virtual ObjectResult<GetNearDriver_Result> GetNearDriver(Nullable<int> driverId, Nullable<int> kM, string name, string dL, Nullable<int> charge, string deviceId, Nullable<int> toatlDistance, string mobileNumber)
+        public virtual ObjectResult<GetNearDriver_Result> GetNearDriver(Nullable<int> driverId, Nullable<int> kM, string name, string dL, Nullable<int> charge, string deviceId, Nullable<int> toatlDistance)
         {
             var driverIdParameter = driverId.HasValue ?
                 new ObjectParameter("DriverId", driverId) :
@@ -544,11 +544,7 @@ namespace HospitalPortal.Models.DomainModels
                 new ObjectParameter("ToatlDistance", toatlDistance) :
                 new ObjectParameter("ToatlDistance", typeof(int));
     
-            var mobileNumberParameter = mobileNumber != null ?
-                new ObjectParameter("MobileNumber", mobileNumber) :
-                new ObjectParameter("MobileNumber", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetNearDriver_Result>("GetNearDriver", driverIdParameter, kMParameter, nameParameter, dLParameter, chargeParameter, deviceIdParameter, toatlDistanceParameter, mobileNumberParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetNearDriver_Result>("GetNearDriver", driverIdParameter, kMParameter, nameParameter, dLParameter, chargeParameter, deviceIdParameter, toatlDistanceParameter);
         }
     
         public virtual ObjectResult<Nullable<int>> AppointmentNurseFor24Hrs(Nullable<int> patientId, string mobile, Nullable<int> nurseTypeId, Nullable<int> locationId, Nullable<System.DateTime> serviceDate, string serviceType)

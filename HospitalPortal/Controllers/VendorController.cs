@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using DocumentFormat.OpenXml.Wordprocessing;
 using HospitalPortal.BL;
 using HospitalPortal.Models.DomainModels;
 using HospitalPortal.Models.ViewModels;
@@ -176,7 +175,7 @@ namespace HospitalPortal.Controllers
                     };
 
                     EmailOperations.SendEmainew(ef);
-                    Message.SendSmsUserIdPass(model.MobileNumber, model.VendorName, model.UniqueId, model.Password);
+
                     TempData["msg"] = "ok";
                     tran.Commit();
                 }
@@ -243,7 +242,8 @@ namespace HospitalPortal.Controllers
                     model.City_Id = cityMaster.Id;
                 }
                 var domainModel = Mapper.Map<Vendor>(model);
-                existingdata.VendorName = model.VendorName; 
+                existingdata.VendorName = model.VendorName;
+                existingdata.EmailId = model.EmailId;
                 existingdata.StateMaster_Id = model.StateMaster_Id;
                 existingdata.City_Id = model.City_Id;
                 existingdata.Location = model.Location;
@@ -273,7 +273,7 @@ namespace HospitalPortal.Controllers
             string q = @"select v.*,s.StateName,c.CityName from Vendor v 
 join StateMaster s on v.StateMaster_Id=s.Id
 join CityMaster c on v.City_Id = c.Id
-where v.IsDeleted=0 order by v.Id desc";
+where v.IsDeleted=0 order by v.Id asc";
             var data = ent.Database.SqlQuery<VendorDTO>(q).ToList();
             if (!string.IsNullOrEmpty(term))
             {
@@ -407,12 +407,10 @@ where v.IsDeleted=0 order by v.Id desc";
             int Id = GetVendorId();
             var model = new ReportDetails();
             double payment = ent.Database.SqlQuery<double>(@"select Commission from CommissionMaster where IsDeleted=0 and Name='" + term + "'").FirstOrDefault();
-            var qry = @"select Sum(P.TotalFee) as Counts,D.DoctorId as UniqueId,D.DoctorName as UserName,ve.VendorName as Name,ve.UniqueId as VendorId,ve.CompanyName as Name1 from PatientAppointment P 
-join Doctor D on D.Id = p.Doctor_Id 
-join Vendor ve on ve.Id = d.Vendor_Id
-where Convert(Date, P.AppointmentDate) = Convert(Date,GETDATE()) and P.IsPaid=1 and ve.Id="+ Id + " GROUP BY D.DoctorId,D.DoctorName,ve.VendorName,ve.CompanyName,ve.UniqueId";
+            var qry = @"select Sum(pa.TotalFee) as Counts, v.VendorName as Name, v.CompanyName as Name1 from Doctor d join Vendor v on d.Vendor_Id = v.Id join dbo.PatientAppointment pa on pa.Doctor_Id = d.Id  where v.Id = " + Id+" and pa.AppointmentDate =  GETDATE() and pa.IsPaid=1 group by v.VendorName, v.CompanyName";
             var data = ent.Database.SqlQuery<Vendorses>(qry).ToList();
-             
+            if (date == null)
+            {
                 if (data.Count() == 0)
                 {
                     TempData["msg"] = "No Record of Current Date";
@@ -422,7 +420,24 @@ where Convert(Date, P.AppointmentDate) = Convert(Date,GETDATE()) and P.IsPaid=1 
                     model.Vendors = data;
                     ViewBag.Payment = payment;
                 }
-           
+            }
+            else
+            {
+                string dt = date.Value.ToString("MM/dd/yyyy");
+                var qry1 = @"select Sum(pa.TotalFee) as Counts, v.VendorName as Name, v.CompanyName as Name1 from Doctor d join Vendor v on d.Vendor_Id = v.Id join dbo.PatientAppointment pa on pa.Doctor_Id = d.Id  where  v.Id = " + Id + " and Convert(Date,pa.AppointmentDate)  =  '" + dt + "'  and pa.IsPaid=1 group by v.VendorName, v.CompanyName";
+                var data1 = ent.Database.SqlQuery<Vendorses>(qry1).ToList();
+                if (data1.Count() == 0)
+                {
+                    TempData["msg"] = "Your Selected Date Doesn't Contain any Information.";
+                }
+                else
+                {
+                    ViewBag.Payment = payment;
+                    model.Vendors = data1;
+                    //ViewBag.Total = model.LabList.Sum(a => a.Amount);
+                    return View(model);
+                }
+            }
             return View(model);
         }
 
@@ -431,15 +446,26 @@ where Convert(Date, P.AppointmentDate) = Convert(Date,GETDATE()) and P.IsPaid=1 
             int Id = GetVendorId();
             var model = new ReportDetails();
             double payment = ent.Database.SqlQuery<double>(@"select Commission from CommissionMaster where IsDeleted=0 and Name='" + term + "'").FirstOrDefault();
-
-            if (date != null)
+            var qry = @"select Sum(pa.TotalFee) as Counts, v.VendorName as Name, v.CompanyName as Name1 from Doctor d join Vendor v on d.Vendor_Id = v.Id join dbo.PatientAppointment pa on pa.Doctor_Id = d.Id  where  v.Id = " + Id + " and pa.AppointmentDate  between DATEADD(day,-7,GETDATE()) and GetDate()  and pa.IsPaid=1 group by v.VendorName, v.CompanyName";
+            var data = ent.Database.SqlQuery<Vendorses>(qry).ToList();
+            if (date == null)
+            {
+                if (data.Count() == 0)
+                {
+                    TempData["msg"] = "No Record of Current Date";
+                }
+                else
+                {
+                    model.Vendors = data;
+                    ViewBag.Payment = payment;
+                    //ViewBag.Total = model.LabList.Sum(a => a.Amount);
+                }
+            }
+            else
             {
                 DateTime dateCriteria = date.Value.AddDays(-7);
                 string Tarikh = dateCriteria.ToString("dd/MM/yyyy");
-                var qry1 = @"select Sum(P.TotalFee) as Counts,D.DoctorId as UniqueId,D.DoctorName as UserName,ve.VendorName as Name,ve.UniqueId as VendorId,ve.CompanyName as Name1 from PatientAppointment P 
-join Doctor D on D.Id = p.Doctor_Id 
-join Vendor ve on ve.Id = d.Vendor_Id
-where p.AppointmentDate between '" + dateCriteria + "' and '" + Tarikh + "' and P.IsPaid=1 and ve.Id="+Id+" GROUP BY D.DoctorId,D.DoctorName,ve.VendorName,ve.CompanyName,ve.UniqueId";
+                var qry1 = @"select Sum(pa.TotalFee) as Counts, v.VendorName as Name, v.CompanyName as Name1 from Doctor d join Vendor v on d.Vendor_Id = v.Id join dbo.PatientAppointment pa on pa.Doctor_Id = d.Id  where  v.Id = " + Id + " and pa.AppointmentDate between '" + dateCriteria + "' and '" + Tarikh + "'  and pa.IsPaid=1 group by v.VendorName, v.CompanyName";
                 var data1 = ent.Database.SqlQuery<Vendorses>(qry1).ToList();
                 if (data1.Count() == 0)
                 {
@@ -449,32 +475,11 @@ where p.AppointmentDate between '" + dateCriteria + "' and '" + Tarikh + "' and 
                 {
                     ViewBag.Payment = payment;
                     model.Vendors = data1;
-
-                }
-                return View(model);
-            }
-            else
-            {
-                var qry = @"select Sum(P.TotalFee) as Counts,D.DoctorId as UniqueId,D.DoctorName as UserName,ve.VendorName as Name,ve.UniqueId as VendorId,ve.CompanyName as Name1 from PatientAppointment P 
-join Doctor D on D.Id = p.Doctor_Id 
-join Vendor ve on ve.Id = d.Vendor_Id
-where p.AppointmentDate  between DATEADD(day,-7,GETDATE()) and GetDate() and P.IsPaid=1 and ve.Id="+Id+" GROUP BY D.DoctorId,D.DoctorName,ve.VendorName,ve.CompanyName,ve.UniqueId";
-                var data = ent.Database.SqlQuery<Vendorses>(qry).ToList();
-
-
-                if (data.Count() == 0)
-                {
-                    TempData["msg"] = "No Record of Current Week";
-                }
-                else
-                {
-                    model.Vendors = data;
-                    ViewBag.Payment = payment;
                     //ViewBag.Total = model.LabList.Sum(a => a.Amount);
+                    return View(model);
                 }
-                return View(model);
             }
-
+            return View(model);
         }
 
         public ActionResult MonthlyDoc(string term, DateTime? sdate, DateTime? edate)
@@ -482,31 +487,24 @@ where p.AppointmentDate  between DATEADD(day,-7,GETDATE()) and GetDate() and P.I
             int Id = GetVendorId();
             var model = new ReportDetails();
             double payment = ent.Database.SqlQuery<double>(@"select Commission from CommissionMaster where IsDeleted=0 and Name='" + term + "'").FirstOrDefault();
-
+            var qry = @"select Sum(pa.TotalFee) as Counts, v.VendorName as Name, v.Id, v.CompanyName as Name1 from Doctor d join Vendor v on d.Vendor_Id = v.Id join dbo.PatientAppointment pa on pa.Doctor_Id = d.Id  where v.Id = " + Id + " and Month(pa.AppointmentDate) = Month(GetDate()) and pa.IsPaid=1 group by v.VendorName,v.CompanyName, v.Id";
+            var data = ent.Database.SqlQuery<Vendorses>(qry).ToList();
             if (sdate == null && edate == null)
             {
-                var qry = @"select Sum(P.TotalFee) as Counts,D.DoctorId as UniqueId,D.DoctorName as UserName,ve.VendorName as Name,ve.UniqueId as VendorId,ve.CompanyName as Name1 from PatientAppointment P 
-join Doctor D on D.Id = p.Doctor_Id 
-join Vendor ve on ve.Id = d.Vendor_Id
-where Month(p.AppointmentDate) = Month(GetDate()) and P.IsPaid=1 and ve.Id="+Id+" GROUP BY D.DoctorId,D.DoctorName,ve.VendorName,ve.CompanyName,ve.UniqueId";
-                var data = ent.Database.SqlQuery<Vendorses>(qry).ToList();
                 if (data.Count() == 0)
                 {
-                    TempData["msg"] = "No Record of Current Month";
+                    TempData["msg"] = "No Record of Current Date";
                 }
                 else
                 {
                     model.Vendors = data;
                     ViewBag.Payment = payment;
+                    //ViewBag.Total = model.LabList.Sum(a => a.Amount);
                 }
-                return View(model);
             }
             else
             {
-                var qry1 = @"select Sum(P.TotalFee) as Counts,D.DoctorId as UniqueId,D.DoctorName as UserName,ve.VendorName as Name,ve.UniqueId as VendorId,ve.CompanyName as Name1 from PatientAppointment P 
-join Doctor D on D.Id = p.Doctor_Id 
-join Vendor ve on ve.Id = d.Vendor_Id
-where p.AppointmentDate between Convert(datetime,'" + sdate + "',103) and Convert(datetime,'" + edate + "',103) and P.IsPaid=1 and ve.Id="+Id+" GROUP BY D.DoctorId,D.DoctorName,ve.VendorName,ve.CompanyName,ve.UniqueId";
+                var qry1 = @"select Sum(pa.TotalFee) as Counts, v.VendorName as Name, v.Id, v.CompanyName as Name1 from Doctor d join Vendor v on d.Vendor_Id = v.Id join dbo.PatientAppointment pa on pa.Doctor_Id = d.Id  where v.Id = " + Id + " and Convert(Date,pa.AppointmentDate) between '" + sdate + "' and '" + edate + "' and pa.IsPaid=1 group by v.VendorName,v.CompanyName, v.Id";
                 var data1 = ent.Database.SqlQuery<Vendorses>(qry1).ToList();
                 if (data1.Count() == 0)
                 {
@@ -516,11 +514,11 @@ where p.AppointmentDate between Convert(datetime,'" + sdate + "',103) and Conver
                 {
                     ViewBag.Payment = payment;
                     model.Vendors = data1;
-
+                    //ViewBag.Total = model.LabList.Sum(a => a.Amount);
+                    return View(model);
                 }
-                return View(model);
             }
-
+            return View(model);
         }
 
         public ActionResult YearlyDoc(string term, int? year)
@@ -528,17 +526,13 @@ where p.AppointmentDate between Convert(datetime,'" + sdate + "',103) and Conver
             int Id = GetVendorId();
             var model = new ReportDetails();
             double payment = ent.Database.SqlQuery<double>(@"select Commission from CommissionMaster where IsDeleted=0 and Name='" + term + "'").FirstOrDefault();
-
+            var qry = @"select Sum(pa.TotalFee) as Counts, v.VendorName as Name, d.Id, v.CompanyName as Name1 from Doctor d join Vendor v on d.Vendor_Id = v.Id join dbo.PatientAppointment pa on pa.Doctor_Id = d.Id  where v.Id = " + Id + " and Year(pa.AppointmentDate) = Year(GetDate()) and pa.IsPaid=1 group by v.VendorName,v.CompanyName, d.Id";
+            var data = ent.Database.SqlQuery<Vendorses>(qry).ToList();
             if (!year.HasValue)
             {
-                var qry = @"select Sum(P.TotalFee) as Counts,D.DoctorId as UniqueId,D.DoctorName as UserName,ve.VendorName as Name,ve.UniqueId as VendorId,ve.CompanyName as Name1 from PatientAppointment P 
-join Doctor D on D.Id = p.Doctor_Id 
-join Vendor ve on ve.Id = d.Vendor_Id
-where Year(p.AppointmentDate) = Year(GetDate()) and P.IsPaid=1 and ve.Id="+Id+" GROUP BY D.DoctorId,D.DoctorName,ve.VendorName,ve.CompanyName,ve.UniqueId";
-                var data = ent.Database.SqlQuery<Vendorses>(qry).ToList();
                 if (data.Count() == 0)
                 {
-                    TempData["msg"] = "No Record of Current Year";
+                    TempData["msg"] = "No Record of Current Date";
                 }
                 else
                 {
@@ -546,14 +540,10 @@ where Year(p.AppointmentDate) = Year(GetDate()) and P.IsPaid=1 and ve.Id="+Id+" 
                     ViewBag.Payment = payment;
                     //ViewBag.Total = model.LabList.Sum(a => a.Amount);
                 }
-                return View(model);
             }
             else
             {
-                var qry1 = @"select Sum(P.TotalFee) as Counts,D.DoctorId as UniqueId,D.DoctorName as UserName,ve.VendorName as Name,ve.UniqueId as VendorId,ve.CompanyName as Name1 from PatientAppointment P 
-join Doctor D on D.Id = p.Doctor_Id 
-join Vendor ve on ve.Id = d.Vendor_Id
-where Year(p.AppointmentDate) = '" + year + "' and P.IsPaid=1 and ve.Id="+Id+" GROUP BY D.DoctorId,D.DoctorName,ve.VendorName,ve.CompanyName,ve.UniqueId";
+                var qry1 = @"select Sum(pa.TotalFee) as Counts, v.VendorName as Name, v.CompanyName as Name1 from Doctor d join Vendor v on d.Vendor_Id = v.Id join dbo.PatientAppointment pa on pa.Doctor_Id = d.Id  where v.Id = " + Id + " and Year(pa.AppointmentDate) = '" + year + "' and pa.IsPaid=1 group by v.VendorName, v.CompanyName";
                 var data1 = ent.Database.SqlQuery<Vendorses>(qry1).ToList();
                 if (data1.Count() == 0)
                 {
@@ -563,11 +553,11 @@ where Year(p.AppointmentDate) = '" + year + "' and P.IsPaid=1 and ve.Id="+Id+" G
                 {
                     ViewBag.Payment = payment;
                     model.Vendors = data1;
-
+                    //ViewBag.Total = model.LabList.Sum(a => a.Amount);
+                    return View(model);
                 }
-                return View(model);
             }
-
+            return View(model);
         }
 
         //Driver Section
@@ -726,12 +716,10 @@ where Year(p.AppointmentDate) = '" + year + "' and P.IsPaid=1 and ve.Id="+Id+" G
             int Id = GetVendorId();
             var model = new ReportDetails();
             double payment = ent.Database.SqlQuery<double>(@"select Commission from CommissionMaster where IsDeleted=0 and Name='" + term + "'").FirstOrDefault();
-            var qry = @"select distinct v.Id as VehicleId,v.VehicleNumber, IsNull(v.VehicleName,'NA') as VehicleName,ve.VendorName as Name,ve.UniqueId,ve.CompanyName as Name1,SUM(trm.Amount) as Amount
-from DriverLocation trm 
-JOIN Driver d ON d.Id = trm.Driver_Id
-JOIN Vehicle v ON v.Id = d.Vehicle_Id
+            var qry = @"select Sum(trm.Amount) as Counts, ve.VendorName as Name, ve.CompanyName as Name1 from Vehicle v
 join Vendor ve on ve.Id = v.Vendor_Id
-where trm.EntryDate > CAST(GETDATE() AS DATE) and trm.IsPay='Y' and ve.Id="+Id+" group by v.VehicleNumber, v.VehicleName,v.Id,ve.VendorName,ve.CompanyName,ve.UniqueId";
+join TravelRecordMaster trm on trm.Vehicle_Id = v.Id
+where trm.IsDriveCompleted = 1 and v.Id = " + Id + "  and Convert(Date,trm.RequestDate) = GetDate() group by  ve.VendorName, ve.CompanyName";
             var data = ent.Database.SqlQuery<Vendorses>(qry).ToList();
             if (data.Count() == 0)
             {
@@ -741,27 +729,15 @@ where trm.EntryDate > CAST(GETDATE() AS DATE) and trm.IsPay='Y' and ve.Id="+Id+"
             {
                 model.Vendors = data;
                 ViewBag.Payment = payment;
+                //ViewBag.Total = model.LabList.Sum(a => a.Amount);
             }
-
-            return View(model);
-        }
-
-        public ActionResult WeeklyVeh(string term, DateTime? week)
-        {
-            int Id = GetVendorId();
-            var model = new ReportDetails();
-            double payment = ent.Database.SqlQuery<double>(@"select Commission from CommissionMaster where IsDeleted=0 and Name='" + term + "'").FirstOrDefault();
-
-            if (week != null)
+            if (date != null)
             {
-                DateTime dateCriteria = week.Value.AddDays(-7);
-                string Tarikh = dateCriteria.ToString("dd/MM/yyyy");
-                var qry1 = @"select distinct v.Id as VehicleId,v.VehicleNumber, IsNull(v.VehicleName,'NA') as VehicleName,ve.VendorName as Name,ve.UniqueId,ve.CompanyName as Name1,SUM(trm.Amount) as Amount
-from DriverLocation trm 
-JOIN Driver d ON d.Id = trm.Driver_Id
-JOIN Vehicle v ON v.Id = d.Vehicle_Id
+                string dt = date.Value.ToString("MM/dd/yyyy");
+                var qry1 = @"select Sum(trm.Amount) as Counts, ve.VendorName as Name, ve.CompanyName as Name1 from Vehicle v
 join Vendor ve on ve.Id = v.Vendor_Id
-where trm.EntryDate between convert(datetime,'" + Tarikh + "',103) and convert(datetime,'" + week + "',103) and trm.IsPay='Y' and ve.Id="+Id+" group by v.VehicleNumber, v.VehicleName,v.Id,ve.VendorName,ve.CompanyName,ve.UniqueId";
+join TravelRecordMaster trm on trm.Vehicle_Id = v.Id
+where v.Id = " + Id + " and trm.IsDriveCompleted = 1 and Convert(Date,trm.RequestDate) = '" + date + "' group by  ve.VendorName, ve.CompanyName";
                 var data1 = ent.Database.SqlQuery<Vendorses>(qry1).ToList();
                 if (data1.Count() == 0)
                 {
@@ -771,30 +747,55 @@ where trm.EntryDate between convert(datetime,'" + Tarikh + "',103) and convert(d
                 {
                     ViewBag.Payment = payment;
                     model.Vendors = data1;
+                    //ViewBag.Total = model.LabList.Sum(a => a.Amount);
+                    return View(model);
                 }
-                return View(model);
+            }
+            return View(model);
+        }
+
+        public ActionResult WeeklyVeh(string term, DateTime? date)
+        {
+            int Id = GetVendorId();
+            var model = new ReportDetails();
+            double payment = ent.Database.SqlQuery<double>(@"select Commission from CommissionMaster where IsDeleted=0 and Name='" + term + "'").FirstOrDefault();
+            var qry = @"select Sum(trm.Amount) as Counts, ve.VendorName as Name, ve.CompanyName as Name1 from Vehicle v
+join Vendor ve on ve.Id = v.Vendor_Id
+join TravelRecordMaster trm on trm.Vehicle_Id = v.Id
+where v.Id = " + Id + " and trm.IsDriveCompleted = 1 and trm.RequestDate between DateAdd(DD,-7,GETDATE() ) and GETDATE() group by  ve.VendorName, ve.CompanyName";
+            var data = ent.Database.SqlQuery<Vendorses>(qry).ToList();
+            if (data.Count() == 0)
+            {
+                TempData["msg"] = "No Record of Current Date";
             }
             else
             {
-                var qry = @"select distinct v.Id as VehicleId,v.VehicleNumber, IsNull(v.VehicleName,'NA') as VehicleName,ve.VendorName as Name,ve.UniqueId,ve.CompanyName as Name1,SUM(trm.Amount) as Amount
-from DriverLocation trm 
-JOIN Driver d ON d.Id = trm.Driver_Id
-JOIN Vehicle v ON v.Id = d.Vehicle_Id
+                model.Vendors = data;
+                ViewBag.Payment = payment;
+                //ViewBag.Total = model.LabList.Sum(a => a.Amount);
+            }
+            if (date != null)
+            {
+                DateTime dateCriteria = date.Value.AddDays(-7);
+                string Tarikh = dateCriteria.ToString("dd/MM/yyyy");
+                var qry1 = @"selectselect Sum(trm.Amount) as Counts, ve.VendorName as Name, ve.CompanyName as Name1 from Vehicle v
 join Vendor ve on ve.Id = v.Vendor_Id
-where trm.EntryDate between DateAdd(DD,-7,GETDATE() ) and GETDATE() and trm.IsPay='Y' and ve.Id="+Id+" group by v.VehicleNumber, v.VehicleName,v.Id,ve.VendorName,ve.CompanyName,ve.UniqueId";
-                var data = ent.Database.SqlQuery<Vendorses>(qry).ToList();
-                if (data.Count() == 0)
+join TravelRecordMaster trm on trm.Vehicle_Id = v.Id
+where v.Id = " + Id + " and trm.IsDriveCompleted = 1 and trm.RequestDate between '" + Tarikh + "' and '" + date + "' group by  ve.VendorName, ve.CompanyName";
+                var data1 = ent.Database.SqlQuery<Vendorses>(qry1).ToList();
+                if (data1.Count() == 0)
                 {
-                    TempData["msg"] = "No Record of Current Week";
+                    TempData["msg"] = "Your Selected Date Doesn't Contain any Information.";
                 }
                 else
                 {
-                    model.Vendors = data;
                     ViewBag.Payment = payment;
+                    model.Vendors = data1;
+                    //ViewBag.Total = model.LabList.Sum(a => a.Amount);
+                    return View(model);
                 }
-                return View(model);
             }
-
+            return View(model);
         }
 
         public ActionResult MonthlyVeh(string term, DateTime? sdate, DateTime? edate)
@@ -802,15 +803,27 @@ where trm.EntryDate between DateAdd(DD,-7,GETDATE() ) and GETDATE() and trm.IsPa
             int Id = GetVendorId();
             var model = new ReportDetails();
             double payment = ent.Database.SqlQuery<double>(@"select Commission from CommissionMaster where IsDeleted=0 and Name='" + term + "'").FirstOrDefault();
-
+            var qry = @"select Sum(trm.Amount) as Counts, ve.VendorName as Name, ve.CompanyName as Name1 from Vehicle v
+join Vendor ve on ve.Id = v.Vendor_Id
+join TravelRecordMaster trm on trm.Vehicle_Id = v.Id
+where v.Id = " + Id + " and trm.IsDriveCompleted = 1 and Month(trm.RequestDate) = Month(GetDate()) group by  ve.VendorName, ve.CompanyName";
+            var data = ent.Database.SqlQuery<Vendorses>(qry).ToList();
+            if (data.Count() == 0)
+            {
+                TempData["msg"] = "No Record of Current Date";
+            }
+            else
+            {
+                model.Vendors = data;
+                ViewBag.Payment = payment;
+                //ViewBag.Total = model.LabList.Sum(a => a.Amount);
+            }
             if (sdate != null && edate != null)
             {
-                var qry1 = @"select distinct v.Id as VehicleId,v.VehicleNumber, IsNull(v.VehicleName,'NA') as VehicleName,ve.VendorName as Name,ve.UniqueId,ve.CompanyName as Name1,SUM(trm.Amount) as Amount
-FROM DriverLocation trm 
-JOIN Driver d ON d.Id = trm.Driver_Id
-JOIN Vehicle v ON v.Id = d.Vehicle_Id
+                var qry1 = @"select Sum(trm.Amount) as Counts, ve.VendorName as Name, ve.CompanyName as Name1 from Vehicle v
 join Vendor ve on ve.Id = v.Vendor_Id
-WHERE trm.EntryDate BETWEEN CONVERT(DATETIME,'" + sdate + "',103) and CONVERT(DATETIME,'" + edate + "',103) and trm.IsPay='Y' and ve.Id="+Id+" group by v.VehicleNumber, v.VehicleName,v.Id,ve.VendorName,ve.CompanyName,ve.UniqueId";
+join TravelRecordMaster trm on trm.Vehicle_Id = v.Id
+where  v.Id = " + Id + " andtrm.IsDriveCompleted = 1 and Convert(Date,trm.RequestDate) between '" + sdate + "' and '" + edate + "' group by  ve.VendorName, ve.CompanyName";
                 var data1 = ent.Database.SqlQuery<Vendorses>(qry1).ToList();
                 if (data1.Count() == 0)
                 {
@@ -820,30 +833,11 @@ WHERE trm.EntryDate BETWEEN CONVERT(DATETIME,'" + sdate + "',103) and CONVERT(DA
                 {
                     ViewBag.Payment = payment;
                     model.Vendors = data1;
+                    //ViewBag.Total = model.LabList.Sum(a => a.Amount);
+                    return View(model);
                 }
-                return View(model);
             }
-            else
-            {
-                var qry = @"select distinct v.Id as VehicleId,v.VehicleNumber, IsNull(v.VehicleName,'NA') as VehicleName,ve.VendorName as Name,ve.UniqueId,ve.CompanyName as Name1,SUM(trm.Amount) as Amount
-from DriverLocation trm 
-JOIN Driver d ON d.Id = trm.Driver_Id
-JOIN Vehicle v ON v.Id = d.Vehicle_Id
-join Vendor ve on ve.Id = v.Vendor_Id
-where Month(trm.EntryDate) = Month(GetDate()) and trm.IsPay='Y' and ve.Id="+Id+" group by v.VehicleNumber, v.VehicleName,v.Id,ve.VendorName,ve.CompanyName,ve.UniqueId";
-                var data = ent.Database.SqlQuery<Vendorses>(qry).ToList();
-                if (data.Count() == 0)
-                {
-                    TempData["msg"] = "No Record of Current Month";
-                }
-                else
-                {
-                    model.Vendors = data;
-                    ViewBag.Payment = payment;
-                }
-                return View(model);
-            }
-
+            return View(model);
         }
 
         public ActionResult YearlyVeh(string term, int? year)
@@ -851,49 +845,41 @@ where Month(trm.EntryDate) = Month(GetDate()) and trm.IsPay='Y' and ve.Id="+Id+"
             int Id = GetVendorId();
             var model = new ReportDetails();
             double payment = ent.Database.SqlQuery<double>(@"select Commission from CommissionMaster where IsDeleted=0 and Name='" + term + "'").FirstOrDefault();
-
+            var qry = @"select Sum(trm.Amount) as Counts, ve.VendorName as Name, ve.CompanyName as Name1 from Vehicle v
+join Vendor ve on ve.Id = v.Vendor_Id
+join TravelRecordMaster trm on trm.Vehicle_Id = v.Id
+where v.Id = " + Id + " and trm.IsDriveCompleted = 1 and Year(trm.RequestDate) = Year(GetDate()) group by  ve.VendorName, ve.CompanyName";
+            var data = ent.Database.SqlQuery<Vendorses>(qry).ToList();
+            if (data.Count() == 0)
+            {
+                TempData["msg"] = "No Record of Current Date";
+            }
+            else
+            {
+                model.Vendors = data;
+                ViewBag.Payment = payment;
+                //ViewBag.Total = model.LabList.Sum(a => a.Amount);
+            }
             if (year != null)
             {
-                var qry1 = @"select distinct v.Id as VehicleId,v.VehicleNumber, IsNull(v.VehicleName,'NA') as VehicleName,ve.VendorName as Name,ve.UniqueId,ve.CompanyName as Name1,SUM(trm.Amount) as Amount
-from DriverLocation trm 
-JOIN Driver d ON d.Id = trm.Driver_Id
-JOIN Vehicle v ON v.Id = d.Vehicle_Id
+                var qry1 = @"select Sum(trm.Amount) as Counts, ve.VendorName as Name, ve.CompanyName as Name1 from Vehicle v
 join Vendor ve on ve.Id = v.Vendor_Id
-where Year(trm.EntryDate) = '" + year + "' and trm.IsPay='Y' and ve.Id="+Id+" group by v.VehicleNumber, v.VehicleName,v.Id,ve.VendorName,ve.CompanyName,ve.UniqueId";
+join TravelRecordMaster trm on trm.Vehicle_Id = v.Id
+where v.Id = " + Id + " and trm.IsDriveCompleted = 1 and Year(trm.RequestDate) = '" + year + "' group by  ve.VendorName, ve.CompanyName";
                 var data1 = ent.Database.SqlQuery<Vendorses>(qry1).ToList();
                 if (data1.Count() == 0)
                 {
-                    TempData["msg"] = "Your Selected Year Doesn't Contain any Information.";
+                    TempData["msg"] = "Your Selected Date Doesn't Contain any Information.";
                 }
                 else
                 {
                     ViewBag.Payment = payment;
                     model.Vendors = data1;
-
+                    //ViewBag.Total = model.LabList.Sum(a => a.Amount);
+                    return View(model);
                 }
-                return View(model);
             }
-            else
-            {
-                var qry = @"select distinct v.Id as VehicleId,v.VehicleNumber, IsNull(v.VehicleName,'NA') as VehicleName,ve.VendorName as Name,ve.UniqueId,ve.CompanyName as Name1,SUM(trm.Amount) as Amount
-from DriverLocation trm 
-JOIN Driver d ON d.Id = trm.Driver_Id
-JOIN Vehicle v ON v.Id = d.Vehicle_Id
-join Vendor ve on ve.Id = v.Vendor_Id
-where Year(trm.EntryDate) = Year(GetDate()) and trm.IsPay='Y' and ve.Id="+Id+" group by v.VehicleNumber, v.VehicleName,v.Id,ve.VendorName,ve.CompanyName,ve.UniqueId";
-                var data = ent.Database.SqlQuery<Vendorses>(qry).ToList();
-                if (data.Count() == 0)
-                {
-                    TempData["msg"] = "No Record of Current Year";
-                }
-                else
-                {
-                    model.Vendors = data;
-                    ViewBag.Payment = payment;
-                }
-                return View(model);
-            }
-
+            return View(model);
         }
 
 
@@ -1075,11 +1061,11 @@ where v.Id = " + Id + " and Year(mo.OrderDate) = '" + year + "' and mo.IsPaid=1 
             int Id = GetVendorId();
             var model = new ReportDetails();
             double payment = ent.Database.SqlQuery<double>(@"select Commission from CommissionMaster where IsDeleted=0 and Name='" + term + "'").FirstOrDefault();
-            var qry = @"select P.ServiceAcceptanceDate, SUM(P.TotalFee ) as Counts,n.NurseId as UniqueId,n.NurseName as UserName ,ve.VendorName as Name,ve.UniqueId as VendorId,ve.CompanyName as Name1 from NurseService P
-join Nurse n on n.Id = p.Nurse_Id 
-join Vendor ve on ve.Id = n.Vendor_Id
-where CONVERT(DATE, P.ServiceAcceptanceDate) >= CAST(GETDATE() AS DATE)
-and P.IsPaid=1 and ve.Id="+Id+" GROUP BY P.ServiceAcceptanceDate,n.NurseId,n.NurseName,ve.VendorName,ve.UniqueId,ve.CompanyName";
+            var qry = @"select v.VendorName as Name, v.CompanyName as Name1, V.Id ,
+(IsNull(Datediff(day,ns.StartDate,ns.EndDate)* ns.PerDayAmount,0)) as Counts
+from Nurse d 
+join NurseService ns on ns.Nurse_Id = d.Id
+join Vendor v on d.Vendor_Id = v.Id  where v.Id = " + Id + " and Convert(Date,ns.ServiceAcceptanceDate)   = GETDATE()  and ns.IsPaid=1 group by v.VendorName,v.CompanyName, V.Id,ns.StartDate,ns.EndDate,ns.PerDayAmount";
             var data = ent.Database.SqlQuery<Vendorses>(qry).ToList();
             if (data.Count() == 0)
             {
@@ -1090,24 +1076,14 @@ and P.IsPaid=1 and ve.Id="+Id+" GROUP BY P.ServiceAcceptanceDate,n.NurseId,n.Nur
                 model.Vendors = data;
                 ViewBag.Payment = payment;
             }
-
-            return View(model);
-        }
-
-        public ActionResult WeeklyNur(string term, DateTime? week)
-        {
-            int Id = GetVendorId();
-            var model = new ReportDetails();
-            double payment = ent.Database.SqlQuery<double>(@"select Commission from CommissionMaster where IsDeleted=0 and Name='" + term + "'").FirstOrDefault();
-
-            if (week != null)
+            if (date != null)
             {
-                DateTime dateCriteria = week.Value.AddDays(-7);
-                string Tarikh = dateCriteria.ToString("dd/MM/yyyy");
-                var qry1 = @"select P.ServiceAcceptanceDate, SUM(P.TotalFee ) as Counts,n.NurseId as UniqueId,n.NurseName as UserName ,ve.VendorName as Name,ve.UniqueId as VendorId,ve.CompanyName as Name1 from NurseService P
-join Nurse n on n.Id = p.Nurse_Id 
-join Vendor ve on ve.Id = n.Vendor_Id
-where p.ServiceAcceptanceDate between Convert(Datetime,'" + dateCriteria + "',103) and Convert(Datetime,'" + Tarikh + "',103) and P.IsPaid=1 and ve.Id="+Id+" GROUP BY P.ServiceAcceptanceDate,n.NurseId,n.NurseName,ve.VendorName,ve.UniqueId,ve.CompanyName";
+                string dt = date.Value.ToString("MM/dd/yyyy");
+                var qry1 = @"select v.VendorName as Name, v.CompanyName as Name1, V.Id ,
+(IsNull(Datediff(day,ns.StartDate,ns.EndDate)* ns.PerDayAmount,0)) as Counts
+from Nurse d 
+join NurseService ns on ns.Nurse_Id = d.Id
+join Vendor v on d.Vendor_Id = v.Id  where v.Id = " + Id + " and Convert(Date,ns.ServiceAcceptanceDate)    = '" + dt + "'  and ns.IsPaid=1 group by v.VendorName,v.CompanyName, V.Id,ns.StartDate,ns.EndDate,ns.PerDayAmount";
                 var data1 = ent.Database.SqlQuery<Vendorses>(qry1).ToList();
                 if (data1.Count() == 0)
                 {
@@ -1117,29 +1093,57 @@ where p.ServiceAcceptanceDate between Convert(Datetime,'" + dateCriteria + "',10
                 {
                     ViewBag.Payment = payment;
                     model.Vendors = data1;
+                    //ViewBag.Total = model.LabList.Sum(a => a.Amount);
+                    return View(model);
                 }
-                return View(model);
+            }
+            return View(model);
+        }
+
+        public ActionResult WeeklyNur(string term, DateTime? date)
+        {
+            int Id = GetVendorId();
+            var model = new ReportDetails();
+            double payment = ent.Database.SqlQuery<double>(@"select Commission from CommissionMaster where IsDeleted=0 and Name='" + term + "'").FirstOrDefault();
+            var qry = @"select v.VendorName as Name, v.CompanyName as Name1, V.Id ,
+(IsNull(Datediff(day,ns.StartDate,ns.EndDate)* ns.PerDayAmount,0)) as Counts
+from Nurse d 
+join NurseService ns on ns.Nurse_Id = d.Id
+join Vendor v on d.Vendor_Id = v.Id  where v.Id = " + Id + " and Convert(Date,ns.ServiceAcceptanceDate)   between DATEADD(day,-7,GETDATE()) and GetDate() and ns.IsPaid=1 group by v.VendorName,v.CompanyName, V.Id,ns.StartDate,ns.EndDate,ns.PerDayAmount";
+            var data = ent.Database.SqlQuery<Vendorses>(qry).ToList();
+            if (data.Count() == 0)
+            {
+                TempData["msg"] = "No Record of Current Date";
             }
             else
             {
-                var qry = @"select P.ServiceAcceptanceDate, SUM(P.TotalFee ) as Counts,n.NurseId as UniqueId,n.NurseName as UserName ,ve.VendorName as Name,ve.UniqueId as VendorId,ve.CompanyName as Name1 from NurseService P
-join Nurse n on n.Id = p.Nurse_Id 
-join Vendor ve on ve.Id = n.Vendor_Id
-where Convert(Date,p.ServiceAcceptanceDate)  between DATEADD(day,-7,GETDATE()) and GetDate()
-and P.IsPaid=1 and ve.Id="+Id+" GROUP BY P.ServiceAcceptanceDate,n.NurseId,n.NurseName,ve.VendorName,ve.UniqueId,ve.CompanyName";
-                var data = ent.Database.SqlQuery<Vendorses>(qry).ToList();
-                if (data.Count() == 0)
+                model.Vendors = data;
+                ViewBag.Payment = payment;
+                //ViewBag.Total = model.LabList.Sum(a => a.Amount);
+            }
+            if (date != null)
+            {
+                DateTime dateCriteria = date.Value.AddDays(-7);
+                string Tarikh = dateCriteria.ToString("dd/MM/yyyy");
+                var qry1 = @"select v.VendorName as Name, v.CompanyName as Name1, V.Id ,
+(IsNull(Datediff(day,ns.StartDate,ns.EndDate)* ns.PerDayAmount,0)) as Counts
+from Nurse d 
+join NurseService ns on ns.Nurse_Id = d.Id
+join Vendor v on d.Vendor_Id = v.Id  where v.Id = " + Id + " and Convert(Date,ns.ServiceAcceptanceDate) between '" + dateCriteria + "' and '" + Tarikh + "'and ns.IsPaid=1 group by v.VendorName,v.CompanyName, V.Id,ns.StartDate,ns.EndDate,ns.PerDayAmount";
+                var data1 = ent.Database.SqlQuery<Vendorses>(qry1).ToList();
+                if (data1.Count() == 0)
                 {
-                    TempData["msg"] = "No Record of Current Week";
+                    TempData["msg"] = "Your Selected Date Doesn't Contain any Information.";
                 }
                 else
                 {
-                    model.Vendors = data;
                     ViewBag.Payment = payment;
+                    model.Vendors = data1;
+                    //ViewBag.Total = model.LabList.Sum(a => a.Amount);
+                    return View(model);
                 }
-                return View(model);
             }
-
+            return View(model);
         }
 
         public ActionResult MonthlyNur(string term, DateTime? sdate, DateTime? edate)
@@ -1147,13 +1151,29 @@ and P.IsPaid=1 and ve.Id="+Id+" GROUP BY P.ServiceAcceptanceDate,n.NurseId,n.Nur
             int Id = GetVendorId();
             var model = new ReportDetails();
             double payment = ent.Database.SqlQuery<double>(@"select Commission from CommissionMaster where IsDeleted=0 and Name='" + term + "'").FirstOrDefault();
-
+            var qry = @"select v.VendorName as Name, v.CompanyName as Name1, V.Id ,
+(IsNull(Datediff(day,ns.StartDate,ns.EndDate)* ns.PerDayAmount,0)) as Counts
+from Nurse d 
+join NurseService ns on ns.Nurse_Id = d.Id
+join Vendor v on d.Vendor_Id = v.Id  where v.Id = " + Id + " and Month(ns.ServiceAcceptanceDate) = Month(GetDate()) and ns.IsPaid=1 group by v.VendorName,v.CompanyName, V.Id,ns.StartDate,ns.EndDate,ns.PerDayAmount";
+            var data = ent.Database.SqlQuery<Vendorses>(qry).ToList();
+            if (data.Count() == 0)
+            {
+                TempData["msg"] = "No Record of Current Date";
+            }
+            else
+            {
+                model.Vendors = data;
+                ViewBag.Payment = payment;
+                //ViewBag.Total = model.LabList.Sum(a => a.Amount);
+            }
             if (sdate != null && edate != null)
             {
-                var qry1 = @"select P.ServiceAcceptanceDate, SUM(P.TotalFee ) as Counts,n.NurseId as UniqueId,n.NurseName as UserName ,ve.VendorName as Name,ve.UniqueId as VendorId,ve.CompanyName as Name1 from NurseService P
-join Nurse n on n.Id = p.Nurse_Id 
-join Vendor ve on ve.Id = n.Vendor_Id
-where p.ServiceAcceptanceDate between Convert(Datetime,'" + sdate + "',103) and Convert(Datetime,'" + edate + "',103) and P.IsPaid=1 and ve.Id="+Id+" GROUP BY P.ServiceAcceptanceDate,n.NurseId,n.NurseName,ve.VendorName,ve.UniqueId,ve.CompanyName";
+                var qry1 = @"select v.VendorName as Name, v.CompanyName as Name1, V.Id ,
+(IsNull(Datediff(day,ns.StartDate,ns.EndDate)* ns.PerDayAmount,0)) as Counts
+from Nurse d 
+join NurseService ns on ns.Nurse_Id = d.Id
+join Vendor v on d.Vendor_Id = v.Id  where v.Id = " + Id + " and Convert(DATE,ns.ServiceAcceptanceDate) between '" + sdate + "' and '" + edate + "' and ns.IsPaid=1 group by v.VendorName,v.CompanyName, V.Id,ns.StartDate,ns.EndDate,ns.PerDayAmount";
                 var data1 = ent.Database.SqlQuery<Vendorses>(qry1).ToList();
                 if (data1.Count() == 0)
                 {
@@ -1163,30 +1183,11 @@ where p.ServiceAcceptanceDate between Convert(Datetime,'" + sdate + "',103) and 
                 {
                     ViewBag.Payment = payment;
                     model.Vendors = data1;
+                    //ViewBag.Total = model.LabList.Sum(a => a.Amount);
+                    return View(model);
                 }
-                return View(model);
             }
-            else
-            {
-                var qry = @"select P.ServiceAcceptanceDate, SUM(P.TotalFee ) as Counts,n.NurseId as UniqueId,n.NurseName as UserName ,ve.VendorName as Name,ve.UniqueId as VendorId,ve.CompanyName as Name1 from NurseService P
-join Nurse n on n.Id = p.Nurse_Id 
-join Vendor ve on ve.Id = n.Vendor_Id
-where Month(p.ServiceAcceptanceDate) = Month(GetDate())
-and P.IsPaid=1 and ve.Id="+Id+" GROUP BY P.ServiceAcceptanceDate,n.NurseId,n.NurseName,ve.VendorName,ve.UniqueId,ve.CompanyName";
-                var data = ent.Database.SqlQuery<Vendorses>(qry).ToList();
-                if (data.Count() == 0)
-                {
-                    TempData["msg"] = "No Record of Current Month";
-                }
-                else
-                {
-                    model.Vendors = data;
-                    ViewBag.Payment = payment;
-                }
-                return View(model);
-            }
-
-
+            return View(model);
         }
 
         public ActionResult YearlyNur(string term, int? year)
@@ -1194,13 +1195,29 @@ and P.IsPaid=1 and ve.Id="+Id+" GROUP BY P.ServiceAcceptanceDate,n.NurseId,n.Nur
             int Id = GetVendorId();
             var model = new ReportDetails();
             double payment = ent.Database.SqlQuery<double>(@"select Commission from CommissionMaster where IsDeleted=0 and Name='" + term + "'").FirstOrDefault();
-
+            var qry = @"select v.VendorName as Name, v.CompanyName as Name1, V.Id ,
+(IsNull(Datediff(day,ns.StartDate,ns.EndDate)* ns.PerDayAmount,0)) as Counts
+from Nurse d 
+join NurseService ns on ns.Nurse_Id = d.Id
+join Vendor v on d.Vendor_Id = v.Id  where v.Id = " + Id + " and Year(ns.ServiceAcceptanceDate) = Year(GetDate()) and ns.IsPaid=1 group by v.VendorName,v.CompanyName, V.Id,ns.StartDate,ns.EndDate,ns.PerDayAmount";
+            var data = ent.Database.SqlQuery<Vendorses>(qry).ToList();
+            if (data.Count() == 0)
+            {
+                TempData["msg"] = "No Record of Current Date";
+            }
+            else
+            {
+                model.Vendors = data;
+                ViewBag.Payment = payment;
+                //ViewBag.Total = model.LabList.Sum(a => a.Amount);
+            }
             if (year != null)
             {
-                var qry1 = @"select P.ServiceAcceptanceDate, SUM(P.TotalFee ) as Counts,n.NurseId as UniqueId,n.NurseName as UserName ,ve.VendorName as Name,ve.UniqueId as VendorId,ve.CompanyName as Name1 from NurseService P
-join Nurse n on n.Id = p.Nurse_Id 
-join Vendor ve on ve.Id = n.Vendor_Id
-where Year(p.ServiceAcceptanceDate) = '" + year + "' and P.IsPaid=1 and ve.Id="+Id+" GROUP BY P.ServiceAcceptanceDate,n.NurseId,n.NurseName,ve.VendorName,ve.UniqueId,ve.CompanyName";
+                var qry1 = @"select v.VendorName as Name, v.CompanyName as Name1, V.Id ,
+(IsNull(Datediff(day,ns.StartDate,ns.EndDate)* ns.PerDayAmount,0)) as Counts
+from Nurse d 
+join NurseService ns on ns.Nurse_Id = d.Id
+join Vendor v on d.Vendor_Id = v.Id  where v.Id = " + Id + " and Year(ns.ServiceAcceptanceDate) = = '" + year + "'and ns.IsPaid=1 group by v.VendorName,v.CompanyName, V.Id,ns.StartDate,ns.EndDate,ns.PerDayAmount";
                 var data1 = ent.Database.SqlQuery<Vendorses>(qry1).ToList();
                 if (data1.Count() == 0)
                 {
@@ -1210,30 +1227,13 @@ where Year(p.ServiceAcceptanceDate) = '" + year + "' and P.IsPaid=1 and ve.Id="+
                 {
                     ViewBag.Payment = payment;
                     model.Vendors = data1;
+                    //ViewBag.Total = model.LabList.Sum(a => a.Amount);
+                    return View(model);
                 }
-                return View(model);
             }
-            else
-            {
-                var qry = @"select P.ServiceAcceptanceDate, SUM(P.TotalFee ) as Counts,n.NurseId as UniqueId,n.NurseName as UserName ,ve.VendorName as Name,ve.UniqueId as VendorId,ve.CompanyName as Name1 from NurseService P
-join Nurse n on n.Id = p.Nurse_Id 
-join Vendor ve on ve.Id = n.Vendor_Id
-where Year(p.ServiceAcceptanceDate) = Year(GetDate())
-and P.IsPaid=1 and ve.Id=" + Id + " GROUP BY P.ServiceAcceptanceDate,n.NurseId,n.NurseName,ve.VendorName,ve.UniqueId,ve.CompanyName";
-                var data = ent.Database.SqlQuery<Vendorses>(qry).ToList();
-                if (data.Count() == 0)
-                {
-                    TempData["msg"] = "No Record of Current Year";
-                }
-                else
-                {
-                    model.Vendors = data;
-                    ViewBag.Payment = payment;
-                }
-                return View(model);
-            }
-
+            return View(model);
         }
+
 
         //Lab
         public ActionResult DailyLab(string term, DateTime? date)
@@ -1639,7 +1639,7 @@ where v.Id = " + Id + " and Year(cc.TestDate) = '" + year + "' and hb.IsPaid=1 g
             int id = GetVendorId();
             var model = new VendorPaymentDTO();
             double payment = ent.Database.SqlQuery<double>(@"select Amount from PaymentMaster p where p.Department='Vendor' and Name='Doctor'").FirstOrDefault();
-            string q = @"select d.Id,Sum(pa.TotalFee) as Counts, v.VendorName, v.CompanyName from Doctor d join Vendor v on d.Vendor_Id = v.Id join dbo.PatientAppointment pa on pa.Doctor_Id = d.Id  where  v.Id = " + id + " and pa.AppointmentDate  between DATEADD(day,-7,GETDATE()) and GetDate()  and pa.IsPaid=1 group by v.VendorName, v.CompanyName,d.Id";
+            string q = @"select Sum(pa.TotalFee) as Counts, v.VendorName, v.CompanyName from Doctor d join Vendor v on d.Vendor_Id = v.Id join dbo.PatientAppointment pa on pa.Doctor_Id = d.Id  where  v.Id = " + id + " and pa.AppointmentDate  between DATEADD(day,-7,GETDATE()) and GetDate()  and pa.IsPaid=1 group by v.VendorName, v.CompanyName";
             var data = ent.Database.SqlQuery<VendorList>(q).ToList();
             if (data.Count() == 0)
             {
@@ -1702,6 +1702,7 @@ where v.Id = " + id + " and trm.IsDriveCompleted = 1 and trm.RequestDate between
             model.Vendorses = data;
             return View(model);
         }
+
         public ActionResult HealthPayment()
         {
             int Id = GetVendorId();
@@ -1720,10 +1721,11 @@ where v.Id = " + Id + " and Convert(Date,cc.TestDate)  between DATEADD(day,-7,GE
                     return View(model);
                 
         }
+
         public ActionResult DoctorDetails(int id)
         {
             var model = new VendorPaymentDTO();
-            string query = @"select CONVERT(VARCHAR(10), AppointmentDate, 111) as AppointmentDate1, P.AppointmentDate, Sum(P.TotalFee) as Amount,p.Doctor_Id, D.DoctorName, D.MobileNumber, D.ClinicName,D.LicenceNumber  from PatientAppointment P join Doctor D on D.Id = p.Doctor_Id where p.IsPaid=1 and p.Doctor_Id='" + id + "' and P.AppointmentDate between DateAdd(DD,-7,GETDATE() ) and GETDATE()  GROUP BY P.AppointmentDate, p.TotalFee, D.DoctorName, D.MobileNumber, D.ClinicName,D.LicenceNumber,p.Doctor_Id";
+            string query = @"select CompanyName, VendorName from Vendor where Id=" + id;
             var datas = ent.Database.SqlQuery<VendorPaymentDTO>(query).ToList();
             model.CompanyName = datas.FirstOrDefault().CompanyName;
             model.VendorName = datas.FirstOrDefault().VendorName;
@@ -1739,6 +1741,7 @@ where v.Id=" + id + "  group by v.VendorName,v.CompanyName, d.DoctorName,c.CityN
             model.VendorDoctor = data;
             return View(model);
         }
+
         public ActionResult DriverDetails(int id)
         {
             var model = new VendorPaymentDTO();
@@ -1758,6 +1761,7 @@ where v.Id=" + id + "  group by v.VendorName,v.CompanyName, d.DoctorName,c.CityN
             model.VendorsDriver = data;
             return View(model);
         }
+
         public ActionResult VehicleDetails(int id)
         {
             var model = new VendorPaymentDTO();
@@ -1866,10 +1870,12 @@ where v.Id=" + id + "  group by v.VendorName,v.CompanyName, d.DoctorName,c.CityN
             model.VendorDoctor = data;
             return View(model);
         }
+
         public ActionResult Vendortds()
         {
             return View();
         }
+
         public ActionResult Drivertds(DateTime? date)
         {
             int id = GetVendorId();
@@ -1939,6 +1945,7 @@ where v.Id=" + id + "  group by v.VendorName,v.CompanyName, d.DoctorName,c.CityN
             model.Vendorses = data;
             return View(model);
         }
+
         public ActionResult DoctortdsList(int id)
         {
             var model = new VendorPaymentDTO();
@@ -1958,6 +1965,7 @@ where v.Id=" + id + "  group by v.VendorName,v.CompanyName, d.DoctorName,c.CityN
             model.VendorDoctor = data;
             return View(model);
         }
+
         public ActionResult DrivertdsList(int id)
         {
             var model = new VendorPaymentDTO();
@@ -1977,6 +1985,7 @@ where v.Id=" + id + "  group by v.VendorName,v.CompanyName, d.DoctorName,c.CityN
             model.VendorsDriver = data;
             return View(model);
         }
+
         public ActionResult VehicletdsList(int id)
         {
             var model = new VendorPaymentDTO();
@@ -1993,7 +2002,11 @@ where v.Id=" + id + "  group by v.VendorName,v.CompanyName, d.DoctorName,c.CityN
             }
             model.VendorsVehicle = data;
             return View(model);
-        } 
+        }
+
+
+
+
         public ActionResult HealthCheckupVendor()
         {
             int id = GetVendorId();
@@ -2009,7 +2022,10 @@ where v.Id=" + id + "  group by v.VendorName,v.CompanyName, d.DoctorName,c.CityN
             ViewBag.Payment = payment;
             model.Vendorses = data;
             return View(model);
-        } 
+        }
+
+
+
         public ActionResult LabVendor()
         {
             int id = GetVendorId();
@@ -2025,7 +2041,10 @@ where v.Id=" + id + "  group by v.VendorName,v.CompanyName, d.DoctorName,c.CityN
             ViewBag.Payment = payment;
             model.Vendorses = data;
             return View(model);
-        } 
+        }
+
+
+
         public ActionResult HealthCheckupVDetails(int id)
         {
             var model = new VendorPaymentDTO();

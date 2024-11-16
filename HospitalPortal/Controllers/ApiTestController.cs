@@ -4,12 +4,9 @@ using HospitalPortal.Models.DomainModels;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Net.NetworkInformation;
 using System.Web.Http;
 
 namespace HospitalPortal.Controllers
@@ -117,7 +114,5 @@ namespace HospitalPortal.Controllers
                 return InternalServerError(ex);
             }
         }
-
-        
     }
 }

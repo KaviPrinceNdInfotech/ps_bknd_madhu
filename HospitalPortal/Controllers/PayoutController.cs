@@ -15,7 +15,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using static HospitalPortal.Controllers.AmbulancePaymentController;
 using static System.Collections.Specialized.BitVector32;
 
 namespace HospitalPortal.Controllers
@@ -159,7 +158,6 @@ GROUP BY D.DoctorId, A.Doctor_Id, D.DoctorName;";
                 model.Doctor_Id = (int)Doctor_Id;
                 ent.DoctorPayOuts.Add(model);
                 ent.SaveChanges();
-
                 var existdata = ent.PatientAppointments.Where(d => d.Doctor_Id == Doctor_Id && d.IsPayoutPaid == false).FirstOrDefault();
                 if (existdata != null)
                 {
@@ -825,8 +823,8 @@ WHERE ns.IsPayoutPaid=0 and ns.ServiceAcceptanceDate BETWEEN DATEADD(DAY, -7, GE
 Sum(trm.TotalPrice) as TotalPrice from DriverLocation trm 
 join Driver d on d.Id = trm.Driver_Id 
 join Vehicle v on v.Id = d.Vehicle_Id 
-join Patient p on p.Id = trm.PatientId  
-WHERE trm.IsPayoutPaid=0 and trm.EntryDate between Convert(datetime,'" + startdate + "',103) and Convert(datetime,'" + enddate + "',103) and trm.IsPay='Y' and trm.RideComplete=1 group by v.VehicleNumber, v.VehicleName, v.Id,d.DriverName,trm.Driver_Id,d.DriverId";
+join Patient p on p.Id = trm.PatientId 
+WHERE trm.IsPayoutPaid=0 and trm.EntryDate between Convert(datetime,'" + startdate + "',103) and Convert(datetime,'" + enddate + "',103) group by v.VehicleNumber, v.VehicleName, v.Id,d.DriverName,trm.Driver_Id,d.DriverId";
                 var data1 = ent.Database.SqlQuery<Ambulance>(qry1).ToList();
                 if (data1.Count() == 0)
                 {
@@ -852,13 +850,12 @@ WHERE trm.IsPayoutPaid=0 and trm.EntryDate between Convert(datetime,'" + startda
             }
             else
             {
-                var qry = @"select d.DriverId,trm.Driver_Id,v.VehicleNumber, IsNull(v.VehicleName,'NA') as VehicleName,v.Id as VehicleId, d.DriverName,vt.DriverCharge,
+                var qry = @"select d.DriverId,trm.Driver_Id,v.VehicleNumber, IsNull(v.VehicleName,'NA') as VehicleName,v.Id as VehicleId, d.DriverName,
 Sum(trm.TotalPrice) as TotalPrice from DriverLocation trm 
 join Driver d on d.Id = trm.Driver_Id 
 join Vehicle v on v.Id = d.Vehicle_Id 
-join Patient p on p.Id = trm.PatientId
-JOIN VehicleType vt on vt.Id=v.VehicleType_Id 
-WHERE trm.IsPayoutPaid=0 and trm.EntryDate between DateAdd(DD,-7,GETDATE() ) and GETDATE() and trm.IsPay='Y' and trm.RideComplete=1 group by v.VehicleNumber, v.VehicleName, v.Id,d.DriverName,trm.Driver_Id,d.DriverId,vt.DriverCharge";
+join Patient p on p.Id = trm.PatientId 
+WHERE trm.IsPayoutPaid=0 and trm.EntryDate between DateAdd(DD,-7,GETDATE() ) and GETDATE() and trm.IsPay='Y' group by v.VehicleNumber, v.VehicleName, v.Id,d.DriverName,trm.Driver_Id,d.DriverId";
                 var data = ent.Database.SqlQuery<Ambulance>(qry).ToList();
 
                 if (data.Count() == 0)
@@ -883,7 +880,9 @@ WHERE trm.IsPayoutPaid=0 and trm.EntryDate between DateAdd(DD,-7,GETDATE() ) and
             }
 
         }
-        public ActionResult PayAmbulance(int? Driver_Id, double? Amount, string multyid)
+
+
+        public ActionResult PayAmbulance_Driver(int? Driver_Id, double? Amount, string multyid)
         {
 
             if (!string.IsNullOrEmpty(multyid))
@@ -894,13 +893,13 @@ WHERE trm.IsPayoutPaid=0 and trm.EntryDate between DateAdd(DD,-7,GETDATE() ) and
                     string[] perdoc = multi[i].Split(',');
                     int driverid = Convert.ToInt32(perdoc[0]);
                     double amount = Convert.ToDouble(perdoc[1]);
-                    var model1 = new AmbulancePayout();
+                    var model1 = new DriverPayOut();
                     model1.Amount = amount;
                     model1.IsPaid = true;
                     model1.IsGenerated = true;
                     model1.PaymentDate = DateTime.Now.Date;
                     model1.Driver_Id = driverid;
-                    ent.AmbulancePayouts.Add(model1);
+                    ent.DriverPayOuts.Add(model1);
                     ent.SaveChanges();
 
                     var existdata = ent.DriverLocations.Where(d => d.Driver_Id == driverid && d.IsPayoutPaid == false).ToList();
@@ -927,319 +926,6 @@ WHERE trm.IsPayoutPaid=0 and trm.EntryDate between DateAdd(DD,-7,GETDATE() ) and
             }
             else
             {
-                var model = new AmbulancePayout();
-                model.Amount = (double)Amount;
-                model.IsPaid = true;
-                model.IsGenerated = true;
-                model.PaymentDate = DateTime.Now.Date;
-                model.Driver_Id = (int)Driver_Id;
-                ent.AmbulancePayouts.Add(model);
-                ent.SaveChanges();
-                return RedirectToAction("ViewDriver_AmbulancePayoutHistory", new { Id = model.Driver_Id });
-            }
-
-        }
-
-        public ActionResult Driver(DateTime? startdate, DateTime? enddate)
-        {
-            var model = new AmbulancesReport();
-            double commision = ent.Database.SqlQuery<double>(@"select Commission from CommissionMaster where IsDeleted=0 and Name='Driver'").FirstOrDefault();
-            double Transactionfee = ent.Database.SqlQuery<double>(@"select Fee from TransactionFeeMaster where Name='Driver'").FirstOrDefault();
-            double gst = ent.Database.SqlQuery<double>(@"select Amount from GSTMaster where IsDeleted=0 and Name='Driver'").FirstOrDefault();
-            double tds = ent.Database.SqlQuery<double>(@"select Amount from TDSMaster where IsDeleted=0 and Name='Driver'").FirstOrDefault();
-
-            if (startdate != null)
-            {
-                var qry = @"select distinct trm.Driver_Id,d.DriverId,v.VehicleNumber, IsNull(v.VehicleName,'NA') as VehicleName,v.Id as VehicleId, d.DriverName,
-        CAST(vt.DriverCharge as INT) as TotalPrice,Cast (SUM(DATEDIFF(minute, AcceptanceDate, CompleteRideDate) / 60.0) AS float) AS TotalHours from DriverLocation trm 
-        join Driver d on d.Id = trm.Driver_Id  
-        join Vehicle v on v.Id = d.Vehicle_Id 
-        join VehicleType vt on vt.Id=v.VehicleType_Id 
-        WHERE trm.IsDriverPayoutPaid=0 and trm.EntryDate between @startdate and @enddate and trm.IsPay='Y' and trm.RideComplete=1 group by v.VehicleNumber, v.VehicleName, v.Id,d.DriverName,trm.Driver_Id,d.DriverId,vt.DriverCharge";
-                var data = ent.Database.SqlQuery<Ambulance>(qry, new SqlParameter("startdate", startdate),
-             new SqlParameter("enddate", enddate)).ToList();
-                var qry1 = @"select *, Vehicle_Id as VehicleId from VehicleAllotHistory";
-                var data1 = ent.Database.SqlQuery<Ambulance>(qry1).ToList();
-
-                var groupByVehicle = data1.GroupBy(x => x.VehicleId);
-
-                foreach (var vehicleGroup in groupByVehicle)
-                {
-                    var vehicleId = vehicleGroup.Key;
-                    var groupdriverforvehicle = vehicleGroup.GroupBy(x => x.Driver_Id);
-
-                    foreach (var driverAllocation in groupdriverforvehicle)
-                    {
-
-                        var alltime = data1.Where(a => a.Driver_Id == driverAllocation.Key).Select(x => new { AllocateDate = x.AllocateDate, IsActive = x.IsActive }).OrderByDescending(x => x.AllocateDate).ToList();
-                        TimeSpan? allallocatetime = TimeSpan.Zero;
-                        int daycount = 0;
-                        if (alltime.Count() % 2 == 0)
-                        {
-
-                            for (int i = 0; i < alltime.Count / 2; i++)
-                            {
-                                var starttime = alltime[i].AllocateDate;
-                                var endtime = alltime[i + 1].AllocateDate;
-                                var allocateTimed = starttime - endtime;
-                                allallocatetime = allallocatetime + allocateTimed;
-                                if (allallocatetime.Value.Hours < 24)
-                                {
-                                    daycount++;
-                                }
-                                else if (allallocatetime.Value.Hours > 24)
-                                {
-                                    var ad = allallocatetime.Value.Hours / 24;
-                                    daycount = daycount + ad;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            int allcount = 0;
-                            if (alltime.Count == 1)
-                            {
-                                allcount = 2;
-                            }
-                            else
-                            {
-                                allcount = alltime.Count + 1;
-                            }
-                            for (int i = 0; i < allcount / 2; i++)
-                            {
-                                var starttime = alltime[i].AllocateDate;
-                                var endtime = (bool)alltime.Last().IsActive ? DateTime.Now : alltime[i + 1].AllocateDate;
-                                var allocateTimed = starttime - endtime;
-                                allallocatetime = allallocatetime + allocateTimed;
-                                if (allallocatetime.Value.Hours < 24)
-                                {
-                                    daycount++;
-                                }
-                                else if (allallocatetime.Value.Hours > 24)
-                                {
-                                    var ad = allallocatetime.Value.Hours / 24;
-                                    daycount = daycount + ad;
-                                }
-                            }
-
-                        }
-                        foreach (var dta in data)
-                        {
-                            if (dta.Driver_Id == driverAllocation.Key)
-                            {
-                                dta.DayCount = daycount;
-                            }
-                        }
-                        //foreach (var dta in data)
-                        //{
-                        //    if (dta.Driver_Id == driverAllocation.Key)
-                        //    {
-                        //        // Calculate the time span between acceptance date and ride completion date
-                        //        TimeSpan rideDuration = (TimeSpan)(dta.CompleteRideDate - dta.AcceptanceDate);
-
-                        //        // Extract the total hours from the time span
-                        //        double rideHours = rideDuration.TotalHours;
-
-                        //        // Assign the calculated hours to the DayCount property
-                        //        dta.TotalHours = rideHours;
-                        //    }
-                        //}
-
-
-                        // Output the results
-                        Debug.WriteLine($"VehicleId: {vehicleId}, DriverId: {driverAllocation.Key}, AllocateTime: {allallocatetime},daycount:{daycount}");
-                    }
-                }
-
-                if (data.Count() == 0)
-                {
-                    TempData["msg"] = "No Record Available.";
-                }
-                else
-                {
-                    ViewBag.Transactionfee = Transactionfee;
-                    ViewBag.Amount = (double?)commision;
-                    ViewBag.gstAmount = (double?)gst;
-                    ViewBag.tdsAmount = (double?)tds;
-                    model.Ambulance = data;
-                    foreach (var item in data)
-                    {
-                        var razorcomm = ((double?)item.TotalPrice * Transactionfee) / 100;
-                        var totalrazorcomm = razorcomm;
-                        item.Amountwithrazorpaycomm = (double?)item.TotalPrice + totalrazorcomm;
-                    }
-                }
-                return View(model);
-            }
-            else
-            { 
-                var qry = @"select distinct trm.Driver_Id,d.DriverId,v.VehicleNumber, IsNull(v.VehicleName,'NA') as VehicleName,v.Id as VehicleId, d.DriverName,
-        CAST(vt.DriverCharge as INT) as TotalPrice,Cast (SUM(DATEDIFF(minute, AcceptanceDate, CompleteRideDate) / 60.0) AS float) AS TotalHours from DriverLocation trm 
-        join Driver d on d.Id = trm.Driver_Id  
-        join Vehicle v on v.Id = d.Vehicle_Id 
-        join VehicleType vt on vt.Id=v.VehicleType_Id 
-        WHERE trm.IsDriverPayoutPaid=0 and trm.EntryDate between DateAdd(DD,-7,GETDATE() ) and GETDATE() and trm.IsPay='Y' and trm.RideComplete=1 group by v.VehicleNumber, v.VehicleName, v.Id,d.DriverName,trm.Driver_Id,d.DriverId,vt.DriverCharge";
-                var data = ent.Database.SqlQuery<Ambulance>(qry).ToList();
-
-                var qry1 = @"select *, Vehicle_Id as VehicleId from VehicleAllotHistory";
-                var data1 = ent.Database.SqlQuery<Ambulance>(qry1).ToList();
-
-                var groupByVehicle = data1.GroupBy(x => x.VehicleId);
-
-                foreach (var vehicleGroup in groupByVehicle)
-                {
-                    var vehicleId = vehicleGroup.Key;
-                    var groupdriverforvehicle = vehicleGroup.GroupBy(x => x.Driver_Id);
-
-                    foreach (var driverAllocation in groupdriverforvehicle)
-                    {
-
-                        var alltime = data1.Where(a => a.Driver_Id == driverAllocation.Key).Select(x => new { AllocateDate = x.AllocateDate, IsActive = x.IsActive }).OrderByDescending(x => x.AllocateDate).ToList();
-                        TimeSpan? allallocatetime = TimeSpan.Zero;
-                        int daycount = 0;
-                        if (alltime.Count() % 2 == 0)
-                        {
-
-                            for (int i = 0; i < alltime.Count / 2; i++)
-                            {
-                                var starttime = alltime[i].AllocateDate;
-                                var endtime = alltime[i + 1].AllocateDate;
-                                var allocateTimed = starttime - endtime;
-                                allallocatetime = allallocatetime + allocateTimed;
-                                if (allallocatetime.Value.Hours < 24)
-                                {
-                                    daycount++;
-                                }
-                                else if (allallocatetime.Value.Hours > 24)
-                                {
-                                    var ad = allallocatetime.Value.Hours / 24;
-                                    daycount = daycount + ad;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            int allcount = 0;
-                            if (alltime.Count == 1)
-                            {
-                                allcount = 2;
-                            }
-                            else
-                            {
-                                allcount = alltime.Count + 1;
-                            }
-                            for (int i = 0; i < allcount / 2; i++)
-                            {
-                                var starttime = alltime[i].AllocateDate;
-                                var endtime = (bool)alltime.Last().IsActive ? DateTime.Now : alltime[i + 1].AllocateDate;
-                                var allocateTimed = starttime - endtime;
-                                allallocatetime = allallocatetime + allocateTimed;
-                                if (allallocatetime.Value.Hours < 24)
-                                {
-                                    daycount++;
-                                }
-                                else if (allallocatetime.Value.Hours > 24)
-                                {
-                                    var ad = allallocatetime.Value.Hours / 24;
-                                    daycount = daycount + ad;
-                                }
-                            }
-
-                        }
-                        foreach (var dta in data)
-                        {
-                            if (dta.Driver_Id == driverAllocation.Key)
-                            {
-                                dta.DayCount = daycount;
-                            }
-                        }
-                        //foreach (var dta in data)
-                        //{
-                        //    if (dta.Driver_Id == driverAllocation.Key)
-                        //    {
-                        //        // Calculate the time span between acceptance date and ride completion date
-                        //        TimeSpan rideDuration = (TimeSpan)(dta.CompleteRideDate - dta.AcceptanceDate);
-
-                        //        // Extract the total hours from the time span
-                        //        double rideHours = rideDuration.TotalHours;
-
-                        //        // Assign the calculated hours to the DayCount property
-                        //        dta.TotalHours = rideHours;
-                        //    }
-                        //}
-
-
-                        // Output the results
-                        Debug.WriteLine($"VehicleId: {vehicleId}, DriverId: {driverAllocation.Key}, AllocateTime: {allallocatetime},daycount:{daycount}");
-                    }
-                }  
-                                
-                if (data.Count() == 0)
-                {
-                    TempData["msg"] = "No Record Available.";
-                }
-                else
-                {
-                    ViewBag.Transactionfee = Transactionfee;
-                    ViewBag.Amount = (double?)commision;
-                    ViewBag.gstAmount = (double?)gst;
-                    ViewBag.tdsAmount = (double?)tds;
-                    model.Ambulance = data;
-                    foreach (var item in data)
-                    {
-                        var razorcomm = ((double?)item.TotalPrice * Transactionfee) / 100;
-                        var totalrazorcomm = razorcomm;
-                        item.Amountwithrazorpaycomm = (double?)item.TotalPrice + totalrazorcomm;
-                    }
-                }
-                return View(model);
-            }
-
-        }
-        public ActionResult PayDriver(int? Driver_Id, double? Amount, string multyid)
-        {
-
-            if (!string.IsNullOrEmpty(multyid))
-            {
-                string[] multi = multyid == null ? null : multyid.Split('-');
-                for (int i = 0; i < multi.Length - 1; i++)
-                {
-                    string[] perdoc = multi[i].Split(',');
-                    int driverid = Convert.ToInt32(perdoc[0]);
-                    double amount = Convert.ToDouble(perdoc[1]);
-                    var model1 = new DriverPayOut();
-                    model1.Amount = amount;
-                    model1.IsPaid = true;
-                    model1.IsGenerated = true;
-                    model1.PaymentDate = DateTime.Now.Date;
-                    model1.Driver_Id = driverid;
-                    ent.DriverPayOuts.Add(model1);
-                    ent.SaveChanges();
-
-                    var existdata = ent.DriverLocations.Where(d => d.Driver_Id == driverid && d.IsDriverPayoutPaid == false).ToList();
-                    if (existdata != null)
-                    {
-                        foreach (var item in existdata)
-                        {
-                            if (item.IsDriverPayoutPaid == false)
-                            {
-                                item.IsDriverPayoutPaid = true;
-                                ent.SaveChanges();
-                            }
-
-                        }
-                    }
-                    else
-                    {
-                        TempData["msg"] = "Data not found.";
-                    }
-
-
-                }
-                return RedirectToAction("DriverList");
-            }
-            else
-            {
                 var model = new DriverPayOut();
                 model.Amount = (double)Amount;
                 model.IsPaid = true;
@@ -1249,6 +935,158 @@ WHERE trm.IsPayoutPaid=0 and trm.EntryDate between DateAdd(DD,-7,GETDATE() ) and
                 ent.DriverPayOuts.Add(model);
                 ent.SaveChanges();
                 return RedirectToAction("ViewDriver_AmbulancePayoutHistory", new { Id = model.Driver_Id });
+            }
+
+        }
+
+        public ActionResult Driver(DateTime? startdate, DateTime? enddate)
+        {
+            var model = new AmbulancesReport();
+            double commision = ent.Database.SqlQuery<double>(@"select Commission from CommissionMaster where IsDeleted=0 and Name='Ambulance'").FirstOrDefault();
+            double Transactionfee = ent.Database.SqlQuery<double>(@"select Fee from TransactionFeeMaster where Name='Ambulance'").FirstOrDefault();
+            double gst = ent.Database.SqlQuery<double>(@"select Amount from GSTMaster where IsDeleted=0 and Name='Ambulance'").FirstOrDefault();
+            double tds = ent.Database.SqlQuery<double>(@"select Amount from TDSMaster where IsDeleted=0 and Name='Ambulance'").FirstOrDefault();
+
+            if (startdate != null)
+            {
+                var qry1 = @"SELECT d.DriverId,trm.Driver_Id,v.VehicleNumber,ISNULL(v.VehicleName,'NA') AS VehicleName,v.Id AS VehicleId,d.DriverName,SUM(trm.TotalPrice) AS TotalPrice,vah.AllocateDate,vah.Vehicle_Id,vah.IsActive FROM DriverLocation trm 
+JOIN Driver d ON d.Id = trm.Driver_Id 
+JOIN Vehicle v ON v.Id = d.Vehicle_Id 
+JOIN VehicleAllotHistory AS vah ON vah.Driver_Id = d.Id
+WHERE trm.IsPayoutPaid = 0 and trm.EntryDate between Convert(datetime,'" + startdate + "',103) and Convert(datetime,'" + enddate + "',103) AND trm.IsPay = 'Y' GROUP BY v.VehicleNumber,v.VehicleName,v.Id,d.DriverName,trm.Driver_Id,d.DriverId,vah.AllocateDate,vah.Vehicle_Id,vah.IsActive;";
+                var data1 = ent.Database.SqlQuery<Ambulance>(qry1).ToList();
+                if (data1.Count() == 0)
+                {
+                    TempData["msg"] = "Your Selected Date Doesn't Contain any Information.";
+                }
+                else
+                {
+                    ViewBag.Transactionfee = Transactionfee;
+                    ViewBag.Amount = (double?)commision;
+                    ViewBag.gstAmount = (double?)gst;
+                    ViewBag.tdsAmount = (double?)tds;
+                    model.Ambulance = data1;
+                    foreach (var item in data1)
+                    {
+
+                        var razorcomm = ((double?)item.TotalPrice * Transactionfee) / 100;
+                        var totalrazorcomm = razorcomm;
+                        item.Amountwithrazorpaycomm = (double?)item.TotalPrice + totalrazorcomm;
+
+                    }
+                }
+                return View(model);
+            }
+            else
+            {
+                //AND trm.EntryDate BETWEEN DATEADD(DD, -7, GETDATE()) AND GETDATE()
+                var qry = @"select d.DriverId,trm.Driver_Id,v.VehicleNumber, IsNull(v.VehicleName,'NA') as VehicleName,v.Id as VehicleId, d.DriverName,
+Sum(trm.TotalPrice) as TotalPrice from DriverLocation trm 
+join Driver d on d.Id = trm.Driver_Id 
+join VehicleAllotHistory as vah on vah.Driver_Id=d.Id
+left join Vehicle v on v.Id = vah.Vehicle_Id 
+join Patient p on p.Id = trm.PatientId
+WHERE trm.IsPayoutPaid=0 and trm.EntryDate between DateAdd(DD,-7,GETDATE() ) and GETDATE() and trm.IsPay='Y' group by v.VehicleNumber, v.VehicleName, v.Id,d.DriverName,trm.Driver_Id,d.DriverId";
+                var data = ent.Database.SqlQuery<Ambulance>(qry).ToList();
+
+                var qry1 = @"select *, Vehicle_Id as VehicleId from VehicleAllotHistory";
+                var data1 = ent.Database.SqlQuery<Ambulance>(qry1).ToList();
+
+                var groupByVehicle = data1.GroupBy(x => x.VehicleId);
+                
+                foreach (var vehicleGroup in groupByVehicle)
+                {
+                    var vehicleId = vehicleGroup.Key;
+                    var groupdriverforvehicle = vehicleGroup.GroupBy(x => x.Driver_Id);
+
+                    foreach (var driverAllocation in groupdriverforvehicle)
+                    {
+                                               
+                        var alltime = data1.Where(a => a.Driver_Id == driverAllocation.Key).Select(x => new { AllocateDate = x.AllocateDate, IsActive = x.IsActive }).OrderByDescending(x => x.AllocateDate).ToList();
+                        TimeSpan? allallocatetime = TimeSpan.Zero;
+                        int daycount=0;
+                        if (alltime.Count()%2==0) {
+                         
+                            for(int i=0;i<alltime.Count/2;i++)
+                            {
+                                var starttime = alltime[i].AllocateDate;
+                                var endtime = alltime[i + 1].AllocateDate;
+                                var allocateTimed = starttime- endtime;
+                                allallocatetime = allallocatetime + allocateTimed;
+                                if(allallocatetime.Value.Hours<24)
+                                {
+                                    daycount++;
+                                }else if(allallocatetime.Value.Hours > 24)
+                                {
+                                   var ad= allallocatetime.Value.Hours/ 24;
+                                    daycount = daycount + ad;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            int allcount = 0;
+                            if (alltime.Count==1)
+                            {
+                                allcount=2;
+                            }else
+                            {
+                                allcount = alltime.Count+1;
+                            }
+                            for (int i = 0; i < allcount / 2; i++)
+                            {
+                                var starttime = alltime[i].AllocateDate;
+                                var endtime = (bool)alltime.Last().IsActive ? DateTime.Now : alltime[i + 1].AllocateDate; 
+                                var allocateTimed = starttime - endtime;
+                                allallocatetime = allallocatetime + allocateTimed;
+                                if (allallocatetime.Value.Hours < 24)
+                                {
+                                    daycount++;
+                                }
+                                else if (allallocatetime.Value.Hours > 24)
+                                {
+                                    var ad = allallocatetime.Value.Hours / 24;
+                                    daycount = daycount + ad;
+                                }
+                            }
+
+                        }
+                        foreach(var dta in data)
+                        {
+                            if(dta.Driver_Id== driverAllocation.Key)
+                            {
+                                dta.RunDay = daycount;
+                            }
+                        }
+                      
+                        // Output the results
+                        Debug.WriteLine($"VehicleId: {vehicleId}, DriverId: {driverAllocation.Key}, AllocateTime: {allallocatetime},daycount:{daycount}");
+                    }
+                }                //var groupdriver = data.GroupBy(x => x.Driver_Id);
+                //foreach (var driver in groupdriver)
+                //{
+                //    Debug.WriteLine(driver.Key);
+
+                //}
+                if (data.Count() == 0)
+                {
+                    TempData["msg"] = "No Record Available.";
+                }
+                else
+                {
+                    ViewBag.Transactionfee = Transactionfee;
+                    ViewBag.Amount = (double?)commision;
+                    ViewBag.gstAmount = (double?)gst;
+                    ViewBag.tdsAmount = (double?)tds;
+                    model.Ambulance = data;
+                    foreach (var item in data)
+                    {
+                        var razorcomm = ((double?)item.TotalPrice * Transactionfee) / 100;
+                        var totalrazorcomm = razorcomm;
+                        item.Amountwithrazorpaycomm = (double?)item.TotalPrice + totalrazorcomm;
+                    }
+                }
+                return View(model);
             }
 
         }
@@ -1296,25 +1134,7 @@ WHERE trm.IsPayoutPaid=0 and trm.EntryDate between DateAdd(DD,-7,GETDATE() ) and
     SELECT dp.*, v.VehicleNumber, v.VehicleName, d.DriverName,d.DriverId,
            ROW_NUMBER() OVER(PARTITION BY dp.Id ORDER BY dp.Id) AS RowNum
     FROM Driver d
-    JOIN AmbulancePayout dp ON dp.Driver_Id = d.Id
-    JOIN DriverLocation AS dl ON dl.Driver_Id = d.Id
-    JOIN Vehicle AS v ON v.Id = d.Vehicle_Id
-)
-SELECT Id,Driver_Id ,Amount ,IsPaid ,PaymentDate ,IsGenerated , VehicleNumber, VehicleName, DriverName,DriverId
-FROM CTE
-WHERE RowNum = 1
-ORDER BY Id").ToList();
-            model.HistoryOfAmbulance_Payout = data;
-            return View(model);
-        }
-        public ActionResult DriverList()
-        {
-            var model = new ViewPayOutHistory();
-            var data = ent.Database.SqlQuery<HistoryOfAmbulance_Payout>(@"WITH CTE AS (
-    SELECT dp.*, v.VehicleNumber, v.VehicleName, d.DriverName,d.DriverId,
-           ROW_NUMBER() OVER(PARTITION BY dp.Id ORDER BY dp.Id) AS RowNum
-    FROM Driver d
-    JOIN DriverPayout dp ON dp.Driver_Id = d.Id
+    JOIN DriverPayOut dp ON dp.Driver_Id = d.Id
     JOIN DriverLocation AS dl ON dl.Driver_Id = d.Id
     JOIN Vehicle AS v ON v.Id = d.Vehicle_Id
 )
@@ -1394,21 +1214,23 @@ where trm.IsDriveCompleted = 1 and trm.RequestDate between '" + dateCriteria + "
         public ActionResult DoctorList()
         {
             var model = new ViewPayOutHistory();
-            var data = ent.Database.SqlQuery<HistoryOfDoc_Payout>(@"select d.DoctorName,d.DoctorId, dp.* from Doctor d join DoctorPayout dp on dp.Doctor_Id = d.Id order By dp.Id desc").ToList();
+            var data = ent.Database.SqlQuery<HistoryOfDoc_Payout>(@"select d.DoctorName, dp.* from Doctor d join DoctorPayout dp on dp.Doctor_Id = d.Id order By dp.Id").ToList();
             model.HistoryOfDoc_Payout = data;
             return View(model);
         }
+
+
         public ActionResult NurseList()
         {
             var model = new ViewPayOutHistory();
-            var data = ent.Database.SqlQuery<HistoryOfNurse_Payout>(@"select n.NurseName,n.NurseId, np.* from Nurse n join NursePayout np on np.Nurse_Id = n.Id order By np.Id").ToList();
+            var data = ent.Database.SqlQuery<HistoryOfNurse_Payout>(@"select n.NurseName, np.* from Nurse n join NursePayout np on np.Nurse_Id = n.Id order By np.Id").ToList();
             model.HistoryOfNurse_Payout = data;
             return View(model);
         }
         public ActionResult LabList()
         {
             var model = new ViewPayOutHistory();
-            var data = ent.Database.SqlQuery<HistoryOfLab_Payout>(@"select l.LabName,l.lABId, lp.* from Lab l join LabPayout lp on lp.Lab_Id = l.Id order By lp.Id").ToList();
+            var data = ent.Database.SqlQuery<HistoryOfLab_Payout>(@"select l.LabName, lp.* from Lab l join LabPayout lp on lp.Lab_Id = l.Id order By lp.Id").ToList();
             model.HistoryOfLab_Payout = data;
             return View(model);
         }
@@ -1430,132 +1252,136 @@ where trm.IsDriveCompleted = 1 and trm.RequestDate between '" + dateCriteria + "
 
         //For Bank
         public void DownloadDoctorExcel(int? Id)
-        { 
-            string query = @"WITH CTE AS (SELECT dp.*,pa.AppointmentDate,d.DoctorId, d.DoctorName as BeneficiaryName,d.PAN,bd.BranchName,bd.IFSCCode,bd.HolderName,d.EmailId,d.MobileNumber,d.DoctorId as UniqueId,
+        {
+            //            String query = @"select d.DoctorId,d.DoctorName,d.PAN,dp.*,bd.*,pa.AppointmentDate from Doctor d 
+            //join DoctorPayout dp on dp.Doctor_Id = d.Id 
+            //left join BankDetails as bd on bd.Login_Id=d.AdminLogin_Id
+            //inner join PatientAppointment as pa on pa.Doctor_Id=d.Id
+            //order By dp.Id";
+            String query = @"WITH CTE AS (
+    SELECT dp.*,pa.AppointmentDate,d.DoctorId, d.DoctorName,d.PAN,bd.BranchName,bd.IFSCCode,bd.HolderName,
            ROW_NUMBER() OVER(PARTITION BY dp.Id ORDER BY dp.Id) AS RowNum
     FROM Doctor d
     JOIN DoctorPayOut dp ON dp.Doctor_Id = d.Id
-    JOIN PatientAppointment AS pa ON pa.Doctor_Id = d.Id   
-	left join BankDetails as bd on bd.Login_Id=d.AdminLogin_Id  
+    JOIN PatientAppointment AS pa ON pa.Doctor_Id = d.Id
+   
+	left join BankDetails as bd on bd.Login_Id=d.AdminLogin_Id 
 )
-SELECT Id,DoctorId,AppointmentDate,Amount ,IsPaid ,PaymentDate ,IsGenerated ,PAN,BranchName,IFSCCode,HolderName,BeneficiaryName,EmailId,MobileNumber,UniqueId
+SELECT Id,DoctorId ,DoctorName,AppointmentDate,Amount ,IsPaid ,PaymentDate ,IsGenerated ,PAN,BranchName,IFSCCode,HolderName
 FROM CTE
 WHERE RowNum = 1
 ORDER BY Id";
 
-            List<DetailsForBank> employeeDetails = ent.Database.SqlQuery<DetailsForBank>(query, Array.Empty<object>()).ToList();
+            var employeeDetails = ent.Database.SqlQuery<HistoryOfDoc_Payout>(query).ToList();
             ExcelPackage Ep = new ExcelPackage();
             ExcelWorksheet Sheet = Ep.Workbook.Worksheets.Add("Report");
-            Sheet.Cells["A1"].Value = "Payment Method";
-            Sheet.Cells["B1"].Value = "Payment Amount";
-            Sheet.Cells["C1"].Value = "Activation Date";
-            Sheet.Cells["D1"].Value = "Beneficiary Name";
-            Sheet.Cells["E1"].Value = "Account No in text";
-            Sheet.Cells["F1"].Value = "Email";
-            Sheet.Cells["G1"].Value = "Email Body";
-            Sheet.Cells["H1"].Value = "Debit Account No";
-            Sheet.Cells["I1"].Value = "CRN No";
-            Sheet.Cells["J1"].Value = "Receiver IFSC Code";
-            Sheet.Cells["K1"].Value = "Receiver Account";
-            Sheet.Cells["L1"].Value = "Remarks";
-            Sheet.Cells["M1"].Value = "Phone No";
+
+            Sheet.Cells["A1"].Value = "Doctor Id";
+            Sheet.Cells["B1"].Value = "Appointment Date";
+            Sheet.Cells["C1"].Value = "Doctor Name";
+            Sheet.Cells["D1"].Value = "Amount";
+            //Sheet.Cells["C1"].Value = "Payment Date";
+            Sheet.Cells["E1"].Value = "PAN No.";
+            Sheet.Cells["F1"].Value = "IFSCCode";
+            Sheet.Cells["G1"].Value = "Branch Name";
+            Sheet.Cells["H1"].Value = "AC Holder Name";
             int row = 2;
-            CRNGenerator crnGenerator = new CRNGenerator();
-            foreach (DetailsForBank item in employeeDetails)
+            double totalAmount = 0.0; // Initialize a variable to store the total MonthSalary
+
+            foreach (var item in employeeDetails)
             {
-                string dvrId = item.UniqueId;
-                long sdds = Convert.ToInt64(item.AccountNo);
-                string crn = crnGenerator.GenerateCRN(dvrId);
-                Sheet.Cells[$"A{row}"].Value = "N";
-                Sheet.Cells[$"B{row}"].Value = item.Amount;
-                Sheet.Cells[$"C{row}"].Value = DateTime.Now;
-                Sheet.Cells[$"C{row}"].Style.Numberformat.Format = "yyyy-MM-dd";
-                Sheet.Cells[$"D{row}"].Value = item.BeneficiaryName;
-                Sheet.Cells[$"E{row}"].Value = NumberToWords(sdds);
-                Sheet.Cells[$"F{row}"].Value = item.EmailId;
-                Sheet.Cells[$"G{row}"].Value = "This is your payment report";
-                Sheet.Cells[$"H{row}"].Value = "924020004812750";
-                Sheet.Cells[$"I{row}"].Value = crn;
-                Sheet.Cells[$"J{row}"].Value = item.IFSCCode;
-                Sheet.Cells[$"K{row}"].Value = item.AccountNo;
-                Sheet.Cells[$"L{row}"].Value = "Enter your remark";
-                Sheet.Cells[$"M{row}"].Value = item.MobileNumber;
+                Sheet.Cells[string.Format("A{0}", row)].Value = item.DoctorId;
+                Sheet.Cells[string.Format("B{0}", row)].Value = item.AppointmentDate;
+                Sheet.Cells[string.Format("B{0}", row)].Style.Numberformat.Format = "yyyy-MM-dd"; // Change the date format as needed
+                Sheet.Cells[string.Format("C{0}", row)].Value = item.DoctorName;
+                Sheet.Cells[string.Format("D{0}", row)].Value = item.Amount;
+                Sheet.Cells[string.Format("E{0}", row)].Value = item.PAN;
+                Sheet.Cells[string.Format("F{0}", row)].Value = item.IFSCCode;
+                Sheet.Cells[string.Format("G{0}", row)].Value = item.BranchName;
+                Sheet.Cells[string.Format("H{0}", row)].Value = item.HolderName;
+                totalAmount += item.Amount; // Add the current MonthSalary to the total
                 row++;
             }
+
+            // Create a cell to display the total MonthSalary
+            Sheet.Cells[string.Format("C{0}", row)].Value = "Total Amount";
+            Sheet.Cells[string.Format("D{0}", row)].Value = totalAmount;
+
             Sheet.Cells["A:AZ"].AutoFitColumns();
-            base.Response.Clear();
-            base.Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            base.Response.AddHeader("content-disposition", "attachment; filename=Report.xlsx");
-            base.Response.BinaryWrite(Ep.GetAsByteArray());
-            base.Response.End();
+            Response.Clear();
+            Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            Response.AddHeader("content-disposition", "attachment; filename=Report.xlsx"); // Use a semicolon (;) instead of a colon (:)
+            Response.BinaryWrite(Ep.GetAsByteArray());
+            Response.End();
         }
 
         public void DownloadLabExcel(int? Id)
-        { 
-            string query = @"WITH CTE AS (
-    SELECT lp.*,BTL.TestDate,l.lABId, l.LabName,l.PAN,bd.BranchName,bd.IFSCCode,bd.HolderName,v.VendorName as BeneficiaryName,v.EmailId,v.UniqueId,
+        {
+            //            String query = @"select l.lABId,BTL.TestDate,l.LabName,l.PAN ,lp.*,bd.* from Lab l 
+            //join LabPayout lp on lp.Lab_Id = l.Id 
+            //left join BankDetails as bd on bd.Login_Id =l.AdminLogin_Id
+            //INNER JOIN BookTestLab AS BTL on BTL .Lab_Id=l.Id
+            //order By lp.Id";
+            String query = @"WITH CTE AS (
+    SELECT lp.*,BTL.TestDate,l.lABId, l.LabName,l.PAN,bd.BranchName,bd.IFSCCode,bd.HolderName,
            ROW_NUMBER() OVER(PARTITION BY lp.Id ORDER BY lp.Id) AS RowNum
     FROM Lab l
    JOIN LabPayOut lp on lp.Lab_Id = l.Id 
    LEFT JOIN BankDetails as bd on bd.Login_Id =l.AdminLogin_Id
    JOIN BookTestLab AS BTL on BTL .Lab_Id=l.Id
-   join Vendor as v on v.Id=l.Vendor_Id
 )
-SELECT Id,lABId ,LabName,TestDate,Amount ,IsPaid ,PaymentDate ,IsGenerated ,PAN,BranchName,IFSCCode,HolderName,BeneficiaryName,EmailId,UniqueId
+SELECT Id,lABId ,LabName,TestDate,Amount ,IsPaid ,PaymentDate ,IsGenerated ,PAN,BranchName,IFSCCode,HolderName
 FROM CTE
 WHERE RowNum = 1
 ORDER BY Id";
 
-            List<DetailsForBank> employeeDetails = ent.Database.SqlQuery<DetailsForBank>(query, Array.Empty<object>()).ToList();
+            var employeeDetails = ent.Database.SqlQuery<HistoryOfLab_Payout>(query).ToList();
             ExcelPackage Ep = new ExcelPackage();
             ExcelWorksheet Sheet = Ep.Workbook.Worksheets.Add("Report");
-            Sheet.Cells["A1"].Value = "Payment Method";
-            Sheet.Cells["B1"].Value = "Payment Amount";
-            Sheet.Cells["C1"].Value = "Activation Date";
-            Sheet.Cells["D1"].Value = "Beneficiary Name";
-            Sheet.Cells["E1"].Value = "Account No in text";
-            Sheet.Cells["F1"].Value = "Email";
-            Sheet.Cells["G1"].Value = "Email Body";
-            Sheet.Cells["H1"].Value = "Debit Account No";
-            Sheet.Cells["I1"].Value = "CRN No";
-            Sheet.Cells["J1"].Value = "Receiver IFSC Code";
-            Sheet.Cells["K1"].Value = "Receiver Account";
-            Sheet.Cells["L1"].Value = "Remarks";
-            Sheet.Cells["M1"].Value = "Phone No";
+
+            Sheet.Cells["A1"].Value = "Lab Id";
+            Sheet.Cells["B1"].Value = "Test Date";
+            Sheet.Cells["C1"].Value = "Lab Name";
+            Sheet.Cells["D1"].Value = "Amount";
+            Sheet.Cells["E1"].Value = "PAN No.";
+            Sheet.Cells["F1"].Value = "IFSCCode";
+            Sheet.Cells["G1"].Value = "Branch Name";
+            Sheet.Cells["H1"].Value = "AC Holder Name";
+
             int row = 2;
-            CRNGenerator crnGenerator = new CRNGenerator();
-            foreach (DetailsForBank item in employeeDetails)
+            double totalAmount = 0.0; // Initialize a variable to store the total MonthSalary
+
+            foreach (var item in employeeDetails)
             {
-                string dvrId = item.UniqueId;
-                long sdds = Convert.ToInt64(item.AccountNo);
-                string crn = crnGenerator.GenerateCRN(dvrId);
-                Sheet.Cells[$"A{row}"].Value = "N";
-                Sheet.Cells[$"B{row}"].Value = item.Amount;
-                Sheet.Cells[$"C{row}"].Value = DateTime.Now;
-                Sheet.Cells[$"C{row}"].Style.Numberformat.Format = "yyyy-MM-dd";
-                Sheet.Cells[$"D{row}"].Value = item.BeneficiaryName;
-                Sheet.Cells[$"E{row}"].Value = NumberToWords(sdds);
-                Sheet.Cells[$"F{row}"].Value = item.EmailId;
-                Sheet.Cells[$"G{row}"].Value = "This is your payment report";
-                Sheet.Cells[$"H{row}"].Value = "924020004812750";
-                Sheet.Cells[$"I{row}"].Value = crn;
-                Sheet.Cells[$"J{row}"].Value = item.IFSCCode;
-                Sheet.Cells[$"K{row}"].Value = item.AccountNo;
-                Sheet.Cells[$"L{row}"].Value = "Enter your remark";
-                Sheet.Cells[$"M{row}"].Value = item.MobileNumber;
+                Sheet.Cells[string.Format("A{0}", row)].Value = item.lABId;
+                Sheet.Cells[string.Format("B{0}", row)].Value = item.TestDate;
+                Sheet.Cells[string.Format("B{0}", row)].Style.Numberformat.Format = "yyyy-MM-dd"; // Change the date format as needed
+                Sheet.Cells[string.Format("C{0}", row)].Value = item.LabName;
+                Sheet.Cells[string.Format("D{0}", row)].Value = item.Amount;
+                Sheet.Cells[string.Format("E{0}", row)].Value = item.PAN;
+                Sheet.Cells[string.Format("F{0}", row)].Value = item.IFSCCode;
+                Sheet.Cells[string.Format("G{0}", row)].Value = item.BranchName;
+                Sheet.Cells[string.Format("H{0}", row)].Value = item.HolderName;
+
+                totalAmount += item.Amount; // Add the current MonthSalary to the total
                 row++;
             }
+
+            // Create a cell to display the total MonthSalary
+            Sheet.Cells[string.Format("C{0}", row)].Value = "Total Amount";
+            Sheet.Cells[string.Format("D{0}", row)].Value = totalAmount;
+
             Sheet.Cells["A:AZ"].AutoFitColumns();
-            base.Response.Clear();
-            base.Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            base.Response.AddHeader("content-disposition", "attachment; filename=Report.xlsx");
-            base.Response.BinaryWrite(Ep.GetAsByteArray());
-            base.Response.End();
+            Response.Clear();
+            Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            Response.AddHeader("content-disposition", "attachment; filename=Report.xlsx"); // Use a semicolon (;) instead of a colon (:)
+            Response.BinaryWrite(Ep.GetAsByteArray());
+            Response.End();
         }
 
         public void DownloadChemistExcel(int? Id)
         {
-            string query = @"select c.ChemistId,c.ChemistName,c.EmailId,c.Location,c.PinCode,c.LicenceNumber,c.PAN , cp.*,bd.* from Chemist c 
+            String query = @"select c.ChemistId,c.ChemistName,c.EmailId,c.Location,c.PinCode,c.LicenceNumber,c.PAN , cp.*,bd.* from Chemist c 
 join ChemistPayOut cp on cp.Chemist_Id = c.Id
 left join BankDetails as bd on bd.Login_Id =c.AdminLogin_Id
  order By cp.Id";
@@ -1605,285 +1431,126 @@ left join BankDetails as bd on bd.Login_Id =c.AdminLogin_Id
         }
         public void DownloadNurseExcel(int? Id)
         {
-            string query = @"WITH CTE AS (
-    SELECT lp.*,ns.ServiceDate, l.NurseName as BeneficiaryName,l.NurseId,l.PAN,bd.BranchName,bd.IFSCCode,bd.HolderName,l.EmailId,l.NurseId as UniqueId,
+            String query = @"WITH CTE AS (
+    SELECT lp.*,ns.ServiceDate, l.NurseName,l.NurseId,l.PAN,bd.BranchName,bd.IFSCCode,bd.HolderName,
            ROW_NUMBER() OVER(PARTITION BY lp.Id ORDER BY lp.Id) AS RowNum
     FROM Nurse l
    JOIN NursePayout lp on lp.Nurse_Id = l.Id 
    LEFT JOIN BankDetails as bd on bd.Login_Id =l.AdminLogin_Id
-   JOIN Nurseservice AS ns on ns.Nurse_Id=l.Id 
+   JOIN Nurseservice AS ns on ns.Nurse_Id=l.Id
 )
-SELECT Id,NurseId,ServiceDate,Amount ,IsPaid ,PaymentDate ,IsGenerated ,PAN,BranchName,IFSCCode,HolderName,BeneficiaryName,EmailId,UniqueId
+SELECT Id,NurseId,NurseName ,ServiceDate,Amount ,IsPaid ,PaymentDate ,IsGenerated ,PAN,BranchName,IFSCCode,HolderName
 FROM CTE
 WHERE RowNum = 1
 ORDER BY Id";
-            List<DetailsForBank> employeeDetails = ent.Database.SqlQuery<DetailsForBank>(query, Array.Empty<object>()).ToList();
+
+            var employeeDetails = ent.Database.SqlQuery<HistoryOfNurse_Payout>(query).ToList();
             ExcelPackage Ep = new ExcelPackage();
             ExcelWorksheet Sheet = Ep.Workbook.Worksheets.Add("Report");
-            Sheet.Cells["A1"].Value = "Payment Method";
-            Sheet.Cells["B1"].Value = "Payment Amount";
-            Sheet.Cells["C1"].Value = "Activation Date";
-            Sheet.Cells["D1"].Value = "Beneficiary Name";
-            Sheet.Cells["E1"].Value = "Account No in text";
-            Sheet.Cells["F1"].Value = "Email";
-            Sheet.Cells["G1"].Value = "Email Body";
-            Sheet.Cells["H1"].Value = "Debit Account No";
-            Sheet.Cells["I1"].Value = "CRN No";
-            Sheet.Cells["J1"].Value = "Receiver IFSC Code";
-            Sheet.Cells["K1"].Value = "Receiver Account";
-            Sheet.Cells["L1"].Value = "Remarks";
-            Sheet.Cells["M1"].Value = "Phone No";
+
+            Sheet.Cells["A1"].Value = "Nurse Id";
+            Sheet.Cells["B1"].Value = "Service Date";
+            Sheet.Cells["C1"].Value = "Nurse Name";
+            Sheet.Cells["D1"].Value = "Amount";
+            Sheet.Cells["E1"].Value = "PAN No.";
+            Sheet.Cells["F1"].Value = "IFSCCode";
+            Sheet.Cells["G1"].Value = "Branch Name";
+            Sheet.Cells["H1"].Value = "AC Holder Name";
             int row = 2;
-            CRNGenerator crnGenerator = new CRNGenerator();
-            foreach (DetailsForBank item in employeeDetails)
+            double totalAmount = 0.0; // Initialize a variable to store the total MonthSalary
+
+            foreach (var item in employeeDetails)
             {
-                string dvrId = item.UniqueId;
-                long sdds = Convert.ToInt64(item.AccountNo);
-                string crn = crnGenerator.GenerateCRN(dvrId);
-                Sheet.Cells[$"A{row}"].Value = "N";
-                Sheet.Cells[$"B{row}"].Value = item.Amount;
-                Sheet.Cells[$"C{row}"].Value = DateTime.Now;
-                Sheet.Cells[$"C{row}"].Style.Numberformat.Format = "yyyy-MM-dd";
-                Sheet.Cells[$"D{row}"].Value = item.BeneficiaryName;
-                Sheet.Cells[$"E{row}"].Value = NumberToWords(sdds);
-                Sheet.Cells[$"F{row}"].Value = item.EmailId;
-                Sheet.Cells[$"G{row}"].Value = "This is your payment report";
-                Sheet.Cells[$"H{row}"].Value = "924020004812750";
-                Sheet.Cells[$"I{row}"].Value = crn;
-                Sheet.Cells[$"J{row}"].Value = item.IFSCCode;
-                Sheet.Cells[$"K{row}"].Value = item.AccountNo;
-                Sheet.Cells[$"L{row}"].Value = "Enter your remark";
-                Sheet.Cells[$"M{row}"].Value = item.MobileNumber;
+                Sheet.Cells[string.Format("A{0}", row)].Value = item.NurseId;
+                Sheet.Cells[string.Format("B{0}", row)].Value = item.ServiceDate;
+                Sheet.Cells[string.Format("B{0}", row)].Style.Numberformat.Format = "yyyy-MM-dd"; // Change the date format as needed
+                Sheet.Cells[string.Format("C{0}", row)].Value = item.NurseName;
+                Sheet.Cells[string.Format("D{0}", row)].Value = item.Amount;
+                Sheet.Cells[string.Format("E{0}", row)].Value = item.PAN;
+                Sheet.Cells[string.Format("F{0}", row)].Value = item.IFSCCode;
+                Sheet.Cells[string.Format("G{0}", row)].Value = item.BranchName;
+                Sheet.Cells[string.Format("H{0}", row)].Value = item.HolderName;
+
+                totalAmount += item.Amount; // Add the current MonthSalary to the total
                 row++;
             }
+
+            // Create a cell to display the total MonthSalary
+            Sheet.Cells[string.Format("C{0}", row)].Value = "Total Amount";
+            Sheet.Cells[string.Format("D{0}", row)].Value = totalAmount;
+
             Sheet.Cells["A:AZ"].AutoFitColumns();
-            base.Response.Clear();
-            base.Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            base.Response.AddHeader("content-disposition", "attachment; filename=Report.xlsx");
-            base.Response.BinaryWrite(Ep.GetAsByteArray());
-            base.Response.End();
+            Response.Clear();
+            Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            Response.AddHeader("content-disposition", "attachment; filename=Report.xlsx"); // Use a semicolon (;) instead of a colon (:)
+            Response.BinaryWrite(Ep.GetAsByteArray());
+            Response.End();
         }
 
-//        public void DownloadAmbulanceExcel(int? Id)
-//        {
-//            string query = @"WITH CTE AS (
-//    SELECT dp.*, v.VehicleNumber, v.VehicleName, d.DriverName,d.PAN,dl.EntryDate,bd.BranchName,bd.IFSCCode,bd.HolderName,
-//           ROW_NUMBER() OVER(PARTITION BY dp.Id ORDER BY dp.Id) AS RowNum
-//    FROM Driver d
-//    JOIN DriverPayOut dp ON dp.Driver_Id = d.Id
-//    JOIN DriverLocation AS dl ON dl.Driver_Id = d.Id
-//    JOIN Vehicle AS v ON v.Driver_Id = dl.Driver_Id
-//	left join BankDetails as bd on bd.Login_Id=d.AdminLogin_Id 
-//)
-//SELECT Id,Driver_Id ,Amount ,IsPaid ,PaymentDate ,IsGenerated , VehicleNumber, VehicleName, DriverName,PAN,EntryDate,BranchName,IFSCCode,HolderName
-//FROM CTE
-//WHERE RowNum = 1
-//ORDER BY Id";
-
-//            var employeeDetails = ent.Database.SqlQuery<HistoryOfAmbulance_Payout>(query).ToList();
-//            ExcelPackage Ep = new ExcelPackage();
-//            ExcelWorksheet Sheet = Ep.Workbook.Worksheets.Add("Report");
-
-//            Sheet.Cells["A1"].Value = "Driver Id";
-//            Sheet.Cells["B1"].Value = "Appointment Date";
-//            Sheet.Cells["C1"].Value = "Driver Name";
-//            Sheet.Cells["D1"].Value = "Vehicle Name";
-//            Sheet.Cells["E1"].Value = "Vehicle Number";
-//            Sheet.Cells["F1"].Value = "Amount";
-//            //Sheet.Cells["C1"].Value = "Payment Date";
-//            Sheet.Cells["G1"].Value = "PAN No.";
-//            Sheet.Cells["H1"].Value = "IFSCCode";
-//            Sheet.Cells["I1"].Value = "Branch Name";
-//            Sheet.Cells["J1"].Value = "AC Holder Name";
-//            int row = 2;
-//            double totalAmount = 0.0; // Initialize a variable to store the total MonthSalary
-
-//            foreach (var item in employeeDetails)
-//            {
-//                Sheet.Cells[string.Format("A{0}", row)].Value = item.Driver_Id;
-//                Sheet.Cells[string.Format("B{0}", row)].Value = item.EntryDate;
-//                Sheet.Cells[string.Format("B{0}", row)].Style.Numberformat.Format = "yyyy-MM-dd"; // Change the date format as needed
-//                Sheet.Cells[string.Format("C{0}", row)].Value = item.DriverName;
-//                Sheet.Cells[string.Format("D{0}", row)].Value = item.VehicleName;
-//                Sheet.Cells[string.Format("E{0}", row)].Value = item.VehicleNumber;
-//                Sheet.Cells[string.Format("F{0}", row)].Value = item.Amount;
-//                Sheet.Cells[string.Format("G{0}", row)].Value = item.PAN;
-//                Sheet.Cells[string.Format("H{0}", row)].Value = item.IFSCCode;
-//                Sheet.Cells[string.Format("I{0}", row)].Value = item.BranchName;
-//                Sheet.Cells[string.Format("J{0}", row)].Value = item.HolderName;
-//                totalAmount += item.Amount; // Add the current MonthSalary to the total
-//                row++;
-//            }
-
-//            // Create a cell to display the total MonthSalary
-//            Sheet.Cells[string.Format("E{0}", row)].Value = "Total Amount";
-//            Sheet.Cells[string.Format("F{0}", row)].Value = totalAmount;
-
-//            Sheet.Cells["A:AZ"].AutoFitColumns();
-//            Response.Clear();
-//            Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-//            Response.AddHeader("content-disposition", "attachment; filename=Report.xlsx"); // Use a semicolon (;) instead of a colon (:)
-//            Response.BinaryWrite(Ep.GetAsByteArray());
-//            Response.End();
-//        }
-
-        public void DownloadAmbulanceExcel()
+        public void DownloadAmbulanceExcel(int? Id)
         {
-            string query = "WITH CTE AS (SELECT dp.*, v.VehicleNumber, v.VehicleName, d.DriverName,ve.UniqueId + '/AMB' AS UniqueId,ve.EmailId,d.PAN,dl.EntryDate,v.BranchName,v.IFSCCode,v.HolderName,v.BranchAddress,v.AccountNo,v.VehicleOwnerName as BeneficiaryName,ve.MobileNumber,ROW_NUMBER() OVER(PARTITION BY dp.Id ORDER BY dp.Id) AS RowNum FROM Driver d JOIN AmbulancePayout dp ON dp.Driver_Id = d.Id JOIN DriverLocation AS dl ON dl.Driver_Id = d.Id JOIN Vehicle AS v ON v.Driver_Id = dl.Driver_Id join Vendor as ve on ve.Id=d.Vendor_Id)SELECT Id,Driver_Id ,Amount ,IsPaid ,PaymentDate ,IsGenerated , VehicleNumber, VehicleName, DriverName,EmailId,PAN,EntryDate,BranchName,IFSCCode,HolderName,BranchAddress,AccountNo,UniqueId,BeneficiaryName,MobileNumber FROM CTE WHERE RowNum = 1 ORDER BY Id";
-            List<DetailsForBank> employeeDetails = ent.Database.SqlQuery<DetailsForBank>(query, Array.Empty<object>()).ToList();
+            string query = @"WITH CTE AS (
+    SELECT dp.*, v.VehicleNumber, v.VehicleName, d.DriverName,d.PAN,dl.EntryDate,bd.BranchName,bd.IFSCCode,bd.HolderName,
+           ROW_NUMBER() OVER(PARTITION BY dp.Id ORDER BY dp.Id) AS RowNum
+    FROM Driver d
+    JOIN DriverPayOut dp ON dp.Driver_Id = d.Id
+    JOIN DriverLocation AS dl ON dl.Driver_Id = d.Id
+    JOIN Vehicle AS v ON v.Driver_Id = dl.Driver_Id
+	left join BankDetails as bd on bd.Login_Id=d.AdminLogin_Id 
+)
+SELECT Id,Driver_Id ,Amount ,IsPaid ,PaymentDate ,IsGenerated , VehicleNumber, VehicleName, DriverName,PAN,EntryDate,BranchName,IFSCCode,HolderName
+FROM CTE
+WHERE RowNum = 1
+ORDER BY Id";
+
+            var employeeDetails = ent.Database.SqlQuery<HistoryOfAmbulance_Payout>(query).ToList();
             ExcelPackage Ep = new ExcelPackage();
             ExcelWorksheet Sheet = Ep.Workbook.Worksheets.Add("Report");
-            Sheet.Cells["A1"].Value = "Payment Method";
-            Sheet.Cells["B1"].Value = "Payment Amount";
-            Sheet.Cells["C1"].Value = "Activation Date";
-            Sheet.Cells["D1"].Value = "Beneficiary Name";
-            Sheet.Cells["E1"].Value = "Account No in text";
-            Sheet.Cells["F1"].Value = "Email";
-            Sheet.Cells["G1"].Value = "Email Body";
-            Sheet.Cells["H1"].Value = "Debit Account No";
-            Sheet.Cells["I1"].Value = "CRN No";
-            Sheet.Cells["J1"].Value = "Receiver IFSC Code";
-            Sheet.Cells["K1"].Value = "Receiver Account";
-            Sheet.Cells["L1"].Value = "Remarks";
-            Sheet.Cells["M1"].Value = "Phone No";
+
+            Sheet.Cells["A1"].Value = "Driver Id";
+            Sheet.Cells["B1"].Value = "Appointment Date";
+            Sheet.Cells["C1"].Value = "Driver Name";
+            Sheet.Cells["D1"].Value = "Vehicle Name";
+            Sheet.Cells["E1"].Value = "Vehicle Number";
+            Sheet.Cells["F1"].Value = "Amount";
+            //Sheet.Cells["C1"].Value = "Payment Date";
+            Sheet.Cells["G1"].Value = "PAN No.";
+            Sheet.Cells["H1"].Value = "IFSCCode";
+            Sheet.Cells["I1"].Value = "Branch Name";
+            Sheet.Cells["J1"].Value = "AC Holder Name";
             int row = 2;
-            CRNGenerator crnGenerator = new CRNGenerator();
-            foreach (DetailsForBank item in employeeDetails)
+            double totalAmount = 0.0; // Initialize a variable to store the total MonthSalary
+
+            foreach (var item in employeeDetails)
             {
-                string dvrId = item.UniqueId;
-                long sdds = Convert.ToInt64(item.AccountNo);
-                string crn = crnGenerator.GenerateCRN(dvrId);
-                Sheet.Cells[$"A{row}"].Value = "N";
-                Sheet.Cells[$"B{row}"].Value = item.Amount;
-                Sheet.Cells[$"C{row}"].Value = DateTime.Now;
-                Sheet.Cells[$"C{row}"].Style.Numberformat.Format = "yyyy-MM-dd";
-                Sheet.Cells[$"D{row}"].Value = item.BeneficiaryName;
-                Sheet.Cells[$"E{row}"].Value = NumberToWords(sdds);
-                Sheet.Cells[$"F{row}"].Value = item.EmailId;
-                Sheet.Cells[$"G{row}"].Value = "This is your payment report";
-                Sheet.Cells[$"H{row}"].Value = "924020004812750";
-                Sheet.Cells[$"I{row}"].Value = crn;
-                Sheet.Cells[$"J{row}"].Value = item.IFSCCode;
-                Sheet.Cells[$"K{row}"].Value = item.AccountNo;
-                Sheet.Cells[$"L{row}"].Value = "Enter your remark";
-                Sheet.Cells[$"M{row}"].Value = item.MobileNumber;
+                Sheet.Cells[string.Format("A{0}", row)].Value = item.Driver_Id;
+                Sheet.Cells[string.Format("B{0}", row)].Value = item.EntryDate;
+                Sheet.Cells[string.Format("B{0}", row)].Style.Numberformat.Format = "yyyy-MM-dd"; // Change the date format as needed
+                Sheet.Cells[string.Format("C{0}", row)].Value = item.DriverName;
+                Sheet.Cells[string.Format("D{0}", row)].Value = item.VehicleName;
+                Sheet.Cells[string.Format("E{0}", row)].Value = item.VehicleNumber;
+                Sheet.Cells[string.Format("F{0}", row)].Value = item.Amount;
+                Sheet.Cells[string.Format("G{0}", row)].Value = item.PAN;
+                Sheet.Cells[string.Format("H{0}", row)].Value = item.IFSCCode;
+                Sheet.Cells[string.Format("I{0}", row)].Value = item.BranchName;
+                Sheet.Cells[string.Format("J{0}", row)].Value = item.HolderName;
+                totalAmount += item.Amount; // Add the current MonthSalary to the total
                 row++;
             }
+
+            // Create a cell to display the total MonthSalary
+            Sheet.Cells[string.Format("E{0}", row)].Value = "Total Amount";
+            Sheet.Cells[string.Format("F{0}", row)].Value = totalAmount;
+
             Sheet.Cells["A:AZ"].AutoFitColumns();
-            base.Response.Clear();
-            base.Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            base.Response.AddHeader("content-disposition", "attachment; filename=Report.xlsx");
-            base.Response.BinaryWrite(Ep.GetAsByteArray());
-            base.Response.End();
-        }
-        public void DownloadDriverExcel()
-        {
-            string query = "WITH CTE AS (SELECT dp.*, v.VehicleNumber, v.VehicleName,d.DriverId as UniqueId ,d.DriverName as BeneficiaryName,d.EmailId,d.PAN,dl.EntryDate,bd.BranchName,bd.IFSCCode,bd.HolderName,bd.BranchAddress,bd.AccountNo,ve.MobileNumber,ROW_NUMBER() OVER(PARTITION BY dp.Id ORDER BY dp.Id) AS RowNum FROM Driver d JOIN DriverPayOut dp ON dp.Driver_Id = d.Id JOIN DriverLocation AS dl ON dl.Driver_Id = d.Id JOIN Vehicle AS v ON v.Driver_Id = dl.Driver_Id join Vendor as ve on ve.Id=d.Vendor_Id LEFT JOIN BankDetails as bd on bd.Login_Id =d.AdminLogin_Id)SELECT Id,Driver_Id ,Amount ,IsPaid ,PaymentDate ,IsGenerated , VehicleNumber, VehicleName,EmailId,PAN,EntryDate,BranchName,IFSCCode,HolderName,BranchAddress,AccountNo,UniqueId,BeneficiaryName,MobileNumber FROM CTE WHERE RowNum = 1 ORDER BY Id";
-            List<DetailsForBank> employeeDetails = ent.Database.SqlQuery<DetailsForBank>(query, Array.Empty<object>()).ToList();
-            ExcelPackage Ep = new ExcelPackage();
-            ExcelWorksheet Sheet = Ep.Workbook.Worksheets.Add("Report");
-            Sheet.Cells["A1"].Value = "Payment Method";
-            Sheet.Cells["B1"].Value = "Payment Amount";
-            Sheet.Cells["C1"].Value = "Activation Date";
-            Sheet.Cells["D1"].Value = "Beneficiary Name";
-            Sheet.Cells["E1"].Value = "Account No in text";
-            Sheet.Cells["F1"].Value = "Email";
-            Sheet.Cells["G1"].Value = "Email Body";
-            Sheet.Cells["H1"].Value = "Debit Account No";
-            Sheet.Cells["I1"].Value = "CRN No";
-            Sheet.Cells["J1"].Value = "Receiver IFSC Code";
-            Sheet.Cells["K1"].Value = "Receiver Account";
-            Sheet.Cells["L1"].Value = "Remarks";
-            Sheet.Cells["M1"].Value = "Phone No";
-            int row = 2;
-            CRNGenerator crnGenerator = new CRNGenerator();
-            foreach (DetailsForBank item in employeeDetails)
-            {
-                string dvrId = item.UniqueId;
-                long sdds = Convert.ToInt64(item.AccountNo);
-                string crn = crnGenerator.GenerateCRN(dvrId);
-                Sheet.Cells[$"A{row}"].Value = "N";
-                Sheet.Cells[$"B{row}"].Value = item.Amount;
-                Sheet.Cells[$"C{row}"].Value = DateTime.Now;
-                Sheet.Cells[$"C{row}"].Style.Numberformat.Format = "yyyy-MM-dd";
-                Sheet.Cells[$"D{row}"].Value = item.BeneficiaryName;
-                Sheet.Cells[$"E{row}"].Value = NumberToWords(sdds);
-                Sheet.Cells[$"F{row}"].Value = item.EmailId;
-                Sheet.Cells[$"G{row}"].Value = "This is your payment report";
-                Sheet.Cells[$"H{row}"].Value = "924020004812750";
-                Sheet.Cells[$"I{row}"].Value = crn;
-                Sheet.Cells[$"J{row}"].Value = item.IFSCCode;
-                Sheet.Cells[$"K{row}"].Value = item.AccountNo;
-                Sheet.Cells[$"L{row}"].Value = "Enter your remark";
-                Sheet.Cells[$"M{row}"].Value = item.MobileNumber;
-                row++;
-            }
-            Sheet.Cells["A:AZ"].AutoFitColumns();
-            base.Response.Clear();
-            base.Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            base.Response.AddHeader("content-disposition", "attachment; filename=Report.xlsx");
-            base.Response.BinaryWrite(Ep.GetAsByteArray());
-            base.Response.End();
-        } 
-        public class CRNGenerator
-        {
-            private int sequenceNumber = 1;
-
-            public string GenerateCRN(string dvrId)
-            {
-                string month = DateTime.Now.ToString("MMM");
-                string year = DateTime.Now.ToString("yyyy");
-                string formattedSequence = sequenceNumber.ToString().PadLeft(4, '0');
-                sequenceNumber++;
-                return $"{dvrId}/{month}/{year}/{formattedSequence}";
-            }
+            Response.Clear();
+            Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            Response.AddHeader("content-disposition", "attachment; filename=Report.xlsx"); // Use a semicolon (;) instead of a colon (:)
+            Response.BinaryWrite(Ep.GetAsByteArray());
+            Response.End();
         }
 
-        static string NumberToWords(long number)
-        {
-            if (number == 0)
-                return "zero";
 
-            int val;
-            long next, num_digits;
-            long[] a = new long[19]; // Maximum number of digits in a long is 19
-
-            // words for every digits from 0 to 9
-            string[] digits_words = {
-        "zero",
-        "one",
-        "two",
-        "three",
-        "four",
-        "five",
-        "six",
-        "seven",
-        "eight",
-        "nine"
-    };
-
-            string words = "";
-
-            val = 0;
-            next = 0;
-            num_digits = 0;
-
-            while (number > 0)
-            {
-                next = number % 10;
-                a[val] = next;
-                val++;
-                num_digits++;
-                number = number / 10;
-            }
-
-            for (val = (int)(num_digits - 1); val >= 0; val--)
-            {
-                words += digits_words[a[val]] + " ";
-            }
-
-            return words.Trim(); // Trim any trailing whitespace
-        }
         //        public void AdminDoctorExcel()
         //        {
         //            double commission = ent.Database.SqlQuery<double>(@"select Commission from CommissionMaster where IsDeleted=0 and Name='Doctor'").FirstOrDefault();

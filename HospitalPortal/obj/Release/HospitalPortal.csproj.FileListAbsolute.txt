@@ -321,6 +321,7 @@ D:\Madhu\HospitalProject\HospitalPortal\bin\ru\Microsoft.ReportViewer.WinForms.r
 D:\Madhu\HospitalProject\HospitalPortal\bin\zh-CHS\Microsoft.ReportViewer.WinForms.resources.dll
 D:\Madhu\HospitalProject\HospitalPortal\obj\Release\HospitalPortal.csproj.AssemblyReference.cache
 D:\Madhu\HospitalProject\HospitalPortal\obj\Release\HospitalPortal.csproj.CoreCompileInputs.cache
+D:\Madhu\HospitalProject\HospitalPortal\obj\Release\HospitalPortal.csproj.CopyComplete
 D:\Madhu\HospitalProject\HospitalPortal\obj\Release\HospitalPortal.dll
 D:\Madhu\HospitalProject\HospitalPortal\obj\Release\HospitalPortal.pdb
 D:\Madhu\HospitalProject\HospitalPortal\bin\ExcelDataReader.DataSet.dll
@@ -329,4 +330,3 @@ D:\Madhu\HospitalProject\HospitalPortal\bin\ExcelDataReader.pdb
 D:\Madhu\HospitalProject\HospitalPortal\bin\ExcelDataReader.xml
 D:\Madhu\HospitalProject\HospitalPortal\bin\ExcelDataReader.DataSet.pdb
 D:\Madhu\HospitalProject\HospitalPortal\bin\ExcelDataReader.DataSet.xml
-D:\Madhu\HospitalProject\HospitalPortal\obj\Release\Hospital.6DCB9563.Up2Date

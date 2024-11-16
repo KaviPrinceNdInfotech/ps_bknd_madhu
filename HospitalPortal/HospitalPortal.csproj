@@ -806,7 +806,6 @@
     <Compile Include="Controllers\HospitalCommissionController.cs" />
     <Compile Include="Controllers\HospitalPaymentController.cs" />
     <Compile Include="Controllers\HospitalTDSController.cs" />
-    <Compile Include="Controllers\IncvoiceController.cs" />
     <Compile Include="Controllers\LabApiController.cs" />
     <Compile Include="Controllers\LabController.cs" />
     <Compile Include="Controllers\CommonController.cs" />
@@ -1424,7 +1423,6 @@
     <Compile Include="Models\ViewModels\HospitalNurseCommissionReport.cs" />
     <Compile Include="Models\ViewModels\HospitalNurseDTO.cs" />
     <Compile Include="Models\ViewModels\HospitalReportDTO.cs" />
-    <Compile Include="Models\ViewModels\InvoiceDTO.cs" />
     <Compile Include="Models\ViewModels\LabCommissionReport.cs" />
     <Compile Include="Models\ViewModels\LabReportsVM.cs" />
     <Compile Include="Models\ViewModels\LabReportDTO.cs" />
@@ -1634,6 +1632,7 @@
     <Content Include="Views\Driver\All.cshtml" />
     <Content Include="Views\Driver\Edit.cshtml" />
     <Content Include="Views\Vehicle\Add.cshtml" />
+    <Content Include="Views\Vehicle\All.cshtml" />
     <Content Include="Views\Vehicle\Edit.cshtml" />
     <Content Include="Views\Hospital\Add.cshtml" />
     <Content Include="Views\Hospital\All.cshtml" />
@@ -2173,13 +2172,6 @@
     <Content Include="Views\Common\EditTransactionFee.cshtml" />
     <Content Include="Views\CommisionReport\AmbulanceDetails.cshtml" />
     <Content Include="Views\Payout\Driver.cshtml" />
-    <Content Include="Views\Payout\DriverList.cshtml" />
-    <Content Include="Views\Vehicle\All.cshtml" />
-    <Content Include="Views\Incvoice\DoctorInvoice.cshtml" />
-    <Content Include="Views\Incvoice\DoctorInvoiceReport.cshtml" />
-    <Content Include="Views\Incvoice\NurseInvoiceReport.cshtml" />
-    <Content Include="Views\Incvoice\NurseInvoice.cshtml" />
-    <Content Include="Views\AmbulanceReport\RoadAccidentReport.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -7,7 +7,7 @@
 <h2>Vendor List</h2>
 
 <table id="table_id" class="table table-bordered">
-    <thead style="background-color:lavender;">
+    <thead>
         <tr>
             <th>
                 Vendor Name
@@ -26,48 +26,30 @@
             </th>
         </tr>
     </thead>
-    @if (Model.Vendorses != null)
-    {
-        <tbody>
-            @foreach (var item in Model.Vendorses)
-            {
-                <tr>
-                    <td>@item.VendorName</td>
-                    <td>@item.CompanyName</td>
-                    <td>@item.Counts</td>
-                    @{
-                        double amt = item.Counts * ViewBag.Payment;
-                    }
-                    <td>
-                        @amt
-                    </td>
-                    <td><a href="/Vendor/VehicleDetails?id=@item.Id" class="btn btn-primary">View Details</a></td>
-                </tr>
-            }
-        </tbody>
-    }
-    else
-    {
-        if (TempData["msg"] != null)
+    <tbody>
+        @foreach (var item in Model.Vendorses)
         {
-            string msg = TempData["msg"].ToString();
-            <div class="alert alert-danger">
-                @msg
-            </div>
-        }
-    }
-
+            <tr>
+                <td>@item.VendorName</td>
+                <td>@item.CompanyName</td>
+                <td>@item.Counts</td>
+                @{
+                    double amt = item.Counts * ViewBag.Payment;
+                }
+                <td>
+                    @amt
+                </td>
+                <td><a href="/Vendor/VehicleDetails?id=@item.Id" class="btn btn-primary">View Details</a></td>
+            </tr>
+                    }
+    </tbody>
 </table>
+<script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
+@*<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>*@
 <script src="https://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css">
 
 <script type="text/javascript">
-    $('#table_id').DataTable(
-        {
-            stateSave: true,
-        });
+        $('#table_id').DataTable();
 </script>
-<script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
-<link href="~/css/jquery-ui.css" rel="stylesheet" />
-<script src="~/Scripts/jquery-ui.js"></script>
 

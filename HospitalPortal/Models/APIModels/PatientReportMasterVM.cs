@@ -50,7 +50,6 @@ namespace HospitalPortal.Models.APIModels
     {
         public int Id { get; set; }
         public string DriverName { get; set; }
-        public string DriverImage { get; set; }
         public string MobileNumber { get; set; } 
         public string EmailId { get; set; } 
         public string StateName { get; set; }

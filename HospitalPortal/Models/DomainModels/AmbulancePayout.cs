@@ -20,6 +20,5 @@ namespace HospitalPortal.Models.DomainModels
         public Nullable<bool> IsPaid { get; set; }
         public Nullable<System.DateTime> PaymentDate { get; set; }
         public Nullable<bool> IsGenerated { get; set; }
-        public Nullable<int> Driver_Id { get; set; }
     }
 }

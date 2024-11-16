@@ -157,7 +157,6 @@ namespace HospitalPortal.Models.ViewModels
     public class CancelAppointent
     {
         public int Id { get; set; }
-        public bool IsCancelled { get; set; }
         public Nullable<int> Pro_Id { get; set; }
         public Nullable<int> Patient_Id { get; set; }
         public Nullable<decimal> Amount { get; set; }

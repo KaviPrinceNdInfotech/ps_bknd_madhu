@@ -665,13 +665,15 @@ join Lab on Lab.Id = BookTestLab.Lab_Id join LabTest on LabTest.Id = BookTestLab
         public IHttpActionResult DoctorAptP(int PatientId)
         {
             //var model = new LabVM();
-            var query = @"select  IsNull(ca.AppointmentDate,PatientAppointment.AppointmentDate) as AppointmentDate,PatientAppointment.PaymentDate,CONCAT(CONVERT(NVARCHAR, TS.StartTime, 8), ' To ', CONVERT(NVARCHAR, TS.EndTime, 8)) AS SlotTime,Specialist.SpecialistName,Doctor.Location,PatientAppointment.TotalFee,PatientAppointment.Id,Doctor.DoctorName,Doctor.MobileNumber,AL.DeviceId,PatientAppointment.InvoiceNumber,PatientAppointment.OrderId from PatientAppointment
+            var query = @"select  PatientAppointment.AppointmentDate as AppointmentDate,PatientAppointment.Id,
+PatientAppointment.PaymentDate,CONCAT(CONVERT(NVARCHAR, TS.StartTime, 8), ' To ', CONVERT(NVARCHAR, TS.EndTime, 8)) AS SlotTime,
+Specialist.SpecialistName,Doctor.Location,PatientAppointment.TotalFee,PatientAppointment.Id,Doctor.DoctorName,
+Doctor.MobileNumber,AL.DeviceId,PatientAppointment.InvoiceNumber,PatientAppointment.OrderId from PatientAppointment
 join Doctor on Doctor.Id = PatientAppointment.Doctor_Id 
-left join Specialist on Doctor.Specialist_Id = Specialist.Id 
-join DoctorTimeSlot as TS on PatientAppointment.Slot_id=TS.Id
-left join CancelledAppointment ca on ca.CancelledId = PatientAppointment.Id 
-join AdminLogin as AL on AL.Id=Doctor.AdminLogin_Id 
-where PatientAppointment.Patient_Id=" + PatientId + " and PatientAppointment.IsCancelled=0 and PatientAppointment.BookingMode_Id=1 and PatientAppointment.IsBooked=1 order by PatientAppointment.Id desc";
+join Specialist on Doctor.Specialist_Id = Specialist.Id 
+join DoctorTimeSlot as TS on PatientAppointment.Slot_id=TS.Id 
+join AdminLogin as AL on AL.Id=Doctor.AdminLogin_Id  
+where PatientAppointment.Patient_Id=" + PatientId + " and PatientAppointment.IsCancelled=0 and PatientAppointment.BookingMode_Id=1 and PatientAppointment.AppointmentIsDone=0 order by PatientAppointment.Id desc";
             var data = ent.Database.SqlQuery<DoctorAppointmentByPatient>(query).ToList();
             Dictionary<string, object> dict = new Dictionary<string, object>();
             dict["Appointment"] = data;
@@ -683,12 +685,12 @@ where PatientAppointment.Patient_Id=" + PatientId + " and PatientAppointment.IsC
         public IHttpActionResult DoctorVirtualAptByPatient(int PatientId)
         {
             var query = @"select  IsNull(ca.AppointmentDate,PatientAppointment.AppointmentDate) as AppointmentDate,PatientAppointment.PaymentDate,CONCAT(CONVERT(NVARCHAR, TS.StartTime, 8), ' To ', CONVERT(NVARCHAR, TS.EndTime, 8)) AS SlotTime,Specialist.SpecialistName,Doctor.Location,PatientAppointment.TotalFee,PatientAppointment.Id,Doctor.DoctorName,Doctor.MobileNumber,AL.DeviceId,PatientAppointment.InvoiceNumber,PatientAppointment.OrderId from PatientAppointment
-join Doctor on Doctor.Id = PatientAppointment.Doctor_Id 
+left join Doctor on Doctor.Id = PatientAppointment.Doctor_Id 
 left join Specialist on Doctor.Specialist_Id = Specialist.Id 
-join DoctorTimeSlot as TS on PatientAppointment.Slot_id=TS.Id
+left join DoctorTimeSlot as TS on PatientAppointment.Slot_id=TS.Id
 left join CancelledAppointment ca on ca.CancelledId = PatientAppointment.Id 
-join AdminLogin as AL on AL.Id=Doctor.AdminLogin_Id 
-where PatientAppointment.Patient_Id=" + PatientId + " and PatientAppointment.IsCancelled=0 and PatientAppointment.BookingMode_Id=2 and PatientAppointment.IsBooked=1 order by PatientAppointment.Id desc";
+left join AdminLogin as AL on AL.Id=Doctor.AdminLogin_Id 
+where PatientAppointment.Patient_Id=" + PatientId + " and PatientAppointment.IsCancelled=0 and PatientAppointment.BookingMode_Id=2 and PatientAppointment.AppointmentIsDone=0 order by PatientAppointment.Id desc";
             var data = ent.Database.SqlQuery<DoctorAppointmentByPatient>(query).ToList();
             Dictionary<string, object> dict = new Dictionary<string, object>();
             dict["Appointment"] = data;
@@ -855,7 +857,7 @@ left join AdminLogin as AL on AL.Id=Nurse.AdminLogin_Id
                             PhoneNumber = model.MobileNumber,
                             Password = model.Password,
                             Confirmpassword = model.ConfirmPassword,
-                            Role = "patient",
+                            Role = "Patient",
                         };
                         ent.AdminLogins.Add(admin);
                         ent.SaveChanges();
@@ -1365,57 +1367,21 @@ left join AdminLogin as AL on AL.Id=Nurse.AdminLogin_Id
         {
             try
             {
-                var checkalreadybooking = ent.DriverLocations.Where(d => d.PatientId == model.Patient_Id && d.AmbulanceType_id == 2 && d.IsBooked == true && d.RideComplete==false).OrderByDescending(d => d.Id).FirstOrDefault();
-                
-                var checkamb = ent.DriverLocations.Where(d => d.PatientId == model.Patient_Id && d.AmbulanceType_id == 2).OrderByDescending(d => d.Id).FirstOrDefault();
-                //var data=ent.DriverLocations.Where(d=>d.PatientId==model.Patient_Id).OrderByDescending(d=>d.Id).FirstOrDefault();
+                var data=ent.DriverLocations.Where(d=>d.PatientId==model.Patient_Id).OrderByDescending(d=>d.Id).FirstOrDefault();
+                data.IsBooked = true;
+                ent.SaveChanges();
 
-                var data = ent.DriverLocations.Where(d => d.PatientId == model.Patient_Id && d.IsPay == "N" && d.Status == "0").OrderByDescending(d => d.Id).FirstOrDefault();
-                
- 
-                if(checkamb==null)
+                var booking = new DriverBooking
                 {
-                    data.IsBooked = true;
-                    data.Driver_Id = model.Driver_Id;
-                    ent.SaveChanges();
+                    Driver_Id = model.Driver_Id,
+                    Patient_Id = model.Patient_Id,
+                    BookingDate = DateTime.Now,
+                    RideComplete=false
+                };
 
-                    var booking = new DriverBooking
-                    {
-                        Driver_Id = model.Driver_Id,
-                        Patient_Id = model.Patient_Id,
-                        BookingDate = DateTime.Now,
-                        RideComplete = false
-                    };
+                ent.DriverBookings.Add(booking);
+                ent.SaveChanges();
 
-                    ent.DriverBookings.Add(booking);
-                    ent.SaveChanges();
-                }
-                else
-                {
-                    if (checkalreadybooking == null)
-                    {
-                        var driverdetail = ent.Drivers.Where(d => d.Id == model.Driver_Id).FirstOrDefault();
-                        driverdetail.IsBooked = true;
-                        data.IsBooked = true;
-                        data.Driver_Id = model.Driver_Id;
-                        ent.SaveChanges();
-
-                        var booking = new DriverBooking
-                        {
-                            Driver_Id = model.Driver_Id,
-                            Patient_Id = model.Patient_Id,
-                            BookingDate = DateTime.Now,
-                            RideComplete = false
-                        };
-
-                        ent.DriverBookings.Add(booking);
-                        ent.SaveChanges();
-                    }
-                    else
-                    {
-                        return BadRequest("You already book a ambulance.");
-                    }
-                } 
                 return Ok(new { Message = "Driver booked successfully" });
 
             }
@@ -1462,91 +1428,7 @@ left join AdminLogin as AL on AL.Id=Nurse.AdminLogin_Id
             }
         }
 
-        [HttpPost, Route("api/PatientApi/UpdateUserLocation")]
-        public IHttpActionResult UpdateUserLocation(UpdatelocationPatient model)
-        {
-            try
-            {
-                var data = ent.Patients.FirstOrDefault(a => a.Id == model.PatientId);
-                data.Lat = model.Lat;
-                data.Lang = model.Lang;
-                ent.SaveChanges();
-                return Ok(new { Message = "Update Patient Location SuccessFully" });
-            }
-            catch
-            {
-                return BadRequest("Server Error");
-            }
-        }
 
-        [HttpGet, Route("api/DriverApi/GetRoadAccidendAmbOngoingRide")]
-        public IHttpActionResult GetRoadAccidendAmbOngoingRide(int PatientId)
-        {
-            var driverDetails = (from d in ent.Drivers
-                                 join dl in ent.DriverLocations on d.Id equals dl.Driver_Id
-                                 join v in ent.Vehicles on d.Vehicle_Id equals v.Id 
-                                 where dl.PatientId == PatientId && dl.AmbulanceType_id == 2 && dl.RideComplete == false
-                                 orderby dl.Id descending
-                                 select new getdriverbookinglist
-                                 {
-                                     Id = dl.Id,
-                                     DriverId = d.Id,
-                                     DriverName = d.DriverName,
-                                     MobileNumber = d.MobileNumber,
-                                     DlNumber = d.DlNumber,
-                                     DriverImage = d.DriverImage,
-                                     VehicleNumber = v.VehicleNumber, 
-                                     ToatlDistance = dl.ToatlDistance,
-                                     PaidAmount = dl.Amount,
-                                     TotalPrice = dl.TotalPrice,
-                                     RemainingAmount = dl.TotalPrice - dl.Amount,
-                                     UserLat = dl.start_Lat,
-                                     UserLong = dl.start_Long,
-                                     end_Lat = dl.end_Lat,
-                                     end_Long = dl.end_Long,
-                                     Lat_Driver = d.Lat,
-                                     Lang_Driver = d.Lang,
-                                     PaymentDate = dl.PaymentDate,
-                                 }).FirstOrDefault();
-
-
-
-            if (driverDetails != null)
-            {
-                // Driver
-                var lat1 = (double)driverDetails.Lat_Driver;
-                var lon1 = (double)driverDetails.Lang_Driver;
-
-                // User
-                var lat2 = (double)driverDetails.UserLat;
-                var lon2 = (double)driverDetails.UserLong;
-
-                double rlat1 = Math.PI * lat1 / 180;
-                double rlat2 = Math.PI * lat2 / 180;
-                double theta = lon1 - lon2;
-                double rtheta = Math.PI * theta / 180;
-
-                double dist = Math.Sin(rlat1) * Math.Sin(rlat2) +
-                              Math.Cos(rlat1) * Math.Cos(rlat2) * Math.Cos(rtheta);
-
-                dist = Math.Acos(dist);
-                dist = dist * 180 / Math.PI;
-                dist = dist * 60 * 1.1515; // Convert miles to kilometers
-                dist = dist * 1.609344;   // Convert miles to kilometers
-
-                driverDetails.DriverUserDistance = dist;
-
-                // Calculate expected time
-                double expectedTimeMinutes = dist * 2; // 2 minutes per kilometer
-
-                // Convert the expectedTimeMinutes to an integer
-                int expectedTimeMinutesInt = Convert.ToInt32(expectedTimeMinutes);
-
-                driverDetails.ExpectedTime = expectedTimeMinutesInt;
-            }
-
-            return Ok(driverDetails);
-        }
     }
     
 }

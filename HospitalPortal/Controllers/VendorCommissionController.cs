@@ -64,6 +64,7 @@ join dbo.PatientAppointment pa on pa.Doctor_Id = d.Id where Convert(varchar,pa.A
 					return View(model);
 				}
 			}
+
 			else
 			{
 				var doctor = @"select Sum(pa.TotalFee) as Amount, v.VendorName,v.UniqueId as VendorId, v.CompanyName,d.DoctorName,d.DoctorId as UniqueId from Doctor d 

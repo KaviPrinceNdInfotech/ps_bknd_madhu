@@ -23,6 +23,5 @@ namespace HospitalPortal.Models.DomainModels
         public Nullable<int> TotalPrice { get; set; }
         public string DeviceId { get; set; }
         public Nullable<int> ToatlDistance { get; set; }
-        public string MobileNumber { get; set; }
     }
 }

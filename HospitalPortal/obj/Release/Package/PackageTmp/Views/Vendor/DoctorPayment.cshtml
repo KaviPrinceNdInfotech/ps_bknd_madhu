@@ -6,36 +6,35 @@
 
 <h2>Franchise List</h2>
 
-
-<table id="table_id" class="table table-bordered">
-    <thead style="background-color:lavender;">
-        <tr>
-            <th>
-                Vendor Name
-            </th>
-            <th>
-                Company's Name
-            </th>
-            <th>
-                Total Amount
-            </th>
-            <th>
-                Action
-            </th>
-        </tr>
-    </thead>
-    @if (Model.Vendorses == null)
+@if (Model.Vendorses == null)
+{
+    if (TempData["msg"] != null)
     {
-        if (TempData["msg"] != null)
-        {
-            string msg = TempData["msg"].ToString();
-            <div class="alert alert-danger">
-                @msg
-            </div>
-        }
+        string msg = TempData["msg"].ToString();
+        <div class="alert alert-danger">
+            @msg
+        </div>
     }
-    else
-    {
+}
+else
+{
+    <table id="table_id" class="table table-bordered">
+        <thead>
+            <tr>
+                <th>
+                    Vendor Name
+                </th>
+                <th>
+                    Company's Name
+                </th>
+                <th>
+                    Total Amount
+                </th>
+                <th>
+                    Action
+                </th>
+            </tr>
+        </thead>
         <tbody>
             @foreach (var item in Model.Vendorses)
             {
@@ -47,20 +46,14 @@
                 </tr>
             }
         </tbody>
-    }
-</table>
-
+    </table>
+}
+<script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
+@*<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>*@
 <script src="https://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css">
 
 <script type="text/javascript">
-    $('#table_id').DataTable(
-        {
-            stateSave: true,
-        });
+    $('#table_id').DataTable();
 </script>
-<script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
-<link href="~/css/jquery-ui.css" rel="stylesheet" />
-<script src="~/Scripts/jquery-ui.js"></script>
- 
 

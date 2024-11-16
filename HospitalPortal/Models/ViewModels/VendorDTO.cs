@@ -265,7 +265,6 @@ namespace HospitalPortal.Models.ViewModels
         public double PaidFees { get; set; }
         public double transactionamt { get; set; }
         public double PayableAmount { get; set; }
-        public double FraPaidableamt { get; set; }
         public double commamt { get; set; }
         public double tdsamt { get; set; }
         public double Amountwithrazorpaycomm { get; set; }
@@ -306,7 +305,6 @@ namespace HospitalPortal.Models.ViewModels
         public string UniqueId { get; set; } 
         public double transactionamt { get; set; }
         public double PayableAmount { get; set; }
-        public double FraPaidableamt { get; set; }
         public double commamt { get; set; }
         public double tdsamt { get; set; }
         public double Amountwithrazorpaycomm { get; set; }
@@ -928,7 +926,6 @@ namespace HospitalPortal.Models.ViewModels
         public string EmailId { get; set; }
         public string Location { get; set; }
         public string CertificateNumber { get; set; }
-        public double TotalAmount { get; set; }
         public bool IsApproved { get; set; }
     }
 
@@ -952,8 +949,6 @@ namespace HospitalPortal.Models.ViewModels
     {
         public int Id { get; set; }
         public string VehicleNumber { get; set; }
-        public decimal TotalAmount { get; set; }
-        public string VehicleName { get; set; }
         public string VehicleOwnerName { get; set; }
         public string Franchise { get; set; }
         public string Type { get; set; }
