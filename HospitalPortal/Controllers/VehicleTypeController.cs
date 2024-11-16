@@ -36,7 +36,9 @@ namespace HospitalPortal.Controllers
                     return View(model);
                 }
                     var domainModel = Mapper.Map<VehicleType>(model);
+                    domainModel.IsApproved = false;
                     ent.VehicleTypes.Add(domainModel);
+
                     ent.SaveChanges();
                     TempData["msg"] = "ok";
             }
@@ -140,6 +142,18 @@ where vt.IsDeleted=0 and mc.IsDeleted=0 order by CategoryName asc,VehicleTypeNam
             var model = ent.VehicleTypes.Find(VehicleType);
             var data = Mapper.Map<VehicleType>(model);
             return View(data);
+        }
+
+        public ActionResult UpdateStatus(int id)
+        {
+            string q = @"update VehicleType set IsApproved = case when IsApproved=1 then 0 else 1 end where id=" + id;
+            ent.Database.ExecuteSqlCommand(q);
+            string mobile = ent.Database.SqlQuery<string>("select MobileNumber from Driver where Id=" + id).FirstOrDefault();
+            string Email = ent.Database.SqlQuery<string>(@"select EmailId from Driver where Id=" + id).FirstOrDefault();
+            string Name = ent.Database.SqlQuery<string>(@"select DriverName from Driver where Id=" + id).FirstOrDefault();
+            var msg = "Dear " + Name + ", Now you Can Login With Your Registered EmailId " + Email + " and Pasword";
+            
+            return RedirectToAction("All");
         }
     }
 }

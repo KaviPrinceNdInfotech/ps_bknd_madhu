@@ -22,7 +22,7 @@
         <div class="col-md-1">
             <input type="button" id="test" value="Search" class="btn btn-primary" />
         </div>
-         
+
         @using (Html.BeginForm("Vehicle", "VendorCommission", FormMethod.Get))
         {
             <div class="col-md-4">
@@ -35,174 +35,159 @@
             </div>
         }
     </div>
-    </div>
+</div>
+<table id="table_id" class="table table-bordered">
+    <thead style="background-color:lavender;">
+        <tr>
+            <th>Sr No.</th>
+            <th>
+                Franchise Name/Id
+            </th>
+            <th>
+                Company Name
+            </th>
+            <th>Vehicle Name</th>
+            <th>Vehicle Number</th>
+            <th>Driver Name /Id</th>
+            <th>
+                Basic Amount
+            </th>
+            <th>
+                Commission to PS Wellness @ViewBag.Commission %
+            </th>
+            <th>
+                Transaction Fee @ViewBag.Transactionfee %
+            </th>
+            <th>
+                TDS @ViewBag.tds %
+            </th>
+            <th>
+                Payable to service provider
+            </th>
+            <th>
+                Payable to franchise 3%
+            </th>
+        </tr>
 
-   
-
-    <table class="table table-bordered">
-        <thead style="background-color:lavender;">
-            <tr>
-                <th>Sr No.</th>
-                <th>
-                    Franchise Name/Id
-                </th>
-                <th>
-                    Company Name
-                </th>
-                <th>Vehicle Name</th>
-                <th>Vehicle Number</th>
-                <th>Driver Name /Id</th>
-                <th>
-                    Basic Amount
-                </th>
-                <th>
-                    Commission to PS Wellness @ViewBag.Commission %
-                </th>
-                <th>
-                    Transaction Fee @ViewBag.Transactionfee %
-                </th>
-                <th>
-                    TDS @ViewBag.tds %
-                </th>
-                <th>
-                    Payable to service provider
-                </th>
-                <th>
-                    Payable to franchise 3%
-                </th>
-            </tr>
-
-        </thead>
-        @if (Model.VendorCommissionReport == null)
+    </thead>
+    @if (Model.VendorCommissionReport == null)
+    {
+        if (TempData["msg"] != null)
         {
-            if (TempData["msg"] != null)
-            {
-                <div class="alert alert-danger">
-                    @TempData["msg"];
-                </div>
-                
-            }
+            <div class="alert alert-danger">
+                @TempData["msg"];
+            </div>
+
         }
-        else
-        {
-            <tbody>
-                @{
-                    double? totalPayableAmount = 0;
-                    double? totalCommissionAmount = 0;
-                    double? totalAmount = 0;
-                    double? totaltdsAmount = 0;
-                    double totalTransactionAmount = 0;
-                    double? totalFraPaidableamt = 0;
-                }
-                @foreach (var item in Model.VendorCommissionReport)
-                {
-                    <tr>
-                        <td>@count</td>
-                        <td>@item.VendorName (@item.VendorId)</td>
-                        <td>@item.CompanyName</td>
-                        <td>@item.VehicleName</td>
-                        <td>@item.VehicleNumber</td>
-                        <td>@item.DriverName (@item.UniqueId)</td>
-                        <td>@item.Counts</td>
-                        @{
-                            double comm = (Math.Round(item.Counts * ViewBag.Commission) / 100);
-                        }
-                        <td>
-                            ₹ @comm
-                        </td>
-                        @{
-                            double? razorpaycomm = @item.Amountwithrazorpaycomm;
-                            double? basicamt = @item.Counts;
-                            double? razarfeeamt = razorpaycomm - basicamt;
-                            totalTransactionAmount += (double)razarfeeamt;
-                        }
-                        <td>@String.Format("{0:F2}", razarfeeamt) </td>
-                        @{
-                            decimal tds = (decimal)Math.Round((decimal)item.Counts * (decimal)ViewBag.tds / 100, 2);
-
-                        }
-                        <td>
-                            ₹ @tds
-                        </td>
-                        @{
-                            double? commAmt = ((double)item.Counts * ViewBag.Commission) / 100;
-                            double? tdsamt = ((double)item.Counts * (double)ViewBag.tds) / 100;
-                            double? Value = item.Counts - (commAmt + tdsamt + razarfeeamt);
-
-                            totalFraPaidableamt += item.FraPaidableamt;
-                            totalAmount += item.Counts;
-                            totalPayableAmount += @Value;
-                            totaltdsAmount += (double)tds;
-
-                            totalCommissionAmount += commAmt;
-                        }
-
-
-                        <td>₹ @Value</td>
-                        <td> ₹ @item.FraPaidableamt</td>
-                    </tr>
-                    count++;
-                }
-            </tbody>
-                           
-            <tfoot>
+    }
+    else
+    {
+        <tbody>
+            @{
+                double? totalPayableAmount = 0;
+                double? totalCommissionAmount = 0;
+                double? totalAmount = 0;
+                double? totaltdsAmount = 0;
+                double totalTransactionAmount = 0;
+                double? totalFraPaidableamt = 0;
+            }
+            @foreach (var item in Model.VendorCommissionReport)
+            {
                 <tr>
-                    <td colspan="6" style="text-align: right;">
-                        <strong>Total:</strong>
-                    </td>
+                    <td>@count</td>
+                    <td>@item.VendorName (@item.VendorId)</td>
+                    <td>@item.CompanyName</td>
+                    <td>@item.VehicleName</td>
+                    <td>@item.VehicleNumber</td>
+                    <td>@item.DriverName (@item.UniqueId)</td>
+                    <td>@item.Counts</td>
+                    @{
+                        double comm = (Math.Round(item.Counts * ViewBag.Commission) / 100);
+                    }
                     <td>
-                        <strong>₹ @totalAmount</strong>
+                        ₹ @comm
                     </td>
-                    <td>
-                        <strong>₹ @totalCommissionAmount</strong>
-                    </td>
-                    <td>
-                        <strong>₹ @String.Format("{0:F2}", @totalTransactionAmount)</strong>
-                    </td>
+                    @{
+                        double? razorpaycomm = @item.Amountwithrazorpaycomm;
+                        double? basicamt = @item.Counts;
+                        double? razarfeeamt = razorpaycomm - basicamt;
+                        totalTransactionAmount += (double)razarfeeamt;
+                    }
+                    <td>@String.Format("{0:F2}", razarfeeamt) </td>
+                    @{
+                        decimal tds = (decimal)Math.Round((decimal)item.Counts * (decimal)ViewBag.tds / 100, 2);
 
+                    }
                     <td>
-                        <strong>₹ @totaltdsAmount</strong>
+                        ₹ @tds
                     </td>
-                    <td>
-                        <strong>₹ @totalPayableAmount</strong>
-                    </td>
-                    <td>
-                        <strong>₹ @totalFraPaidableamt</strong>
-                    </td>
+                    @{
+                        double? commAmt = ((double)item.Counts * ViewBag.Commission) / 100;
+                        double? tdsamt = ((double)item.Counts * (double)ViewBag.tds) / 100;
+                        double? Value = item.Counts - (commAmt + tdsamt + razarfeeamt);
+
+                        totalFraPaidableamt += item.FraPaidableamt;
+                        totalAmount += item.Counts;
+                        totalPayableAmount += @Value;
+                        totaltdsAmount += (double)tds;
+
+                        totalCommissionAmount += commAmt;
+                    }
+
+
+                    <td>₹ @Value</td>
+                    <td> ₹ @item.FraPaidableamt</td>
                 </tr>
-            </tfoot>
-                            }
-        </table>
-                           
+                count++;
+            }
+        </tbody>
 
-    <nav aria-label="Page navigation example">
-        @*<ul class="pagination">
-                <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                @for (int i = 1; i <= Model.TotalPages; i++)
-                {
-                    if (i == Model.PageNumber)
-                    {
-                        <li class="page-item active"><a class="page-link" href="/CommisionReport/Doctor?pageNumber=@i">@i</a></li>
+        <tfoot>
+            <tr>
+                <td colspan="6" style="text-align: right;">
+                    <strong>Total:</strong>
+                </td>
+                <td>
+                    <strong>₹ @totalAmount</strong>
+                </td>
+                <td>
+                    <strong>₹ @totalCommissionAmount</strong>
+                </td>
+                <td>
+                    <strong>₹ @String.Format("{0:F2}", @totalTransactionAmount)</strong>
+                </td>
 
-                    }
-                    else
-                    {
-                        <li class="page-item"><a class="page-link" href="/Patient/PatientList?pageNumber=@i">@i</a></li>
+                <td>
+                    <strong>₹ @totaltdsAmount</strong>
+                </td>
+                <td>
+                    <strong>₹ @totalPayableAmount</strong>
+                </td>
+                <td>
+                    <strong>₹ @totalFraPaidableamt</strong>
+                </td>
+            </tr>
+        </tfoot>
+    }
+</table>
 
-                    }
-                }
-                @*<li class="page-item"><a class="page-link" href="#">Next</a></li>
-            </ul>*@
-    </nav>
 
+<script src="https://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css">
 
+<script type="text/javascript">
+    $('#table_id').DataTable(
+        {
+            stateSave: true,
+        });
+</script>
 <script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
 <link href="~/css/jquery-ui.css" rel="stylesheet" />
 <script src="~/Scripts/jquery-ui.js"></script>
 <script>
     $(".datepicker").datepicker().datepicker('setdate', 'today');
 </script>
- 
+
 
 <script>
     $(".datepicker").datepicker({});

@@ -19,32 +19,34 @@
     </div>
 }
 
-@if (Model.Vendorses == null)
-{
-    <h2>No Records</h2>}
 
-else
-{
-    <table id="table_id" class="table table-bordered">
-        <thead>
-            <tr>
-                <th>
-                    Vendor Name
-                </th>
-                <th>
-                    Company's Name
-                </th>
-                <th>
-                    No. Of Doctors Added!!
-                </th>
-                <th>
-                    Total Amount
-                </th>
-                <th>
-                    Action
-                </th>
-            </tr>
-        </thead>
+<table id="table_id" class="table table-bordered">
+    <thead style="background-color:lavender;">
+        <tr>
+            <th>
+                Vendor Name
+            </th>
+            <th>
+                Company's Name
+            </th>
+            <th>
+                No. Of Doctors Added!!
+            </th>
+            <th>
+                Total Amount
+            </th>
+            <th>
+                Action
+            </th>
+        </tr>
+    </thead>
+    @if (Model.Vendorses == null)
+    {
+        <div class="alert alert-danger">No Records</div>
+    }
+
+    else
+    {
         <tbody>
             @foreach (var item in Model.Vendorses)
             {
@@ -62,13 +64,13 @@ else
                 </tr>
                         }
         </tbody>
-    </table>
                         }
+    </table>
+                         
 <script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
 <link href="~/css/jquery-ui.css" rel="stylesheet" />
 <script src="~/Scripts/jquery-ui.js"></script>
-<script type="text/javascript">
-        //$('#table_id').DataTable();
+<script type="text/javascript"> 
 
     $(".datepicker").datepicker().datepicker('setdate', 'today');
 </script>

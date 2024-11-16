@@ -29,7 +29,6 @@ namespace HospitalPortal.Models.DomainModels
             this.PatientRequests = new HashSet<PatientRequest>();
             this.TravelMasters = new HashSet<TravelMaster>();
             this.TravelRecordMasters = new HashSet<TravelRecordMaster>();
-            this.DriverLocations = new HashSet<DriverLocation>();
         }
     
         public int Id { get; set; }
@@ -54,6 +53,8 @@ namespace HospitalPortal.Models.DomainModels
         public string About { get; set; }
         public string Gender { get; set; }
         public Nullable<System.DateTime> DOB { get; set; }
+        public Nullable<double> Lat { get; set; }
+        public Nullable<double> Lang { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<BookTestLab> BookTestLabs { get; set; }
@@ -79,7 +80,5 @@ namespace HospitalPortal.Models.DomainModels
         public virtual ICollection<TravelMaster> TravelMasters { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TravelRecordMaster> TravelRecordMasters { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DriverLocation> DriverLocations { get; set; }
     }
 }

@@ -32,7 +32,7 @@
 
     </div>
 </div>
-<table class="table table-bordered">
+<table id="table_id" class="table table-bordered">
     <thead style="background-color:lavender;">
         <tr>
             <th>
@@ -140,7 +140,7 @@
     }
 </table>
 
-<nav aria-label="Page navigation example">
+@*<nav aria-label="Page navigation example">
     <ul class="pagination">
         <li class="page-item"><a class="page-link" href="#">Previous</a></li>
         @for (int i = 1; i <= Model.TotalPages; i++)
@@ -156,7 +156,7 @@
         }
         <li class="page-item"><a class="page-link" href="#">Next</a></li>
     </ul>
-</nav>
+</nav>*@
 <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
 
 
@@ -164,7 +164,10 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css">
 
 <script type="text/javascript">
-    $('#table_id').DataTable();
+    $('#table_id').DataTable(
+        {
+            stateSave: true,
+        });
 </script>
 
 <script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>

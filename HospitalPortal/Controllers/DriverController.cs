@@ -9,6 +9,9 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.SqlClient;
+using System.Drawing.Imaging;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -155,7 +158,6 @@ namespace HospitalPortal.Controllers
                         var adImg2 = FileOperation.UploadImage(model.AadharImageFile2, "Images");
                         if (adImg2 == "not allowed")
                         {
-
                             TempData["msg"] = "Only png,jpg,jpeg files are allowed as adhar Image.";
 
                             return View(model);
@@ -210,6 +212,7 @@ namespace HospitalPortal.Controllers
                     domainModel.IsBankUpdateApproved = false;
                     domainModel.AadharImage = model.AadharImage;
                     domainModel.AadharImage2 = model.AadharImage2;
+                    domainModel.IsBooked =false;
                     ent.Drivers.Add(domainModel);
                     ent.SaveChanges();
                      
@@ -239,6 +242,7 @@ namespace HospitalPortal.Controllers
                     };
 
                     EmailOperations.SendEmainew(ef);
+                    Message.SendSmsUserIdPass(model.MobileNumber,model.DriverName,domainModel.DriverId,model.Password);
                     TempData["msg"] = "ok";
                     tran.Commit();
                 }
@@ -372,8 +376,8 @@ namespace HospitalPortal.Controllers
                 existingdriver.MobileNumber = model.MobileNumber;
                 existingdriver.Location = model.Location;
                 existingdriver.PinCode = model.PinCode;
-                existingdriver.VehicleType_Id = model.VehicleType_Id;
-                existingdriver.Paidamount = model.Paidamount;
+                //existingdriver.VehicleType_Id = model.VehicleType_Id;
+               // existingdriver.Paidamount = model.Paidamount;
                 existingdriver.DlNumber = model.DlNumber;
                 existingdriver.DlValidity = model.DlValidity;
                 existingdriver.PAN = model.PAN;
@@ -419,7 +423,7 @@ join CityMaster c on d.CityMaster_Id = c.Id
 left join VehicleType vt on vt.Id = d.VehicleType_Id
 left join Vendor ve on ve.Id = d.Vendor_Id
 left join MainCategory as mac on mac.Id=vt.Category_Id
-where d.IsDeleted=0 order by d.Id asc";
+where d.IsDeleted=0 order by d.Id desc";
             var data = ent.Database.SqlQuery<DriverDTO>(q).ToList();
             if (vendorId != null)
                 data = data.Where(a => a.Vendor_Id == vendorId).ToList();
@@ -430,15 +434,15 @@ where d.IsDeleted=0 order by d.Id asc";
                 TempData["msg"] = "No Records";
                 return View(data);
             }
-            int total = data.Count;
-            page = page ?? 1;
-            int pageSize = 10;
-            decimal noOfPages = Math.Ceiling((decimal)total / pageSize);
-            model.NumberOfPages = (int)noOfPages;
-            model.Page = page;
-            data = data.OrderByDescending(a => a.Id).Skip(pageSize * ((int)page - 1)).Take(pageSize).ToList();
-            data.FirstOrDefault().NumberOfPages = model.NumberOfPages;
-            data.FirstOrDefault().Page = model.Page;
+            //int total = data.Count;
+            //page = page ?? 1;
+            //int pageSize = 10;
+            //decimal noOfPages = Math.Ceiling((decimal)total / pageSize);
+            //model.NumberOfPages = (int)noOfPages;
+            //model.Page = page;
+            //data = data.OrderByDescending(a => a.Id).Skip(pageSize * ((int)page - 1)).Take(pageSize).ToList();
+            //data.FirstOrDefault().NumberOfPages = model.NumberOfPages;
+            //data.FirstOrDefault().Page = model.Page;
             return View(data);
         }
 
@@ -571,6 +575,73 @@ join Vehicle v on v.Id = trm.Vehicle_Id join VehicleType vt on v.VehicleType_Id 
             }
             model.travelHistory = data;
             return View(model);
+        }
+
+
+
+        public ActionResult ImageThumb(string fna)
+        {
+            string rawUrl = HttpContext.Request.RawUrl;
+            string[] parts = rawUrl.Split('/');
+            string fname = parts[parts.Length - 1];
+            string folderPath = Server.MapPath("~/Images/");
+            string filePath = Path.Combine(folderPath, fname);
+
+            if (System.IO.File.Exists(filePath))
+            {
+                // Load the original image
+                using (var originalImage = Image.FromFile(filePath))
+                {
+                    // Calculate the scaling factor to reduce image size below 50 KB
+                    double scaleFactor = 1.0;
+                    long originalSize = new FileInfo(filePath).Length;
+                    if (originalSize > 50 * 1024) // Check if file size is greater than 50 KB
+                    {
+                        scaleFactor = 50.0 / (originalSize / 1024.0);
+                    }
+
+                    // Calculate new dimensions
+                    int newWidth = (int)(originalImage.Width * scaleFactor);
+                    int newHeight = (int)(originalImage.Height * scaleFactor);
+
+                    // Create a new bitmap with the new dimensions
+                    using (var newImage = new Bitmap(newWidth, newHeight))
+                    {
+                        // Resize the original image to the new dimensions
+                        using (var graphics = Graphics.FromImage(newImage))
+                        {
+                            graphics.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
+                            graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                            graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+
+                            graphics.DrawImage(originalImage, 0, 0, newWidth, newHeight);
+                        }
+
+                        // Save the resized image to a memory stream
+                        using (MemoryStream ms = new MemoryStream())
+                        {
+                            newImage.Save(ms, ImageFormat.Jpeg); // Save as JPEG, change format if needed
+
+                            // Check the size of the resized image
+                            if (ms.Length > 50 * 1024) // If still greater than 50 KB
+                            {
+                                // If resizing didn't reduce the size below 50 KB, return the original image
+                                return File(filePath, "image/jpeg");
+                            }
+                            else
+                            {
+                                // Return the resized image
+                                return File(ms.ToArray(), "image/jpeg");
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                // If the file does not exist, return a 404 Not Found error
+                return HttpNotFound();
+            }
         }
     }
 }

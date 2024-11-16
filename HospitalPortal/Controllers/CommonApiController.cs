@@ -387,7 +387,7 @@ where BT.Lab_Id=" + Id + "";
 		{
 			string qry = @"select * from VehicleType vt 
 join MainCategory mc on mc.Id = vt.Category_Id 
-where vt.IsDeleted=0 and mc.IsDeleted=0 order by CategoryName asc,VehicleTypeName asc";
+where vt.IsDeleted=0 and mc.IsDeleted=0 and vt.IsApproved=1 order by CategoryName asc,VehicleTypeName asc";
 			var VehicleType = ent.Database.SqlQuery<VehicleTypes>(qry).ToList();
 			return Ok(new { VehicleType });
 		}

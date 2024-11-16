@@ -59,7 +59,7 @@
             <div class='col-sm-5'>
                 <div class="form-group">
                     <div class='input-group date'>
-                        <input type='text' name="sdate" id="datepicker1" class="form-control" placeholder="From Date" />
+                        <input type='date' name="sdate" class="form-control" placeholder="From Date" />
                         <span class="input-group-addon">
                             <span class="glyphicon glyphicon-calendar"></span>
                         </span>
@@ -69,7 +69,7 @@
             <div class='col-sm-5'>
                 <div class="form-group">
                     <div class='input-group date' id='datetimepicker1'>
-                        <input type='text' name="edate" id="datepicker2" class="form-control" placeholder="Date To" />
+                        <input type='date' name="edate" class="form-control" placeholder="Date To" />
                         <span class="input-group-addon">
                             <span class="glyphicon glyphicon-calendar"></span>
                         </span>
@@ -83,7 +83,7 @@
 }
 @if (Model.NurseList.Count() == 0)
 {
-    <h2 style="color:red; text-align:center;">No Appoinment of Current Month</h2>
+    <div class="alert alert-danger">@TempData["msg"]</div>
 }
 else
 {
@@ -100,7 +100,7 @@ else
             @foreach (var item in Model.NurseList)
             {
                 <tr>
-                    <td>@item.PatientName</td>
+                    <td>@item.PatientName/ @item.PatientRegNo</td>
                     <td>
                         @if (item.RequestDate != null)
                         {

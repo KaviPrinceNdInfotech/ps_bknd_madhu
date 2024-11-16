@@ -125,6 +125,18 @@ namespace HospitalPortal.Controllers
                         }
                         model.SignaturePic = SignatureImg;
                     }
+                    // pan upload
+                    if (model.PanImageFile != null)
+                    {
+                        var Img = FileOperation.UploadImage(model.PanImageFile, "Images");
+                        if (Img == "not allowed")
+                        {
+                            TempData["msg"] = "Only png, jpg, jpeg, pdf files are allowed as Pan document";
+                            tran.Rollback();
+                            return View(model);
+                        }
+                        model.PanImage = Img;
+                    }
 
                     if (!string.IsNullOrEmpty(model.OtherCity))
                     {
@@ -159,6 +171,7 @@ namespace HospitalPortal.Controllers
                     domainModel.Qualification = domainModel.Qualification;
                     domainModel.RegistrationNumber = domainModel.RegistrationNumber;
                     domainModel.SignaturePic = model.SignaturePic;
+                    domainModel.PanImage = model.PanImage;
                     domainModel.PAN = domainModel.PAN;
                     domainModel.Day_Id = domainModel.Day_Id;
                     domainModel.Fee = domainModel.Fee;
@@ -195,6 +208,7 @@ namespace HospitalPortal.Controllers
                     };
 
                     EmailOperations.SendEmainew(ef);
+                    Message.SendSmsUserIdPass(model.MobileNumber, model.DoctorName, domainModel.DoctorId, model.Password);
                     TempData["msg"] = "ok";
                     tran.Commit();
                 }
@@ -274,17 +288,47 @@ namespace HospitalPortal.Controllers
                     }
                     model.LicenceImage = licenceImg;
                 }
+
+                // signature upload
+                if (model.SignatureImageFile != null)
+                {
+                    var SignatureImg = FileOperation.UploadImage(model.SignatureImageFile, "Images");
+                    if (SignatureImg == "not allowed")
+                    {
+                        TempData["msg"] = "Only png, jpg, jpeg, pdf files are allowed as Licence document";
+                       
+                        return View(model);
+                    }
+                    model.SignaturePic = SignatureImg;
+                }
+                // pan upload
+                if (model.PanImageFile != null)
+                {
+                    var Img = FileOperation.UploadImage(model.PanImageFile, "Images");
+                    if (Img == "not allowed")
+                    {
+                        TempData["msg"] = "Only png, jpg, jpeg, pdf files are allowed as Pan document";
+                        
+                        return View(model);
+                    }
+                    model.PanImage = Img;
+                }
+
                 // Update the existing entity with values from the model
                 existingDoctor.DoctorName = model.DoctorName;
                 existingDoctor.ClinicName = model.ClinicName;
                 existingDoctor.Department_Id = (int)model.Department_Id;
                 existingDoctor.Specialist_Id = (int)model.Specialist_Id;
                 existingDoctor.PhoneNumber = model.PhoneNumber;
+                existingDoctor.MobileNumber = model.MobileNumber;
                 existingDoctor.EmailId = model.EmailId;
                 existingDoctor.StateMaster_Id = model.StateMaster_Id;
                 existingDoctor.CityMaster_Id = model.CityMaster_Id;
                 existingDoctor.Location = model.Location;
                 existingDoctor.LicenceImage = model.LicenceImage;
+                existingDoctor.SignaturePic = model.SignaturePic;
+                existingDoctor.PanImage = model.PanImage;
+                existingDoctor.PAN = model.PAN;
                 existingDoctor.LicenceNumber = model.LicenceNumber;
                 existingDoctor.LicenseValidity = model.LicenseValidity;
                 existingDoctor.Day_Id = model.Day_Id;
@@ -312,7 +356,7 @@ namespace HospitalPortal.Controllers
         public ActionResult All(int? vendorId, string term = null, int? page = 0)
         {
             var model = new DoctorDTO();
-            string q = @"select v.*,IsNull(ve.UniqueId,'N/A') as UniqueId, s.StateName,Special.*,Dept.*, c.CityName,IsNull(ve.VendorName,'NA') AS VendorName , IsNull(ve.CompanyName,'NA') as CompanyName from Doctor v join StateMaster s on v.StateMaster_Id=s.Id join CityMaster c on v.CityMaster_Id = c.Id inner join Department Dept on Dept.Id = v.Department_Id inner join Specialist Special on Special.Id = v.Specialist_Id left join Vendor ve on ve.Id = v.Vendor_Id where v.IsDeleted=0 order by v.Id asc";
+            string q = @"select v.*,IsNull(ve.UniqueId,'N/A') as UniqueId, s.StateName,Special.*,Dept.*, c.CityName,IsNull(ve.VendorName,'NA') AS VendorName , IsNull(ve.CompanyName,'NA') as CompanyName from Doctor v join StateMaster s on v.StateMaster_Id=s.Id join CityMaster c on v.CityMaster_Id = c.Id inner join Department Dept on Dept.Id = v.Department_Id inner join Specialist Special on Special.Id = v.Specialist_Id left join Vendor ve on ve.Id = v.Vendor_Id where v.IsDeleted=0 order by v.Id desc";
             var data = ent.Database.SqlQuery<DoctorDTO>(q).ToList();
             if (vendorId != null)
                 data = data.Where(a => a.Vendor_Id == vendorId).ToList();
@@ -325,15 +369,7 @@ namespace HospitalPortal.Controllers
                 TempData["msg"] = "No Result";
                 return View();
             }
-            int total = data.Count;
-            page = page ?? 1;
-            int pageSize = 10;
-            decimal noOfPages = Math.Ceiling((decimal)total / pageSize);
-            model.NumberOfPages = (int)noOfPages;
-            model.Page = page;
-            data = data.OrderByDescending(a => a.Id).Skip(pageSize * ((int)page - 1)).Take(pageSize).ToList();
-            data.FirstOrDefault().NumberOfPages = model.NumberOfPages;
-            data.FirstOrDefault().Page = model.Page;
+             
             return View(data);
         }
 

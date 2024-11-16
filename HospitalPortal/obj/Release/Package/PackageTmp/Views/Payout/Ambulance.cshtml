@@ -47,7 +47,7 @@
 </div>
 <div class="row">
     <div class="col-md-12">
-        <table id="myTable" class="table table-responsive">
+        <table id="myTable" class="table table-bordered">
             <thead style="background-color:lavender;">
                 <tr>
                     <th>
@@ -71,19 +71,14 @@
                     </th>
                     <th>
                         Transaction Fee @ViewBag.Transactionfee %
-                    </th>
-                    @*<th>
-                            GST in %
-                        </th>*@
-                    @*<th>
-                            Total Amount
-                        </th>*@
+                    </th> 
                     <th>
                         Commission Amount @ViewBag.Amount %
                     </th>
                     <th>
                         TDS Amount @ViewBag.tdsAmount %
                     </th>
+                    <th>Driver Charge</th>
                     <th>
                         Payable Amount
                     </th>
@@ -155,13 +150,14 @@
 
                                 double? commAmt = ((double)item.TotalPrice * ViewBag.Amount) / 100;
                                 double? tdsamt = ((double)item.TotalPrice * ViewBag.tdsAmount) / 100;
-                                Value = (double?)item.TotalPrice - (commAmt + tdsamt + razarfeeamt);
+                                Value = (double?)item.TotalPrice - (commAmt + tdsamt + razarfeeamt)-(item.DriverCharge);
 
                                 totalPayableAmount += (double)Value;
                                 TotalBasicAmount += (double)item.TotalPrice;
                                 totalTransactionAmount += (double)razarfeeamt;
                                 totaltdsAmount += (double)tdsamt;
                                 totalCommissionAmount += (double)commAmt;
+                                totalAmount += (double)item.DriverCharge;
                                 <script>
 
               document.getElementById('@item.Driver_Id').value = "@item.Driver_Id,@Value";
@@ -176,12 +172,13 @@
                             <td>@tdsamt</td>
 
 
+                            <td>@item.DriverCharge</td>
                             <td>@Value</td>
                             @*<td>
                                     <a href="/Payout/WeeklyReport?Id=@item.VehicleId">View Record</a>
                                 </td>*@
                             <td>
-                                <a href="/Payout/PayAmbulance_Driver?Driver_Id=@item.Driver_Id&Amount=@Value" class="btn btn-primary" style="display:none;">Pay</a>
+                                <a href="/Payout/PayAmbulance_Driver?Driver_Id=@item.VehicleId&Amount=@Value" class="btn btn-primary" style="display:none;">Pay</a>
                                 <a href="/Payout/ViewDriver_AmbulancePayoutHistory?Id=@item.Driver_Id" class="btn btn-primary">View Payout History</a>
                             </td>
 
@@ -196,6 +193,7 @@
                         <td><strong>₹ @String.Format("{0:F2}", @totalTransactionAmount)</strong></td>
                         <td><strong>₹ @totalCommissionAmount</strong></td>
                         <td><strong>₹@totaltdsAmount</strong></td>
+                        <td><strong>₹@totalAmount</strong></td>
                         <td><strong>₹ @totalPayableAmount</strong></td>
                         <td></td>
                     </tr>
@@ -245,6 +243,6 @@
         multyid = multyid.replace(/,$/, "");
         //  var docmulty = document.getElementById("multydocid").value;
         var payLink = document.getElementById("payLink");
-        payLink.href = "/Payout/PayAmbulance_Driver?multyid=" + multyid;
+        payLink.href = "/Payout/PayAmbulance?multyid=" + multyid;
     });
 </script>

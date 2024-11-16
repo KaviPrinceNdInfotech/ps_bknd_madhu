@@ -6,32 +6,55 @@
 }
 
 <h2>NurseReport</h2>
-<div class=" row">
-    <div class="col-md-3">
-        <div class=" form-group">
-            <a href="@Url.Action("DownloadNurseExcelForBank", "Report")">
-                <img src="https://www.pinclipart.com/picdir/big/178-1780962_download-105-free-excel-icons-here-excel-download.png" alt="List View" style="width: 55px;">
-            </a>
+@using (Html.BeginForm())
+{
+    <div style="margin-bottom:3%;">
+        <div class="row">
+            <h4 style="text-align:center">Search By Date</h4>
+        </div>
+        <div class="row">
+            <div class='col-sm-5'>
+                <div class="form-group">
+                    <div class='input-group date'>
+                        <input type='date' name="sdate" class="form-control" placeholder="From Date" />
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class='col-sm-5'>
+                <div class="form-group">
+                    <div class='input-group date' id='datetimepicker1'>
+                        <input type='date' name="edate" class="form-control" placeholder="Date To" />
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2"><input type="submit" value="Filter" class="btn btn-primary" /></div>
+
         </div>
     </div>
-</div>
-<div style="margin:auto; width:90%">
+}
+<div>
     @using (Html.BeginForm())
     {
-    <div class="row" style="display:none;">
-        <div class="col-md-3">
-            Select Nurse Type
+        <div class="row" style="display:none;">
+            <div class="col-md-3">
+                Select Nurse Type
+            </div>
+            <div class="col-md-3">
+                @Html.DropDownListFor(x => x.Id, Model.NurseTypeList, "Select Nurse Type", new { @class = "form-control", style = "height: calc(3.25rem + 2px) !important;" })
+            </div>
+            <div class="col-md-3">
+                <input type="submit" value="Filter" class="btn btn-primary" />
+            </div>
         </div>
-        <div class="col-md-3">
-            @Html.DropDownListFor(x => x.Id, Model.NurseTypeList, "Select Nurse Type", new { @class = "form-control", style = "height: calc(3.25rem + 2px) !important;" })
-        </div>
-        <div class="col-md-3">
-            <input type="submit" value="Filter" class="btn btn-primary" />
-        </div>
-    </div>
     }
     <div style="margin-top:3%">
-       
+
         <table id="table_id" class="display">
             <thead style="background-color:lavender;">
                 <tr>
@@ -67,7 +90,7 @@
                 </tbody>
             }
         </table>
-      
+
     </div>
     <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
 
@@ -76,7 +99,10 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css">
 
     <script type="text/javascript">
-        $('#table_id').DataTable();
+        $('#table_id').DataTable(
+            {
+                stateSave: true,
+            });
     </script>
 
 </div>

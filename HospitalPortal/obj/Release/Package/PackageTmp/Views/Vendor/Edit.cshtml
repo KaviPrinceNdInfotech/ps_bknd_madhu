@@ -35,9 +35,8 @@
 
         @Html.HiddenFor(a => a.Id)
         @Html.HiddenFor(a => a.IsDeleted)
-        @Html.HiddenFor(a => a.AdminLogin_Id)
-        @Html.HiddenFor(a => a.EmailId)
-        @Html.HiddenFor(a => a.MobileNumber)
+        @Html.HiddenFor(a => a.IsApproved)
+        @Html.HiddenFor(a => a.AdminLogin_Id) 
         @Html.HiddenFor(a => a.AadharOrPANImage)
         @Html.HiddenFor(a => a.PanImage)
         @Html.HiddenFor(a => a.Password)
@@ -63,6 +62,20 @@
                     </span>
                 </div>
                 <div class="form-group">
+                    Mobile Number * @Html.TextBoxFor(a => a.MobileNumber, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.MobileNumber)
+                    </span>
+                </div>
+
+
+                <div class="form-group">
+                    Email Id * @Html.TextBoxFor(a => a.EmailId, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.EmailId)
+                    </span>
+                </div>
+                <div class="form-group">
                     State * @Html.DropDownListFor(a => a.StateMaster_Id, Model.States, "Select State", new { @class = "form-control" })
                     <span class="red">
                         @Html.ValidationMessageFor(a => a.StateMaster_Id)
@@ -76,12 +89,12 @@
                     </span>
                 </div>
                 <div class="form-group">
-            Other City (If you are not able to find it above )
-            @Html.TextBoxFor(a => a.OtherCity, new { @class = "form-control" })
-            <span class="red">
-                @Html.ValidationMessageFor(a => a.OtherCity)
-            </span>
-        </div>
+                    Other City (If you are not able to find it above )
+                    @Html.TextBoxFor(a => a.OtherCity, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.OtherCity)
+                    </span>
+                </div>
 
                 <div class="form-group">
                     Address * @Html.TextAreaFor(a => a.Location, new { @class = "form-control" })

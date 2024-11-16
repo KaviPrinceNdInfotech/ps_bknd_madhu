@@ -62,7 +62,7 @@ namespace HospitalPortal.Controllers
                         return Ok(rm);
                     }
 
-                    if (ent.Patients.Any(a => a.PatientName == model.PatientName && a.MobileNumber == model.MobileNumber))
+                    if (ent.Patients.Any(a => a.PatientName == model.PatientName && a.MobileNumber == model.MobileNumber && a.IsDeleted == false))
                     {
                         var data = ent.Patients.Where(a => a.PatientName == model.PatientName && a.MobileNumber == model.MobileNumber).FirstOrDefault();
                         var logdata = ent.AdminLogins.Where(a => a.UserID == data.PatientRegNo).FirstOrDefault();
@@ -140,8 +140,8 @@ namespace HospitalPortal.Controllers
 
                     tran.Commit();
                     string msg1 = "Welcome to PSWELLNESS. Your User Name :  " + admin.Username + "(" + domainModel.PatientRegNo + "), Password : " + admin.Password + ".";
-                    Message.SendSms(domainModel.MobileNumber, msg1);
-                    rm.Message = "Thanks for joining us.Please check your mail for the crediantials.";
+                    Message.SendSmsUserIdPass(model.MobileNumber, model.PatientName, domainModel.PatientRegNo, model.Password);
+                    rm.Message = "Thanks for joining us.Please check your mail or sms for the crediantials.";
                     rm.Status = 1;
                     return Ok(rm);
                 }
@@ -194,7 +194,7 @@ namespace HospitalPortal.Controllers
                     //    return Ok(rm);
                     // }
 
-                    if (ent.Doctors.Any(a => a.DoctorName == model.DoctorName && a.MobileNumber == model.MobileNumber && a.Disease == model.Disease))
+                    if (ent.Doctors.Any(a => a.DoctorName == model.DoctorName && a.MobileNumber == model.MobileNumber && a.Disease == model.Disease && a.IsDeleted==false))
                     {
                         var data = ent.Doctors.Where(a => a.DoctorName == model.DoctorName && a.MobileNumber == model.MobileNumber && a.Disease == model.Disease).FirstOrDefault();
                         var logdata = ent.AdminLogins.Where(a => a.UserID == data.DoctorId).FirstOrDefault();
@@ -319,7 +319,7 @@ namespace HospitalPortal.Controllers
                     EmailOperations.SendEmainew(ef);
 
                     string msg1 = "Welcome to PSWELLNESS. Your User Name :  " + admin.Username + "(" + domainModel.DoctorId + "), Password : " + admin.Password + ".";
-                    Message.SendSms(domainModel.MobileNumber, msg1);
+                    Message.SendSmsUserIdPass(model.MobileNumber, model.DoctorName, domainModel.DoctorId, model.Password);
                     tran.Commit();
                     rm.Status = 1;
                     rm.Message = "Welcome to PS Wellness. Sign up process completed. Approval pending.";
@@ -350,9 +350,7 @@ namespace HospitalPortal.Controllers
             using (var tran = ent.Database.BeginTransaction())
             {
                 try
-                {
-                     
-
+                { 
                     if (ent.AdminLogins.Any(a => a.Username == model.EmailId))
                     {
                         rm.Status = 0;
@@ -364,7 +362,7 @@ namespace HospitalPortal.Controllers
                         rm.Status = 0;
                         return BadRequest("This Mobile Number has already exists.");
                     }
-                    if (ent.Drivers.Any(a => a.DriverName == model.DriverName && a.MobileNumber == model.MobileNumber))
+                    if (ent.Drivers.Any(a => a.DriverName == model.DriverName && a.MobileNumber == model.MobileNumber && a.IsDeleted == false))
                     {
                         var data = ent.Drivers.Where(a => a.DriverName == model.DriverName && a.MobileNumber == model.MobileNumber).FirstOrDefault();
                         var logdata = ent.AdminLogins.Where(a => a.UserID == data.DriverId).FirstOrDefault();
@@ -469,6 +467,7 @@ namespace HospitalPortal.Controllers
                     domainModel.Paidamount = model.Paidamount;
                     admin.UserID = domainModel.DriverId;
                     domainModel.IsBankUpdateApproved = false;
+                    domainModel.IsBooked = false;
                     ent.Drivers.Add(domainModel);
                     ent.SaveChanges();
                     rm.Status = 1;
@@ -501,7 +500,7 @@ namespace HospitalPortal.Controllers
                     EmailOperations.SendEmainew(ef);
 
                     string msg1 = "Welcome to PSWELLNESS. Your User Name :  " + admin.Username + "(" + domainModel.DriverId + "), Password : " + admin.Password + ".";
-                    Message.SendSms(domainModel.MobileNumber, msg1);
+                    Message.SendSmsUserIdPass(model.MobileNumber, model.DriverName, domainModel.DriverId, model.Password);
                     rm.Message = "Welcome to PS Wellness. Sign up process completed. Approval pending.";
                     tran.Commit();
                     return Ok(rm);
@@ -655,7 +654,7 @@ ModelState.Values
                         return Ok(rm);
                     }
 
-                    if (ent.Nurses.Any(a => a.NurseName == model.NurseName && a.MobileNumber == model.MobileNumber))
+                    if (ent.Nurses.Any(a => a.NurseName == model.NurseName && a.MobileNumber == model.MobileNumber && a.IsDeleted == false))
                     {
                         var data = ent.Nurses.Where(a => a.NurseName == model.NurseName && a.MobileNumber == model.MobileNumber).FirstOrDefault();
                         var logdata = ent.AdminLogins.Where(a => a.UserID == data.NurseId).FirstOrDefault();
@@ -767,7 +766,7 @@ ModelState.Values
                     rm.Message = "Welcome to PS Wellness. Sign up process completed. Approval pending.";
                     rm.Status = 1;
                     string msg1 = "Welcome to PSWELLNESS. Your User Name :  " + admin.Username + "(" + domainModel.NurseId + "), Password : " + admin.Password + ".";
-                    Message.SendSms(domainModel.MobileNumber, msg1);
+                    Message.SendSmsUserIdPass(model.MobileNumber, model.NurseName, domainModel.NurseId, model.Password);
                     tran.Commit();
                     return Ok(rm);
 
@@ -1549,7 +1548,7 @@ ModelState.Values
                     return Ok(rm);
                 }
 
-                if (ent.Labs.Any(L => L.LabName == model.LabName && L.MobileNumber == model.MobileNumber))
+                if (ent.Labs.Any(L => L.LabName == model.LabName && L.MobileNumber == model.MobileNumber && L.IsDeleted == false))
                 {
                     var data = ent.Labs.Where(L => L.LabName == model.LabName && L.MobileNumber == model.MobileNumber).FirstOrDefault();
                     var logdata = ent.AdminLogins.Where(L => L.UserID == data.lABId).FirstOrDefault();
@@ -1685,13 +1684,13 @@ ModelState.Values
                     return Ok(rm);
                 }
 
-                if (ent.Chemists.Any(L => L.ChemistName == model.ChemistName && L.MobileNumber == model.MobileNumber))
+                if (ent.Chemists.Any(L => L.ChemistName == model.ChemistName && L.MobileNumber == model.MobileNumber && L.IsDeleted==false))
                 {
                     var data = ent.Chemists.Where(L => L.ChemistName == model.ChemistName && L.MobileNumber == model.MobileNumber).FirstOrDefault();
                     var logdata = ent.AdminLogins.Where(L => L.UserID == data.ChemistId).FirstOrDefault();
                     string mssg = "Welcome to PSWELLNESS. Your User Name :  " + logdata.Username + "(" + logdata.UserID + "), Password : " + logdata.Password + ".";
                     Message.SendSms(logdata.PhoneNumber, mssg);
-                    rm.Message = "you are already Lab  registered with pswellness";
+                    rm.Message = "you are already Chemist registered with pswellness";
                     rm.Status = 1;
                     return Ok(rm);
                 }
@@ -1771,7 +1770,7 @@ ModelState.Values
                 EmailOperations.SendEmainew(ef);
 
                 string msg1 = "Welcome to PSWELLNESS. Your User Name :  " + domainModel.EmailId + "(" + domainModel.ChemistId + "), Password : " + admin.Password + ".";
-                Message.SendSms(domainModel.MobileNumber, msg1);
+                Message.SendSmsUserIdPass(model.MobileNumber, model.ChemistName, domainModel.ChemistId, model.Password);
                 rm.Message = "Welcome to PS Wellness. Sign up process completed. Approval pending.";
                 rm.Status = 1;
                 return Ok(rm);
@@ -1797,8 +1796,7 @@ ModelState.Values
             {
                 try
                 {
-
-                    if (ent.Vendors.Any(a => a.VendorName == model.VendorName && a.MobileNumber == model.MobileNumber))
+                    if (ent.Vendors.Any(a => a.VendorName == model.VendorName && a.MobileNumber == model.MobileNumber && a.IsDeleted==false))
                     {
                         var data = ent.Vendors.Where(a => a.VendorName == model.VendorName && a.MobileNumber == model.MobileNumber).FirstOrDefault();
                         var logdata = ent.AdminLogins.Where(a => a.UserID == data.UniqueId).FirstOrDefault();
@@ -1884,7 +1882,8 @@ ModelState.Values
                         Subject = "PS Wellness Registration Confirmation"
                     };
                     
-                    EmailOperations.SendEmainew(ef); 
+                    EmailOperations.SendEmainew(ef);
+                    Message.SendSmsUserIdPass(model.MobileNumber, model.VendorName, domainModel.UniqueId, model.Password);
                     tran.Commit();
                     rm.Status = 1;
                     rm.Message = "Welcome to PS Wellness. Sign up process completed. Approval pending.";

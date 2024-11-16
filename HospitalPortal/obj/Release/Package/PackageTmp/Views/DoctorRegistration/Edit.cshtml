@@ -27,9 +27,10 @@
         @Html.HiddenFor(a => a.AdminLogin_Id)
         @Html.HiddenFor(a => a.AadharImageName) 
         @Html.HiddenFor(a => a.LicenceImage)
+        @Html.HiddenFor(a => a.SignaturePic)
+        @Html.HiddenFor(a => a.PanImage)
         @*@Html.HiddenFor(a => a.LicenseValidity)*@
-        @Html.HiddenFor(a => a.IsApproved) 
-        @Html.HiddenFor(a => a.MobileNumber)
+        @Html.HiddenFor(a => a.IsApproved)  
         @Html.HiddenFor(a => a.Password) 
         @Html.HiddenFor(a => a.Vendor_Id) 
         @Html.HiddenFor(a => a.PinCode)  
@@ -79,9 +80,15 @@ Model.SpecialistList
                     </span>
                 </div>
                 <div class="form-group">
-                    Phone Number  @Html.TextBoxFor(a => a.PhoneNumber, new { @class = "form-control" })
+                    Phone Number * @Html.TextBoxFor(a => a.PhoneNumber, new { @class = "form-control" })
                     <span class="red">
                         @Html.ValidationMessageFor(a => a.PhoneNumber)
+                    </span>
+                </div>
+                <div class="form-group">
+                    Mobile Number*  @Html.TextBoxFor(a => a.MobileNumber, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.MobileNumber)
                     </span>
                 </div>
 
@@ -108,13 +115,13 @@ Model.Cities
                     </span>
                 </div>
                 <div class="form-group">
-                    Fee @Html.TextAreaFor(a => a.Fee, new { @class = "form-control" })
+                    Fee *@Html.TextAreaFor(a => a.Fee, new { @class = "form-control" })
                     <span class="red">
                         @Html.ValidationMessageFor(a => a.Fee)
                     </span>
                 </div>
                 <div class="form-group">
-                    Virtual Fee @Html.TextAreaFor(a => a.VirtualFee, new { @class = "form-control" })
+                    Virtual Fee* @Html.TextAreaFor(a => a.VirtualFee, new { @class = "form-control" })
                     <span class="red">
                         @Html.ValidationMessageFor(a => a.VirtualFee)
                     </span>
@@ -142,6 +149,51 @@ Model.Cities
                     Licence Validity * @Html.TextBoxFor(a => a.LicenseValidity, new { @class = "form-control" })
                     <span class="red">
                         @Html.ValidationMessageFor(a => a.LicenseValidity)
+                    </span>
+                </div>
+                <div class="form-group">
+                    @{ Html.EnableClientValidation(false); }
+                    @if (!string.IsNullOrEmpty(Model.PanImage))
+                    {
+                        <img src="/Images/@Model.PanImage" class="thumb" />
+                    }
+                    Pan Doc. * @Html.TextBoxFor(a => a.PanImageFile, new { @class = "form-control", type = "file" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.PanImageFile)
+                    </span>
+                    @{ Html.EnableClientValidation(true); }
+                </div>
+                <div class="form-group">
+                    Pan Number * @Html.TextBoxFor(a => a.PAN, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.PAN)
+                    </span>
+                </div>
+                <div class="form-group">
+                    Experience * @Html.TextBoxFor(a => a.Experience, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.Experience)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    Qualification  @Html.TextBoxFor(a => a.Qualification, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.Qualification)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    Reg Number  @Html.TextBoxFor(a => a.RegistrationNumber, new { @class = "form-control" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.RegistrationNumber)
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    Signature  * @Html.TextBoxFor(a => a.SignatureImageFile, new { @class = "form-control", type = "file" })
+                    <span class="red">
+                        @Html.ValidationMessageFor(a => a.SignatureImageFile)
                     </span>
                 </div>
 

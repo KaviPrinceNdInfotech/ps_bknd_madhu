@@ -18,17 +18,19 @@ namespace HospitalPortal.Controllers
     {
         DbEntities ent = new DbEntities();
 
-        public ActionResult Show(int? Id)
+        public ActionResult Show(int? Id, DateTime? sdate, DateTime? edate)
         {
             var model = new AmbulanceList();
-            if(Id > 0)
+            if(sdate!=null && edate!=null)
             {
                 var doctor1 = @"SELECT distinct v.Id AS VehicleId,v.VehicleNumber,d.DriverId,d.DriverName,ISNULL(v.VehicleName, 'NA') AS VehicleName
     FROM DriverLocation trm
     JOIN Driver d ON d.Id = trm.Driver_Id
-    JOIN Vehicle v ON v.Id = d.Vehicle_Id     
-    WHERE trm.IsPay = 'Y' AND trm.EntryDate BETWEEN DATEADD(DD, -7, GETDATE()) AND GETDATE() and trm.IsPayoutPaid=1 group by v.Id,v.VehicleNumber, d.DriverName,trm.Id,v.VehicleName,d.DriverId";
-                var data1 = ent.Database.SqlQuery<AmbulanceReport>(doctor1).ToList();
+    JOIN Vehicle v ON v.Id = d.Vehicle_Id   
+	JOIN Patient p on p.Id=trm.PatientId     
+    WHERE trm.IsPay = 'Y' AND trm.EntryDate BETWEEN @sdate AND @edate and trm.RideComplete=1 group by v.Id,v.VehicleNumber, d.DriverName,v.VehicleName,d.DriverId";
+                var data1 = ent.Database.SqlQuery<AmbulanceReport>(doctor1, new SqlParameter("sdate", sdate),
+             new SqlParameter("edate", edate)).ToList();
                 model.Ambulance = data1;
                 return View(model);
             }
@@ -37,8 +39,9 @@ namespace HospitalPortal.Controllers
                 var doctor = @"SELECT distinct v.Id AS VehicleId,v.VehicleNumber,d.DriverId,d.DriverName,ISNULL(v.VehicleName, 'NA') AS VehicleName
     FROM DriverLocation trm
     JOIN Driver d ON d.Id = trm.Driver_Id
-    JOIN Vehicle v ON v.Id = d.Vehicle_Id     
-    WHERE trm.IsPay = 'Y' AND trm.EntryDate BETWEEN DATEADD(DD, -7, GETDATE()) AND GETDATE() and trm.IsPayoutPaid=1 group by v.Id,v.VehicleNumber, d.DriverName,trm.Id,v.VehicleName,d.DriverId";
+    JOIN Vehicle v ON v.Id = d.Vehicle_Id   
+	JOIN Patient p on p.Id=trm.PatientId     
+    WHERE trm.IsPay = 'Y' AND trm.EntryDate BETWEEN DATEADD(DD, -7, GETDATE()) AND GETDATE() and trm.RideComplete=1 group by v.Id,v.VehicleNumber, d.DriverName,v.VehicleName,d.DriverId";
                 var data = ent.Database.SqlQuery<AmbulanceReport>(doctor).ToList();
                 model.Ambulance = data;
                
@@ -57,30 +60,30 @@ namespace HospitalPortal.Controllers
             model.DriverName = mek.FirstOrDefault().DriverName;
             if (sdate != null && edate != null)
             {
-                var doct = @"SELECT trm.id,p.PatientName,p.PatientRegNo,CONCAT(DAY(dp.PaymentDate), ' ',UPPER(FORMAT(dp.PaymentDate, 'MMM')), ' ', YEAR(trm.PaymentDate),' ',FORMAT(dp.PaymentDate, 'hh:mm tt')) AS PaymentDate,v.VehicleNumber,ISNULL(v.VehicleName, 'NA') AS VehicleName,Cast(dp.Amount as INT) as TotalPrice,
+                var doct = @"SELECT trm.id,p.PatientName,p.PatientRegNo,CONCAT(DAY(dp.PaymentDate), ' ',UPPER(FORMAT(trm.PaymentDate, 'MMM')), ' ', YEAR(trm.PaymentDate),' ',FORMAT(trm.PaymentDate, 'hh:mm tt')) AS PaymentDate,v.VehicleNumber,ISNULL(v.VehicleName, 'NA') AS VehicleName,trm.TotalPrice as TotalPrice,
 trm.ToatlDistance AS Distance,d.DriverName,v.Id AS VehicleId,trm.start_Lat,trm.start_Long,trm.end_Lat,trm.end_Long FROM DriverLocation trm
 JOIN Driver d ON d.Id = trm.Driver_Id
 JOIN Vehicle v ON v.Id = d.Vehicle_Id
 JOIN Patient p ON p.Id = trm.PatientId
-join DriverPayOut as dp on dp.Driver_Id=d.Id
 WHERE v.Id=" + id+" and trm.IsPay = 'Y' AND CONVERT(DATETIME, trm.PaymentDate, 103) BETWEEN @sdate AND @edate) SELECT id, PatientName, PaymentDate, PatientRegNo, VehicleNumber, VehicleName, Amount, Distance, DriverName, VehicleId, start_Lat, start_Long, end_Lat, end_Long FROM RankedResults WHERE RowNum = 1;";
                // var doctor1 = ent.Database.SqlQuery<AmbulanceReport>(doct).ToList();
 				var doctor1 = ent.Database.SqlQuery<AmbulanceReport>(doct,
 			new SqlParameter("sdate", sdate),
 			new SqlParameter("edate", edate)).ToList();
-				model.Ambulance = doctor1;
+                TempData["msg"] = "Your Selected Date Doesn't Contain any Information.";
+                model.Ambulance = doctor1;
             }
             else
             { 
-                var doctor1 = @"SELECT trm.id,p.PatientName,p.PatientRegNo,CONCAT(DAY(dp.PaymentDate), ' ',UPPER(FORMAT(dp.PaymentDate, 'MMM')), ' ', YEAR(trm.PaymentDate),' ',FORMAT(dp.PaymentDate, 'hh:mm tt')) AS PaymentDate,v.VehicleNumber,ISNULL(v.VehicleName, 'NA') AS VehicleName,Cast(dp.Amount as INT) as TotalPrice,
+                var doctor1 = @"SELECT trm.id,p.PatientName,p.PatientRegNo,CONCAT(DAY(trm.PaymentDate), ' ',UPPER(FORMAT(trm.PaymentDate, 'MMM')), ' ', YEAR(trm.PaymentDate),' ',FORMAT(trm.PaymentDate, 'hh:mm tt')) AS PaymentDate,v.VehicleNumber,ISNULL(v.VehicleName, 'NA') AS VehicleName,trm.TotalPrice as TotalPrice,
 trm.ToatlDistance AS Distance,d.DriverName,v.Id AS VehicleId,trm.start_Lat,trm.start_Long,trm.end_Lat,trm.end_Long FROM DriverLocation trm
 JOIN Driver d ON d.Id = trm.Driver_Id
 JOIN Vehicle v ON v.Id = d.Vehicle_Id
 JOIN Patient p ON p.Id = trm.PatientId
-join DriverPayOut as dp on dp.Driver_Id=d.Id
-WHERE v.Id=" + id+" and trm.IsPay = 'Y' AND trm.EntryDate BETWEEN DATEADD(DD, -7, GETDATE()) AND GETDATE()";
+WHERE v.Id=" + id+" and trm.IsPay = 'Y'";
                 var doctorList = ent.Database.SqlQuery<AmbulanceReport>(doctor1).ToList();
                 model.Ambulance = doctorList;
+                TempData["msg"] = "No data available.";
             } 
             return View(model);
         }
@@ -258,55 +261,55 @@ where trm.IsDriveCompleted = 1 and v.Id = "+id+ " and Convert(Date,trm.RequestDa
             return View(model);
         }
 
-        public void DownloadAmbulanceExcelForBank()
-        {
-            string query = "SELECT distinct v.Id AS VehicleId, d.DriverId as UniqueId, d.DriverName as Name, d.EmailId, sum(dl.Amount) as Amount, bd.AccountNo, bd.IFSCCode FROM DriverLocation dl JOIN Driver d ON d.Id = dl.Driver_Id JOIN Vehicle v ON v.Id = d.Vehicle_Id LEFT JOIN BankDetails as bd ON bd.Login_Id=d.AdminLogin_Id WHERE dl.IsPay = 'Y' AND dl.EntryDate BETWEEN DATEADD(DD, -7, GETDATE()) AND GETDATE() and dl.IsPayoutPaid=1 GROUP BY v.Id, d.DriverName, d.DriverId, d.EmailId, bd.AccountNo, bd.IFSCCode";
-            List<DetailsForBank> employeeDetails = ent.Database.SqlQuery<DetailsForBank>(query, Array.Empty<object>()).ToList();
-            ExcelPackage Ep = new ExcelPackage();
-            ExcelWorksheet Sheet = Ep.Workbook.Worksheets.Add("Report");
-            Sheet.Cells["A1"].Value = "Payment Method";
-            Sheet.Cells["B1"].Value = "Payment Amount";
-            Sheet.Cells["C1"].Value = "Activation Date";
-            Sheet.Cells["D1"].Value = "Beneficiary Name";
-            Sheet.Cells["E1"].Value = "Account No in text";
-            Sheet.Cells["F1"].Value = "Email";
-            Sheet.Cells["G1"].Value = "Email Body";
-            Sheet.Cells["H1"].Value = "Debit Account No";
-            Sheet.Cells["I1"].Value = "CRN No";
-            Sheet.Cells["J1"].Value = "Receiver IFSC Code";
-            Sheet.Cells["K1"].Value = "Receiver Account";
-            Sheet.Cells["L1"].Value = "Remarks";
-            Sheet.Cells["M1"].Value = "Phone No";
-            int row = 2;
-            CRNGenerator crnGenerator = new CRNGenerator();
-            foreach (DetailsForBank item in employeeDetails)
-            {
-                string dvrId = item.UniqueId;
-                long sdds = Convert.ToInt64(item.AccountNo);
-                string crn = crnGenerator.GenerateCRN(dvrId);
-                Sheet.Cells[$"A{row}"].Value = "N";
-                Sheet.Cells[$"B{row}"].Value = item.Amount;
-                Sheet.Cells[$"C{row}"].Value = DateTime.Now;
-                Sheet.Cells[$"C{row}"].Style.Numberformat.Format = "yyyy-MM-dd";
-                Sheet.Cells[$"D{row}"].Value = item.Name;
-                Sheet.Cells[$"E{row}"].Value = NumberToWords(sdds);
-                Sheet.Cells[$"F{row}"].Value = item.EmailId;
-                Sheet.Cells[$"G{row}"].Value = "This is your payment report";
-                Sheet.Cells[$"H{row}"].Value = "55443333322222(fix)";
-                Sheet.Cells[$"I{row}"].Value = crn;
-                Sheet.Cells[$"J{row}"].Value = item.IFSCCode;
-                Sheet.Cells[$"K{row}"].Value = item.AccountNo;
-                Sheet.Cells[$"L{row}"].Value = "Enter your remark";
-                Sheet.Cells[$"M{row}"].Value = "9090907867(admin)";
-                row++;
-            }
-            Sheet.Cells["A:AZ"].AutoFitColumns();
-            base.Response.Clear();
-            base.Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            base.Response.AddHeader("content-disposition", "attachment; filename=Report.xlsx");
-            base.Response.BinaryWrite(Ep.GetAsByteArray());
-            base.Response.End();
-        } 
+        //public void DownloadAmbulanceExcelForBank()
+        //{
+        //    string query = "SELECT distinct v.Id AS VehicleId, d.DriverId as UniqueId, d.DriverName as Name, d.EmailId, sum(dl.Amount) as Amount, bd.AccountNo, bd.IFSCCode FROM DriverLocation dl JOIN Driver d ON d.Id = dl.Driver_Id JOIN Vehicle v ON v.Id = d.Vehicle_Id LEFT JOIN BankDetails as bd ON bd.Login_Id=d.AdminLogin_Id WHERE dl.IsPay = 'Y' AND dl.EntryDate BETWEEN DATEADD(DD, -7, GETDATE()) AND GETDATE() and dl.IsPayoutPaid=1 GROUP BY v.Id, d.DriverName, d.DriverId, d.EmailId, bd.AccountNo, bd.IFSCCode";
+        //    List<DetailsForBank> employeeDetails = ent.Database.SqlQuery<DetailsForBank>(query, Array.Empty<object>()).ToList();
+        //    ExcelPackage Ep = new ExcelPackage();
+        //    ExcelWorksheet Sheet = Ep.Workbook.Worksheets.Add("Report");
+        //    Sheet.Cells["A1"].Value = "Payment Method";
+        //    Sheet.Cells["B1"].Value = "Payment Amount";
+        //    Sheet.Cells["C1"].Value = "Activation Date";
+        //    Sheet.Cells["D1"].Value = "Beneficiary Name";
+        //    Sheet.Cells["E1"].Value = "Account No in text";
+        //    Sheet.Cells["F1"].Value = "Email";
+        //    Sheet.Cells["G1"].Value = "Email Body";
+        //    Sheet.Cells["H1"].Value = "Debit Account No";
+        //    Sheet.Cells["I1"].Value = "CRN No";
+        //    Sheet.Cells["J1"].Value = "Receiver IFSC Code";
+        //    Sheet.Cells["K1"].Value = "Receiver Account";
+        //    Sheet.Cells["L1"].Value = "Remarks";
+        //    Sheet.Cells["M1"].Value = "Phone No";
+        //    int row = 2;
+        //    CRNGenerator crnGenerator = new CRNGenerator();
+        //    foreach (DetailsForBank item in employeeDetails)
+        //    {
+        //        string dvrId = item.UniqueId;
+        //        long sdds = Convert.ToInt64(item.AccountNo);
+        //        string crn = crnGenerator.GenerateCRN(dvrId);
+        //        Sheet.Cells[$"A{row}"].Value = "N";
+        //        Sheet.Cells[$"B{row}"].Value = item.Amount;
+        //        Sheet.Cells[$"C{row}"].Value = DateTime.Now;
+        //        Sheet.Cells[$"C{row}"].Style.Numberformat.Format = "yyyy-MM-dd";
+        //        Sheet.Cells[$"D{row}"].Value = item.Name;
+        //        Sheet.Cells[$"E{row}"].Value = NumberToWords(sdds);
+        //        Sheet.Cells[$"F{row}"].Value = item.EmailId;
+        //        Sheet.Cells[$"G{row}"].Value = "This is your payment report";
+        //        Sheet.Cells[$"H{row}"].Value = "55443333322222(fix)";
+        //        Sheet.Cells[$"I{row}"].Value = crn;
+        //        Sheet.Cells[$"J{row}"].Value = item.IFSCCode;
+        //        Sheet.Cells[$"K{row}"].Value = item.AccountNo;
+        //        Sheet.Cells[$"L{row}"].Value = "Enter your remark";
+        //        Sheet.Cells[$"M{row}"].Value = "9090907867(admin)";
+        //        row++;
+        //    }
+        //    Sheet.Cells["A:AZ"].AutoFitColumns();
+        //    base.Response.Clear();
+        //    base.Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+        //    base.Response.AddHeader("content-disposition", "attachment; filename=Report.xlsx");
+        //    base.Response.BinaryWrite(Ep.GetAsByteArray());
+        //    base.Response.End();
+        //} 
         static string NumberToWords(long number)
         {
             if (number == 0)
@@ -408,6 +411,7 @@ where trm.IsDriveCompleted = 1 and v.Id = "+id+ " and Convert(Date,trm.RequestDa
 
         public class AmbulanceReport
         {
+            public int Id { get; set; }
             public int VehicleId { get; set; }
             public int TotalPrice { get; set; }
 
@@ -464,13 +468,14 @@ where trm.IsDriveCompleted = 1 and v.Id = "+id+ " and Convert(Date,trm.RequestDa
         public class DetailsForBank
         {
             public int Id { get; set; }
-            public string Name { get; set; }
+            public string BeneficiaryName { get; set; }
             public string UniqueId { get; set; }
             public string EmailId { get; set; }
             public string AccountNo { get; set; }
+            public string MobileNumber { get; set; }
             public string IFSCCode { get; set; }
             public string CRN { get; set; }
-            public decimal Amount { get; set; }
+            public double Amount { get; set; }
             public double TotalFee { get; set; }
         }
 

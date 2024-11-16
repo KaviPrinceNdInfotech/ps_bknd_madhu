@@ -196,26 +196,7 @@ where v.IsDeleted=0 and mc.IsDeleted=0 and vt.IsDeleted=0 order by v.Id desc";
             {
                 TempData["msg"] = "No Records";
                 return View(data);
-            }
-            int total = data.Count;
-            page = page ?? 1;
-            int pageSize = 10;
-            decimal noOfPages = Math.Ceiling((decimal)total / pageSize);
-            model.NumberOfPages = (int)noOfPages;
-            model.Page = page;
-            data = data.OrderByDescending(a => a.Id).Skip(pageSize * ((int)page - 1)).Take(pageSize).ToList();
-            data.FirstOrDefault().NumberOfPages = model.NumberOfPages;
-            data.FirstOrDefault().Page = model.Page;
-
-            //int total = data.Count;
-            //page = page ?? 1;
-            //int pageSize = 10;
-            //decimal noOfPages = Math.Ceiling((decimal)total / pageSize);
-            //model.NumberOfPages = (int)noOfPages;
-            //model.Page = page;
-            //data = data.OrderByDescending(a => a.Id).Skip(pageSize * ((int)page - 1)).Take(pageSize).ToList();
-            //data.FirstOrDefault().NumberOfPages = model.NumberOfPages;
-            //data.FirstOrDefault().Page = model.Page;
+            } 
             return View(data);
         }
 

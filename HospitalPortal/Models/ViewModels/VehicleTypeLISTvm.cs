@@ -39,5 +39,6 @@ namespace HospitalPortal.Models.ViewModels
         public Nullable<double> Above500KM { get; set; }
         public Nullable<int> Category_Id { get; set; }
         public string CategoryName { get; set; }
+        public bool? IsApproved { get; set; }
     }
 }

@@ -618,7 +618,7 @@ from DriverLocation trm
 join Driver d on d.Id = trm.Driver_Id
 join Vehicle v on v.Id = d.Vehicle_Id
 join Patient p on p.Id = trm.PatientId
-where trm.IsPay = 'Y' and trm.EntryDate  between Convert(datetime,'" + startdate + "',103) and Convert(datetime,'" + enddate + "',103) group by v.VehicleNumber, v.VehicleName, v.Id,d.DriverName,d.DriverId";
+where trm.IsPay = 'Y' and trm.RideComplete=1  and trm.EntryDate  between Convert(datetime,'" + startdate + "',103) and Convert(datetime,'" + enddate + "',103) group by v.VehicleNumber, v.VehicleName, v.Id,d.DriverName,d.DriverId";
                 var data1 = ent.Database.SqlQuery<AmbulanceReport>(qry1).ToList();
                 if (data1.Count() == 0)
                 {
@@ -659,7 +659,7 @@ from DriverLocation trm
 join Driver d on d.Id = trm.Driver_Id
 join Vehicle v on v.Id = d.Vehicle_Id
 join Patient p on p.Id = trm.PatientId
-where trm.IsPay = 'Y' and trm.EntryDate between DateAdd(DD,-7,GETDATE() ) and GETDATE() group by v.VehicleNumber, v.VehicleName, v.Id,d.DriverName,d.DriverId";
+where trm.IsPay = 'Y' and trm.RideComplete=1 and trm.EntryDate between DateAdd(DD,-7,GETDATE() ) and GETDATE() group by v.VehicleNumber, v.VehicleName, v.Id,d.DriverName,d.DriverId";
 				var data = ent.Database.SqlQuery<AmbulanceReport>(doctor).ToList();
 				if (data.Count() == 0)
 				{
@@ -724,7 +724,7 @@ from DriverLocation trm
 join Driver d on d.Id = trm.Driver_Id
 join Vehicle v on v.Id = d.Vehicle_Id
 join Patient p on p.Id = trm.PatientId
-where trm.IsPay = 'Y' and trm.EntryDate between "+ dateCriteria + " and " +AppointmentDate+ " and v.Id=" + VehicleId + " group by v.VehicleNumber, v.VehicleName, v.Id,d.DriverName,d.DriverId,trm.EntryDate,trm.PaymentDate";
+where trm.IsPay = 'Y' and trm.RideComplete=1 and trm.EntryDate between " + dateCriteria + " and " +AppointmentDate+ " and v.Id=" + VehicleId + " group by v.VehicleNumber, v.VehicleName, v.Id,d.DriverName,d.DriverId,trm.EntryDate,trm.PaymentDate";
 				var data1 = ent.Database.SqlQuery<AmbulanceReport>(qry1).ToList();
 				if (data1.Count() == 0)
 				{
@@ -769,7 +769,7 @@ from DriverLocation trm
 join Driver d on d.Id = trm.Driver_Id
 join Vehicle v on v.Id = d.Vehicle_Id
 join Patient p on p.Id = trm.PatientId
-where trm.IsPay = 'Y' and trm.EntryDate between DateAdd(DD,-7,GETDATE() ) and GETDATE() and v.Id=" + VehicleId + " group by v.VehicleNumber, v.VehicleName, v.Id,d.DriverName,d.DriverId,trm.EntryDate,trm.PaymentDate";
+where trm.IsPay = 'Y' and trm.RideComplete=1 and trm.EntryDate between DateAdd(DD,-7,GETDATE() ) and GETDATE() and v.Id=" + VehicleId + " group by v.VehicleNumber, v.VehicleName, v.Id,d.DriverName,d.DriverId,trm.EntryDate,trm.PaymentDate";
 				var data = ent.Database.SqlQuery<AmbulanceReport>(q).ToList();
 				if (data.Count() == 0)
 				{
