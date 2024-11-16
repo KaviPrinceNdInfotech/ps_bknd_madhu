@@ -1,68 +1,86 @@
 ﻿@model HospitalPortal.Models.ViewModels.ReportDetails
 @{
     ViewBag.Title = "ViewReport";
+    int count = 1;
 }
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("MonthlyDoc", "Vendor", FormMethod.Get))
 {
     <div class="row">
         <div class="col-md-4">
-            @Html.TextBoxFor(a => a.sdate, new { @class = "datepicker form-control", required = "required" })
+            Start Date
+            @Html.TextBoxFor(a => a.sdate, new { @class = "form-control", required = "required", type = "date" })
         </div>
         <div class="col-md-4">
-            @Html.TextBoxFor(a => a.edate, new { @class = "datepicker form-control", required = "required" })
+            End Date
+            @Html.TextBoxFor(a => a.edate, new { @class = "form-control", required = "required", type = "date" })
         </div>
         <div class="col-md-4">
-            <input type="button" id="test" value="Search" class="btn btn-primary" />
+            <input type="submit" id="test" value="Search" class="btn btn-primary" />
         </div>
     </div>
-}@if (Model.Vendors == null)
-{
-    if (TempData["msg"] != null)
-    {
-        <h2 style="color:blueviolet">
-            @TempData["msg"]
-        </h2>
-    }
 }
-else
-{
-    <table id="tables" class="table table-responsive">
-        <thead>
-            <tr>
-                <th>
-                    Vendor Name
-                </th>
-                <th>
-                    Company Name
-                </th>
-                <th>
-                    Total Amount
-                </th>
-            </tr>
-        </thead>
+<table id="table_id" class="table table-bordered">
+    <thead style="background-color:lavender;">
+        <tr>
+            <th>Sr No.</th>
+            <th>
+                Vendor Name (Id)
+            </th>
+            <th>
+                Company Name
+            </th>
+            <th>Doctor Name (Id)</th>
+            <th>
+                Total Amount
+            </th>
+        </tr>
+    </thead>
+    @if (Model.Vendors == null)
+    {
+        if (TempData["msg"] != null)
+        {
+
+            <div class="alert alert-danger">
+                @TempData["msg"]
+            </div>
+        }
+    }
+    else
+    {
         <tbody>
             @foreach (var item in Model.Vendors)
             {
                 <tr>
+                    <td>@count</td>
                     <td>
-                        @item.Name
+                        @item.Name (@item.VendorId)
                     </td>
                     <td>
                         @item.Name1
                     </td>
-                    @{
-
-                    }
+                    <td>@item.UserName (@item.UniqueId)</td>
                     <td>
                         @item.Counts
                     </td>
+
                 </tr>
-                        }
+                count++;
+            }
 
         </tbody>
-    </table>
-                        }
+    }
+</table>
+
+<script src="https://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css">
+
+<script type="text/javascript">
+    $('#table_id').DataTable(
+        {
+            stateSave: true,
+        });
+</script>
 <script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
 <link href="~/css/jquery-ui.css" rel="stylesheet" />
 <script src="~/Scripts/jquery-ui.js"></script>

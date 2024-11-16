@@ -253,8 +253,7 @@ ModelState.Values
             }
             return Ok(new { Message = "Record Deleted Successfully!!!" });
         }
-
-
+         
         //========================FRANCHISE EDIT PROFILE=================//
 
         [HttpPost]
@@ -308,9 +307,7 @@ ModelState.Values
 
 
         //=============================ProfileDetail===============================//
-
-
-
+         
         [HttpGet]
         [Route("api/FranchisesApi/Fra_ProfileDetail")]
 
@@ -555,7 +552,7 @@ Inner join VendorPayOut as VP on VP.Vendor_Id=V.Id";
         //==============PaymentHistories by role===================//
 
         [HttpGet, Route("api/FranchisesApi/PaymentHistories_ByRole")]
-        public IHttpActionResult PaymentHistories_ByRole(string Role)
+        public IHttpActionResult PaymentHistories_ByRole(string Role,int?VendorId)
         {
             if (Role == "Chemist")//chemist
             {
@@ -566,25 +563,46 @@ Inner join VendorPayOut as VP on VP.Vendor_Id=V.Id";
             }
             else if (Role == "Nurse")//Nurse
             {
-                string qry = @"select N.Id,N.NurseName as Name,NP.Amount as PaidFees,NP.Id as PaymentId,N.Location,CONVERT(VARCHAR(11), NP.PaymentDate, 103) AS PaymentDate,FORMAT(NP.PaymentDate, 'hh:mm') AS PaymentTime from NursePayout as NP Left join Nurse as N on NP.Nurse_Id=N.Id";
+                string qry = @"select P.Id,p.NurseId as UniqueId,P.NurseName as Name,sm.StateName+','+cm.CityName+','+P.Location as Location,SUM(ns.TotalFee) as PaidFees from Nurse P 
+join NurseService ns on ns.Nurse_Id = P.Id 
+left join StateMaster as sm on sm.Id=p.StateMaster_Id
+left join CityMaster as cm on cm.Id=p.CityMaster_Id
+join Vendor as v on v.Id=p.Vendor_Id
+where ns.ServiceAcceptanceDate between DateAdd(DD,-7,GETDATE() ) and GETDATE() and ns.IsPaid=1 and v.Id="+VendorId+" group by  P.NurseName,P.Id,p.NurseId,sm.StateName,cm.CityName,p.Location";
                 var PaymentHistory = ent.Database.SqlQuery<Payment_History>(qry).ToList();
                 return Ok(new { PaymentHistory });
-            }
-            else if (Role == "Franchise")//Vendor(franchise)
-            {
-                string qry = @"select V.Id,V.VendorName as Name,VP.Amount as PaidFees,VP.Id as PaymentId,V.Location,CONVERT(VARCHAR(11), VP.PaymentDate, 103) AS PaymentDate,FORMAT(VP.PaymentDate, 'hh:mm') AS PaymentTime From VendorPayOut as VP left join Vendor as V on VP.Vendor_Id=V.Id";
-                var PaymentHistory = ent.Database.SqlQuery<Payment_History>(qry).ToList();
-                return Ok(new { PaymentHistory });
-            }
+            } 
             else if (Role == "Lab")//lab
             {
-                string query = @"select L.Id,L.LabName as Name,LP.Amount as PaidFees,LP.Id as PaymentId,L.Location,CONVERT(VARCHAR(11), LP.PaymentDate, 103) AS PaymentDate,FORMAT(LP.PaymentDate, 'hh:mm') AS PaymentTime From LabPayOut as LP left join Lab as L on LP.Lab_Id=L.Id";
+                string query = @"select l.Id, l.LabName as Name,l.lABId as UniqueId,sm.StateName+','+cm.CityName+','+l.Location as Location,SUM(btl.Amount) as PaidFees from BookTestLab btl
+join Lab l ON l.Id = btl.Lab_Id 
+left join StateMaster as sm on sm.Id=l.StateMaster_Id
+left join CityMaster as cm on cm.Id=l.CityMaster_Id
+join Vendor as v on v.Id=l.Vendor_Id
+where btl.TestDate between DateAdd(DD,-7,GETDATE() ) and GETDATE() and  btl.IsPaid=1 and v.Id"+VendorId+" group by l.Id,l.LabName,l.lABId,sm.StateName,cm.CityName,l.Location";
                 var PaymentHistory = ent.Database.SqlQuery<Payment_History>(query).ToList();
                 return Ok(new { PaymentHistory });
             }
             else if (Role == "Doctor")//doctor
             {
-                string query = @"select D.Id,D.DoctorName as Name,DP.Amount as PaidFees,DP.Id as PaymentId,D.Location,CONVERT(VARCHAR(11), DP.PaymentDate, 103) AS PaymentDate,FORMAT(DP.PaymentDate, 'hh:mm') AS PaymentTime From DoctorPayOut as DP left join Doctor as D on DP.Doctor_Id=D.Id";
+                string query = @"select D.Id,D.DoctorId as UniqueId,D.DoctorName as Name,sm.StateName+','+cm.CityName+','+d.Location as Location,SUM(P.TotalFee) as PaidFees from dbo.PatientAppointment P 
+join Doctor D ON d.Id = p.Doctor_Id 
+join Vendor as v on v.Id=D.Vendor_Id
+left join StateMaster as sm on sm.Id=D.StateMaster_Id
+left join CityMaster as cm on cm.Id=d.CityMaster_Id
+where p.IsPaid=1 and  P.AppointmentDate between DateAdd(DD,-7,GETDATE() ) and GETDATE() and v.Id=" + VendorId + " group by d.Id,d.DoctorName,D.DoctorId,sm.StateName,cm.CityName,d.Location";
+                var PaymentHistory = ent.Database.SqlQuery<Payment_History>(query).ToList();
+                return Ok(new { PaymentHistory });
+            }
+            else if (Role == "Ambulance")//Ambulance
+            {
+                string query = @"SELECT distinct v.Id AS VehicleId,v.VehicleNumber,d.DriverId,d.DriverName,ISNULL(v.VehicleName, 'NA') AS Name,sm.StateName+','+cm.CityName+','+d.Location as Location FROM DriverLocation trm
+JOIN Driver d ON d.Id = trm.Driver_Id
+JOIN Vehicle v ON v.Id = d.Vehicle_Id
+join Vendor as ve on v.Id=d.Vendor_Id
+left join StateMaster as sm on sm.Id=d.StateMaster_Id
+left join CityMaster as cm on cm.Id=d.CityMaster_Id
+WHERE trm.IsPay = 'Y' AND trm.EntryDate BETWEEN DATEADD(DD, -7, GETDATE()) AND GETDATE() and ve.Id="+VendorId+" group by v.Id,v.VehicleNumber, d.DriverName,trm.Id,v.VehicleName,d.DriverId,sm.StateName,cm.CityName,d.Location";
                 var PaymentHistory = ent.Database.SqlQuery<Payment_History>(query).ToList();
                 return Ok(new { PaymentHistory });
             }
@@ -620,7 +638,7 @@ ORDER BY CategoryName;";
         {
             string qry = @"select vt.id,vt.VehicleTypeName from  VehicleType as vt with(nolock)
  Left join MainCategory as mcy with(nolock) on mcy.id=vt.Category_Id
- where vt.Category_Id=" + Id + " AND Vt.IsDeleted=0";
+ where vt.Category_Id=" + Id + " AND Vt.IsDeleted=0 and vt.IsApproved=1";
             var VehicleTypeName = ent.Database.SqlQuery<VehicleType_Name>(qry).ToList();
             return Ok(new { VehicleTypeName });
         }
@@ -656,8 +674,7 @@ ORDER BY CategoryName;";
                 rm.Message = "Internal server error";
             }
             return Ok(rm);
-        }
-
+        } 
 
         //===================View Vehicle Type List================//
 
@@ -777,8 +794,10 @@ ORDER BY CategoryName;";
 
                 EmailOperations.SendEmainew(ef);
 
-                string msg1 = "Welcome to PSWELLNESS. Your User Name :  " + domainModel.EmailId + "(" + domainModel.ChemistId + "), Password : " + admin.Password + ".";
-                Message.SendSms(domainModel.MobileNumber, msg1);
+                string msg1 = "Welcome to PSWELLNESS. Your User Name :  " + domainModel.ChemistName + "(" + domainModel.ChemistId + "), Password : " + admin.Password + ".";
+                Message.SendSmsUserIdPass(model.MobileNumber, model.ChemistName, domainModel.ChemistId, model.Password);
+
+
                 rm.Message = "Welcome to PS Wellness. Sign up process completed. Approval pending.";
                 rm.Status = 1;
                 return Ok(rm);
@@ -928,7 +947,7 @@ ORDER BY CategoryName;";
                     EmailOperations.SendEmainew(ef);
 
                     string msg1 = "Welcome to PSWELLNESS. Your User Name :  " + admin.Username + "(" + domainModel.DoctorId + "), Password : " + admin.Password + ".";
-                    Message.SendSms(domainModel.MobileNumber, msg1);
+                    Message.SendSmsUserIdPass(model.MobileNumber, model.DoctorName, UniqeIdDoc, model.Password);
                     tran.Commit();
                     rm.Status = 1;
                     rm.Message = "Welcome to PS Wellness. Sign up process completed. Approval pending.";
@@ -1058,8 +1077,7 @@ ORDER BY CategoryName;";
 </body>
 </html>";
 
-                // string msg1 = "Welcome to PS Wellness. Your signup is complete. To finalize your registration please proceed to log in using the credentials you provided during the signup process. Your User Id: " + admin.UserID + ", Password: " + admin.Password + ".";
-
+                
                 EmailEF ef = new EmailEF()
                 {
                     EmailAddress = model.EmailId,
@@ -1070,7 +1088,7 @@ ORDER BY CategoryName;";
                 EmailOperations.SendEmainew(ef);
 
                 string msg1 = "Welcome to PSWELLNESS. Your User Name :  " + domainModel.EmailId + "(" + domainModel.lABId + "), Password : " + admin.Password + ".";
-                Message.SendSms(domainModel.MobileNumber, msg1);
+                Message.SendSmsUserIdPass(domainModel.MobileNumber, model.LabName, model.lABId, model.Password);
                 rm.Message = "Welcome to PS Wellness. Sign up process completed. Approval pending.";
                 rm.Status = 1;
                 return Ok(rm);
@@ -1188,7 +1206,7 @@ ORDER BY CategoryName;";
 
                     tran.Commit(); 
                     string msg1 = "Welcome to PSWELLNESS. Your User Name :  " + admin.Username + "(" + domainModel.PatientRegNo + "), Password : " + admin.Password + ".";
-                    Message.SendSms(domainModel.MobileNumber, msg1);
+                    Message.SendSmsUserIdPass(model.MobileNumber, model.PatientName, model.PatientRegNo, model.Password);
                     rm.Message = "Welcome to PS Wellness. Sign up process completed. Approval pending.";
                     rm.Status = 1;
                     return Ok(rm);
@@ -1201,8 +1219,7 @@ ORDER BY CategoryName;";
                 }
             }
         }
-
-
+         
         //======================FRANCHISE DRIVER REGISTRATION==========================//
 
         [HttpPost, Route("api/FranchisesApi/Fra_DriverRegistration")]
@@ -1354,6 +1371,7 @@ ModelState.Values
                         domainModel.AdminLogin_Id = admin.Id;
                         domainModel.DriverId = bk.GenerateDriverId();
                         domainModel.IsBankUpdateApproved = false;
+                        domainModel.IsBooked = false;
                         admin.UserID = domainModel.DriverId;
                     };
 
@@ -1389,7 +1407,7 @@ ModelState.Values
                     EmailOperations.SendEmainew(ef);
                     rm.Status = 1;
                     string msg1 = "Welcome to PSWELLNESS. Your User Name :  " + admin.Username + "(" + domainModel.DriverId + "), Password : " + admin.Password + ".";
-                    Message.SendSms(domainModel.MobileNumber, msg1);
+                    Message.SendSmsUserIdPass(model.MobileNumber, model.DriverName, domainModel.DriverId, model.Password);
                     rm.Message = "Welcome to PS Wellness. Sign up process completed. Approval pending.";
                     tran.Commit();
                     return Ok(rm);
@@ -1677,7 +1695,7 @@ ModelState.Values
                     rm.Message = "Welcome to PS Wellness. Sign up process completed. Approval pending.";
                     rm.Status = 1;
                     string msg1 = "Welcome to PSWELLNESS. Your User Name :  " + admin.Username + "(" + domainModel.NurseId + "), Password : " + admin.Password + ".";
-                    Message.SendSms(domainModel.MobileNumber, msg1);
+                    Message.SendSmsUserIdPass(model.MobileNumber, model.NurseName, domainModel.NurseId, model.Password);
                     tran.Commit();
                     return Ok(rm);
 
@@ -1708,7 +1726,7 @@ ModelState.Values
                         domainModel.VehicleNumber = model.VehicleNumber;
                         domainModel.AccountNo = model.AccountNo;
                         domainModel.DriverCharges = model.DriverCharges;
-                        domainModel.AccountHolderName = model.AccountHolderName;
+                        domainModel.HolderName = model.AccountHolderName;
                         domainModel.VehicleCat_Id = model.VehicleCat_Id;
                         domainModel.VehicleType_Id = model.VehicleType_Id;
                         domainModel.IFSCCode = model.IFSCCode;
@@ -2050,9 +2068,7 @@ join Vendor as V on V.Id=N.Vendor_Id where N.IsDeleted=0 and V.Id=" + VendorId +
             string qry = @"select RWA.Id,RWA.RWAId,RWA.AuthorityName,RWA.MobileNumber,RWA.LandlineNumber as PhoneNumber,RWA.EmailId,RWA.Location,RWA.CertificateNo,RWA.IsApproved from RWA inner join Vendor as V on V.Id=RWA.Vendor_Id where RWA.IsDeleted=0 and V.Id="+ VendorId + " order by Id desc";
             var RWARegDetail = ent.Database.SqlQuery<FraRWARegDetail>(qry).ToList();
             return Ok(new { RWARegDetail });
-        }
-
-
+        } 
         //======================FRANCHISE (EDIT RWA REGISTRATION DETAIL)==========================//
 
         [HttpPost, Route("api/FranchisesApi/Fra_EditRWARegDetail")]
@@ -2118,8 +2134,7 @@ join Vendor as V on V.Id=N.Vendor_Id where N.IsDeleted=0 and V.Id=" + VendorId +
             }
 
             return Ok(new { Message = "Record Deleted Successfully!!!" });
-        }
-
+        } 
 
         //==============GET OLD DRIVER LIST==============//
         [HttpGet]
@@ -2192,7 +2207,7 @@ where D.IsDeleted=0 and V.IsDeleted=0 and ve.Id=" + VendorId + "";
         { 
             string query = @"select d.Id,CONCAT('[', d.DriverId, '] ', d.DriverName) AS DriverName from Driver as d
 join Vendor as v on v.Id=d.Vendor_Id
-where d.VehicleType_Id=0 or d.VehicleType_Id is null and d.IsDeleted = 0 and v.Id=" + VendorId + "";
+where (d.VehicleType_Id = 0 OR d.VehicleType_Id IS NULL) and d.IsDeleted = 0 and v.Id=" + VendorId + "";
             var NewDriver = ent.Database.SqlQuery<NewDriverList>(query).ToList();
             return Ok(new { NewDriver });
         }
@@ -2339,12 +2354,12 @@ where A.IsPaid=1 and A.AppointmentDate BETWEEN DATEADD(DAY, -7, GETDATE()) AND G
             {
                 double tds = ent.Database.SqlQuery<double>(@"select Amount from TDSMaster where IsDeleted=0 and Name='" + Role + "'").FirstOrDefault();
 
-                string query = @"select A.Driver_Id,D.DriverId as UniqueId, D.DriverName as Name,sm.StateName+','+ cm.CityName+','+d.Location as Location, SUM(A.TotalPrice)  As PaidFees from dbo.DriverLocation A 
+                string query = @"select A.Driver_Id,D.DriverId as UniqueId, D.DriverName as Name,sm.StateName+','+ cm.CityName+','+d.Location as Location, CAST(SUM(A.TotalPrice) AS float)  As PaidFees from dbo.DriverLocation A 
 join Driver D on D.Id = A.Driver_Id
 join Vendor as v on v.Id=D.Vendor_Id
 left join StateMaster sm on sm.Id=D.StateMaster_Id
 left join CityMaster cm on cm.Id=D.CityMaster_Id
-where A.IsPay='Y' and A.EntryDate BETWEEN DATEADD(DAY, -7, GETDATE()) AND GETDATE() and D.Vendor_Id="+VendorId+" group by  D.DriverName, A.Driver_Id,D.DriverId,D.Location,sm.StateName,cm.CityName";
+where A.IsPay='Y' and A.EntryDate BETWEEN DATEADD(DAY, -7, GETDATE()) AND GETDATE() and D.Vendor_Id=" + VendorId+" group by  D.DriverName, A.Driver_Id,D.DriverId,D.Location,sm.StateName,cm.CityName";
                 var TDSReport = ent.Database.SqlQuery<Payment_History>(query).ToList();
 
                 foreach (var item in TDSReport)
@@ -2413,6 +2428,7 @@ WHERE  ns.IsPaid = 1 AND ns.ServiceDate BETWEEN DATEADD(DAY, -7, GETDATE()) AND 
                     item.Amountwithrazorpaycomm = item.PaidFees + totalrazorcomm;
 
                     item.PayableAmount = item.PaidFees - (item.commamt + item.tdsamt + item.transactionamt);
+                    item.FraPaidableamt = (item.PaidFees * 3) / 100;
                 }
                 return Ok(new { CommissionReport });
             } 
@@ -2441,6 +2457,7 @@ where D.IsDeleted=0 and A.IsPaid = 1 and A.TestDate BETWEEN DATEADD(DAY, -7, GET
                     item.Amountwithrazorpaycomm = item.PaidFees + totalrazorcomm;
 
                     item.PayableAmount = item.PaidFees - (item.commamt + item.tdsamt + item.transactionamt);
+                    item.FraPaidableamt = (item.PaidFees * 3) / 100;
                 }
                 return Ok(new { CommissionReport });
             }
@@ -2471,6 +2488,7 @@ WHERE  A.IsPaid = 1 AND A.AppointmentDate BETWEEN DATEADD(DAY, -7, GETDATE()) AN
                     item.Amountwithrazorpaycomm = item.PaidFees + totalrazorcomm;
 
                     item.PayableAmount = item.PaidFees - (item.commamt + item.tdsamt + item.transactionamt);
+                    item.FraPaidableamt = (item.PaidFees * 3) / 100;
                 }
                 return Ok(new { CommissionReport });
             }
@@ -2501,6 +2519,7 @@ WHERE  A.IsPay = 'Y' AND A.EntryDate BETWEEN DATEADD(DAY, -7, GETDATE()) AND GET
                     item.Amountwithrazorpaycomm = item.PaidFees + totalrazorcomm;
 
                     item.PayableAmount = item.PaidFees - (item.commamt + item.tdsamt + item.transactionamt);
+                    item.FraPaidableamt = (item.PaidFees * 3) / 100;
                 }
                 return Ok(new { CommissionReport });
             }
@@ -2517,15 +2536,15 @@ WHERE  A.IsPay = 'Y' AND A.EntryDate BETWEEN DATEADD(DAY, -7, GETDATE()) AND GET
 
         [HttpGet, Route("api/FranchisesApi/GetChemistReport_By_YMWD")]
 
-        public IHttpActionResult GetChemistReport_By_YMWD(string Timeperiod)
+        public IHttpActionResult GetChemistReport_By_YMWD(string Timeperiod, int? VendorId)
         {
             if (Timeperiod == "Weekly")
             {
                 string qry = @"select Ch.Id,Ch.ChemistId,Ch.ChemistName,V.VendorName as Franchise,Ch.ShopName,Ch.MobileNumber,Ch.EmailId,Ch.Location,Ch.GSTNumber,Ch.LicenceNumber,Ch.IsApproved from Chemist as Ch
-left join Vendor as V on V.Id=Ch.Vendor_Id
+join Vendor as V on V.Id=Ch.Vendor_Id
 where ch.IsDeleted=0 and JoiningDate BETWEEN DATEADD(d,-7,
 CONVERT(nvarchar(10),GETDATE(),101)) 
-AND CONVERT(nvarchar(10),GETDATE(),101)";
+AND CONVERT(nvarchar(10),GETDATE(),101) and V.Id="+ VendorId + "";
                 var ChemistYMWD_Report = ent.Database.SqlQuery<ChemistReport_By_YMWD>(qry).ToList();
                 return Ok(new { ChemistYMWD_Report });
 
@@ -2533,10 +2552,10 @@ AND CONVERT(nvarchar(10),GETDATE(),101)";
             else if (Timeperiod == "Monthly")
             {
                 string qry = @"select Ch.Id,Ch.ChemistId,Ch.ChemistName,V.VendorName as Franchise,Ch.ShopName,Ch.MobileNumber,Ch.EmailId,Ch.Location,Ch.GSTNumber,Ch.LicenceNumber,Ch.IsApproved from Chemist as Ch
-left join Vendor as V on V.Id=Ch.Vendor_Id
+join Vendor as V on V.Id=Ch.Vendor_Id
 where ch.IsDeleted=0 and JoiningDate BETWEEN DATEADD(d,-30,
 CONVERT(nvarchar(10),GETDATE(),101)) 
-AND CONVERT(nvarchar(10),GETDATE(),101)";
+AND CONVERT(nvarchar(10),GETDATE(),101) and V.Id="+ VendorId + "";
                 var ChemistYMWD_Report = ent.Database.SqlQuery<ChemistReport_By_YMWD>(qry).ToList();
                 return Ok(new { ChemistYMWD_Report });
             }
@@ -2544,7 +2563,7 @@ AND CONVERT(nvarchar(10),GETDATE(),101)";
             {
                 string qry = @"select Ch.Id,Ch.ChemistId,Ch.ChemistName,V.VendorName as Franchise,Ch.ShopName,Ch.MobileNumber,Ch.EmailId,Ch.Location,Ch.GSTNumber,Ch.LicenceNumber,Ch.IsApproved from Chemist as Ch
 left join Vendor as V on V.Id=Ch.Vendor_Id
-where ch.IsDeleted=0 and JoiningDate > CAST(GETDATE() AS DATE)";
+where ch.IsDeleted=0 and JoiningDate > CAST(GETDATE() AS DATE) and V.Id="+ VendorId + "";
                 var ChemistYMWD_Report = ent.Database.SqlQuery<ChemistReport_By_YMWD>(qry).ToList();
                 return Ok(new { ChemistYMWD_Report });
             }
@@ -2552,7 +2571,7 @@ where ch.IsDeleted=0 and JoiningDate > CAST(GETDATE() AS DATE)";
             {
                 string query = @"select Ch.Id,Ch.ChemistId,Ch.ChemistName,V.VendorName as Franchise,Ch.ShopName,Ch.MobileNumber,Ch.EmailId,Ch.Location,Ch.GSTNumber,Ch.LicenceNumber,Ch.IsApproved from Chemist as Ch
 left join Vendor as V on V.Id=Ch.Vendor_Id
-where ch.IsDeleted=0 and JoiningDate > DATEADD(year,-1,GETDATE())";
+where ch.IsDeleted=0 and JoiningDate > DATEADD(year,-1,GETDATE()) and V.Id="+ VendorId + "";
                 var ChemistYMWD_Report = ent.Database.SqlQuery<ChemistReport_By_YMWD>(query).ToList();
                 return Ok(new { ChemistYMWD_Report });
             }
@@ -2569,38 +2588,42 @@ where ch.IsDeleted=0 and JoiningDate > DATEADD(year,-1,GETDATE())";
 
         [HttpGet, Route("api/FranchisesApi/GetLabReport_By_YMWD")]
 
-        public IHttpActionResult GetLabReport_By_YMWD(string Timeperiod)
+        public IHttpActionResult GetLabReport_By_YMWD(string Timeperiod, int? VendorId)
         {
             if (Timeperiod == "Weekly")
             {
-                string qry = @"select Id,lABId,LabName,PhoneNumber,MobileNumber,EmailId,Location,LicenceNumber,GSTNumber,AadharNumber,IsApproved from Lab 
-where IsDeleted=0 and JoiningDate BETWEEN DATEADD(d,-7,
+                string qry = @"select l.Id,l.lABId,l.LabName,l.PhoneNumber,l.MobileNumber,l.EmailId,l.Location,l.LicenceNumber,l.GSTNumber,l.AadharNumber,l.IsApproved from Lab as l
+join Vendor as v on v.Id=l.Vendor_Id
+where l.IsDeleted=0 and l.JoiningDate BETWEEN DATEADD(d,-7,
 CONVERT(nvarchar(10),GETDATE(),101)) 
-AND CONVERT(nvarchar(10),GETDATE(),101)";
+AND CONVERT(nvarchar(10),GETDATE(),101) AND v.Id="+VendorId+"";
                 var LabYMWD_Report = ent.Database.SqlQuery<LabReport_By_MYWD>(qry).ToList();
                 return Ok(new { LabYMWD_Report });
 
             }
             else if (Timeperiod == "Monthly")
             {
-                string qry = @"select Id,lABId,LabName,PhoneNumber,MobileNumber,EmailId,Location,LicenceNumber,GSTNumber,AadharNumber,IsApproved from Lab 
-where IsDeleted=0 and JoiningDate BETWEEN DATEADD(d,-30,
+                string qry = @"select l.Id,l.lABId,l.LabName,l.PhoneNumber,l.MobileNumber,l.EmailId,l.Location,l.LicenceNumber,l.GSTNumber,l.AadharNumber,l.IsApproved from Lab as l
+join Vendor as v on v.Id=l.Vendor_Id
+where l.IsDeleted=0 and l.JoiningDate BETWEEN DATEADD(d,-30,
 CONVERT(nvarchar(10),GETDATE(),101)) 
-AND CONVERT(nvarchar(10),GETDATE(),101)";
+AND CONVERT(nvarchar(10),GETDATE(),101) AND v.Id="+VendorId+"";
                 var LabYMWD_Report = ent.Database.SqlQuery<LabReport_By_MYWD>(qry).ToList();
                 return Ok(new { LabYMWD_Report });
             }
             else if (Timeperiod == "Daily")
             {
-                string qry = @"select Id,lABId,LabName,PhoneNumber,MobileNumber,EmailId,Location,LicenceNumber,GSTNumber,AadharNumber,IsApproved from Lab 
-where IsDeleted=0 and JoiningDate > CAST(GETDATE() AS DATE)";
+                string qry = @"select l.Id,l.lABId,l.LabName,l.PhoneNumber,l.MobileNumber,l.EmailId,l.Location,l.LicenceNumber,l.GSTNumber,l.AadharNumber,l.IsApproved from Lab as l
+join Vendor as v on v.Id=l.Vendor_Id
+where l.IsDeleted=0 and l.JoiningDate > CAST(GETDATE() AS DATE) AND v.Id="+VendorId+"";
                 var LabYMWD_Report = ent.Database.SqlQuery<LabReport_By_MYWD>(qry).ToList();
                 return Ok(new { LabYMWD_Report });
             }
             else if (Timeperiod == "Yearly")
             {
-                string query = @"select Id,lABId,LabName,PhoneNumber,MobileNumber,EmailId,Location,LicenceNumber,GSTNumber,AadharNumber,IsApproved from Lab 
-where IsDeleted=0 and JoiningDate > DATEADD(year,-1,GETDATE())";
+                string query = @"select l.Id,l.lABId,l.LabName,l.PhoneNumber,l.MobileNumber,l.EmailId,l.Location,l.LicenceNumber,l.GSTNumber,l.AadharNumber,l.IsApproved from Lab as l
+join Vendor as v on v.Id=l.Vendor_Id
+where l.IsDeleted=0 and l.JoiningDate > DATEADD(year,-1,GETDATE()) AND v.Id="+VendorId+"";
                 var LabYMWD_Report = ent.Database.SqlQuery<LabReport_By_MYWD>(query).ToList();
                 return Ok(new { LabYMWD_Report });
             }
@@ -2617,42 +2640,50 @@ where IsDeleted=0 and JoiningDate > DATEADD(year,-1,GETDATE())";
 
         [HttpGet, Route("api/FranchisesApi/GetNurseReport_By_YMWD")]
 
-        public IHttpActionResult GetNurseReport_By_YMWD(string Timeperiod)
+        public IHttpActionResult GetNurseReport_By_YMWD(string Timeperiod, int? VendorId)
         {
             if (Timeperiod == "Weekly")
             {
-                string qry = @"select N.Id,N.NurseId,N.NurseName,NT.NurseTypeName,V.VendorName as Franchise,N.MobileNumber,N.EmailId,N.Location,N.CertificateNumber,N.IsApproved from Nurse as N
-left join NurseType as NT on NT.Id=N.NurseType_Id
-left join Vendor as V on V.Id=N.Vendor_Id Where N.IsDeleted=0 and N.JoiningDate BETWEEN DATEADD(d,-7,
-CONVERT(nvarchar(10),GETDATE(),101)) 
-AND CONVERT(nvarchar(10),GETDATE(),101)";
+                string qry = @"select SUM(P.TotalFee ) as TotalAmount,n.NurseId,n.NurseName,nt.NurseTypeName from NurseService P
+join Nurse n on n.Id = p.Nurse_Id 
+join Vendor ve on ve.Id = n.Vendor_Id
+join NurseType as NT on NT.Id=N.NurseType_Id
+where Convert(Date,p.ServiceAcceptanceDate)  between DATEADD(day,-7,GETDATE()) and GetDate()
+and P.IsPaid=1 and ve.Id=" + VendorId + " GROUP BY n.NurseId,n.NurseName,nt.NurseTypeName";
                 var NurseYMWD_Report = ent.Database.SqlQuery<NurseReport_By_MYWD>(qry).ToList();
                 return Ok(new { NurseYMWD_Report });
 
             }
             else if (Timeperiod == "Monthly")
             {
-                string qry = @"select N.Id,N.NurseId,N.NurseName,NT.NurseTypeName,V.VendorName as Franchise,N.MobileNumber,N.EmailId,N.Location,N.CertificateNumber,N.IsApproved from Nurse as N
-left join NurseType as NT on NT.Id=N.NurseType_Id
-left join Vendor as V on V.Id=N.Vendor_Id Where N.IsDeleted=0 and N.JoiningDate BETWEEN DATEADD(d,-30,
-CONVERT(nvarchar(10),GETDATE(),101)) 
-AND CONVERT(nvarchar(10),GETDATE(),101)";
+                string qry = @"select SUM(P.TotalFee ) as TotalAmount,n.NurseId,n.NurseName,nt.NurseTypeName from NurseService P
+join Nurse n on n.Id = p.Nurse_Id 
+join Vendor ve on ve.Id = n.Vendor_Id
+join NurseType as NT on NT.Id=N.NurseType_Id
+where Month(p.ServiceAcceptanceDate) = Month(GetDate())
+and P.IsPaid=1 and ve.Id=" + VendorId + " GROUP BY n.NurseId,n.NurseName,nt.NurseTypeName";
                 var NurseYMWD_Report = ent.Database.SqlQuery<NurseReport_By_MYWD>(qry).ToList();
                 return Ok(new { NurseYMWD_Report });
             }
             else if (Timeperiod == "Daily")
             {
-                string qry = @"select N.Id,N.NurseId,N.NurseName,NT.NurseTypeName,V.VendorName as Franchise,N.MobileNumber,N.EmailId,N.Location,N.CertificateNumber,N.IsApproved from Nurse as N
-left join NurseType as NT on NT.Id=N.NurseType_Id
-left join Vendor as V on V.Id=N.Vendor_Id Where N.IsDeleted=0 and N.JoiningDate > CAST(GETDATE() AS DATE)";
+                string qry = @"select SUM(P.TotalFee ) as TotalAmount,n.NurseId,n.NurseName,nt.NurseTypeName from NurseService P
+join Nurse n on n.Id = p.Nurse_Id 
+join Vendor ve on ve.Id = n.Vendor_Id
+join NurseType as NT on NT.Id=N.NurseType_Id
+where CONVERT(DATE, P.ServiceAcceptanceDate) >= CAST(GETDATE() AS DATE)
+and P.IsPaid=1 and ve.Id=" + VendorId+" GROUP BY n.NurseId,n.NurseName,nt.NurseTypeName";
                 var NurseYMWD_Report = ent.Database.SqlQuery<NurseReport_By_MYWD>(qry).ToList();
                 return Ok(new { NurseYMWD_Report });
             }
             else if (Timeperiod == "Yearly")
             {
-                string query = @"select N.Id,N.NurseId,N.NurseName,NT.NurseTypeName,V.VendorName as Franchise,N.MobileNumber,N.EmailId,N.Location,N.CertificateNumber,N.IsApproved from Nurse as N
-left join NurseType as NT on NT.Id=N.NurseType_Id
-left join Vendor as V on V.Id=N.Vendor_Id Where N.IsDeleted=0 and N.JoiningDate > DATEADD(year,-1,GETDATE())";
+                string query = @"select SUM(P.TotalFee ) as TotalAmount,n.NurseId,n.NurseName,nt.NurseTypeName from NurseService P
+join Nurse n on n.Id = p.Nurse_Id 
+join Vendor ve on ve.Id = n.Vendor_Id
+join NurseType as NT on NT.Id=N.NurseType_Id
+where Year(p.ServiceAcceptanceDate) = Year(GetDate())
+and P.IsPaid=1 and ve.Id=" + VendorId + " GROUP BY n.NurseId,n.NurseName,nt.NurseTypeName";
                 var NurseYMWD_Report = ent.Database.SqlQuery<NurseReport_By_MYWD>(query).ToList();
                 return Ok(new { NurseYMWD_Report });
             }
@@ -2668,46 +2699,50 @@ left join Vendor as V on V.Id=N.Vendor_Id Where N.IsDeleted=0 and N.JoiningDate 
 
         [HttpGet, Route("api/FranchisesApi/GetDoctorReport_By_YMWD")]
 
-        public IHttpActionResult GetDoctorReport_By_YMWD(string Timeperiod)
+        public IHttpActionResult GetDoctorReport_By_YMWD(string Timeperiod, int? VendorId)
         {
             if (Timeperiod == "Weekly")
             {
-                string qry = @"select D.Id,D.DoctorId,D.DoctorName,D.Fee,D.Location,DD.DepartmentName,S.SpecialistName,D.PhoneNumber,D.EmailId,D.LicenceNumber from Doctor as D
+                string qry = @"select Sum(P.TotalFee) as Fee,D.DoctorId,D.DoctorName,D.Location,DD.DepartmentName,S.SpecialistName from PatientAppointment P 
+join Doctor D on D.Id = p.Doctor_Id 
+join Vendor ve on ve.Id = d.Vendor_Id
 left join Department as DD on DD.Id=D.Department_Id  
 left join Specialist as S on S.Id=D.Specialist_Id
-Where D.IsDeleted=0 and DD.IsDeleted=0 and S.IsDeleted=0 and D.JoiningDate BETWEEN DATEADD(d,-7,
-CONVERT(nvarchar(10),GETDATE(),101)) 
-AND CONVERT(nvarchar(10),GETDATE(),101)";
+where p.AppointmentDate  between DATEADD(day,-7,GETDATE()) and GetDate() and P.IsPaid=1 and ve.Id=" + VendorId + " GROUP BY D.DoctorId,D.DoctorName,D.Location,DD.DepartmentName,S.SpecialistName";
                 var DoctorYMWD_Report = ent.Database.SqlQuery<DoctorReport_By_MYWD>(qry).ToList();
                 return Ok(new { DoctorYMWD_Report });
 
             }
             else if (Timeperiod == "Monthly")
             {
-                string qry = @"select D.Id,D.DoctorId,D.DoctorName,D.Fee,D.Location,DD.DepartmentName,S.SpecialistName,D.PhoneNumber,D.EmailId,D.LicenceNumber from Doctor as D
+                string qry = @"select Sum(P.TotalFee) as Fee,D.DoctorId,D.DoctorName,D.Location,DD.DepartmentName,S.SpecialistName from PatientAppointment P 
+join Doctor D on D.Id = p.Doctor_Id 
+join Vendor ve on ve.Id = d.Vendor_Id
 left join Department as DD on DD.Id=D.Department_Id  
 left join Specialist as S on S.Id=D.Specialist_Id
-Where D.IsDeleted=0 and DD.IsDeleted=0 and S.IsDeleted=0 and D.JoiningDate BETWEEN DATEADD(d,-30,
-CONVERT(nvarchar(10),GETDATE(),101)) 
-AND CONVERT(nvarchar(10),GETDATE(),101)";
+where Month(p.AppointmentDate) = Month(GetDate()) and P.IsPaid=1 and ve.Id=" + VendorId + " GROUP BY D.DoctorId,D.DoctorName,D.Location,DD.DepartmentName,S.SpecialistName";
                 var DoctorYMWD_Report = ent.Database.SqlQuery<DoctorReport_By_MYWD>(qry).ToList();
                 return Ok(new { DoctorYMWD_Report });
             }
             else if (Timeperiod == "Daily")
             {
-                string qry = @"select D.Id,D.DoctorId,D.DoctorName,D.Fee,D.Location,DD.DepartmentName,S.SpecialistName,D.PhoneNumber,D.EmailId,D.LicenceNumber from Doctor as D
+                string qry = @"select Sum(P.TotalFee) as Fee,D.DoctorId,D.DoctorName,D.Location,DD.DepartmentName,S.SpecialistName from PatientAppointment P 
+join Doctor D on D.Id = p.Doctor_Id 
+join Vendor ve on ve.Id = d.Vendor_Id
 left join Department as DD on DD.Id=D.Department_Id  
 left join Specialist as S on S.Id=D.Specialist_Id
-Where D.IsDeleted=0 and DD.IsDeleted=0 and S.IsDeleted=0 and D.JoiningDate > CAST(GETDATE() AS DATE)";
+where Year(p.AppointmentDate) = Year(GetDate()) and P.IsPaid=1 and ve.Id=" + VendorId+" GROUP BY D.DoctorId,D.DoctorName,D.Location,DD.DepartmentName,S.SpecialistName";
                 var DoctorYMWD_Report = ent.Database.SqlQuery<DoctorReport_By_MYWD>(qry).ToList();
                 return Ok(new { DoctorYMWD_Report });
             }
             else if (Timeperiod == "Yearly")
             {
-                string query = @"select D.Id,D.DoctorId,D.DoctorName,D.Fee,D.Location,DD.DepartmentName,S.SpecialistName,D.PhoneNumber,D.EmailId,D.LicenceNumber from Doctor as D
+                string query = @"select Sum(P.TotalFee) as Fee,D.DoctorId,D.DoctorName,D.Location,DD.DepartmentName,S.SpecialistName from PatientAppointment P 
+join Doctor D on D.Id = p.Doctor_Id 
+join Vendor ve on ve.Id = d.Vendor_Id
 left join Department as DD on DD.Id=D.Department_Id  
 left join Specialist as S on S.Id=D.Specialist_Id
-Where D.IsDeleted=0 and DD.IsDeleted=0 and S.IsDeleted=0 and D.JoiningDate > DATEADD(year,-1,GETDATE())";
+where Convert(Date, P.AppointmentDate) = Convert(Date,GETDATE()) and P.IsPaid=1 and ve.Id=" + VendorId + " GROUP BY D.DoctorId,D.DoctorName,D.Location,DD.DepartmentName,S.SpecialistName";
                 var DoctorYMWD_Report = ent.Database.SqlQuery<DoctorReport_By_MYWD>(query).ToList();
                 return Ok(new { DoctorYMWD_Report });
             }
@@ -2723,46 +2758,58 @@ Where D.IsDeleted=0 and DD.IsDeleted=0 and S.IsDeleted=0 and D.JoiningDate > DAT
 
         [HttpGet, Route("api/FranchisesApi/GetVehicleReport_By_YMWD")]
 
-        public IHttpActionResult GetVehicleReport_By_YMWD(string Timeperiod)
+        public IHttpActionResult GetVehicleReport_By_YMWD(string Timeperiod,int?VendorId)
         {
             if (Timeperiod == "Weekly")
             {
-                string qry = @"select Veh.Id,Veh.VehicleNumber,Veh.VehicleOwnerName,V.VendorName as Franchise,MCY.Type,MCY.CategoryName,Veh.DriverCharges from Vehicle as Veh
-left join Vendor as V on V.Id=Veh.Vendor_Id
-left join MainCategory as MCY on MCY.Id=Veh.VehicleCat_Id
-where Veh.IsDeleted=0 and Veh.RegistrationDate BETWEEN DATEADD(d,-7,
-CONVERT(nvarchar(10),GETDATE(),101)) 
-AND CONVERT(nvarchar(10),GETDATE(),101)";
+                string qry = @"select distinct v.Id,MCY.CategoryName,SUM(trm.Amount) as TotalAmount,v.VehicleNumber,v.VehicleOwnerName,vt.VehicleTypeName as Type, IsNull(v.VehicleName,'NA') as VehicleName,SUM(trm.Amount) as Amount
+from DriverLocation trm 
+JOIN Driver d ON d.Id = trm.Driver_Id
+JOIN Vehicle v ON v.Id = d.Vehicle_Id
+join Vendor ve on ve.Id = v.Vendor_Id
+join VehicleType as vt on vt.Id=v.VehicleType_Id
+left join MainCategory as MCY on MCY.Id=v.VehicleCat_Id
+where trm.EntryDate between DateAdd(DD,-7,GETDATE()) and GETDATE() and trm.IsPay='Y' and ve.Id=" + VendorId + " group by v.VehicleNumber, v.VehicleName,v.Id,v.VehicleOwnerName,vt.VehicleTypeName,MCY.CategoryName";
                 var VehicleYMWD_Report = ent.Database.SqlQuery<VehicleReport_By_MYWD>(qry).ToList();
                 return Ok(new { VehicleYMWD_Report });
 
             }
             else if (Timeperiod == "Monthly")
             {
-                string qry = @"select Veh.Id,Veh.VehicleNumber,Veh.VehicleOwnerName,V.VendorName as Franchise,MCY.Type,MCY.CategoryName,Veh.DriverCharges from Vehicle as Veh
-left join Vendor as V on V.Id=Veh.Vendor_Id
-left join MainCategory as MCY on MCY.Id=Veh.VehicleCat_Id
-where Veh.IsDeleted=0 and Veh.RegistrationDate BETWEEN DATEADD(d,-30,
-CONVERT(nvarchar(10),GETDATE(),101)) 
-AND CONVERT(nvarchar(10),GETDATE(),101)";
+                string qry = @"select distinct v.Id,v.VehicleNumber,MCY.CategoryName,SUM(trm.Amount) as TotalAmount,v.VehicleOwnerName,vt.VehicleTypeName as Type, IsNull(v.VehicleName,'NA') as VehicleName,SUM(trm.Amount) as Amount
+from DriverLocation trm 
+JOIN Driver d ON d.Id = trm.Driver_Id
+JOIN Vehicle v ON v.Id = d.Vehicle_Id
+join Vendor ve on ve.Id = v.Vendor_Id
+join VehicleType as vt on vt.Id=v.VehicleType_Id
+left join MainCategory as MCY on MCY.Id=v.VehicleCat_Id
+where Month(trm.EntryDate) = Month(GetDate()) and trm.IsPay='Y' and ve.Id=" + VendorId + " group by v.VehicleNumber, v.VehicleName,v.Id,v.VehicleOwnerName,vt.VehicleTypeName,MCY.CategoryName";
                 var VehicleYMWD_Report = ent.Database.SqlQuery<VehicleReport_By_MYWD>(qry).ToList();
                 return Ok(new { VehicleYMWD_Report });
             }
             else if (Timeperiod == "Daily")
             {
-                string qry = @"select Veh.Id,Veh.VehicleNumber,Veh.VehicleOwnerName,V.VendorName as Franchise,MCY.Type,MCY.CategoryName,Veh.DriverCharges from Vehicle as Veh
-left join Vendor as V on V.Id=Veh.Vendor_Id
-left join MainCategory as MCY on MCY.Id=Veh.VehicleCat_Id
-where Veh.IsDeleted=0 and Veh.RegistrationDate > CAST(GETDATE() AS DATE)";
+                string qry = @"select distinct v.Id,v.VehicleNumber,MCY.CategoryName,SUM(trm.Amount) as TotalAmount,v.VehicleOwnerName,vt.VehicleTypeName as Type, IsNull(v.VehicleName,'NA') as VehicleName,SUM(trm.Amount) as Amount
+from DriverLocation trm 
+JOIN Driver d ON d.Id = trm.Driver_Id
+JOIN Vehicle v ON v.Id = d.Vehicle_Id
+join Vendor ve on ve.Id = v.Vendor_Id
+join VehicleType as vt on vt.Id=v.VehicleType_Id
+left join MainCategory as MCY on MCY.Id=v.VehicleCat_Id
+where trm.EntryDate > CAST(GETDATE() AS DATE) and trm.IsPay='Y' and ve.Id=" + VendorId+ " group by v.VehicleNumber, v.VehicleName,v.Id,v.VehicleOwnerName,vt.VehicleTypeName,MCY.CategoryName";
                 var VehicleYMWD_Report = ent.Database.SqlQuery<VehicleReport_By_MYWD>(qry).ToList();
                 return Ok(new { VehicleYMWD_Report });
             }
             else if (Timeperiod == "Yearly")
             {
-                string query = @"select Veh.Id,Veh.VehicleNumber,Veh.VehicleOwnerName,V.VendorName as Franchise,MCY.Type,MCY.CategoryName,Veh.DriverCharges from Vehicle as Veh
-left join Vendor as V on V.Id=Veh.Vendor_Id
-left join MainCategory as MCY on MCY.Id=Veh.VehicleCat_Id
-where Veh.IsDeleted=0 and Veh.RegistrationDate > DATEADD(year,-1,GETDATE())";
+                string query = @"select distinct v.Id,v.VehicleNumber,SUM(trm.Amount) as TotalAmount,v.VehicleOwnerName,vt.VehicleTypeName as Type, IsNull(v.VehicleName,'NA') as VehicleName,MCY.CategoryName,SUM(trm.Amount) as Amount
+from DriverLocation trm 
+JOIN Driver d ON d.Id = trm.Driver_Id
+JOIN Vehicle v ON v.Id = d.Vehicle_Id
+join Vendor ve on ve.Id = v.Vendor_Id
+join VehicleType as vt on vt.Id=v.VehicleType_Id
+left join MainCategory as MCY on MCY.Id=v.VehicleCat_Id
+where Year(trm.EntryDate) = Year(GetDate()) and trm.IsPay='Y' and ve.Id=" + VendorId + " group by v.VehicleNumber, v.VehicleName,v.Id,v.VehicleOwnerName,vt.VehicleTypeName,MCY.CategoryName";
                 var VehicleYMWD_Report = ent.Database.SqlQuery<VehicleReport_By_MYWD>(query).ToList();
                 return Ok(new { VehicleYMWD_Report });
             }
@@ -2841,7 +2888,7 @@ join Nurse D on D.Id = A.Nurse_Id
 join Vendor as v on v.Id=D.Vendor_Id
 left join StateMaster sm on sm.Id=D.StateMaster_Id
 left join CityMaster cm on cm.Id=D.CityMaster_Id
-where A.IsPaid=1 and A.ServiceDate BETWEEN '" + FromDate + "' AND '" + ToDate + "' and D.Vendor_Id=" + VendorId + " group by  D.NurseName, A.Nurse_Id,NurseId,D.Location,sm.StateName,cm.CityName";
+where A.IsPaid=1 and A.ServiceDate BETWEEN '"+FromDate+"' AND '"+ToDate+"' and D.Vendor_Id=" + VendorId + " group by  D.NurseName, A.Nurse_Id,NurseId,D.Location,sm.StateName,cm.CityName";
                         var TDSReport = ent.Database.SqlQuery<TDS_Report>(query).ToList();
                         foreach (var item in TDSReport)
                         {
@@ -2860,7 +2907,7 @@ join Lab D on D.Id = A.Lab_Id
 join Vendor as v on v.Id=D.Vendor_Id
 left join StateMaster sm on sm.Id=D.StateMaster_Id
 left join CityMaster cm on cm.Id=D.CityMaster_Id
-where A.IsPaid=1 and A.TestDate BETWEEN '" + FromDate + "' AND '" + ToDate + "' and D.Vendor_Id=" + VendorId + " group by  D.LabName, A.Lab_Id,D.lABId,D.Location,sm.StateName,cm.CityName";
+where A.IsPaid=1 and A.TestDate BETWEEN '"+FromDate+"' AND '"+ToDate+"' and D.Vendor_Id=" + VendorId + " group by  D.LabName, A.Lab_Id,D.lABId,D.Location,sm.StateName,cm.CityName";
                         var TDSReport = ent.Database.SqlQuery<TDS_Report>(query).ToList();
                         foreach (var item in TDSReport)
                         {
@@ -2879,7 +2926,7 @@ join Doctor D on D.Id = A.Doctor_Id
 join Vendor as v on v.Id=D.Vendor_Id
 left join StateMaster sm on sm.Id=D.StateMaster_Id
 left join CityMaster cm on cm.Id=D.CityMaster_Id
-where A.IsPaid=1 and A.AppointmentDate BETWEEN '" + FromDate + "' AND '" + ToDate + "' and D.Vendor_Id=" + VendorId + " group by  D.DoctorName, A.Doctor_Id,D.DoctorId,D.Location,sm.StateName,cm.CityName";
+where A.IsPaid=1 and A.AppointmentDate BETWEEN '"+FromDate+"' AND '" + ToDate + "' and D.Vendor_Id="+VendorId+" group by  D.DoctorName, A.Doctor_Id,D.DoctorId,D.Location,sm.StateName,cm.CityName";
                         var TDSReport = ent.Database.SqlQuery<TDS_Report>(query).ToList();
                         foreach (var item in TDSReport)
                         {
@@ -2893,12 +2940,12 @@ where A.IsPaid=1 and A.AppointmentDate BETWEEN '" + FromDate + "' AND '" + ToDat
                     {
                         double tds = ent.Database.SqlQuery<double>(@"select Amount from TDSMaster where IsDeleted=0 and Name='" + Role + "'").FirstOrDefault();
 
-                        string query = @"select A.Driver_Id,D.DriverId as UniqueId, D.DriverName as Name,sm.StateName+','+ cm.CityName+','+d.Location as Location, SUM(A.TotalPrice)  As PaidFees from dbo.DriverLocation A 
+                        string query = @"select A.Driver_Id,D.DriverId as UniqueId, D.DriverName as Name,sm.StateName+','+ cm.CityName+','+d.Location as Location, CAST(SUM(A.TotalPrice) AS float)  As PaidFees from dbo.DriverLocation A 
 join Driver D on D.Id = A.Driver_Id
 join Vendor as v on v.Id=D.Vendor_Id
 left join StateMaster sm on sm.Id=D.StateMaster_Id
 left join CityMaster cm on cm.Id=D.CityMaster_Id
-where A.IsPay='Y' and A.EntryDate BETWEEN '" + FromDate + "' AND '" + ToDate + "' and D.Vendor_Id="+VendorId+ " group by  D.DriverName, A.Driver_Id,D.DriverId,D.Location,sm.StateName,cm.CityName";
+where A.IsPay='Y' and A.EntryDate BETWEEN '"+FromDate+"' AND '"+ToDate+"' and D.Vendor_Id=" + VendorId + " group by  D.DriverName, A.Driver_Id,D.DriverId,D.Location,sm.StateName,cm.CityName";
                         var TDSReport = ent.Database.SqlQuery<TDS_Report>(query).ToList();
                         foreach (var item in TDSReport)
                         {
@@ -2966,6 +3013,7 @@ where n.IsDeleted=0 and ns.ServiceDate BETWEEN '" + FromDate + "' AND '" + ToDat
                             item.Amountwithrazorpaycomm = item.PaidFees + totalrazorcomm;
 
                             item.PayableAmount = item.PaidFees - (item.commamt + item.tdsamt + item.transactionamt);
+                            item.FraPaidableamt = (item.PaidFees * 3) / 100;
                         }
                         return Ok(new { CommissionReport });
                     } 
@@ -2993,6 +3041,7 @@ where D.IsDeleted=0 and A.TestDate BETWEEN '" + FromDate + "' AND '" + ToDate + 
                             item.Amountwithrazorpaycomm = item.PaidFees + totalrazorcomm;
 
                             item.PayableAmount = item.PaidFees - (item.commamt + item.tdsamt + item.transactionamt);
+                            item.FraPaidableamt = (item.PaidFees * 3) / 100;
                         }
                         return Ok(new { CommissionReport });
                     }
@@ -3022,6 +3071,7 @@ where A.AppointmentDate BETWEEN '" + FromDate + "' AND '" + ToDate + "' AND d.Ve
                             item.Amountwithrazorpaycomm = item.PaidFees + totalrazorcomm;
 
                             item.PayableAmount = item.PaidFees - (item.commamt + item.tdsamt + item.transactionamt);
+                            item.FraPaidableamt = (item.PaidFees * 3) / 100;
                         }
                         return Ok(new { CommissionReport });
                     }
@@ -3050,6 +3100,7 @@ where A.EntryDate BETWEEN '" + FromDate + "' AND '" + ToDate + "' AND d.Vendor_I
                             item.Amountwithrazorpaycomm = item.PaidFees + totalrazorcomm;
 
                             item.PayableAmount = item.PaidFees - (item.commamt + item.tdsamt + item.transactionamt);
+                            item.FraPaidableamt = (item.PaidFees * 3) / 100;
                         }
                         return Ok(new { CommissionReport });
                     }
@@ -3095,8 +3146,7 @@ where A.EntryDate BETWEEN '" + FromDate + "' AND '" + ToDate + "' AND d.Vendor_I
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
-            }
-            return Ok();
+            } 
 
         }
 
@@ -3194,16 +3244,15 @@ where A.EntryDate BETWEEN '" + FromDate + "' AND '" + ToDate + "' AND d.Vendor_I
                     double commision = ent.Database.SqlQuery<double>(@"select Commission from CommissionMaster where IsDeleted=0 and Name='Doctor'").FirstOrDefault(); 
 
                    // string query = @"select sum(Amount- ((Amount*10)/100)) as TotalCommissionAmount from DoctorPayOut Where PaymentDate Between '" + FromDate + "' and '" + ToDate + "'";
-                    string query = $"select sum((pa.TotalFee*{commision})/100) as TotalCommissionAmount from PatientAppointment pa join Doctor as d on d.Id=pa.Doctor_Id join Vendor as v on v.Id=d.Vendor_Id Where AppointmentDate Between '" + FromDate + "' and '" + ToDate + "' And d.Vendor_Id="+VendorId+ " and A.IsPaid=1";
+                    string query = $"select sum((pa.TotalFee*{commision})/100) as TotalCommissionAmount from PatientAppointment pa join Doctor as d on d.Id=pa.Doctor_Id join Vendor as v on v.Id=d.Vendor_Id Where AppointmentDate Between '" + FromDate + "' and '" + ToDate + "' And d.Vendor_Id="+VendorId+ " and pa.IsPaid=1";
                     var TotalTDSAmount = ent.Database.SqlQuery<Total_CommissionAmount>(query).FirstOrDefault();
                     return Ok(TotalTDSAmount);
                 }
                 else if (Role == "Ambulance")//Ambulance
                 {                    
                     double commision = ent.Database.SqlQuery<double>(@"select Commission from CommissionMaster where IsDeleted=0 and Name='Doctor'").FirstOrDefault(); 
-
-                   
-                    string query = $"select sum((pa.TotalPrice*{commision})/100) as TotalCommissionAmount from DriverLocation pa join Driver as d on d.Id=pa.Driver_Id join Vendor as v on v.Id=d.Vendor_Id Where EntryDate Between '" + FromDate + "' and '" + ToDate + "' And d.Vendor_Id="+VendorId+ " and A.IsPay='Y'";
+                     
+                    string query = $"select cast(sum((pa.TotalPrice*{commision})/100)as float) as TotalCommissionAmount from DriverLocation pa join Driver as d on d.Id=pa.Driver_Id join Vendor as v on v.Id=d.Vendor_Id Where EntryDate Between '" + FromDate + "' and '" + ToDate + "' And d.Vendor_Id="+VendorId+ " and pa.IsPay='Y'";
                     var TotalTDSAmount = ent.Database.SqlQuery<Total_CommissionAmount>(query).FirstOrDefault();
                     return Ok(TotalTDSAmount);
                 }
@@ -3232,7 +3281,8 @@ where A.EntryDate BETWEEN '" + FromDate + "' AND '" + ToDate + "' AND d.Vendor_I
                     {
                         Category_Id = existingCategory.Id,
                         VehicleTypeName = model.VehicleTypeName,
-                        IsDeleted = false
+                        IsDeleted = false,
+                        IsApproved = false
                     };
 
                     ent.VehicleTypes.Add(data1);
@@ -3333,7 +3383,7 @@ where A.EntryDate BETWEEN '" + FromDate + "' AND '" + ToDate + "' AND d.Vendor_I
 		public IHttpActionResult GetDriverVehicleId(int VehicleNumberId)
 		{
 			string qry = @"Select d.Id,v.VehicleNumber,d.DriverName from Driver as d
-join Vehicle as v on v.Id=d.Vehicle_Id where d.Vehicle_Id="+ VehicleNumberId + "";
+join Vehicle as v on v.Id=d.Vehicle_Id where d.Vehicle_Id="+ VehicleNumberId + " and v.IsApproved=1";
 			var VehicleNumberdetail = ent.Database.SqlQuery<VehicleNumbers>(qry).ToList();
 			return Ok(new { VehicleNumberdetail });
 		}
@@ -3342,7 +3392,7 @@ join Vehicle as v on v.Id=d.Vehicle_Id where d.Vehicle_Id="+ VehicleNumberId + "
 		{
 			string qry = @"Select D.Id,CONCAT('[', d.DriverId, '] ', d.DriverName) AS DriverName from Driver as D
 join Vendor as v on v.Id=d.Vendor_Id
-where D.IsDeleted=0 and V.IsDeleted=0 and v.Id=" + VendorId + "";
+where D.IsDeleted=0 and V.IsDeleted=0 and d.IsApproved=1 and v.Id=" + VendorId + "";
 			var Drivers = ent.Database.SqlQuery<DriversName>(qry).ToList();
 			return Ok(new { Drivers });
 		}

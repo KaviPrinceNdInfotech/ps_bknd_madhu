@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="e51b3189a163499fbe410e26adb1305b" Name="Diagram1" ZoomLevel="63">
+      <Diagram DiagramId="e51b3189a163499fbe410e26adb1305b" Name="Diagram1" ZoomLevel="29">
         <EntityTypeShape EntityType="Model.RWAPayment" Width="1.5" PointX="5" PointY="0.875" IsExpanded="true" />
         <EntityTypeShape EntityType="Model.UserWallet" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="Model.VehicleTemp" Width="1.5" PointX="12.75" PointY="13.25" IsExpanded="true" />
@@ -206,10 +206,6 @@
         <EntityTypeShape EntityType="Model.Medicine_Pay" Width="1.5" PointX="28.375" PointY="22.75" />
         <EntityTypeShape EntityType="Model.Medicinedeliver" Width="1.5" PointX="28.375" PointY="25.75" />
         <EntityTypeShape EntityType="Model.Nurse_Rep" Width="1.5" PointX="25.375" PointY="29.75" />
-        <EntityTypeShape EntityType="Model.NearDriver" Width="1.5" PointX="27.375" PointY="29.75" />
-        <EntityTypeShape EntityType="Model.DriverLocation" Width="1.5" PointX="22.875" PointY="30.875" />
-        <AssociationConnector Association="Model.FK__DriverLoc__Drive__6ADAD1BF" />
-        <AssociationConnector Association="Model.FK__DriverLoc__Patie__7C055DC1" />
         <EntityTypeShape EntityType="Model.TestInLab" Width="1.5" PointX="30.375" PointY="10.75" />
         <EntityTypeShape EntityType="Model.DoctorBookingMode" Width="1.5" PointX="29.375" PointY="29.75" />
         <EntityTypeShape EntityType="Model.PFMaster" Width="1.5" PointX="30.375" PointY="13.75" />
@@ -232,9 +228,11 @@
         <AssociationConnector Association="Model.FK__Cancelled__Docto__1F198FD4" />
         <EntityTypeShape EntityType="Model.TransactionFeeMaster" Width="1.5" PointX="11.375" PointY="3.75" />
         <EntityTypeShape EntityType="Model.VehicleAllotHistory" Width="1.5" PointX="34.375" PointY="12.75" />
-        <EntityTypeShape EntityType="Model.AmbulancePayout" Width="1.5" PointX="34.375" PointY="15.75" />
         <EntityTypeShape EntityType="Model.Role" Width="1.5" PointX="34.375" PointY="18.75" />
         <EntityTypeShape EntityType="Model.DriverBooking" Width="1.5" PointX="34.375" PointY="21.75" />
+        <EntityTypeShape EntityType="Model.DriverLocation" Width="1.5" PointX="21.375" PointY="32.75" />
+        <EntityTypeShape EntityType="Model.NearDriver" Width="1.5" PointX="34.375" PointY="24.75" />
+        <EntityTypeShape EntityType="Model.AmbulancePayout" Width="1.5" PointX="29.375" PointY="34.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

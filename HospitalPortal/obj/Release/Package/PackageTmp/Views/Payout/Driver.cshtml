@@ -5,7 +5,7 @@
     int count = 1;
 }
 
-<h2>Ambulance</h2>
+<h2>Driver</h2>
 
 @*<div class=" row">
         <div class="col-md-3">
@@ -47,7 +47,7 @@
 </div>
 <div class="row">
     <div class="col-md-12">
-        <table id="myTable" class="table table-responsive">
+        <table id="myTable" class="table table-bordered">
             <thead style="background-color:lavender;">
                 <tr>
                     <th>
@@ -66,19 +66,21 @@
                     <th>
                         Vehicle Name
                     </th>
+                    <th>Booking Hours</th>
                     <th>Day</th>
+                    <th>Basic Amount</th>
                     <th>
-                        Basic Amount
+                        Total Amount
                     </th>
                     <th>
                         Transaction Fee @ViewBag.Transactionfee %
                     </th>
                     @*<th>
-            GST in %
-        </th>*@
+                            GST in %
+                        </th>*@
                     @*<th>
-            Total Amount
-        </th>*@
+                            Total Amount
+                        </th>*@
                     <th>
                         Commission Amount @ViewBag.Amount %
                     </th>
@@ -129,23 +131,24 @@
                             </td>
                             <td>
                                 @item.VehicleName
-                            </td> 
-                            <td>@item.RunDay</td>
-                            <td>
-                                @item.TotalPrice
                             </td>
+                            <td>@String.Format("{0:F0}", Convert.ToInt32(item.TotalHours) == 0 ? 1 : item.TotalHours) </td>
+                            <td>@item.DayCount</td>
+                            <td>@item.TotalPrice</td>
+                            <td>
+                                @(item.TotalPrice * Convert.ToInt32(String.Format("{0:F0}", Convert.ToInt32(item.TotalHours) == 0 ? 1 : item.TotalHours)))
 
+                            </td>
                             @{
                                 double? razorpaycomm = @item.Amountwithrazorpaycomm;
                                 double? basicamt = (double?)@item.TotalPrice;
                                 double? razarfeeamt = razorpaycomm - basicamt;
-
                             }
                             <td>@String.Format("{0:F2}", razarfeeamt) </td>
 
                             @*<td>
-            @ViewBag.gstAmount
-        </td>*@
+                                    @ViewBag.gstAmount
+                                </td>*@
                             @{
 
                                 //double? GSTAmt = ((double?)item.Amount * ViewBag.gstAmount) / 100;
@@ -156,10 +159,10 @@
 
                                 double? commAmt = ((double)item.TotalPrice * ViewBag.Amount) / 100;
                                 double? tdsamt = ((double)item.TotalPrice * ViewBag.tdsAmount) / 100;
-                                Value = (double?)item.TotalPrice - (commAmt + tdsamt + razarfeeamt);
+                                Value = (double?)item.TotalPrice * Convert.ToInt32(String.Format("{0:F0}", Convert.ToInt32(item.TotalHours) == 0 ? 1 : item.TotalHours)) - (commAmt + tdsamt + razarfeeamt);
 
                                 totalPayableAmount += (double)Value;
-                                TotalBasicAmount += (double)item.TotalPrice;
+                                TotalBasicAmount += (double)item.TotalPrice * Convert.ToInt32(String.Format("{0:F0}", Convert.ToInt32(item.TotalHours) == 0 ? 1 : item.TotalHours));
                                 totalTransactionAmount += (double)razarfeeamt;
                                 totaltdsAmount += (double)tdsamt;
                                 totalCommissionAmount += (double)commAmt;
@@ -175,24 +178,21 @@
 
                             <td>@commAmt</td>
                             <td>@tdsamt</td>
-
-
                             <td>@Value</td>
                             @*<td>
-            <a href="/Payout/WeeklyReport?Id=@item.VehicleId">View Record</a>
-        </td>*@
+                                    <a href="/Payout/WeeklyReport?Id=@item.VehicleId">View Record</a>
+                                </td>*@
                             <td>
                                 <a href="/Payout/PayAmbulance_Driver?Driver_Id=@item.Driver_Id&Amount=@Value" class="btn btn-primary" style="display:none;">Pay</a>
                                 <a href="/Payout/ViewDriver_AmbulancePayoutHistory?Id=@item.Driver_Id" class="btn btn-primary">View Payout History</a>
                             </td>
-
                         </tr>
                         count++;
                     }
                 </tbody>
                 <tfoot>
                     <tr>
-                        <td colspan="6" style="text-align: right;"><strong>Total:</strong></td>
+                        <td colspan="9" style="text-align: right;"><strong>Total:</strong></td>
                         <td><strong>₹ @TotalBasicAmount</strong></td>
                         <td><strong>₹ @String.Format("{0:F2}", @totalTransactionAmount)</strong></td>
                         <td><strong>₹ @totalCommissionAmount</strong></td>
@@ -206,8 +206,7 @@
     </div>
 
 </div>
-
-<a id="payLink" class="btn btn-primary" style="display:none;">Pay</a>
+<a id="payLink" class="btn btn-primary">Pay</a>
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
@@ -246,6 +245,6 @@
         multyid = multyid.replace(/,$/, "");
         //  var docmulty = document.getElementById("multydocid").value;
         var payLink = document.getElementById("payLink");
-        payLink.href = "/Payout/PayAmbulance_Driver?multyid=" + multyid;
+        payLink.href = "/Payout/PayDriver?multyid=" + multyid;
     });
 </script>

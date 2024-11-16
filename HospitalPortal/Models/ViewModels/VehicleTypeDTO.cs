@@ -16,6 +16,7 @@ namespace HospitalPortal.Models.ViewModels
         [Required]
         public string VehicleTypeName { get; set; }
         public bool IsDeleted { get; set; }
+        public bool IsApproved { get; set; }
 
         public Nullable<double> under5KM { get; set; }
         public Nullable<double> under6_10KM { get; set; }

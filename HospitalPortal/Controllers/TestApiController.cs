@@ -1196,9 +1196,17 @@ v.VehicleNumber, tm.StatusKey, tm.Lat_Driver, tm.Lang_Driver, pr.VehicelType_Id 
             public double Lang { get; set; }
             public Nullable<int> Charge { get; set; }
             public string DriverName { get; set; }
+            public string MobileNumber { get; set; }
             public string DlNumber { get; set; }
             public string DeviceId { get; set; }
             
+        }
+        public class UpdatelocationPatient
+        {
+            public int PatientId { get; set; }
+            public double Lat { get; set; }
+            public double Lang { get; set; } 
+
         }
 
         public class DriverListNearByUser
@@ -1211,6 +1219,7 @@ v.VehicleNumber, tm.StatusKey, tm.Lat_Driver, tm.Lang_Driver, pr.VehicelType_Id 
             public Nullable<int> Charge { get; set; }
             public Nullable<int> TotalPrice { get; set; }
             public string DeviceId { get; set; }
+            public string MobileNumber { get; set; }
             public Nullable<int> ToatlDistance { get; set; }
         }
 
@@ -1315,6 +1324,7 @@ v.VehicleNumber, tm.StatusKey, tm.Lat_Driver, tm.Lang_Driver, pr.VehicelType_Id 
             public int Id { get; set; }
             public int DriverId { get; set; }
             public string DriverName { get; set; }
+            public string InvoiceNumber { get; set; }
             public string MobileNumber { get; set; }
             public string DriverImage { get; set; }
             public string DlNumber { get; set; }
@@ -1327,10 +1337,44 @@ v.VehicleNumber, tm.StatusKey, tm.Lat_Driver, tm.Lang_Driver, pr.VehicelType_Id 
             public Nullable<double> Lat_Driver { get; set; }
             public Nullable<double> Lang_Driver { get; set; }
             public Nullable<double> UserLat { get; set; }
-            public Nullable<double> UserLong { get; set; }
+            public Nullable<double> UserLong { get; set; } 
+            public Nullable<double> end_Lat { get; set; }
+            public Nullable<double> end_Long { get; set; }
             public Nullable<double> DriverUserDistance { get; set; }
             public double ExpectedTime { get; set; }
             public Nullable<System.DateTime> PaymentDate { get; set; }
+            //CODE FOR LAT LONG TO LOCATION 
+            public string PickupLocation
+            {
+                get { return getlocation(UserLat.ToString(), UserLong.ToString()); }
+            }
+            public string DropLocation
+            {
+                get { return getlocation(end_Lat.ToString(), end_Long.ToString()); }
+            }
+
+            private string getlocation(string latitude, string longitude)
+            {
+                string url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + latitude + "," + longitude + "&key=AIzaSyBrbWFXlOYpaq51wteSyFS2UjdMPOWBlQw";
+
+                // Make the HTTP request.
+                WebRequest request = WebRequest.Create(url);
+                request.Method = "GET";
+                request.Timeout = 10000;
+
+                // Get the response.
+                WebResponse response = request.GetResponse();
+                string responseText = new StreamReader(response.GetResponseStream()).ReadToEnd();
+
+                // Parse the response JSON.
+                var json = JsonConvert.DeserializeObject<dynamic>(responseText);
+
+                // Get the location from the JSON.
+                var location = json.results[0].formatted_address;
+                return location;
+            }
+
+            //END CODE FOR LAT LONG TO LOCATION 
 
         }
 

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using static HospitalPortal.Controllers.AmbulancePaymentController;
 
 namespace HospitalPortal.Controllers
 {
@@ -29,7 +30,7 @@ namespace HospitalPortal.Controllers
 			double Transactionfee = ent.Database.SqlQuery<double>(@"select Fee from TransactionFeeMaster where Name='Doctor'").FirstOrDefault();
 			string q = @"select d.DoctorId ,Sum(pa.TotalFee) as Amount,v.VendorName,v.UniqueId, V.Id, v.CompanyName from Doctor d 
 join Vendor v on d.Vendor_Id = v.Id join dbo.PatientAppointment pa on pa.Doctor_Id = d.Id  
-where pa.AppointmentDate  >= DATEADD(day,-7, GETDATE())   group by v.VendorName,v.CompanyName, V.Id,d.DoctorId,v.UniqueId";
+where pa.AppointmentDate  >= DATEADD(day,-7, GETDATE()) and pa.IsPayoutPaid=0 group by v.VendorName,v.CompanyName, V.Id,d.DoctorId,v.UniqueId";
             var data = ent.Database.SqlQuery<VendorList>(q).ToList();
             if (data.Count() == 0)
             {
@@ -129,14 +130,14 @@ and GETDATE() group by  vp.IsGenerated,ve.VendorName, ve.CompanyName, ve.Id";
 
 
                 }
-                return RedirectToAction("DoctorList");
+                return RedirectToAction("VendorPayOutList");
             }
             else
             {
                 var model = new VendorPayOut();
                 model.Vendor_Id = Vendor_Id;
                 model.Amount = Amount;
-                model.IsPaid = false;
+                model.IsPaid = true;
                 model.IsGenerated = true;
                 model.PaymentDate = DateTime.Now.Date;
                 ent.VendorPayOuts.Add(model);
@@ -321,56 +322,99 @@ group by v.VendorName,v.CompanyName, vp.Id,vp.PaymentDate,v.UniqueId";
             return View(model);
         }
 
-        public void DownloadVendorExcel(int? Id)
+        public void DownloadVendorExcel()
         {
-            String query = @"select vp.Id,v.UniqueId, SUM(vp.Amount) as Amount, v.VendorName,v.EmailId,v.AadharOrPANNumber,V.Location, v.CompanyName,vp.PaymentDate from 
-VendorPayout vp join Vendor v on vp.Vendor_Id = v.Id
-group by v.VendorName,v.CompanyName, vp.Id,vp.PaymentDate,v.UniqueId,v.EmailId,v.AadharOrPANNumber,V.Location";
-
-            var employeeDetails = ent.Database.SqlQuery<VendorPayoutHistory>(query).ToList();
+            string query = "select vp.*,v.UniqueId, v.VendorName as BeneficiaryName,bd.* from VendorPayout vp join Vendor v on vp.Vendor_Id = v.Id join BankDetails as bd on bd.Login_Id=v.AdminLogin_Id";
+            List<DetailsForBank> employeeDetails = ent.Database.SqlQuery<DetailsForBank>(query, Array.Empty<object>()).ToList();
             ExcelPackage Ep = new ExcelPackage();
             ExcelWorksheet Sheet = Ep.Workbook.Worksheets.Add("Report");
-
-            Sheet.Cells["A1"].Value = "Vendor Name";
-            Sheet.Cells["B1"].Value = "UniqueId";
-            Sheet.Cells["C1"].Value = "Company Name";
-            Sheet.Cells["D1"].Value = "Location";
-            Sheet.Cells["E1"].Value = "AadharOrPANNumber";
-            Sheet.Cells["F1"].Value = "Amount";
-            Sheet.Cells["G1"].Value = "EmailId";
-            Sheet.Cells["H1"].Value = "Payment Date";
+            Sheet.Cells["A1"].Value = "Payment Method";
+            Sheet.Cells["B1"].Value = "Payment Amount";
+            Sheet.Cells["C1"].Value = "Activation Date";
+            Sheet.Cells["D1"].Value = "Beneficiary Name";
+            Sheet.Cells["E1"].Value = "Account No in text";
+            Sheet.Cells["F1"].Value = "Email";
+            Sheet.Cells["G1"].Value = "Email Body";
+            Sheet.Cells["H1"].Value = "Debit Account No";
+            Sheet.Cells["I1"].Value = "CRN No";
+            Sheet.Cells["J1"].Value = "Receiver IFSC Code";
+            Sheet.Cells["K1"].Value = "Receiver Account";
+            Sheet.Cells["L1"].Value = "Remarks";
+            Sheet.Cells["M1"].Value = "Phone No";
             int row = 2;
-            double totalAmount = 0.0; // Initialize a variable to store the total MonthSalary
-
-            foreach (var item in employeeDetails)
+            CRNGenerator crnGenerator = new CRNGenerator();
+            foreach (DetailsForBank item in employeeDetails)
             {
-                Sheet.Cells[string.Format("A{0}", row)].Value = item.VendorName;
-                Sheet.Cells[string.Format("B{0}", row)].Value = item.UniqueId;
-                Sheet.Cells[string.Format("C{0}", row)].Value = item.CompanyName;                
-                Sheet.Cells[string.Format("D{0}", row)].Value = item.Location;
-                Sheet.Cells[string.Format("E{0}", row)].Value = item.AadharOrPANNumber;
-                Sheet.Cells[string.Format("F{0}", row)].Value = item.Amount;
-                Sheet.Cells[string.Format("G{0}", row)].Value = item.EmailId;
-                Sheet.Cells[string.Format("H{0}", row)].Value = item.PaymentDate;
-                Sheet.Cells[string.Format("H{0}", row)].Style.Numberformat.Format = "yyyy-MM-dd"; // Change the date format as needed
-                //Sheet.Cells[string.Format("I{0}", row)].Value = item.BranchName;
-                //Sheet.Cells[string.Format("J{0}", row)].Value = item.BranchAddress;
-                //Sheet.Cells[string.Format("K{0}", row)].Value = item.HolderName;
-
-                totalAmount += item.Amount; // Add the current MonthSalary to the total
+                string dvrId = item.UniqueId;
+                long sdds = Convert.ToInt64(item.AccountNo);
+                string crn = crnGenerator.GenerateCRN(dvrId);
+                Sheet.Cells[$"A{row}"].Value = "N";
+                Sheet.Cells[$"B{row}"].Value = item.Amount;
+                Sheet.Cells[$"C{row}"].Value = DateTime.Now;
+                Sheet.Cells[$"C{row}"].Style.Numberformat.Format = "yyyy-MM-dd";
+                Sheet.Cells[$"D{row}"].Value = item.BeneficiaryName;
+                Sheet.Cells[$"E{row}"].Value = NumberToWords(sdds);
+                Sheet.Cells[$"F{row}"].Value = item.EmailId;
+                Sheet.Cells[$"G{row}"].Value = "This is your payment report";
+                Sheet.Cells[$"H{row}"].Value = "924020004812750";
+                Sheet.Cells[$"I{row}"].Value = crn;
+                Sheet.Cells[$"J{row}"].Value = item.IFSCCode;
+                Sheet.Cells[$"K{row}"].Value = item.AccountNo;
+                Sheet.Cells[$"L{row}"].Value = "Enter your remark";
+                Sheet.Cells[$"M{row}"].Value = item.MobileNumber;
                 row++;
             }
-
-            // Create a cell to display the total MonthSalary
-            Sheet.Cells[string.Format("E{0}", row)].Value = "Total Amount";
-            Sheet.Cells[string.Format("F{0}", row)].Value = totalAmount;
-
             Sheet.Cells["A:AZ"].AutoFitColumns();
-            Response.Clear();
-            Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            Response.AddHeader("content-disposition", "attachment; filename=Report.xlsx"); 
-            Response.BinaryWrite(Ep.GetAsByteArray());
-            Response.End();
+            base.Response.Clear();
+            base.Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            base.Response.AddHeader("content-disposition", "attachment; filename=Report.xlsx");
+            base.Response.BinaryWrite(Ep.GetAsByteArray());
+            base.Response.End();
+        }
+        static string NumberToWords(long number)
+        {
+            if (number == 0)
+                return "zero";
+
+            int val;
+            long next, num_digits;
+            long[] a = new long[19]; // Maximum number of digits in a long is 19
+
+            // words for every digits from 0 to 9
+            string[] digits_words = {
+        "zero",
+        "one",
+        "two",
+        "three",
+        "four",
+        "five",
+        "six",
+        "seven",
+        "eight",
+        "nine"
+    };
+
+            string words = "";
+
+            val = 0;
+            next = 0;
+            num_digits = 0;
+
+            while (number > 0)
+            {
+                next = number % 10;
+                a[val] = next;
+                val++;
+                num_digits++;
+                number = number / 10;
+            }
+
+            for (val = (int)(num_digits - 1); val >= 0; val--)
+            {
+                words += digits_words[a[val]] + " ";
+            }
+
+            return words.Trim(); // Trim any trailing whitespace
         }
     }
 }

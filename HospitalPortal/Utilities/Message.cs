@@ -10,7 +10,6 @@ namespace HospitalPortal.Utilities
 {
     public class Message
     {
-
         public static void SendSms(string mobileNumber,string m)
         {
             //Your authentication key
@@ -53,20 +52,16 @@ namespace HospitalPortal.Utilities
                 reader.Close();
                 response.Close();
             }
-            catch 
+            catch (Exception ex)
             {
-               
+                Console.WriteLine(ex.Message);               
             }
         }
 
-        public static int SendSmsUserIdPass(string mobileNumber)
+        public static int SendSmsUserIdPass(string mobileNumber,string username,string userid,string password)
         {  
-           string dltid = "1207171048570054443";
-              mobileNumber = "";
-            string dear = "madhu";
-            string userid = "33";
-            string password = "3434";
-            string m = $"Dear {dear}, Thank You for Joining PS Wellness Now you Can Login With Your Registered User Id: {userid} and Password: {password}";
+            string dltid = "1207171048570054443";  
+            string m = $"Dear {username}, Thank You for Joining PS Wellness Now you Can Login With Your Registered User Id: {userid} and Password: {password}";
 
             string authKey = "153995AnO2vKHdOPk59294dd7";
             //Multiple mobiles numbers separated by comma

@@ -38,8 +38,11 @@ namespace HospitalPortal.Models.DomainModels
         public Nullable<bool> RideComplete { get; set; }
         public Nullable<bool> IsBooked { get; set; }
         public Nullable<bool> IsPayoutPaid { get; set; }
-    
-        public virtual Driver Driver { get; set; }
-        public virtual Patient Patient { get; set; }
+        public Nullable<bool> IsDriverPayoutPaid { get; set; }
+        public string InvoiceNumber { get; set; }
+        public string OrderId { get; set; }
+        public Nullable<System.DateTime> OrderDate { get; set; }
+        public Nullable<System.DateTime> AcceptanceDate { get; set; }
+        public Nullable<System.DateTime> CompleteRideDate { get; set; }
     }
 }

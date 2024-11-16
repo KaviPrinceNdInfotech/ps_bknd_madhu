@@ -1,0 +1,126 @@
+﻿@model IEnumerable<HospitalPortal.Models.ViewModels.InvoiceDTO>
+@{
+    ViewBag.Title = "NurseInvoice";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="https://wandb.github.io/openui/tailwindcss.min.js"></script>
+    <title>Invoice</title>
+    <link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.css">
+
+    <script type="text/javascript">
+        window.tailwind.config.darkMode = ['class', '.darkMode']
+    </script>
+    <style type="text/css">
+        .selected {
+            position: absolute;
+            z-index: 49;
+            border: 2px dashed orange;
+            border-radius: 3px;
+        }
+
+        .inspector-element {
+            position: absolute;
+            z-index: 100;
+            pointer-events: none;
+            border: 1px dashed rgb(139 92 246);
+            box-shadow: 0 0 3px rgb(139 92 246);
+            animation: pulseGlow 1s infinite ease-in-out;
+            border-radius: 2px;
+            transition: all 250ms ease-in-out;
+            background-color: rgba(250, 250, 250, 0.1);
+        }
+
+        #wrapper {
+            cursor: pointer;
+            padding-top: 20px;
+        }
+
+        @@keyframes pulseGlow {
+            0% {
+                box-shadow: 0 0 3px rgb(139 92 246);
+            }
+
+            50% {
+                box-shadow: 0 0 8px rgb(139 92 200);
+            }
+
+            100% {
+                box-shadow: 0 0 3px rgb(139 92 246);
+            }
+        }
+    </style>
+    <style media="print">
+        .noprint {
+            display: none;
+        }
+    </style>
+</head>
+
+<body class="fixed-navbar">
+    @foreach (var item in Model)
+    {
+        <div class="bg-white shadow-lg rounded-lg p-8 max-w-4xl mx-auto my-12">
+            <div class="flex justify-center mb-6">
+                <img src="~/Home/logo.png" alt="Company Logo" class="h-12" />
+            </div>
+            @*<div class="text-center text-2xl font-bold mb-6">Invoice</div>*@
+            <div class="grid grid-cols-2 gap-8 mb-6">
+                <div>
+                    <div class="font-bold mb-2">From</div>
+                    <div>Nurse Type: @item.NurseTypeName</div>
+                    <div>Email: @item.EmailId</div>
+                    <div>PAN: @item.PAN</div>
+                    <div>Address: @item.StateName, @item.CityName, @item.Location, @item.PinCode</div>
+                </div>
+                <div>
+                    <div class="font-bold mb-2">To</div>
+                    <div>Name: @item.PatientName</div>
+                    <div>Mobile: @item.MobileNumber</div>
+                    <div>Email: @item.PatientEmailId</div>
+                    <div>Address: @item.PatientStateName,@item.PatientCityName,@item.PatientLocation,@item.PatientPinCode</div>
+                </div>
+            </div>
+            <div class="mb-6">
+                <div>Invoice Number: @item.InvoiceNumber</div>
+                <div>Order ID: @item.OrderId</div>
+                <div>Order Date: @item.OrderDate.ToString("yyyy-MM-dd")</div>
+                <div>Invoice Date: @DateTime.Now.ToString("yyyy-MM-dd")</div>
+            </div>
+            <table class="w-full mb-6">
+                <thead>
+                    <tr class="bg-zinc-100">
+                        <th class="p-2 text-left">Name</th>
+                        <th class="p-2 text-left">No of days</th>
+                        <th class="p-2 text-left">Fees</th>
+                        <th class="p-2 text-left">GST</th>
+                        <th class="p-2 text-left">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="p-2">@item.ServiceProviderName</td>
+                        <td class="p-2">@item.TotalNumberofdays</td>
+                        <td class="p-2">₹@item.Fee</td>
+                        <td class="p-2">@item.GST %</td>
+                        <td class="p-2">₹@item.TotalFee</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="text-right">
+                <div>Subtotal: ₹@item.TotalFee</div>
+                <div>GST: ₹@item.GSTAmount</div>
+                <div class="font-bold">Grand Total (Incl. Tax): ₹@item.FinalAmount</div>
+            </div>
+            <footer class="text-center mt-8 text-sm text-zinc-600"><b>Note:</b>Thank you We are available for you 24*7 and we provide the best services and solutions of medical field.</footer>
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded noprint" type="button" onclick="javascript:window.print();"><i class="fa fa-print"></i> Print</button>
+        </div>
+    }
+
+    </body>
+
+</html>
+

@@ -9,7 +9,7 @@
 <h2 style="text-align:center; margin-bottom:2%">Vehicle Travel Report</h2>
 
 <table class="table table-bordered">
-    <thead>
+    <thead style="background-color:lavender;">
 
         @if (Model.Ambulance.Count() != 0)
         {
@@ -89,7 +89,11 @@
     </thead>
     @if (Model.Ambulance.Count() == 0)
     {
-        <h2 style="color:red; text-align:center;">Your Selected Date Doesn't Contain any Information.</h2>
+        if (TempData["msg"] != null)
+        {
+            <div class="alert alert-danger">@TempData["msg"]</div>
+
+        }
     }
     else
     {
@@ -130,8 +134,8 @@
                 <td></td>
             </tr>
         </tfoot>
-                        }
-    </table> 
+    }
+</table> 
 
 
   
@@ -140,49 +144,7 @@
 <script src="https://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css">
 
-<script type="text/javascript">
-
-                    var table = $('#doctor').DataTable();
-
-
-                    // Bootstrap datepicker
-                    //$(".input-daterange input").each(function () {
-                    //    $(this).datepicker("clearDates");
-                    //});
-
-
-
-                    // Set up your table
-                    //table = $("#my-table").DataTable({
-                    //    paging: false,
-                    //    info: false
-                    //});
-
-                    // Extend dataTables search
-                    //$.fn.dataTable.ext.search.push(
-                    //  function (settings, data, dataIndex) {
-                    //      debugger
-                    //      var min = $('#min-date').val();
-                    //      var max = $('#max-date').val();
-                    //      var createdAt = data[0] || 0; // Our date column in the table
-
-                    //      if (
-                    //        (min == "" || max == "") || (moment(createdAt).isSameOrAfter(min) && moment(createdAt).isSameOrBefore(max))
-                    //      ) {
-                    //          return true;
-                    //      }
-                    //      return false;
-                    //  }
-                    //);
-
-                    // Re-draw the table when the a date range filter changes
-                    //$('.date-range-filter').change(function () {
-                    //    table.draw();
-                    //});
-
-                    //$('#doctor_filter').hide();
-
-</script>
+ 
 <link href="/css/jquery-ui.css" rel="stylesheet" />
 <script src="/js/jquery-ui.js"></script>
 
