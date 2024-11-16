@@ -1748,7 +1748,6 @@ ORDER BY Id";
             Sheet.Cells["M1"].Value = "Phone No";
             int row = 2;
             CRNGenerator crnGenerator = new CRNGenerator();
-
             foreach (DetailsForBank item in employeeDetails)
             {
                 string dvrId = item.UniqueId;
