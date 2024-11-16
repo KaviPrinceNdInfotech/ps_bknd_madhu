@@ -56,5 +56,8 @@ else
     $(".datepicker").datepicker().datepicker('setDate', 'today');
 </script>
 <script type="text/javascript">
-        $('#table_id').DataTable();
+    $('#table_id').DataTable(
+        {
+            stateSave: true,
+        });
 </script>

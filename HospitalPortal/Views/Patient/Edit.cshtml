@@ -15,9 +15,7 @@
     <div id="mainContainer">
         @Html.HiddenFor(a => a.Id)
         @Html.HiddenFor(a => a.IsApproved)
-        @Html.HiddenFor(a => a.IsDeleted)
-        @Html.HiddenFor(a => a.MobileNumber)
-        @Html.HiddenFor(a => a.EmailId)
+        @Html.HiddenFor(a => a.IsDeleted) 
         @Html.HiddenFor(a => a.Rwa_Id)
         @Html.HiddenFor(a => a.Password)
         @Html.HiddenFor(a => a.PatientRegNo)
@@ -61,37 +59,47 @@
                         @Html.ValidationMessageFor(a => a.PatientName)
                     </span>
                 </div>
-
-
-
-                @*<div class="form-group">
+                <div class="form-group">
                     Mobile Number * @Html.TextBoxFor(a => a.MobileNumber, new { @class = "form-control" })
                     <span class="red">
                         @Html.ValidationMessageFor(a => a.MobileNumber)
                     </span>
                 </div>
-
-
                 <div class="form-group">
-                    Email Id * @Html.TextBoxFor(a => a.EmailId, new { @class = "form-control" })
+                    EmailId * @Html.TextBoxFor(a => a.EmailId, new { @class = "form-control" })
                     <span class="red">
                         @Html.ValidationMessageFor(a => a.EmailId)
                     </span>
                 </div>
 
-                <div class="form-group">
-                    Password * @Html.PasswordFor(a => a.Password, new { @class = "form-control" })
-                    <span class="red">
-                        @Html.ValidationMessageFor(a => a.Password)
-                    </span>
-                </div>
+                @*<div class="form-group">
+            Mobile Number * @Html.TextBoxFor(a => a.MobileNumber, new { @class = "form-control" })
+            <span class="red">
+                @Html.ValidationMessageFor(a => a.MobileNumber)
+            </span>
+        </div>
 
-                <div class="form-group">
-                    Confirm Your Password * @Html.PasswordFor(a => a.ConfirmPassword, new { @class = "form-control" })
-                    <span class="red">
-                        @Html.ValidationMessageFor(a => a.ConfirmPassword)
-                    </span>
-                </div>*@
+
+        <div class="form-group">
+            Email Id * @Html.TextBoxFor(a => a.EmailId, new { @class = "form-control" })
+            <span class="red">
+                @Html.ValidationMessageFor(a => a.EmailId)
+            </span>
+        </div>
+
+        <div class="form-group">
+            Password * @Html.PasswordFor(a => a.Password, new { @class = "form-control" })
+            <span class="red">
+                @Html.ValidationMessageFor(a => a.Password)
+            </span>
+        </div>
+
+        <div class="form-group">
+            Confirm Your Password * @Html.PasswordFor(a => a.ConfirmPassword, new { @class = "form-control" })
+            <span class="red">
+                @Html.ValidationMessageFor(a => a.ConfirmPassword)
+            </span>
+        </div>*@
 
                 <div class="form-group">
                     State * @Html.DropDownListFor(a => a.StateMaster_Id, Model.States, "Select", new { @class = "form-control" })
@@ -102,8 +110,8 @@
 
                 <div class="form-group">
                     City * @Html.DropDownListFor(a => a.CityMaster_Id,
-                        Model.Cities
-                        , "Select", new { @class = "form-control" })
+          Model.Cities
+          , "Select", new { @class = "form-control" })
                     <span class="red">
                         @Html.ValidationMessageFor(a => a.CityMaster_Id)
                     </span>

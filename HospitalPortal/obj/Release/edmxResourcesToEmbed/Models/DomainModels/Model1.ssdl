@@ -274,6 +274,7 @@ warning 6002: The table/view 'admin_Hospital.admin_Hospital.franchiseRole' does 
     <Property Name="TotalPrice" Type="int" />
     <Property Name="DeviceId" Type="varchar(max)" />
     <Property Name="ToatlDistance" Type="int" />
+    <Property Name="MobileNumber" Type="nvarchar" MaxLength="100" />
   </EntityType>
   <EntityType Name="Nurse_Rep">
     <Key>
@@ -502,16 +503,12 @@ warning 6002: The table/view 'admin_Hospital.admin_Hospital.franchiseRole' does 
     <Property Name="Confirmpassword" Type="nvarchar" MaxLength="100" />
     <Property Name="DeviceId" Type="nvarchar" MaxLength="500" />
   </EntityType>
-  <!--Errors Found During Generation:
-warning 6002: The table/view 'admin_Hospital.dbo.AmbulancePayout' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="AmbulancePayout">
     <Key>
       <PropertyRef Name="Id" />
-      <PropertyRef Name="Vehicle_Id" />
-      <PropertyRef Name="Amount" />
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Vehicle_Id" Type="int" Nullable="false" />
+    <Property Name="Driver_Id" Type="int" Nullable="false" />
     <Property Name="Amount" Type="float" Nullable="false" />
     <Property Name="IsPaid" Type="bit" />
     <Property Name="PaymentDate" Type="datetime" />
@@ -936,6 +933,12 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
     <Property Name="RideComplete" Type="bit" />
     <Property Name="IsBooked" Type="bit" />
     <Property Name="IsPayoutPaid" Type="bit" />
+    <Property Name="AcceptanceDate" Type="datetime" />
+    <Property Name="CompleteRideDate" Type="datetime" />
+    <Property Name="IsDriverPayoutPaid" Type="bit" />
+    <Property Name="InvoiceNumber" Type="nvarchar" MaxLength="100" />
+    <Property Name="OrderId" Type="nvarchar" MaxLength="100" />
+    <Property Name="OrderDate" Type="datetime" />
   </EntityType>
   <EntityType Name="DriverPayOut">
     <Key>
@@ -1569,6 +1572,8 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
     <Property Name="About" Type="nvarchar" MaxLength="500" />
     <Property Name="Gender" Type="varchar" MaxLength="10" />
     <Property Name="DOB" Type="date" />
+    <Property Name="Lat" Type="float" />
+    <Property Name="Lang" Type="float" />
   </EntityType>
   <EntityType Name="PatientAppointment">
     <Key>
@@ -1873,6 +1878,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
     <Property Name="Above500KM" Type="float" />
     <Property Name="Category_Id" Type="int" />
     <Property Name="DriverCharge" Type="float" />
+    <Property Name="IsApproved" Type="bit" />
   </EntityType>
   <EntityType Name="Vendor">
     <Key>
@@ -1927,81 +1933,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__Cancelled__Cance__25C68D63">
-    <End Role="PatientAppointment" Type="Self.PatientAppointment" Multiplicity="0..1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Role="CancelledAppointment" Type="Self.CancelledAppointment" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="PatientAppointment">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="CancelledAppointment">
-        <PropertyRef Name="CancelledId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__Cancelled__Docto__1F198FD4">
-    <End Role="Doctor" Type="Self.Doctor" Multiplicity="0..1" />
-    <End Role="CancelledAppointment" Type="Self.CancelledAppointment" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Doctor">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="CancelledAppointment">
-        <PropertyRef Name="Doctor_Id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__Cancelled__Hospi__22EA20B8">
-    <End Role="HospitalDoctor" Type="Self.HospitalDoctor" Multiplicity="0..1" />
-    <End Role="CancelledAppointment" Type="Self.CancelledAppointment" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="HospitalDoctor">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="CancelledAppointment">
-        <PropertyRef Name="HospitalDoc_Id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__Cancelled__Hospi__23DE44F1">
-    <End Role="HospitalDoctor" Type="Self.HospitalDoctor" Multiplicity="0..1" />
-    <End Role="CancelledAppointment" Type="Self.CancelledAppointment" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="HospitalDoctor">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="CancelledAppointment">
-        <PropertyRef Name="HospitalDoc_Id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__Cancelled__Patie__1E256B9B">
-    <End Role="Patient" Type="Self.Patient" Multiplicity="0..1" />
-    <End Role="CancelledAppointment" Type="Self.CancelledAppointment" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Patient">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="CancelledAppointment">
-        <PropertyRef Name="Patient_Id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__Cancelled__Speci__200DB40D">
-    <End Role="Specialist" Type="Self.Specialist" Multiplicity="0..1" />
-    <End Role="CancelledAppointment" Type="Self.CancelledAppointment" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Specialist">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="CancelledAppointment">
-        <PropertyRef Name="Specialist_Id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__CheckUpRe__Check__2180FB33">
+  <Association Name="FK__CheckUpRe__Check__0134F289">
     <End Role="HealthCheckupCenter" Type="Self.HealthCheckupCenter" Multiplicity="0..1" />
     <End Role="CheckUpReport" Type="Self.CheckUpReport" Multiplicity="*" />
     <ReferentialConstraint>
@@ -2027,7 +1959,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__CheckUpRe__TestI__3AC1AA49">
+  <Association Name="FK__CheckUpRe__TestI__031D3AFB">
     <End Role="LabTest" Type="Self.LabTest" Multiplicity="0..1" />
     <End Role="CheckUpReport" Type="Self.CheckUpReport" Multiplicity="*" />
     <ReferentialConstraint>
@@ -2053,7 +1985,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__CityMaste__State__2739D489">
+  <Association Name="FK__CityMaste__State__0505836D">
     <End Role="StateMaster" Type="Self.StateMaster" Multiplicity="1">
       <OnDelete Action="Cascade" />
     </End>
@@ -2067,7 +1999,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__CmpltChec__Cente__282DF8C2">
+  <Association Name="FK__CmpltChec__Cente__05F9A7A6">
     <End Role="HealthCheckupCenter" Type="Self.HealthCheckupCenter" Multiplicity="0..1" />
     <End Role="CmpltCheckUp" Type="Self.CmpltCheckUp" Multiplicity="*" />
     <ReferentialConstraint>
@@ -2093,7 +2025,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__CmpltChec__Test___3D491139">
+  <Association Name="FK__CmpltChec__Test___07E1F018">
     <End Role="HealthCheckUp" Type="Self.HealthCheckUp" Multiplicity="0..1" />
     <End Role="CmpltCheckUp" Type="Self.CmpltCheckUp" Multiplicity="*" />
     <ReferentialConstraint>
@@ -2119,7 +2051,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__HealthChe__Cente__3493CFA7">
+  <Association Name="FK__HealthChe__Cente__09CA388A">
     <End Role="HealthCheckupCenter" Type="Self.HealthCheckupCenter" Multiplicity="1" />
     <End Role="HealthCheckUp" Type="Self.HealthCheckUp" Multiplicity="*" />
     <ReferentialConstraint>
@@ -2131,7 +2063,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__HealthChe__Cente__38C4533E">
+  <Association Name="FK__HealthChe__Cente__0ABE5CC3">
     <End Role="HealthCheckupCenter" Type="Self.HealthCheckupCenter" Multiplicity="0..1" />
     <End Role="HealthCheckUpPackage" Type="Self.HealthCheckUpPackage" Multiplicity="*" />
     <ReferentialConstraint>
@@ -2143,7 +2075,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__HealthPay__Healt__3864608B">
+  <Association Name="FK__HealthPay__Healt__0BB280FC">
     <End Role="HealthCheckupCenter" Type="Self.HealthCheckupCenter" Multiplicity="0..1" />
     <End Role="HealthPayOut" Type="Self.HealthPayOut" Multiplicity="*" />
     <ReferentialConstraint>
@@ -2155,7 +2087,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__HospitalN__Nurse__76619304">
+  <Association Name="FK__HospitalN__Nurse__0CA6A535">
     <End Role="NurseType" Type="Self.NurseType" Multiplicity="0..1" />
     <End Role="HospitalNurse" Type="Self.HospitalNurse" Multiplicity="*" />
     <ReferentialConstraint>
@@ -2167,7 +2099,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__HospitalR__Hospi__7869D707">
+  <Association Name="FK__HospitalR__Hospi__0D9AC96E">
     <End Role="Hospital" Type="Self.Hospital" Multiplicity="0..1" />
     <End Role="HospitalReport" Type="Self.HospitalReport" Multiplicity="*" />
     <ReferentialConstraint>
@@ -2193,7 +2125,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__HospitalRe__Test__7A521F79">
+  <Association Name="FK__HospitalRe__Test__0F8311E0">
     <End Role="LabTest" Type="Self.LabTest" Multiplicity="0..1" />
     <End Role="HospitalReport" Type="Self.HospitalReport" Multiplicity="*" />
     <ReferentialConstraint>
@@ -2219,7 +2151,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__LabBookin__TestI__515009E6">
+  <Association Name="FK__LabBookin__TestI__116B5A52">
     <End Role="TestLab" Type="Self.TestLab" Multiplicity="0..1" />
     <End Role="LabBooking" Type="Self.LabBooking" Multiplicity="*" />
     <ReferentialConstraint>
@@ -2231,7 +2163,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__NurseComp__Login__2D87AABC">
+  <Association Name="FK__NurseComp__Login__7F4CAA17">
     <End Role="AdminLogin" Type="Self.AdminLogin" Multiplicity="0..1" />
     <End Role="NurseComplaint" Type="Self.NurseComplaint" Multiplicity="*" />
     <ReferentialConstraint>
@@ -2257,7 +2189,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__PatientAp__Hospi__1960B67E">
+  <Association Name="FK__PatientAp__Hospi__1447C6FD">
     <End Role="Hospital" Type="Self.Hospital" Multiplicity="0..1" />
     <End Role="PatientAppointment" Type="Self.PatientAppointment" Multiplicity="*" />
     <ReferentialConstraint>
@@ -2269,7 +2201,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__PatientAp__Hospi__1A54DAB7">
+  <Association Name="FK__PatientAp__Hospi__153BEB36">
     <End Role="HospitalDoctor" Type="Self.HospitalDoctor" Multiplicity="0..1" />
     <End Role="PatientAppointment" Type="Self.PatientAppointment" Multiplicity="*" />
     <ReferentialConstraint>
@@ -2281,7 +2213,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__PatientAp__Hospi__7849DB76">
+  <Association Name="FK__PatientAp__Hospi__16300F6F">
     <End Role="Hospital" Type="Self.Hospital" Multiplicity="0..1" />
     <End Role="PatientAppointment" Type="Self.PatientAppointment" Multiplicity="*" />
     <ReferentialConstraint>
@@ -2293,7 +2225,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__PatientAp__Hospi__793DFFAF">
+  <Association Name="FK__PatientAp__Hospi__172433A8">
     <End Role="HospitalDoctor" Type="Self.HospitalDoctor" Multiplicity="0..1" />
     <End Role="PatientAppointment" Type="Self.PatientAppointment" Multiplicity="*" />
     <ReferentialConstraint>
@@ -2319,7 +2251,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__PatientAp__Speci__1B48FEF0">
+  <Association Name="FK__PatientAp__Speci__190C7C1A">
     <End Role="Specialist" Type="Self.Specialist" Multiplicity="0..1" />
     <End Role="PatientAppointment" Type="Self.PatientAppointment" Multiplicity="*" />
     <ReferentialConstraint>
@@ -2331,7 +2263,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__PatientAp__Speci__47A6A41B">
+  <Association Name="FK__PatientAp__Speci__1A00A053">
     <End Role="Specialist" Type="Self.Specialist" Multiplicity="0..1" />
     <End Role="PatientAppointment" Type="Self.PatientAppointment" Multiplicity="*" />
     <ReferentialConstraint>
@@ -2371,7 +2303,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__PatientRe__Vehic__0E591826">
+  <Association Name="FK__PatientRe__Vehic__1CDD0CFE">
     <End Role="VehicleType" Type="Self.VehicleType" Multiplicity="0..1" />
     <End Role="PatientRequest" Type="Self.PatientRequest" Multiplicity="*" />
     <ReferentialConstraint>
@@ -2383,7 +2315,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__SalaryMas__Emp_I__0E04126B">
+  <Association Name="FK__SalaryMas__Emp_I__1DD13137">
     <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
     <End Role="SalaryMaster" Type="Self.SalaryMaster" Multiplicity="*" />
     <ReferentialConstraint>
@@ -2395,7 +2327,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__Specialis__Depar__4C6B5938">
+  <Association Name="FK__Specialis__Depar__1EC55570">
     <End Role="Department" Type="Self.Department" Multiplicity="1">
       <OnDelete Action="Cascade" />
     </End>
@@ -2409,7 +2341,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__Vendor__AdminLog__51300E55">
+  <Association Name="FK__Vendor__AdminLog__1FB979A9">
     <End Role="AdminLogin" Type="Self.AdminLogin" Multiplicity="1" />
     <End Role="Vendor" Type="Self.Vendor" Multiplicity="*" />
     <ReferentialConstraint>
@@ -2469,6 +2401,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
     <Parameter Name="Charge" Type="int" Mode="In" />
     <Parameter Name="DeviceId" Type="varchar(max)" Mode="In" />
     <Parameter Name="ToatlDistance" Type="int" Mode="In" />
+    <Parameter Name="MobileNumber" Type="nvarchar" Mode="In" />
   </Function>
   <Function Name="sp_AppointmentHistory" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="admin_Hospital">
     <Parameter Name="patientId" Type="int" Mode="In" />
@@ -2658,6 +2591,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
     <EntitySet Name="VehicleAllotHistory" EntityType="Self.VehicleAllotHistory" Schema="admin_Hospital" store:Type="Tables" />
     <EntitySet Name="VehicleTemp" EntityType="Self.VehicleTemp" Schema="admin_Hospital" store:Type="Tables" />
     <EntitySet Name="AdminLogin" EntityType="Self.AdminLogin" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="AmbulancePayout" EntityType="Self.AmbulancePayout" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="BankDetails" EntityType="Self.BankDetails" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="BookTestLab" EntityType="Self.BookTestLab" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="CancelledAppointment" EntityType="Self.CancelledAppointment" Schema="dbo" store:Type="Tables" />
@@ -2753,16 +2687,6 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
     [franchiseRole].[RoleName] AS [RoleName]
     FROM [admin_Hospital].[franchiseRole] AS [franchiseRole]</DefiningQuery>
     </EntitySet>
-    <EntitySet Name="AmbulancePayout" EntityType="Self.AmbulancePayout" store:Type="Tables" store:Schema="dbo">
-      <DefiningQuery>SELECT 
-    [AmbulancePayout].[Id] AS [Id], 
-    [AmbulancePayout].[Vehicle_Id] AS [Vehicle_Id], 
-    [AmbulancePayout].[Amount] AS [Amount], 
-    [AmbulancePayout].[IsPaid] AS [IsPaid], 
-    [AmbulancePayout].[PaymentDate] AS [PaymentDate], 
-    [AmbulancePayout].[IsGenerated] AS [IsGenerated]
-    FROM [dbo].[AmbulancePayout] AS [AmbulancePayout]</DefiningQuery>
-    </EntitySet>
     <EntitySet Name="AppLog" EntityType="Self.AppLog" store:Type="Tables" store:Schema="dbo">
       <DefiningQuery>SELECT 
     [AppLog].[Date] AS [Date], 
@@ -2777,31 +2701,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
       <End Role="Patient" EntitySet="Patient" />
       <End Role="BookTestLab" EntitySet="BookTestLab" />
     </AssociationSet>
-    <AssociationSet Name="FK__Cancelled__Cance__25C68D63" Association="Self.FK__Cancelled__Cance__25C68D63">
-      <End Role="PatientAppointment" EntitySet="PatientAppointment" />
-      <End Role="CancelledAppointment" EntitySet="CancelledAppointment" />
-    </AssociationSet>
-    <AssociationSet Name="FK__Cancelled__Docto__1F198FD4" Association="Self.FK__Cancelled__Docto__1F198FD4">
-      <End Role="Doctor" EntitySet="Doctor" />
-      <End Role="CancelledAppointment" EntitySet="CancelledAppointment" />
-    </AssociationSet>
-    <AssociationSet Name="FK__Cancelled__Hospi__22EA20B8" Association="Self.FK__Cancelled__Hospi__22EA20B8">
-      <End Role="HospitalDoctor" EntitySet="HospitalDoctor" />
-      <End Role="CancelledAppointment" EntitySet="CancelledAppointment" />
-    </AssociationSet>
-    <AssociationSet Name="FK__Cancelled__Hospi__23DE44F1" Association="Self.FK__Cancelled__Hospi__23DE44F1">
-      <End Role="HospitalDoctor" EntitySet="HospitalDoctor" />
-      <End Role="CancelledAppointment" EntitySet="CancelledAppointment" />
-    </AssociationSet>
-    <AssociationSet Name="FK__Cancelled__Patie__1E256B9B" Association="Self.FK__Cancelled__Patie__1E256B9B">
-      <End Role="Patient" EntitySet="Patient" />
-      <End Role="CancelledAppointment" EntitySet="CancelledAppointment" />
-    </AssociationSet>
-    <AssociationSet Name="FK__Cancelled__Speci__200DB40D" Association="Self.FK__Cancelled__Speci__200DB40D">
-      <End Role="Specialist" EntitySet="Specialist" />
-      <End Role="CancelledAppointment" EntitySet="CancelledAppointment" />
-    </AssociationSet>
-    <AssociationSet Name="FK__CheckUpRe__Check__2180FB33" Association="Self.FK__CheckUpRe__Check__2180FB33">
+    <AssociationSet Name="FK__CheckUpRe__Check__0134F289" Association="Self.FK__CheckUpRe__Check__0134F289">
       <End Role="HealthCheckupCenter" EntitySet="HealthCheckupCenter" />
       <End Role="CheckUpReport" EntitySet="CheckUpReport" />
     </AssociationSet>
@@ -2809,7 +2709,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
       <End Role="Patient" EntitySet="Patient" />
       <End Role="CheckUpReport" EntitySet="CheckUpReport" />
     </AssociationSet>
-    <AssociationSet Name="FK__CheckUpRe__TestI__3AC1AA49" Association="Self.FK__CheckUpRe__TestI__3AC1AA49">
+    <AssociationSet Name="FK__CheckUpRe__TestI__031D3AFB" Association="Self.FK__CheckUpRe__TestI__031D3AFB">
       <End Role="LabTest" EntitySet="LabTest" />
       <End Role="CheckUpReport" EntitySet="CheckUpReport" />
     </AssociationSet>
@@ -2817,11 +2717,11 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
       <End Role="Chemist" EntitySet="Chemist" />
       <End Role="ChemistPayOut" EntitySet="ChemistPayOut" />
     </AssociationSet>
-    <AssociationSet Name="FK__CityMaste__State__2739D489" Association="Self.FK__CityMaste__State__2739D489">
+    <AssociationSet Name="FK__CityMaste__State__0505836D" Association="Self.FK__CityMaste__State__0505836D">
       <End Role="StateMaster" EntitySet="StateMaster" />
       <End Role="CityMaster" EntitySet="CityMaster" />
     </AssociationSet>
-    <AssociationSet Name="FK__CmpltChec__Cente__282DF8C2" Association="Self.FK__CmpltChec__Cente__282DF8C2">
+    <AssociationSet Name="FK__CmpltChec__Cente__05F9A7A6" Association="Self.FK__CmpltChec__Cente__05F9A7A6">
       <End Role="HealthCheckupCenter" EntitySet="HealthCheckupCenter" />
       <End Role="CmpltCheckUp" EntitySet="CmpltCheckUp" />
     </AssociationSet>
@@ -2829,7 +2729,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
       <End Role="Patient" EntitySet="Patient" />
       <End Role="CmpltCheckUp" EntitySet="CmpltCheckUp" />
     </AssociationSet>
-    <AssociationSet Name="FK__CmpltChec__Test___3D491139" Association="Self.FK__CmpltChec__Test___3D491139">
+    <AssociationSet Name="FK__CmpltChec__Test___07E1F018" Association="Self.FK__CmpltChec__Test___07E1F018">
       <End Role="HealthCheckUp" EntitySet="HealthCheckUp" />
       <End Role="CmpltCheckUp" EntitySet="CmpltCheckUp" />
     </AssociationSet>
@@ -2837,23 +2737,23 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
       <End Role="Patient" EntitySet="Patient" />
       <End Role="HealthBooking" EntitySet="HealthBooking" />
     </AssociationSet>
-    <AssociationSet Name="FK__HealthChe__Cente__3493CFA7" Association="Self.FK__HealthChe__Cente__3493CFA7">
+    <AssociationSet Name="FK__HealthChe__Cente__09CA388A" Association="Self.FK__HealthChe__Cente__09CA388A">
       <End Role="HealthCheckupCenter" EntitySet="HealthCheckupCenter" />
       <End Role="HealthCheckUp" EntitySet="HealthCheckUp" />
     </AssociationSet>
-    <AssociationSet Name="FK__HealthChe__Cente__38C4533E" Association="Self.FK__HealthChe__Cente__38C4533E">
+    <AssociationSet Name="FK__HealthChe__Cente__0ABE5CC3" Association="Self.FK__HealthChe__Cente__0ABE5CC3">
       <End Role="HealthCheckupCenter" EntitySet="HealthCheckupCenter" />
       <End Role="HealthCheckUpPackage" EntitySet="HealthCheckUpPackage" />
     </AssociationSet>
-    <AssociationSet Name="FK__HealthPay__Healt__3864608B" Association="Self.FK__HealthPay__Healt__3864608B">
+    <AssociationSet Name="FK__HealthPay__Healt__0BB280FC" Association="Self.FK__HealthPay__Healt__0BB280FC">
       <End Role="HealthCheckupCenter" EntitySet="HealthCheckupCenter" />
       <End Role="HealthPayOut" EntitySet="HealthPayOut" />
     </AssociationSet>
-    <AssociationSet Name="FK__HospitalN__Nurse__76619304" Association="Self.FK__HospitalN__Nurse__76619304">
+    <AssociationSet Name="FK__HospitalN__Nurse__0CA6A535" Association="Self.FK__HospitalN__Nurse__0CA6A535">
       <End Role="NurseType" EntitySet="NurseType" />
       <End Role="HospitalNurse" EntitySet="HospitalNurse" />
     </AssociationSet>
-    <AssociationSet Name="FK__HospitalR__Hospi__7869D707" Association="Self.FK__HospitalR__Hospi__7869D707">
+    <AssociationSet Name="FK__HospitalR__Hospi__0D9AC96E" Association="Self.FK__HospitalR__Hospi__0D9AC96E">
       <End Role="Hospital" EntitySet="Hospital" />
       <End Role="HospitalReport" EntitySet="HospitalReport" />
     </AssociationSet>
@@ -2861,7 +2761,7 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
       <End Role="Patient" EntitySet="Patient" />
       <End Role="HospitalReport" EntitySet="HospitalReport" />
     </AssociationSet>
-    <AssociationSet Name="FK__HospitalRe__Test__7A521F79" Association="Self.FK__HospitalRe__Test__7A521F79">
+    <AssociationSet Name="FK__HospitalRe__Test__0F8311E0" Association="Self.FK__HospitalRe__Test__0F8311E0">
       <End Role="LabTest" EntitySet="LabTest" />
       <End Role="HospitalReport" EntitySet="HospitalReport" />
     </AssociationSet>
@@ -2869,11 +2769,11 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
       <End Role="BookTestLab" EntitySet="BookTestLab" />
       <End Role="LabBooking" EntitySet="LabBooking" />
     </AssociationSet>
-    <AssociationSet Name="FK__LabBookin__TestI__515009E6" Association="Self.FK__LabBookin__TestI__515009E6">
+    <AssociationSet Name="FK__LabBookin__TestI__116B5A52" Association="Self.FK__LabBookin__TestI__116B5A52">
       <End Role="TestLab" EntitySet="TestLab" />
       <End Role="LabBooking" EntitySet="LabBooking" />
     </AssociationSet>
-    <AssociationSet Name="FK__NurseComp__Login__2D87AABC" Association="Self.FK__NurseComp__Login__2D87AABC">
+    <AssociationSet Name="FK__NurseComp__Login__7F4CAA17" Association="Self.FK__NurseComp__Login__7F4CAA17">
       <End Role="AdminLogin" EntitySet="AdminLogin" />
       <End Role="NurseComplaint" EntitySet="NurseComplaint" />
     </AssociationSet>
@@ -2881,19 +2781,19 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
       <End Role="Nurse" EntitySet="Nurse" />
       <End Role="NursePayout" EntitySet="NursePayout" />
     </AssociationSet>
-    <AssociationSet Name="FK__PatientAp__Hospi__1960B67E" Association="Self.FK__PatientAp__Hospi__1960B67E">
+    <AssociationSet Name="FK__PatientAp__Hospi__1447C6FD" Association="Self.FK__PatientAp__Hospi__1447C6FD">
       <End Role="Hospital" EntitySet="Hospital" />
       <End Role="PatientAppointment" EntitySet="PatientAppointment" />
     </AssociationSet>
-    <AssociationSet Name="FK__PatientAp__Hospi__1A54DAB7" Association="Self.FK__PatientAp__Hospi__1A54DAB7">
+    <AssociationSet Name="FK__PatientAp__Hospi__153BEB36" Association="Self.FK__PatientAp__Hospi__153BEB36">
       <End Role="HospitalDoctor" EntitySet="HospitalDoctor" />
       <End Role="PatientAppointment" EntitySet="PatientAppointment" />
     </AssociationSet>
-    <AssociationSet Name="FK__PatientAp__Hospi__7849DB76" Association="Self.FK__PatientAp__Hospi__7849DB76">
+    <AssociationSet Name="FK__PatientAp__Hospi__16300F6F" Association="Self.FK__PatientAp__Hospi__16300F6F">
       <End Role="Hospital" EntitySet="Hospital" />
       <End Role="PatientAppointment" EntitySet="PatientAppointment" />
     </AssociationSet>
-    <AssociationSet Name="FK__PatientAp__Hospi__793DFFAF" Association="Self.FK__PatientAp__Hospi__793DFFAF">
+    <AssociationSet Name="FK__PatientAp__Hospi__172433A8" Association="Self.FK__PatientAp__Hospi__172433A8">
       <End Role="HospitalDoctor" EntitySet="HospitalDoctor" />
       <End Role="PatientAppointment" EntitySet="PatientAppointment" />
     </AssociationSet>
@@ -2901,11 +2801,11 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
       <End Role="Patient" EntitySet="Patient" />
       <End Role="PatientAppointment" EntitySet="PatientAppointment" />
     </AssociationSet>
-    <AssociationSet Name="FK__PatientAp__Speci__1B48FEF0" Association="Self.FK__PatientAp__Speci__1B48FEF0">
+    <AssociationSet Name="FK__PatientAp__Speci__190C7C1A" Association="Self.FK__PatientAp__Speci__190C7C1A">
       <End Role="Specialist" EntitySet="Specialist" />
       <End Role="PatientAppointment" EntitySet="PatientAppointment" />
     </AssociationSet>
-    <AssociationSet Name="FK__PatientAp__Speci__47A6A41B" Association="Self.FK__PatientAp__Speci__47A6A41B">
+    <AssociationSet Name="FK__PatientAp__Speci__1A00A053" Association="Self.FK__PatientAp__Speci__1A00A053">
       <End Role="Specialist" EntitySet="Specialist" />
       <End Role="PatientAppointment" EntitySet="PatientAppointment" />
     </AssociationSet>
@@ -2917,19 +2817,19 @@ warning 6002: The table/view 'admin_Hospital.dbo.AppLog' does not have a primary
       <End Role="Patient" EntitySet="Patient" />
       <End Role="PatientRequest" EntitySet="PatientRequest" />
     </AssociationSet>
-    <AssociationSet Name="FK__PatientRe__Vehic__0E591826" Association="Self.FK__PatientRe__Vehic__0E591826">
+    <AssociationSet Name="FK__PatientRe__Vehic__1CDD0CFE" Association="Self.FK__PatientRe__Vehic__1CDD0CFE">
       <End Role="VehicleType" EntitySet="VehicleType" />
       <End Role="PatientRequest" EntitySet="PatientRequest" />
     </AssociationSet>
-    <AssociationSet Name="FK__SalaryMas__Emp_I__0E04126B" Association="Self.FK__SalaryMas__Emp_I__0E04126B">
+    <AssociationSet Name="FK__SalaryMas__Emp_I__1DD13137" Association="Self.FK__SalaryMas__Emp_I__1DD13137">
       <End Role="Employee" EntitySet="Employee" />
       <End Role="SalaryMaster" EntitySet="SalaryMaster" />
     </AssociationSet>
-    <AssociationSet Name="FK__Specialis__Depar__4C6B5938" Association="Self.FK__Specialis__Depar__4C6B5938">
+    <AssociationSet Name="FK__Specialis__Depar__1EC55570" Association="Self.FK__Specialis__Depar__1EC55570">
       <End Role="Department" EntitySet="Department" />
       <End Role="Specialist" EntitySet="Specialist" />
     </AssociationSet>
-    <AssociationSet Name="FK__Vendor__AdminLog__51300E55" Association="Self.FK__Vendor__AdminLog__51300E55">
+    <AssociationSet Name="FK__Vendor__AdminLog__1FB979A9" Association="Self.FK__Vendor__AdminLog__1FB979A9">
       <End Role="AdminLogin" EntitySet="AdminLogin" />
       <End Role="Vendor" EntitySet="Vendor" />
     </AssociationSet>

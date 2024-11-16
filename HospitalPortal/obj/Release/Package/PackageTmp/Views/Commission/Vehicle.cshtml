@@ -3,95 +3,185 @@
 @{
     ViewBag.Title = "Doctor";
     Layout = null;
+    int count = 1;
 }
 
 <link href="/Styles/bootstrap.min.css" rel="stylesheet" />
 
 <h2 style="text-align:center;">Vehicle Commission of Week</h2>
 <div style="margin:auto; width:85%">
+
     <div class="row" style="margin-bottom: 3%;">
         <div class="col-md-3">
-            <input type="text" class="datepicker form-control" name="StartDate" id="StartDate" placeholder="From Date" />
+            From
+            @Html.TextBoxFor(a => a.JoiningDate, new { @class = "form-control", required = "required", type = "date" })
         </div>
         <div class="col-md-3">
-            <input type="text" class="datepicker form-control" name="EndDate" id="EndDate" placeholder="End Date" />
+            To
+            <input type="date" class="form-control" name="EndDate" id="EndDate" , required="required" />
         </div>
         <div class="col-md-1">
-            <input type="button" id="test" value="Search" class="btn btn-primary" style="margin-top: 2.3%;" />
+            <input type="button" id="test" value="Search" class="btn btn-primary" />
         </div>
-    </div>
 
+        @using (Html.BeginForm("Vehicle", "Commission", FormMethod.Get))
+        {
+            <div class="col-md-4">
+                @*<input type="text" class="form-control" id="name" name="name" placeholder="Serach by Name & Id" />*@
+                <input type="text" class="form-control" id="VendorName" placeholder="Enter VendorName's Name & Id">
+            </div>
+            <div class="col-md-1">
+                <input type="submit" id="test2" value="Search" class="btn btn-primary" />
+                @*<input type="submit" value="Search" class="btn btn-primary" />*@
+            </div>
+        }
+    </div>
+</div>
+<table id="table_id" class="table table-bordered">
+    <thead style="background-color:lavender;">
+        <tr>
+            <th>Sr No.</th>
+            <th>
+                Franchise Name/Id
+            </th>
+            <th>
+                Company Name
+            </th>
+            <th>Vehicle Name</th>
+            <th>Vehicle Number</th>
+            <th>Driver Name /Id</th>
+            <th>
+                Basic Amount
+            </th>
+            <th>
+                Commission to PS Wellness @ViewBag.Commission %
+            </th>
+            <th>
+                Transaction Fee @ViewBag.Transactionfee %
+            </th>
+            <th>
+                TDS @ViewBag.tds %
+            </th>
+            <th>
+                Payable to service provider
+            </th>
+            <th>
+                Payable to franchise 3%
+            </th>
+        </tr>
+
+    </thead>
     @if (Model.VendorCommissionReport == null)
     {
         if (TempData["msg"] != null)
         {
-            @TempData["msg"];
+            <div class="alert alert-danger">
+                @TempData["msg"];
+            </div>
+
         }
     }
     else
     {
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-
-                    <th>
-                        Vehicle Commission Amt(in %)
-                    </th>
-                    <th>Amount</th>
-                    <th>
-                        Vehicle Amt
-                    </th>
-                    <th>
-                        Payable Amount
-                    </th>
-                    <th>Vendor Commission (%)</th>
-                    <th>Vendor Commisson Amount</th>
-
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model.VendorCommissionReport)
-                {
-                    <tr>
-                        <td>
-                            @ViewBag.Commission %
-                        </td>
-                        <td>@item.Amount</td>
-
-                        @{
-                            //Calculate The Amount for Doctor Commission
-                            double amt = (Math.Round(item.Amount * ViewBag.Commission) / 100);
-                            //Total Amount for Doctor
-                            double Value = (double)item.Amount - amt;
-                            //Commission Amount of Vendor
-                            double vendorCut = (Math.Round(Value * ViewBag.VendorCommission) / 100);
-                            double asd = Math.Round(vendorCut, 0, MidpointRounding.AwayFromZero);
-                        }
-
-                        <td>₹ @amt</td>
-                        <td>₹ @Value</td>
-                        <td>@ViewBag.VendorCommission</td>
-                        <td>₹ @asd</td>
-                    </tr>
-                            }
-            </tbody>
-        </table>
-                            }
-    <nav aria-label="Page navigation example">
-        <ul class="pagination">
-            <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-            @for (int i = 1; i <= Model.TotalPages; i++)
-            {
-                if (i == Model.PageNumber)
-                {
-                    <li class="page-item active"><a class="page-link" href="/Commission/Doctor?pageNumber=@i">@i</a></li>
-                }
-                else
-                {
-                    <li class="page-item"><a class="page-link" href="/Commission/DoctorPatientList?pageNumber=@i">@i</a></li>
-                }
+        <tbody>
+            @{
+                double? totalPayableAmount = 0;
+                double? totalCommissionAmount = 0;
+                double? totalAmount = 0;
+                double? totaltdsAmount = 0;
+                double totalTransactionAmount = 0;
+                double? totalFraPaidableamt = 0;
             }
-            <li class="page-item"><a class="page-link" href="#">Next</a></li>
-        </ul>
-    </nav>
-</div>
+            @foreach (var item in Model.VendorCommissionReport)
+            {
+                <tr>
+                    <td>@count</td>
+                    <td>@item.VendorName (@item.VendorId)</td>
+                    <td>@item.CompanyName</td>
+                    <td>@item.VehicleName</td>
+                    <td>@item.VehicleNumber</td>
+                    <td>@item.DriverName (@item.UniqueId)</td>
+                    <td>@item.Counts</td>
+                    @{
+                        double comm = (Math.Round(item.Counts * ViewBag.Commission) / 100);
+                    }
+                    <td>
+                        ₹ @comm
+                    </td>
+                    @{
+                        double? razorpaycomm = @item.Amountwithrazorpaycomm;
+                        double? basicamt = @item.Counts;
+                        double? razarfeeamt = razorpaycomm - basicamt;
+                        totalTransactionAmount += (double)razarfeeamt;
+                    }
+                    <td>@String.Format("{0:F2}", razarfeeamt) </td>
+                    @{
+                        decimal tds = (decimal)Math.Round((decimal)item.Counts * (decimal)ViewBag.tds / 100, 2);
+
+                    }
+                    <td>
+                        ₹ @tds
+                    </td>
+                    @{
+                        double? commAmt = ((double)item.Counts * ViewBag.Commission) / 100;
+                        double? tdsamt = ((double)item.Counts * (double)ViewBag.tds) / 100;
+                        double? Value = item.Counts - (commAmt + tdsamt + razarfeeamt);
+
+                        totalFraPaidableamt += item.FraPaidableamt;
+                        totalAmount += item.Counts;
+                        totalPayableAmount += @Value;
+                        totaltdsAmount += (double)tds;
+
+                        totalCommissionAmount += commAmt;
+                    }
+
+
+                    <td>₹ @Value</td>
+                    <td> ₹ @item.FraPaidableamt</td>
+                </tr>
+                count++;
+            }
+        </tbody>
+
+        <tfoot>
+            <tr>
+                <td colspan="6" style="text-align: right;">
+                    <strong>Total:</strong>
+                </td>
+                <td>
+                    <strong>₹ @totalAmount</strong>
+                </td>
+                <td>
+                    <strong>₹ @totalCommissionAmount</strong>
+                </td>
+                <td>
+                    <strong>₹ @String.Format("{0:F2}", @totalTransactionAmount)</strong>
+                </td>
+
+                <td>
+                    <strong>₹ @totaltdsAmount</strong>
+                </td>
+                <td>
+                    <strong>₹ @totalPayableAmount</strong>
+                </td>
+                <td>
+                    <strong>₹ @totalFraPaidableamt</strong>
+                </td>
+            </tr>
+        </tfoot>
+    }
+</table>
+
+
+<script src="https://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css">
+
+<script type="text/javascript">
+    $('#table_id').DataTable(
+        {
+            stateSave: true,
+        });
+</script>
+<script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
+<link href="~/css/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>

@@ -1,48 +1,83 @@
-﻿@model HospitalPortal.Models.ViewModels.VendorPaymentDTO
+﻿@model HospitalPortal.Controllers.AmbulancePaymentController.AmbulanceList
 @{
     ViewBag.Title = "VendorReport";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    int count = 1;
 }
 
 <h2>Driver List</h2>
-@if (Model.Vendorses == null) { 
-<table id="table_id" class="table table-bordered">
-    <thead>
-        <tr>
-            <th>
-                Vendor Name
-            </th>
-            <th>
-                Company's Name
-            </th>
-            <th>
-                No. Of Drivers Added!!
-            </th>
-            <th>
-                Total Amount
-            </th>
-            <th>
-                Action
-            </th>
-        </tr>
-    </thead>
-   </table>
- }
-    else
-    {
+@using (Html.BeginForm())
+{
+    <div style="margin-bottom:3%;">
+        <div class="row">
+            <h4 style="text-align:center">Search By Date</h4>
+        </div>
+        <div class="row">
+            <div class='col-sm-5'>
+                <div class="form-group">
+                    <div class='input-group date'>
+                        <input type='date' name="sdate" class="form-control" placeholder="From Date" />
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class='col-sm-5'>
+                <div class="form-group">
+                    <div class='input-group date' id='datetimepicker1'>
+                        <input type='date' name="edate" class="form-control" placeholder="Date To" />
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2"><input type="submit" value="Filter" class="btn btn-primary" /></div>
+
+        </div>
+    </div>
+}
+@if (Model.Ambulance == null)
+{
+    @*<table id="table_id" class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>
+                        Vendor Name
+                    </th>
+                    <th>
+                        Company's Name
+                    </th>
+                    <th>
+                        No. Of Drivers Added!!
+                    </th>
+                    <th>
+                        Total Amount
+                    </th>
+                    <th>
+                        Action
+                    </th>
+                </tr>
+            </thead>
+        </table>*@
+}
+else
+{
     <table id="table_id" class="table table-bordered">
-        <thead>
+        <thead style="background-color:lavender;">
             <tr>
+                <th>Sr No.</th>
                 <th>
-                    Vendor Name
+                    Driver Id
                 </th>
                 <th>
-                    Company's Name
+                    Driver Name
                 </th>
                 <th>
-                    No. Of Drivers Added!!
+                    Vehicle Number
                 </th>
-                <th>
+                <th style="display:none;">
                     Total Amount
                 </th>
                 <th>
@@ -51,30 +86,31 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model.Vendorses)
+            @foreach (var item in Model.Ambulance)
             {
                 <tr>
-                    <td>@item.VendorName</td>
-                    <td>@item.CompanyName</td>
-                    <td>@item.Count</td>
-                    @{
-                        double amt = /*item.Counts **/ ViewBag.Payment;
-                    }
-                    <td>
-                        @amt
-                    </td>
+                    <td>@count</td>
+                    <td>@item.DriverId</td>
+                    <td>@item.DriverName</td>
+                    <td>@item.VehicleNumber</td>
+                    <td style="display:none;">@item.TotalPrice</td>
+
                     <td><a href="/Report/DriverDetails?id=@item.Id" class="btn btn-primary">View Details</a></td>
                 </tr>
+                count++;
             }
         </tbody>
     </table>
-    }
-    <script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
-    @*<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>*@
-    <script src="https://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css">
+}
+<script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
+@*<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>*@
+<script src="https://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css">
 
-    <script type="text/javascript">
-        $('#table_id').DataTable();
-    </script>
+<script type="text/javascript">
+    $('#table_id').DataTable(
+        {
+            stateSave: true,
+        });
+</script>
 

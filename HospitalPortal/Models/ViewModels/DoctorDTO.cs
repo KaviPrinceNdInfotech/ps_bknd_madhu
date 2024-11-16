@@ -41,7 +41,9 @@ namespace HospitalPortal.Models.ViewModels
         public string RegistrationNumber { get; set; }
         public string SignaturePic { get; set; }
         public HttpPostedFileBase SignatureImageFile { get; set; }
+        public HttpPostedFileBase PanImageFile { get; set; }
         public string LicenceImage { get; set; }
+        public string PanImage { get; set; }
         
         public string LicenceNumber { get; set; }
         public string PAN { get; set; }

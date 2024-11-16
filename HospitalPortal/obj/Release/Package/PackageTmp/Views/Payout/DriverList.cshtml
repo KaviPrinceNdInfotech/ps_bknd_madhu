@@ -1,0 +1,85 @@
+﻿@model HospitalPortal.Models.ViewModels.ViewPayOutHistory
+
+@{
+    ViewBag.Title = "DriverList";
+    Layout = "~/Views/Shared/_PayoutLayoutPage.cshtml";
+}
+
+<h2>Driver Payout History</h2>
+<div class=" row">
+    <div class="col-md-3">
+        <div class=" form-group">
+            <a href="@Url.Action("DownloadDriverExcel", "Payout")">
+                <img src="https://www.pinclipart.com/picdir/big/178-1780962_download-105-free-excel-icons-here-excel-download.png" alt="List View" style="width: 55px;">
+            </a>
+        </div>
+    </div>
+</div>
+<div style="margin:auto; width:95%">
+
+    @if (Model.HistoryOfAmbulance_Payout == null)
+    {
+        if (TempData["msg"] != null)
+        {
+            <h3>@TempData["msg"]</h3>
+        }
+    }
+    else
+    {
+        <table id="myTable" class="table table-bordered">
+            <thead style="background-color:lavender;">
+                <tr>
+                    <th>Serial No</th>
+                    <th>Vehicle Name</th>
+                    <th>Vehicle Number</th>
+                    <th>Driver Name</th>
+                    <th>Payment Date</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @{int RowNo = 0;}
+                @foreach (var item in Model.HistoryOfAmbulance_Payout)
+                {
+                    <tr>
+                        <td>
+                            @{RowNo++;} @RowNo
+                        </td>
+                        <td>@item.VehicleName</td>
+                        <td>@item.VehicleNumber</td>
+                        <td>@item.DriverName <b>(@item.DriverId)</b></td>
+                        <td>@item.PaymentDate.Value.ToShortDateString()</td>
+                        <td>@item.Amount</td>
+                        @*<td>
+                                @if (Convert.ToInt32(item.IsGenerated) == 1)
+                                {
+                                    <a href="/Payout/UpdateStatus?id=@item.Doctor_Id" class="btn btn-primary">Generated</a>
+                                }
+                                else
+                                {
+                                    <a href="/Payout/PayDoctor?Doctor_Id=@item.Doctor_Id&Amount=@item.Amount" class="btn btn-danger">Not Generated</a>
+                                }
+
+                                @if (Convert.ToInt32(item.IsPaid) == 1)
+                                {
+                                    <a href="/Payout/UpdatePayment?id=@item.Id" class="btn btn-primary">Paid</a>
+                                }
+                                else
+                                {
+                                    <a href="/Payout/UpdatePayment?id=@item.Id" class="btn btn-danger">Not Paid</a>
+                                }
+                            </td>*@
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+<script src="~/Scripts/Library/jquery-1.7.1.min.js"></script>
+<link href="~/css/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
+<script>
+    $('.datepicker').datepicker().datepicker('setDate', 'today');
+</script>
+

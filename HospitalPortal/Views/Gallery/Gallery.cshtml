@@ -2,6 +2,7 @@
 @{
     ViewBag.Title = "Gallery";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    int count = 1;
 }
 
 <h2>Gallery</h2>
@@ -45,9 +46,10 @@
             }
             else
             {
-        <table class="table table-bordered" style="margin-top:3%">
-            <thead>
+        <table id="myTable" class="table table-bordered" style="margin-top:3%">
+            <thead style="background-color:lavender;">
                 <tr>
+                    <th>Sr No.</th>
                     <th>Image Name</th>
                     <th>Image</th>
                     <th>Action</th>
@@ -57,6 +59,7 @@
                 @foreach (var item in Model.GalleryList)
                 {
                     <tr>
+                        <td>@count</td>
                         <td>@item.ImageName</td>
                         <td>
                             @if (item.Images != null)
@@ -72,6 +75,7 @@
                         </td>
                         <td><a href="/Gallery/Delete?Id=@item.Id" class="btn btn-danger" onclick="return confirm('Are you sure to Delete?')">Delete</a></td>
                     </tr>
+                    count++;
                 }
             </tbody>
         </table>

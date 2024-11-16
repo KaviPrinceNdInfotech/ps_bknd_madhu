@@ -23,6 +23,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
+using static HospitalPortal.Utilities.EmailOperations;
 
 namespace HospitalPortal.Controllers
 {
@@ -100,12 +101,35 @@ namespace HospitalPortal.Controllers
                     admin.UserID = domainModel.PatientRegNo;
                     ent.Patients.Add(domainModel);
                     ent.SaveChanges();
-                    string msg = "Welcome to PSWELLNESS. Your User Name :  " + domainModel.EmailId + "(" + domainModel.PatientRegNo + "), Password : "+ admin.Password+".";
-                    Message.SendSms(domainModel.MobileNumber, msg);
-                    string msg1 = "Welcome to PSWELLNESS. Your User Name :  " + admin.Username + "(" + admin.UserID + "), Password : " + admin.Password + ".";
 
-                    Utilities.EmailOperations.SendEmail1(model.EmailId, "Ps Wellness", msg1, true);
+                    string msg = @"<!DOCTYPE html>
+<html>
+<head>
+    <title>PS Wellness Registration Confirmation</title>
+</head>
+<body>
+    <h1>Welcome to PS Wellness!</h1>
+    <p>Your signup is complete. To finalize your registration, please use the following login credentials:</p>
+    <ul>
+        <li><strong>User ID:</strong> " + admin.UserID + @"</li>
+        <li><strong>Password:</strong> " + admin.Password + @"</li>
+    </ul>
+    <p>Thank you for choosing PS Wellness. We look forward to assisting you on your wellness journey.</p>
+</body>
+</html>";
 
+                    string msg1 = "Welcome to PS Wellness. Your signup is complete. To finalize your registration please proceed to log in using the credentials you provided during the signup process. Your User Id: " + admin.UserID + ", Password: " + admin.Password + ".";
+
+                    EmailEF ef = new EmailEF()
+                    {
+                        EmailAddress = model.EmailId,
+                        Message = msg,
+                        Subject = "PS Wellness Registration Confirmation"
+                    };
+
+                    EmailOperations.SendEmainew(ef);
+                    Message.SendSmsUserIdPass(model.MobileNumber, model.PatientName, domainModel.PatientRegNo, model.Password); ;
+                     
                     TempData["msg"] = "ok";
                     tran.Commit();
                 }
@@ -169,6 +193,7 @@ namespace HospitalPortal.Controllers
                           join v in ent.Vendors
                           on p.vendorId equals v.Id
                           into t from rt in t.DefaultIfEmpty()
+                          where !p.IsDeleted
                           //orderby p.Id descending
                           select new PatientList 
                           {
@@ -198,13 +223,7 @@ namespace HospitalPortal.Controllers
             {
                 result = result.Where(a => a.vendorId == fid).ToList();
             }
-            int total = result.Count;
-            pageNumber = (int?)pageNumber ?? 1;
-            int pageSize = 10;
-            decimal noOfPages = Math.Ceiling((decimal)total / pageSize);
-            model.TotalPages = (int)noOfPages;
-            model.PageNumber = (int)pageNumber;
-            result = result.Skip(pageSize * ((int)pageNumber - 1)).Take(pageSize).ToList();
+             
             model.Patient = result;
             return View(model);
         }
@@ -467,5 +486,21 @@ WHERE  MeO.Id= " + id + " order by MeO.Id desc";
             return new EmptyResult();
         }
 
+        public ActionResult Delete(int id)
+        {
+            var data = ent.Patients.Find(id);
+            try
+            {
+                data.IsDeleted = true;
+                ent.SaveChanges();
+                string q = @"delete from AdminLogin where Id=" + data.AdminLogin_Id;
+                ent.Database.ExecuteSqlCommand(q);
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex.Message);
+            }
+            return RedirectToAction("PatientList");
+        }
     }
 }

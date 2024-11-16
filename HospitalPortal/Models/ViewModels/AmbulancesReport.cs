@@ -29,6 +29,8 @@ namespace HospitalPortal.Models.ViewModels
         public decimal? Amount { get; set; }
 		public int TotalPrice { get; set; }
 		public double? Amountwithrazorpaycomm { get; set; }
+		public double? DriverCharge { get; set; }
+		public double? TotalHours { get; set; }
         public int? Distance { get; set; }
         public string PatientName { get; set; }
         public string UniqueId { get; set; }
@@ -41,8 +43,10 @@ namespace HospitalPortal.Models.ViewModels
         public double start_Lat { get; set; }
         public double start_Long { get; set; }
         public DateTime? AllocateDate { get; set; }
+        public DateTime? CompleteRideDate { get; set; }
+        public DateTime? AcceptanceDate { get; set; }
         public bool? IsActive { get; set; }
-        public int? RunDay { get; set; }
+        public int? DayCount { get; set; }
 
         //CODE FOR LAT LONG TO LOCATION 
         public string ReverseStartLatLong_To_Location

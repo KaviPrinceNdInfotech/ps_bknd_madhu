@@ -52,10 +52,10 @@ namespace HospitalPortal.Models.ViewModels
         public int Id { get; set; }
         public int Doctor_Id { get; set; }
         public string DoctorName { get; set; }
+        public string DoctorId { get; set; }
         public string PatientName { get; set; }
         public string PatientRegNo { get; set; }
-        public string AppointmentDate { get; set; }
-        public string DoctorId { get; set; }
+        public string AppointmentDate { get; set; } 
         public string EmailId { get; set; }
         public string MobileNumber { get; set; }
         public string Location { get; set; }
