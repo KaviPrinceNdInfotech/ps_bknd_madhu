@@ -396,3 +396,6 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+/HospitalPortal/bin/HospitalPortal.dll
+/HospitalPortal/bin/HospitalPortal.pdb
+/HospitalPortal/obj/Debug/HospitalPortal.csproj.AssemblyReference.cache
